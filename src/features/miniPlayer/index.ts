@@ -2,9 +2,9 @@ import type { Nullable } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
-import { waitForElement } from "@/src/utils/dom/wait";
 
 import type { MiniPlayerRect } from "./controller";
 import type { MiniPlayerOptions } from "./types";
@@ -84,53 +84,64 @@ export const setCommentsMiniPlayerDefaults = (defaults: MiniPlayerOptions) => {
 	cachedMiniPlayerDefaults = defaults;
 	if (miniPlayerController) miniPlayerController.setDefaults(defaults, { forceApply: true });
 };
-async function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController) {
-	cleanupAutoObservers();
-	const playerElement =
-		(await waitForElement<Element>("#player", 15000)) ??
-		(await waitForElement<Element>("#player-container", 15000));
-	if (!playerElement) return;
-	const visibilitySentinel = ensureSentinelBelowPlayer(playerElement);
-	const attachObserver = (commentsElement: Element) => {
-		let shouldAutoActivate = false;
-		const evaluateVisibility = () => {
-			ensureSentinelBelowPlayer(playerElement);
-			const sentinelVisible = isElementVisible(visibilitySentinel);
-			const commentsVisible = isElementVisible(commentsElement);
-			const nextAutoState = !sentinelVisible && commentsVisible;
-			if (nextAutoState === shouldAutoActivate) {
+/**
+ * The player element can be missing for a long time (stripped pages) or render
+ * late under load; waiting inline froze this feature's reconcile. Retry through
+ * the player manager until the player exists, then attach observers.
+ */
+function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController): void {
+	const task = () => {
+		const playerElement =
+			document.querySelector<Element>("#player") ??
+			document.querySelector<Element>("#player-container");
+		if (!playerElement) return false;
+		cleanupAutoObservers();
+		const visibilitySentinel = ensureSentinelBelowPlayer(playerElement);
+		const attachObserver = (commentsElement: Element) => {
+			let shouldAutoActivate = false;
+			const evaluateVisibility = () => {
+				ensureSentinelBelowPlayer(playerElement);
+				const sentinelVisible = isElementVisible(visibilitySentinel);
+				const commentsVisible = isElementVisible(commentsElement);
+				const nextAutoState = !sentinelVisible && commentsVisible;
+				if (nextAutoState === shouldAutoActivate) {
+					emitMiniPlayerState(miniPlayer.isActive());
+					return;
+				}
+				shouldAutoActivate = nextAutoState;
+				miniPlayer.setAutoActive(shouldAutoActivate);
 				emitMiniPlayerState(miniPlayer.isActive());
-				return;
-			}
-			shouldAutoActivate = nextAutoState;
-			miniPlayer.setAutoActive(shouldAutoActivate);
-			emitMiniPlayerState(miniPlayer.isActive());
+			};
+			visibilityObserver = new IntersectionObserver(evaluateVisibility, {
+				threshold: [0, 0.01, 0.05, 0.1]
+			});
+			visibilityObserver.observe(visibilitySentinel);
+			visibilityObserver.observe(commentsElement);
+			visibilityObserver.observe(playerElement);
+			evaluateVisibility();
 		};
-		visibilityObserver = new IntersectionObserver(evaluateVisibility, {
-			threshold: [0, 0.01, 0.05, 0.1]
-		});
-		visibilityObserver.observe(visibilitySentinel);
-		visibilityObserver.observe(commentsElement);
-		visibilityObserver.observe(playerElement);
-		evaluateVisibility();
+		const commentsElement = getCommentsElement();
+		if (commentsElement) {
+			attachObserver(commentsElement);
+			return true;
+		}
+		unsubscribeCommentsBus = subscribe(
+			"ytd-comments, #comments",
+			([foundComments]) => {
+				if (!foundComments) return;
+				unsubscribeCommentsBus?.();
+				unsubscribeCommentsBus = null;
+				attachObserver(foundComments);
+			},
+			{ once: true }
+		);
+		return true;
 	};
-	let commentsElement = getCommentsElement();
-	if (!commentsElement) {
-		commentsElement = await waitForElement<Element>("ytd-comments, #comments", 8000);
-	}
-	if (commentsElement) {
-		attachObserver(commentsElement);
-		return;
-	}
-	unsubscribeCommentsBus = subscribe(
-		"ytd-comments, #comments",
-		([foundComments]) => {
-			if (!foundComments) return;
-			unsubscribeCommentsBus?.();
-			unsubscribeCommentsBus = null;
-			attachObserver(foundComments);
-		},
-		{ once: true }
+	void registry.playerManager.executeWithRetries(
+		"miniPlayer",
+		[task],
+		["attach-comments-auto-mini-player"],
+		{ waitForLoaded: true }
 	);
 }
 function getEnabledController(): Nullable<MiniPlayerController> {
@@ -169,7 +180,7 @@ export const suspendMiniPlayerOverlay = (): (() => void) => {
 	return () => miniPlayerController?.setOverlayHidden(false);
 };
 
-async function setupMiniPlayer(
+function setupMiniPlayer(
 	defaultPosition: MiniPlayerOptions["defaultPosition"],
 	defaultSize: MiniPlayerOptions["defaultSize"]
 ) {
@@ -177,7 +188,7 @@ async function setupMiniPlayer(
 		defaultPosition,
 		defaultSize
 	});
-	await attachCommentsAutoMiniPlayer(miniPlayer);
+	attachCommentsAutoMiniPlayer(miniPlayer);
 	emitMiniPlayerState(miniPlayer.isActive());
 }
 
@@ -205,11 +216,11 @@ export default createFeature({
 		}
 		emitMiniPlayerState(false);
 	},
-	onEnable: async ({ defaultPosition, defaultSize }) => {
+	onEnable: ({ defaultPosition, defaultSize }) => {
 		setManualOverride(false);
-		await setupMiniPlayer(defaultPosition, defaultSize);
+		setupMiniPlayer(defaultPosition, defaultSize);
 	},
-	onNavigate: async ({ defaultPosition, defaultSize }) => {
+	onNavigate: ({ defaultPosition, defaultSize }) => {
 		cleanupAutoObservers();
 		const sentinel = document.getElementById(MINI_PLAYER_SENTINEL_ID);
 		sentinel?.remove();
@@ -229,7 +240,7 @@ export default createFeature({
 			miniPlayer.toggleManual();
 		}
 
-		await setupMiniPlayer(defaultPosition, defaultSize);
+		setupMiniPlayer(defaultPosition, defaultSize);
 	},
 	persistState: true,
 	state: {

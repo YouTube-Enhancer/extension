@@ -13,7 +13,6 @@ import { getButtonColor } from "@/src/utils/deep-dark-theme";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { subscribe as onDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 import { createTooltip, removeTooltip } from "@/src/utils/dom/tooltip";
-import { waitForElement } from "@/src/utils/dom/wait";
 
 import type { ListenerType } from "./types";
 
@@ -87,7 +86,10 @@ export async function addButton<
 	const selector = getPlacementSelector(effectivePlacement);
 	await enableFeatureMenuButton();
 	if (selector && !getCachedContainer(effectivePlacement)) {
-		const element = await waitForElement(selector);
+		// Probe synchronously: when the placement target has not rendered, defer to
+		// the mutation bus below rather than waiting inline, so stripped pages cost
+		// nothing and live pages that render late are still placed when they appear.
+		const element = document.querySelector(selector);
 		if (!element) {
 			// The placement target has not rendered yet. This is common when the feature is
 			// enabled during page setup on live streams, whose player controls appear late.
@@ -152,11 +154,11 @@ export async function addButton<
 	);
 }
 
-export async function checkIfFeatureButtonExists(
+export function checkIfFeatureButtonExists(
 	buttonName: AllButtonNames,
 	placement: ButtonPlacement
-): Promise<boolean> {
-	const root = await getPlacementRoot(placement);
+): boolean {
+	const root = getPlacementRoot(placement);
 	if (!root) return false;
 	if (placement === "feature_menu")
 		return root.querySelector(`#${getFeatureIds(buttonName).featureMenuItemId}`) !== null;
