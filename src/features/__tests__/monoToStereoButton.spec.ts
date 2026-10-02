@@ -6,12 +6,12 @@ import type { FeatureMenuItemId } from "@/src/types";
 
 import { metadata } from "@/src/features/monoToStereoButton/index.metadata";
 import {
-	expectFeatureButtonToBeFalsy,
-	expectFeatureButtonToBeIn,
-	expectFeatureButtonToBeTruthy,
-	expectFeatureMenuItemToBeTruthy,
-	expectToggleButtonState,
-	expectToStay
+    expectFeatureButtonToBeFalsy,
+    expectFeatureButtonToBeIn,
+    expectFeatureButtonToBeTruthy,
+    expectFeatureMenuItemToBeTruthy,
+    expectToggleButtonState,
+    expectToStay
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
