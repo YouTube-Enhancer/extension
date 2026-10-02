@@ -203,6 +203,9 @@ const onWindowMessage = (event: MessageEvent) => {
 					 * Exists solely to support E2E tests (Playwright). Not a runtime feature.
 					 */
 					case "test_setConfigValue": {
+						// Test-only entrypoint: compiled out of release builds, where DEV_MODE is
+						// statically false, so pages cannot trigger storage rewrites.
+						if (!DEV_MODE) break;
 						const {
 							data: { key, value }
 						} = message;
@@ -476,11 +479,13 @@ const storageChangeHandler = async (changes: StorageChanges<unknown>, areaName: 
 				enabled: resolveEnabled(config),
 				id: feature
 			});
-			dispatchedFeatureUpdates += 1;
+			if (DEV_MODE) dispatchedFeatureUpdates += 1;
 		}
 	}
-	testConfigWriteSettled?.();
-	testConfigWriteSettled = null;
+	if (DEV_MODE) {
+		testConfigWriteSettled?.();
+		testConfigWriteSettled = null;
+	}
 };
 type ConfigPathChange<P extends keyof typeof changeHandlers> = {
 	newValue: PathValue<configuration, P>;
