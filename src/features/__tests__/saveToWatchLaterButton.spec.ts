@@ -293,7 +293,7 @@ test.describe("saveToWatchLaterButton", () => {
 		await channelLink.click();
 		await page.waitForURL((url) => url.pathname.startsWith("/@"), { timeout: 30000 });
 		await waitForExtensionReady(page);
-		await expectToStay(async () => page.locator(BUTTON_SELECTOR).count(), 0, { page });
+		await expect(page.locator(BUTTON_SELECTOR)).toHaveCount(0, { timeout: 30000 });
 	});
 
 	test.describe("watch page actions row", () => {
