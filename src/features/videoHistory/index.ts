@@ -359,12 +359,9 @@ function queueVideoChange(resumeType: VideoHistoryResumeType): void {
 		}
 		return true;
 	};
-	void registry.playerManager.executeWithRetries(
-		"videoHistory",
-		[task],
-		["video-change"],
-		{ waitForLoaded: true }
-	);
+	void registry.playerManager.executeWithRetries("videoHistory", [task], ["video-change"], {
+		waitForLoaded: true
+	});
 }
 
 function resetState() {

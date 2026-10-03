@@ -17,6 +17,9 @@
 		"package.json",
 		"package-lock.json",
 		"yarn.lock",
-		"public/locales/en-US.json.d.ts"
+		"pnpm-lock.yaml",
+		"pnpm-workspace.yaml",
+		"public/locales/en-US.json.d.ts",
+		"tests/test-settings-broken.json"
 	]
 }

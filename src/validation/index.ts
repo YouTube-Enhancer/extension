@@ -68,9 +68,7 @@ function extractConstraints(node: unknown, constraints: ConstraintTree): void {
 	setNestedPath(constraints, pathParts, { max, min, step });
 }
 
-function hasNumericConstraints(
-	node: unknown
-): node is {
+function hasNumericConstraints(node: unknown): node is {
 	component: "number" | "slider";
 	id: string;
 	max?: number;

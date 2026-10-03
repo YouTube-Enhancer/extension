@@ -22,7 +22,9 @@ export type PropertiesObj = {
  * Before comparing, corrects unreliable isDefault flags via {@link correctDefaultFlags}.
  */
 export function findDefaultTrack(tracks: Record<string, unknown>[]): Nullable<ParsedAudioTrack> {
-	const parsed = tracks.map((t) => parseAudioTrack(t)).filter((t): t is ParsedAudioTrack => t !== null);
+	const parsed = tracks
+		.map((t) => parseAudioTrack(t))
+		.filter((t): t is ParsedAudioTrack => t !== null);
 	// YouTube's Ro.isDefault is unreliable (inverted on some videos). Correct using
 	// top-level boolean properties before we rely on isDefault.
 	const corrected = correctDefaultFlags(tracks, parsed);
@@ -59,7 +61,13 @@ export function parseAudioTrack(obj: Record<string, unknown>): Nullable<ParsedAu
 	try {
 		// Fast path: descriptor fields are directly on the object
 		if (isAudioTrack(obj)) {
-			return { id: obj.id, isAutoDubbed: obj.isAutoDubbed, isDefault: obj.isDefault, name: obj.name, track: obj as unknown as audioTrack };
+			return {
+				id: obj.id,
+				isAutoDubbed: obj.isAutoDubbed,
+				isDefault: obj.isDefault,
+				name: obj.name,
+				track: obj as unknown as audioTrack
+			};
 		}
 		// Slow path: search own property values (including non-enumerable) for the descriptor
 		const descriptor = Object.getOwnPropertyNames(obj)
@@ -72,7 +80,13 @@ export function parseAudioTrack(obj: Record<string, unknown>): Nullable<ParsedAu
 			})
 			.find(isAudioTrack);
 		if (descriptor) {
-			return { id: descriptor.id, isAutoDubbed: descriptor.isAutoDubbed, isDefault: descriptor.isDefault, name: descriptor.name, track: obj as unknown as audioTrack };
+			return {
+				id: descriptor.id,
+				isAutoDubbed: descriptor.isAutoDubbed,
+				isDefault: descriptor.isDefault,
+				name: descriptor.name,
+				track: obj as unknown as audioTrack
+			};
 		}
 		return null;
 	} catch {
@@ -90,7 +104,10 @@ export function parseAudioTrack(obj: Record<string, unknown>): Nullable<ParsedAu
  * (e.g. both D and J are true for one track each), it prefers the candidate whose track has
  * caption tracks - the original always has them, while audio-description tracks have none.
  */
-function correctDefaultFlags(tracks: Record<string, unknown>[], parsed: ParsedAudioTrack[]): ParsedAudioTrack[] {
+function correctDefaultFlags(
+	tracks: Record<string, unknown>[],
+	parsed: ParsedAudioTrack[]
+): ParsedAudioTrack[] {
 	// Count how many tracks have each boolean property set to true
 	const trueCounts = new Map<string, number>();
 	for (const track of tracks) {
@@ -105,7 +122,9 @@ function correctDefaultFlags(tracks: Record<string, unknown>[], parsed: ParsedAu
 		}
 	}
 	// Only consider properties that are true for exactly one track - that's the real default
-	const candidates = [...trueCounts.entries()].filter(([_, count]) => count === 1).map(([key]) => key);
+	const candidates = [...trueCounts.entries()]
+		.filter(([_, count]) => count === 1)
+		.map(([key]) => key);
 	if (candidates.length === 0) return parsed;
 	// If there's only one candidate, use it directly
 	const [firstCandidate] = candidates;

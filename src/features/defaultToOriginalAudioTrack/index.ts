@@ -37,7 +37,8 @@ function makeRestoreAudioTrackTask(): () => Promise<boolean> {
 	return async (): Promise<boolean> => {
 		if (!originalAudioTrack) return true;
 		const playerContainer = getPlayerContainer();
-		if (!playerContainer || !playerContainer.setAudioTrack || !playerContainer.getVideoData) return false;
+		if (!playerContainer || !playerContainer.setAudioTrack || !playerContainer.getVideoData)
+			return false;
 		try {
 			const { video_id: playerVideoId } = await playerContainer.getVideoData();
 			const videoId = resolvePlayerVideoId(playerVideoId);
@@ -60,10 +61,14 @@ function makeRestoreAudioTrackTask(): () => Promise<boolean> {
 function makeSaveTrackTask(): () => Promise<boolean> {
 	return async (): Promise<boolean> => {
 		const playerContainer = getPlayerContainer();
-		if (!playerContainer || !playerContainer.getAudioTrack || !playerContainer.getVideoData) return false;
+		if (!playerContainer || !playerContainer.getAudioTrack || !playerContainer.getVideoData)
+			return false;
 		try {
 			// Read the id and the track together so both describe the same moment.
-			const [{ video_id: playerVideoId }, currentTrack] = await Promise.all([playerContainer.getVideoData(), playerContainer.getAudioTrack()]);
+			const [{ video_id: playerVideoId }, currentTrack] = await Promise.all([
+				playerContainer.getVideoData(),
+				playerContainer.getAudioTrack()
+			]);
 			const videoId = resolvePlayerVideoId(playerVideoId);
 			if (!videoId) return false;
 			// Keep the track already saved for this video, replace one saved for any other.
@@ -113,11 +118,16 @@ function resolvePlayerVideoId(playerVideoId: Nullable<string>): Nullable<string>
 export default createFeature({
 	...metadata,
 	onDisable: () => {
-		void registry.playerManager.executeWithRetries("defaultToOriginalAudioTrack", [makeRestoreAudioTrackTask()], ["restoreAudio"], {
-			maxAttempts: 15,
-			pageTypes: ["watch", "shorts"],
-			waitForLoaded: true
-		});
+		void registry.playerManager.executeWithRetries(
+			"defaultToOriginalAudioTrack",
+			[makeRestoreAudioTrackTask()],
+			["restoreAudio"],
+			{
+				maxAttempts: 15,
+				pageTypes: ["watch", "shorts"],
+				waitForLoaded: true
+			}
+		);
 	},
 	onEnable: () => {
 		void registry.playerManager.executeWithRetries(

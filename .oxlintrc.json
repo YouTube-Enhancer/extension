@@ -6,7 +6,11 @@
 	"plugins": ["import", "promise", "typescript", "react"],
 	// ESLint plugins oxlint has no native equivalent for, run through its JS plugin loader. They still need the
 	// `eslint` package installed as a library (perfectionist pulls in @typescript-eslint/utils, which requires it).
-	"jsPlugins": ["eslint-plugin-perfectionist", "eslint-plugin-tailwindcss", "eslint-plugin-no-secrets"],
+	"jsPlugins": [
+		"eslint-plugin-perfectionist",
+		"eslint-plugin-tailwindcss",
+		"eslint-plugin-no-secrets"
+	],
 	"categories": {
 		"correctness": "off"
 	},
@@ -233,7 +237,11 @@
 					}
 				],
 				"no-useless-escape": "off",
-				"prefer-destructuring": ["error", { "array": true, "object": true }, { "enforceForRenamedProperties": true }],
+				"prefer-destructuring": [
+					"error",
+					{ "array": true, "object": true },
+					{ "enforceForRenamedProperties": true }
+				],
 				"react/react-in-jsx-scope": "off",
 				"tailwindcss/classnames-order": "error",
 				"tailwindcss/no-custom-classname": "off"
