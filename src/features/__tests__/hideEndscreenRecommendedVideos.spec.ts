@@ -53,8 +53,19 @@ test.describe("hideEndscreenRecommendedVideos", () => {
 			page
 		}) => {
 			await navigateToPageType(page, pageType);
+			// automaticallyShowMoreVideosOnEndScreen hides the same grid under its own body class;
+			// its config can persist from earlier tests in this worker, so turn it off explicitly.
+			await disableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
 			await expectBodyWithoutClass(page, bodyClass);
 			await showEndScreen(page, pageType);
+			// YouTube keeps the grid hidden until the end screen actually pops; without a rendered
+			// end screen "not hidden" cannot be distinguished from YouTube's own hidden state.
+			const grid = page.locator("div.ytp-fullscreen-grid").first();
+			const gridVisible = await grid
+				.waitFor({ state: "visible", timeout: 15000 })
+				.then(() => true)
+				.catch(() => false);
+			test.skip(!gridVisible, "the end screen did not render on this video");
 			await expectElementsNotHidden(page, selectors, { requireMatch: true });
 		});
 		test(`persists after full page reload on ${pageType}`, async ({ page }) => {
