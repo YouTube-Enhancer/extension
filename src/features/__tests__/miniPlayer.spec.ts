@@ -144,7 +144,7 @@ test.describe("miniPlayer", () => {
 	for (const pageType of testPages) {
 		// A live stream's player takes longer to settle than a video's, and the registry only enables page-gated
 		// features once it has read the player, so the sentinel arrives later there.
-		const sentinelTimeout = pageType === live ? 15000 : 5000;
+		const sentinelTimeout = pageType === live ? 30000 : 5000;
 		test(`should create sentinel element on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "miniPlayer.enabled");

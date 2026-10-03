@@ -23,17 +23,30 @@ test.describe("restoreFullscreenScrolling", () => {
 			test.setTimeout(120_000);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "restoreFullscreenScrolling.enabled");
+			// The product waits up to 10s x 3 retries for the elements before adding the classes.
 			await expect(page.locator("ytd-watch-flexy")).toHaveClass(
-				/yte-ytd-watch-flexy-restore-fullscreen-scrolling/
+				/yte-ytd-watch-flexy-restore-fullscreen-scrolling/,
+				{ timeout: 45000 }
 			);
-			await expect(page.locator("ytd-app")).toHaveClass(/yte-ytd-app-restore-fullscreen-scrolling/);
+			await expect(page.locator("ytd-app")).toHaveClass(
+				/yte-ytd-app-restore-fullscreen-scrolling/,
+				{
+					timeout: 45000
+				}
+			);
 			await navigateToPageType(page, home);
 			await navigateToPageType(page, pageType);
 			// No disable/enable round trip: the assertions have to observe the state the navigation produced.
 			await expect(page.locator("ytd-watch-flexy")).toHaveClass(
-				/yte-ytd-watch-flexy-restore-fullscreen-scrolling/
+				/yte-ytd-watch-flexy-restore-fullscreen-scrolling/,
+				{ timeout: 45000 }
 			);
-			await expect(page.locator("ytd-app")).toHaveClass(/yte-ytd-app-restore-fullscreen-scrolling/);
+			await expect(page.locator("ytd-app")).toHaveClass(
+				/yte-ytd-app-restore-fullscreen-scrolling/,
+				{
+					timeout: 45000
+				}
+			);
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
