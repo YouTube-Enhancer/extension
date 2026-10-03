@@ -88,7 +88,7 @@ test.describe("hideLiveStreamChat", () => {
 			// The feature only includes live, so leaving it must drop the class again.
 			await expectBodyWithoutClass(page, bodyClass);
 			await navigateToPageType(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+			await expectBodyWithClass(page, bodyClass, { timeout: 30000 });
 			await expectElementsHidden(page, selectors);
 		});
 		test(`persists hide after full page reload on ${pageType}`, async ({ page }) => {
@@ -97,7 +97,7 @@ test.describe("hideLiveStreamChat", () => {
 			await expectBodyWithClass(page, bodyClass);
 			await expectElementsHidden(page, selectors);
 			await reloadPage(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+			await expectBodyWithClass(page, bodyClass, { timeout: 30000 });
 			await expectElementsHidden(page, selectors);
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {

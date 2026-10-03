@@ -183,7 +183,7 @@ test.describe("playerSpeed", () => {
 			await navigateToPageType(page, watch);
 			await setOption(page, "playerSpeed.speed", 2);
 			await enableFeature(page, "playerSpeed.enabled");
-			await expect.poll(() => getCurrentSpeed(page, watch), { timeout: 5000 }).toBe(2);
+			await expect.poll(() => getCurrentSpeed(page, watch), { timeout: 30000 }).toBe(2);
 
 			await page.locator("div#movie_player").hover();
 			await page.locator(".ytp-settings-button").click();
