@@ -1,15 +1,24 @@
-import type { Page } from '@playwright/test';
+import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
 
-import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
+import {
+	expectBodyWithClass,
+	expectBodyWithoutClass,
+	expectElementsHidden,
+	expectElementsNotHidden
+} from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { hasAnyMatch } from "@/src/utils/_tests/dom";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, spaNavigateToFirstVideo, spaNavigateToHome } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	spaNavigateToFirstVideo,
+	spaNavigateToHome
+} from "@/src/utils/_tests/navigation";
 import { loginRequiredPages } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
@@ -33,7 +42,10 @@ const injectedSelectors = selectors.map((selector) => `#${playablesHostId} ${sel
  * assertions iterate over zero elements and pass without ever looking at the feature's effect.
  */
 async function expectInjectedSelectorsToMatch(page: Page): Promise<void> {
-	const unmatched = await page.evaluate((scoped) => scoped.filter((selector) => document.querySelector(selector) === null), [...injectedSelectors]);
+	const unmatched = await page.evaluate(
+		(scoped) => scoped.filter((selector) => document.querySelector(selector) === null),
+		[...injectedSelectors]
+	);
 	expect(unmatched).toEqual([]);
 }
 /**
@@ -66,7 +78,10 @@ async function injectPlayablesShelf(page: Page): Promise<void> {
 test.describe("hidePlayables", () => {
 	for (const pageType of testPages) {
 		test(`hides playables section on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hidePlayables.enabled");
 			await expectBodyWithClass(page, bodyClass);
@@ -85,7 +100,9 @@ test.describe("hidePlayables", () => {
 	// The shelf only ever ships on the home feed, but home needs a login the headless run does not have and the feature
 	// declares no includePages, so the body class and its rule apply on watch just the same. Injecting there keeps the
 	// selector covered in a logged-out run instead of skipping the only test that exercises the rule itself.
-	test("hides an injected playables shelf and leaves sibling rich sections visible on watch", async ({ page }) => {
+	test("hides an injected playables shelf and leaves sibling rich sections visible on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await disableFeature(page, "hidePlayables.enabled");
 		await injectPlayablesShelf(page);

@@ -5,7 +5,11 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import { hasAmbientModeMenuItem } from "@/src/utils/_tests/ambient";
 import { ensurePlayerControlsVisible, pageSetup } from "@/src/utils/_tests/pageSetup";
-import { ensureCaptionsState, getCaptionsState, waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
+import {
+	ensureCaptionsState,
+	getCaptionsState,
+	waitForYoutubePlayerReady
+} from "@/src/utils/_tests/player";
 import { MESSAGE_ORIGIN } from "@/src/utils/messaging";
 
 export const fixtureCapabilities = [
@@ -139,9 +143,14 @@ export const pageFixtures: Record<PageType, VideoFixture[]> = {
 	]
 };
 
-export function getFixture(pageType: PageType, requirements: FixtureCapabilities[] = []): VideoFixture {
+export function getFixture(
+	pageType: PageType,
+	requirements: FixtureCapabilities[] = []
+): VideoFixture {
 	const { [pageType]: pool } = pageFixtures;
-	const match = pool.find((fixture) => requirements.every((surface) => fixture.capabilities.includes(surface)));
+	const match = pool.find((fixture) =>
+		requirements.every((surface) => fixture.capabilities.includes(surface))
+	);
 	if (!match) {
 		throw new Error(`No fixture for ${pageType} matching requirements: ${requirements.join(", ")}`);
 	}
@@ -271,7 +280,9 @@ export async function spaNavigateToHome(page: Page): Promise<void> {
 	});
 	await page.waitForURL((url) => url.pathname === "/", { timeout: 30_000 });
 	await waitForExtensionReady(page);
-	await expect(page.locator("ytd-rich-grid-renderer, ytd-two-column-browse-results-renderer").first()).toBeAttached({ timeout: 15_000 });
+	await expect(
+		page.locator("ytd-rich-grid-renderer, ytd-two-column-browse-results-renderer").first()
+	).toBeAttached({ timeout: 15_000 });
 	await pageSetup(page);
 }
 /**
@@ -301,7 +312,9 @@ export async function spaNavigateToRelatedVideo(page: Page): Promise<void> {
 		await link.evaluate((el) => el.scrollIntoView({ block: "center" }));
 		await link.click();
 	} else {
-		await page.locator("#movie_player .ytp-next-button").evaluate((el) => (el as HTMLButtonElement).click());
+		await page
+			.locator("#movie_player .ytp-next-button")
+			.evaluate((el) => (el as HTMLButtonElement).click());
 	}
 	await page.waitForURL((url) => url.searchParams.get("v") !== before, { timeout: 30_000 });
 	await waitForExtensionReady(page);
@@ -334,7 +347,11 @@ async function finishLiveVideoSetup(page: Page): Promise<void> {
  * Opens a live stream from the fixture channel, walking its streams until one meets the requirements. `deadline`
  * (epoch ms) stops the walk early so a caller can turn "ran out of time" into a skip before the test itself times out.
  */
-async function navigateToLiveVideo(page: Page, requirements: FixtureCapabilities[] = [], deadline?: number): Promise<void> {
+async function navigateToLiveVideo(
+	page: Page,
+	requirements: FixtureCapabilities[] = [],
+	deadline?: number
+): Promise<void> {
 	const {
 		live: [{ url: channelUrl }]
 	} = pageFixtures;
@@ -350,7 +367,8 @@ async function navigateToLiveVideo(page: Page, requirements: FixtureCapabilities
 		const count = await liveVideos.count();
 		let everyStreamOpened = true;
 		for (let index = 0; index < count; index++) {
-			if (outOfTime()) throw new Error("Live stream hunt ran out of time before every stream was checked");
+			if (outOfTime())
+				throw new Error("Live stream hunt ran out of time before every stream was checked");
 			const video = liveVideos.nth(index);
 			if (!(await tryOpenLiveVideo(page, video, channelUrl))) {
 				everyStreamOpened = false;
@@ -365,7 +383,8 @@ async function navigateToLiveVideo(page: Page, requirements: FixtureCapabilities
 		// Every stream opened and none met the requirements; another pass over the same streams cannot change that.
 		if (requirements.length > 0 && everyStreamOpened) break;
 	}
-	const reqMsg = requirements.length > 0 ? ` matching requirements: ${requirements.join(", ")}` : "";
+	const reqMsg =
+		requirements.length > 0 ? ` matching requirements: ${requirements.join(", ")}` : "";
 	throw new Error(`Failed to navigate to a live video${reqMsg} after multiple attempts`);
 }
 async function navigateToYoutubePage(page: Page, pageUrl: string, pageType: PageType = "watch") {
@@ -430,7 +449,10 @@ async function tryOpenLiveVideo(page: Page, video: Locator, channelUrl: string):
 	}
 	return true;
 }
-async function videoMeetsCapabilities(page: Page, requirements: FixtureCapabilities[]): Promise<boolean> {
+async function videoMeetsCapabilities(
+	page: Page,
+	requirements: FixtureCapabilities[]
+): Promise<boolean> {
 	for (const req of requirements) {
 		switch (req) {
 			case "ambientMode": {

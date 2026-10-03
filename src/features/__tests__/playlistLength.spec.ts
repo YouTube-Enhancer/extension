@@ -20,8 +20,10 @@ const UI = {
 	times: "#yte-playlist-length-ui-times"
 } as const;
 /** The containers the playlist-page controller reads its items from. */
-const PLAYLIST_ITEMS_SELECTOR = "ytd-playlist-video-list-renderer div#contents, yt-item-section-renderer div#contents";
-const PLAYLIST_ITEM_SELECTOR = "ytd-playlist-video-list-renderer div#contents > *, yt-item-section-renderer div#contents > *";
+const PLAYLIST_ITEMS_SELECTOR =
+	"ytd-playlist-video-list-renderer div#contents, yt-item-section-renderer div#contents";
+const PLAYLIST_ITEM_SELECTOR =
+	"ytd-playlist-video-list-renderer div#contents > *, yt-item-section-renderer div#contents > *";
 /** The UI only counts as rebuilt for a watch page when it lands in the watch layout's playlist header. */
 const WATCH_UI_SELECTOR = [
 	`#page-manager > ytd-watch-flexy #playlist #header-contents ${UI.root}`,
@@ -69,7 +71,8 @@ async function readUISnapshot(page: Page) {
 			if (!times) return null;
 			return {
 				percent: document.querySelector(percentSelector)?.textContent ?? "",
-				progressBarWidth: document.querySelector<HTMLElement>(progressBarSelector)?.style.width ?? "",
+				progressBarWidth:
+					document.querySelector<HTMLElement>(progressBarSelector)?.style.width ?? "",
 				times
 			};
 		},
@@ -146,10 +149,14 @@ test.describe("playlistLength", () => {
 			video.playbackRate = 2;
 			await video.play().catch(() => {});
 		});
-		await expect.poll(async () => getTotalSeconds(page), { timeout: 15000 }).toBeCloseTo(Math.floor(totalBefore! / 2), -1);
+		await expect
+			.poll(async () => getTotalSeconds(page), { timeout: 15000 })
+			.toBeCloseTo(Math.floor(totalBefore! / 2), -1);
 	});
 
-	test(`should compute a larger watched time with watchTimeGetMethod "duration" than "youtube" on ${watch}`, async ({ page }) => {
+	test(`should compute a larger watched time with watchTimeGetMethod "duration" than "youtube" on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch, ["playlistLength"]);
 		// Freezing playback keeps getCurrentVideoTime(), which both methods add, out of the comparison.
 		await page.locator("video").evaluate((video: HTMLVideoElement) => video.pause());
@@ -161,9 +168,13 @@ test.describe("playlistLength", () => {
 		// "youtube" only counts the progress YouTube reports per item, which can never exceed the full durations
 		// the "duration" method sums - so a ternary that ignores the setting collapses these two into one value.
 		await setOption(page, "playlistLength.watchTimeGetMethod", "youtube");
-		await expect.poll(async () => getWatchedSeconds(page), { timeout: 20000 }).toBeLessThan(watchedWithDuration!);
+		await expect
+			.poll(async () => getWatchedSeconds(page), { timeout: 20000 })
+			.toBeLessThan(watchedWithDuration!);
 	});
-	test(`should use the InnerTube API for a non-uploads playlist on ${playlist}`, async ({ page }) => {
+	test(`should use the InnerTube API for a non-uploads playlist on ${playlist}`, async ({
+		page
+	}) => {
 		// The default playlist fixture is a "UU" uploads playlist, for which getDurationFromAPI throws outright
 		// and the controller silently falls back to summing the rendered rows.
 		await navigateToPageType(page, playlist, ["playlistLength", "playlistManagementButtons"]);
@@ -183,10 +194,14 @@ test.describe("playlistLength", () => {
 				.slice(0, 5)
 				.forEach((child) => child.remove());
 		}, PLAYLIST_ITEMS_SELECTOR);
-		await expect.poll(async () => renderedItems.count(), { timeout: 5000 }).toBeLessThan(renderedBefore);
+		await expect
+			.poll(async () => renderedItems.count(), { timeout: 5000 })
+			.toBeLessThan(renderedBefore);
 		await expectToStay(async () => getTotalSeconds(page), apiTotal, { durationMs: 5000, page });
 	});
-	test(`should rebuild the UI after SPA navigation from ${playlist} to ${watch}`, async ({ page }) => {
+	test(`should rebuild the UI after SPA navigation from ${playlist} to ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, playlist, ["playlistLength"]);
 		await enablePlaylistLength(page, playlist);
 		await expectUIVisible(page);
@@ -198,7 +213,9 @@ test.describe("playlistLength", () => {
 		await expect(page.locator(UI.times)).not.toHaveText("");
 		await expect(page.locator(UI.percent)).toContainText("%");
 	});
-	test(`should show consistent times, percentage and progress-bar width on ${watch}`, async ({ page }) => {
+	test(`should show consistent times, percentage and progress-bar width on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch, ["playlistLength"]);
 		await enablePlaylistLength(page, watch);
 		await expectUIVisible(page);
@@ -226,15 +243,22 @@ test.describe("playlistLength", () => {
 		// appears. The window outlasts both 2500 ms element waits the controller performs before giving up.
 		await expectToStay(async () => page.locator(UI.root).count(), 0, { durationMs: 8000, page });
 	});
-	test(`should re-render the UI when lengthGetMethod changes while enabled on ${playlist}`, async ({ page }) => {
+	test(`should re-render the UI when lengthGetMethod changes while enabled on ${playlist}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, playlist, ["playlistLength"]);
 		await setOption(page, "playlistLength.lengthGetMethod", "html");
 		await enablePlaylistLength(page, playlist);
 		await expectUIVisible(page);
 		// Tagging the current element proves onConfigChange rebuilt it instead of leaving the old one in place.
-		await page.evaluate((selector) => document.querySelector(selector)?.setAttribute("data-test-generation", "first"), UI.root);
+		await page.evaluate(
+			(selector) => document.querySelector(selector)?.setAttribute("data-test-generation", "first"),
+			UI.root
+		);
 		await setOption(page, "playlistLength.lengthGetMethod", "api");
-		await expect(page.locator(`${UI.root}:not([data-test-generation])`)).toBeVisible({ timeout: 20000 });
+		await expect(page.locator(`${UI.root}:not([data-test-generation])`)).toBeVisible({
+			timeout: 20000
+		});
 		await expectUIVisible(page);
 	});
 

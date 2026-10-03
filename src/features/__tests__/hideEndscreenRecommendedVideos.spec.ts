@@ -6,7 +6,12 @@ import type { PageType } from "@/src/features/_registry/types";
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/hideEndscreenRecommendedVideos/index.metadata";
-import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
+import {
+	expectBodyWithClass,
+	expectBodyWithoutClass,
+	expectElementsHidden,
+	expectElementsNotHidden
+} from "@/src/utils/_tests/assertions";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
@@ -14,7 +19,9 @@ import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
-const { hideEndscreenRecommendedVideos: { bodyClass, selectors } } = hideFeatureSelectors;
+const {
+	hideEndscreenRecommendedVideos: { bodyClass, selectors }
+} = hideFeatureSelectors;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 
@@ -42,7 +49,9 @@ test.describe("hideEndscreenRecommendedVideos", () => {
 			await showEndScreen(page, pageType);
 			await expectElementsHidden(page, selectors, { requireMatch: true });
 		});
-		test(`does not hide endscreen recommended videos by default on ${pageType}`, async ({ page }) => {
+		test(`does not hide endscreen recommended videos by default on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType);
 			await expectBodyWithoutClass(page, bodyClass);
 			await showEndScreen(page, pageType);

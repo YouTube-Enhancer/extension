@@ -6,15 +6,21 @@ import type { FeatureMenuItemId } from "@/src/types";
 
 import { metadata } from "@/src/features/monoToStereoButton/index.metadata";
 import {
-    expectFeatureButtonToBeFalsy,
-    expectFeatureButtonToBeIn,
-    expectFeatureButtonToBeTruthy,
-    expectFeatureMenuItemToBeTruthy,
-    expectToggleButtonState,
-    expectToStay
+	expectFeatureButtonToBeFalsy,
+	expectFeatureButtonToBeIn,
+	expectFeatureButtonToBeTruthy,
+	expectFeatureMenuItemToBeTruthy,
+	expectToggleButtonState,
+	expectToStay
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
-import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	clickFeatureButton,
+	clickFeatureMenuItem,
+	disableFeature,
+	enableFeature,
+	setOption
+} from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
@@ -104,13 +110,19 @@ test.describe("monoToStereoButton", () => {
 		await navigateToPageType(page, watch, ["monoAudio"]);
 		await enableFeature(page, "monoToStereoButton.button.enabled");
 		await setOption(page, "monoToStereoButton.button.placement", right);
-		await expectToggleButtonState(page, "yte-feature-monoToStereoButton-button", false, { title: offTitle });
+		await expectToggleButtonState(page, "yte-feature-monoToStereoButton-button", false, {
+			title: offTitle
+		});
 		await clickFeatureButton(page, watch, "yte-feature-monoToStereoButton-button", right);
 		await expect.poll(async () => await isMonoEnabled(page)).toBeTruthy();
-		await expectToggleButtonState(page, "yte-feature-monoToStereoButton-button", true, { title: onTitle });
+		await expectToggleButtonState(page, "yte-feature-monoToStereoButton-button", true, {
+			title: onTitle
+		});
 		await clickFeatureButton(page, watch, "yte-feature-monoToStereoButton-button", right);
 		await expect.poll(async () => await isMonoEnabled(page)).toBeFalsy();
-		await expectToggleButtonState(page, "yte-feature-monoToStereoButton-button", false, { title: offTitle });
+		await expectToggleButtonState(page, "yte-feature-monoToStereoButton-button", false, {
+			title: offTitle
+		});
 	});
 
 	test(`feature menu item should toggle mono to stereo on ${watch}`, async ({ page }) => {
@@ -129,7 +141,9 @@ test.describe("monoToStereoButton", () => {
 		await expect(menuItem).toHaveAttribute("aria-checked", "false");
 	});
 
-	test(`re-enabling the button while the conversion is active should restore the on state on ${watch}`, async ({ page }) => {
+	test(`re-enabling the button while the conversion is active should restore the on state on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch, ["monoAudio"]);
 		await enableFeature(page, "monoToStereoButton.button.enabled");
 		await setOption(page, "monoToStereoButton.button.placement", right);
@@ -142,11 +156,15 @@ test.describe("monoToStereoButton", () => {
 		// add() re-seeds initialChecked and the label from isMonoStereoEnabled(), so the button comes back on.
 		await enableFeature(page, "monoToStereoButton.button.enabled");
 		await setOption(page, "monoToStereoButton.button.placement", right);
-		await expectToggleButtonState(page, "yte-feature-monoToStereoButton-button", true, { title: onTitle });
+		await expectToggleButtonState(page, "yte-feature-monoToStereoButton-button", true, {
+			title: onTitle
+		});
 		expect(await isMonoEnabled(page)).toBe(true);
 	});
 
-	test(`toggle state and title should survive fullscreen relocation on ${watch}`, async ({ page }) => {
+	test(`toggle state and title should survive fullscreen relocation on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch, ["monoAudio"]);
 		await setOption(page, "monoToStereoButton.button.placement", left);
 		await setOption(page, "monoToStereoButton.button.fullscreenPlacement", right);
@@ -154,12 +172,16 @@ test.describe("monoToStereoButton", () => {
 		await expectFeatureButtonToBeIn(page, "yte-feature-monoToStereoButton-button", left);
 		await clickFeatureButton(page, watch, "yte-feature-monoToStereoButton-button", left);
 		await expect.poll(async () => await isMonoEnabled(page)).toBeTruthy();
-		await expectToggleButtonState(page, "yte-feature-monoToStereoButton-button", true, { title: onTitle });
+		await expectToggleButtonState(page, "yte-feature-monoToStereoButton-button", true, {
+			title: onTitle
+		});
 		await toggleFullscreen(page, true);
 		await expectFeatureButtonToBeIn(page, "yte-feature-monoToStereoButton-button", right);
 		// The conversion is untouched by the relocation, so the rebuilt button has to keep reporting the on state.
 		expect(await isMonoEnabled(page)).toBe(true);
-		await expectToggleButtonState(page, "yte-feature-monoToStereoButton-button", true, { title: onTitle });
+		await expectToggleButtonState(page, "yte-feature-monoToStereoButton-button", true, {
+			title: onTitle
+		});
 		await toggleFullscreen(page, false);
 	});
 });

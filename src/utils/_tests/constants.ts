@@ -1,7 +1,10 @@
 import type { PageType } from "@/src/features/_registry/types";
 import type { ButtonPlacement } from "@/src/types";
 
-import { buttonContainerId, playerControlsSelectors } from "@/src/features/buttonController/constants";
+import {
+	buttonContainerId,
+	playerControlsSelectors
+} from "@/src/features/buttonController/constants";
 
 export const placementSelectors = {
 	below_player: `#${buttonContainerId}`,

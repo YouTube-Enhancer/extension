@@ -19,8 +19,17 @@ import { metadata } from "@/src/features/miniPlayer/index.metadata";
 import { miniPlayerPositions } from "@/src/features/miniPlayer/types";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
-import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import {
+	clickFeatureButton,
+	disableFeature,
+	enableFeature,
+	setOption
+} from "@/src/utils/_tests/features";
+import {
+	navigateToPageType,
+	reloadPage,
+	spaNavigateToRelatedVideo
+} from "@/src/utils/_tests/navigation";
 import { readStoredState } from "@/src/utils/_tests/storage";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
@@ -47,25 +56,36 @@ const viewportMargin = 16;
 
 /** Asserts the mini player is up: the class, the overlay shown, and the real player moved inside it. */
 async function expectMiniPlayerActive(page: Page): Promise<void> {
-	await expect(page.locator("html")).toHaveClass(new RegExp(MINI_PLAYER_ACTIVE_CLASS), { timeout: 15000 });
-	await expect(page.locator(`#${MINI_PLAYER_OVERLAY_ID} #${MINI_PLAYER_CONTENT_ID} div#movie_player`)).toBeAttached({ timeout: 15000 });
+	await expect(page.locator("html")).toHaveClass(new RegExp(MINI_PLAYER_ACTIVE_CLASS), {
+		timeout: 15000
+	});
+	await expect(
+		page.locator(`#${MINI_PLAYER_OVERLAY_ID} #${MINI_PLAYER_CONTENT_ID} div#movie_player`)
+	).toBeAttached({ timeout: 15000 });
 	await expect(page.locator(`#${MINI_PLAYER_OVERLAY_ID}`)).toHaveCSS("display", "block");
 }
 /** Asserts the mini player is down and, crucially, that the page still has its player. */
 async function expectMiniPlayerInactive(page: Page): Promise<void> {
-	await expect(page.locator("html")).not.toHaveClass(new RegExp(MINI_PLAYER_ACTIVE_CLASS), { timeout: 15000 });
+	await expect(page.locator("html")).not.toHaveClass(new RegExp(MINI_PLAYER_ACTIVE_CLASS), {
+		timeout: 15000
+	});
 	await expect(page.locator(`#${MINI_PLAYER_OVERLAY_ID} div#movie_player`)).not.toBeAttached();
 	await expect(page.locator("div#movie_player")).toBeAttached();
 }
 /** Waits for the persisted rect and returns it, so a test can compare against the exact stored values. */
 async function expectStoredRect(page: Page): Promise<MiniPlayerRect> {
-	await expect.poll(async () => (await readMiniPlayerState(page))?.rect, { timeout: 10000 }).not.toBeNull();
+	await expect
+		.poll(async () => (await readMiniPlayerState(page))?.rect, { timeout: 10000 })
+		.not.toBeNull();
 	const state = await readMiniPlayerState(page);
 	expect(state?.rect).not.toBeNull();
 	return state!.rect!;
 }
 async function isMiniPlayerActive(page: Page): Promise<boolean> {
-	return await page.evaluate((activeClass) => document.documentElement.classList.contains(activeClass), MINI_PLAYER_ACTIVE_CLASS);
+	return await page.evaluate(
+		(activeClass) => document.documentElement.classList.contains(activeClass),
+		MINI_PLAYER_ACTIVE_CLASS
+	);
 }
 /**
  * Scrolls until the geometry the feature's IntersectionObserver reads says "player gone, comments on screen", which
@@ -76,17 +96,24 @@ async function scrollCommentsIntoView(page: Page): Promise<void> {
 		.poll(
 			async () =>
 				page.evaluate((sentinelId) => {
-					const comments = document.querySelector("ytd-comments") ?? document.querySelector("#comments");
+					const comments =
+						document.querySelector("ytd-comments") ?? document.querySelector("#comments");
 					const sentinel = document.getElementById(sentinelId);
 					if (!comments || !sentinel) return false;
 					comments.scrollIntoView({ block: "start" });
 					const sentinelBounds = sentinel.getBoundingClientRect();
 					const commentBounds = comments.getBoundingClientRect();
-					const sentinelVisible = sentinelBounds.bottom > 0 && sentinelBounds.top < window.innerHeight;
-					const commentsVisible = commentBounds.bottom > 0 && commentBounds.top < window.innerHeight;
+					const sentinelVisible =
+						sentinelBounds.bottom > 0 && sentinelBounds.top < window.innerHeight;
+					const commentsVisible =
+						commentBounds.bottom > 0 && commentBounds.top < window.innerHeight;
 					return !sentinelVisible && commentsVisible;
 				}, MINI_PLAYER_SENTINEL_ID),
-			{ intervals: [250], message: "expected the comments to be on screen with the player scrolled away", timeout: 20000 }
+			{
+				intervals: [250],
+				message: "expected the comments to be on screen with the player scrolled away",
+				timeout: 20000
+			}
 		)
 		.toBe(true);
 }
@@ -121,12 +148,16 @@ test.describe("miniPlayer", () => {
 		test(`should create sentinel element on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: sentinelTimeout });
+			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({
+				timeout: sentinelTimeout
+			});
 		});
 		test(`should create sentinel element after navigation on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: sentinelTimeout });
+			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({
+				timeout: sentinelTimeout
+			});
 			// No disable/re-enable cycle afterwards: the sentinel has to come back from the navigation itself. On watch
 			// that needs a genuine in-page navigation; on live navigateToPageType clicks through from the channel page.
 			if (pageType === watch) await spaNavigateToRelatedVideo(page);
@@ -134,7 +165,9 @@ test.describe("miniPlayer", () => {
 				await navigateToPageType(page, home);
 				await navigateToPageType(page, pageType);
 			}
-			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: sentinelTimeout });
+			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({
+				timeout: sentinelTimeout
+			});
 		});
 	}
 
@@ -164,7 +197,9 @@ test.describe("miniPlayer", () => {
 	});
 	// navigateToPageType(nonTargetPage) is a document load, so this cannot observe cleanup across a navigation; it
 	// checks the includePages gate on a fresh load while the feature is already enabled.
-	test(`should not create sentinel when the feature is already enabled and the page is a non-target page`, async ({ page }) => {
+	test(`should not create sentinel when the feature is already enabled and the page is a non-target page`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, testPages[0]);
 		await enableFeature(page, "miniPlayer.enabled");
 		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
@@ -187,9 +222,13 @@ test.describe("miniPlayer", () => {
 			await enableFeature(page, "miniPlayerButton.button.enabled");
 			await setOption(page, "miniPlayerButton.button.placement", right);
 			await clickFeatureButton(page, watch, "yte-feature-miniPlayerButton-button", right);
-			await expect(page.locator("html")).toHaveClass(new RegExp(MINI_PLAYER_ACTIVE_CLASS), { timeout: 10000 });
+			await expect(page.locator("html")).toHaveClass(new RegExp(MINI_PLAYER_ACTIVE_CLASS), {
+				timeout: 10000
+			});
 
-			await expect.poll(async () => (await readMiniPlayerState(page))?.manualOverride, { timeout: 10000 }).toBe(true);
+			await expect
+				.poll(async () => (await readMiniPlayerState(page))?.manualOverride, { timeout: 10000 })
+				.toBe(true);
 			const activeState = await readMiniPlayerState(page);
 			const { rect } = activeState!;
 			expect(rect).not.toBeNull();
@@ -202,7 +241,9 @@ test.describe("miniPlayer", () => {
 	// Every case below runs on watch only: the auto observer keys off the comments section, and the live fixture costs
 	// up to 120 s while taking exactly the same code path.
 	test.describe("automatic activation", () => {
-		test(`should activate the mini player when the comments are scrolled into view on ${watch}`, async ({ page }) => {
+		test(`should activate the mini player when the comments are scrolled into view on ${watch}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
 			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
@@ -210,7 +251,9 @@ test.describe("miniPlayer", () => {
 			await scrollCommentsIntoView(page);
 			await expectMiniPlayerActive(page);
 		});
-		test(`should restore the player into the page when the mini player deactivates automatically on ${watch}`, async ({ page }) => {
+		test(`should restore the player into the page when the mini player deactivates automatically on ${watch}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
 			await scrollCommentsIntoView(page);
@@ -221,7 +264,9 @@ test.describe("miniPlayer", () => {
 			await expect(page.locator("ytd-player div#movie_player")).toBeAttached({ timeout: 15000 });
 			await expect(page.locator(`#${MINI_PLAYER_PLACEHOLDER_ID}`)).not.toBeAttached();
 		});
-		test(`should restore the player when the feature is disabled while the mini player is active on ${watch}`, async ({ page }) => {
+		test(`should restore the player when the feature is disabled while the mini player is active on ${watch}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
 			await scrollCommentsIntoView(page);
@@ -234,7 +279,9 @@ test.describe("miniPlayer", () => {
 		});
 	});
 	test.describe("mini seek bar", () => {
-		test(`should render the mini seek bar while active and give YouTube its progress bar back on ${watch}`, async ({ page }) => {
+		test(`should render the mini seek bar while active and give YouTube its progress bar back on ${watch}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
 			const nativeProgressBar = page.locator("div#movie_player .ytp-progress-bar-container");
@@ -242,7 +289,9 @@ test.describe("miniPlayer", () => {
 			await scrollCommentsIntoView(page);
 			await expectMiniPlayerActive(page);
 			const miniSeekBar = page.locator(`#${MINI_PLAYER_OVERLAY_ID} .${MINI_SEEK_BAR_CLASS}`);
-			await expect(miniSeekBar.locator(`.${MINI_SEEK_BAR_CLASS}__track`)).toBeAttached({ timeout: 15000 });
+			await expect(miniSeekBar.locator(`.${MINI_SEEK_BAR_CLASS}__track`)).toBeAttached({
+				timeout: 15000
+			});
 			// The mini seek bar takes over from the native progress bar while it is up.
 			await expect(nativeProgressBar).toHaveCSS("display", "none");
 			await scrollPlayerIntoView(page);
@@ -253,7 +302,9 @@ test.describe("miniPlayer", () => {
 		});
 	});
 	test.describe("defaults", () => {
-		test(`should reposition the active mini player when defaultPosition changes on ${watch}`, async ({ page }) => {
+		test(`should reposition the active mini player when defaultPosition changes on ${watch}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
 			await scrollCommentsIntoView(page);
@@ -264,9 +315,13 @@ test.describe("miniPlayer", () => {
 			await setOption(page, "miniPlayer.defaultPosition", "top_left");
 			// applyInitialRect puts top_left at the fixed 16 px margin on both axes.
 			await expect(overlay).toHaveCSS("transform", "matrix(1, 0, 0, 1, 16, 16)");
-			await expect.poll(async () => (await readMiniPlayerState(page))?.rect, { timeout: 10000 }).toMatchObject({ x: 16, y: 16 });
+			await expect
+				.poll(async () => (await readMiniPlayerState(page))?.rect, { timeout: 10000 })
+				.toMatchObject({ x: 16, y: 16 });
 		});
-		test(`should resize the active mini player when defaultSize changes on ${watch}`, async ({ page }) => {
+		test(`should resize the active mini player when defaultSize changes on ${watch}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
 			await scrollCommentsIntoView(page);
@@ -278,24 +333,40 @@ test.describe("miniPlayer", () => {
 			await setOption(page, "miniPlayer.defaultSize", "560x315");
 			await expect(overlay).toHaveCSS("width", "560px");
 			await expect(overlay).toHaveCSS("height", "315px");
-			await expect.poll(async () => (await readMiniPlayerState(page))?.rect, { timeout: 10000 }).toMatchObject({ height: 315, width: 560 });
+			await expect
+				.poll(async () => (await readMiniPlayerState(page))?.rect, { timeout: 10000 })
+				.toMatchObject({ height: 315, width: 560 });
 		});
 	});
 	test.describe("manual control", () => {
-		test(`should not auto-activate or auto-deactivate while the manual override is set on ${watch}`, async ({ page }) => {
+		test(`should not auto-activate or auto-deactivate while the manual override is set on ${watch}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
 			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
 			await toggleMiniPlayerFromButton(page);
 			await expectMiniPlayerActive(page);
-			await expect.poll(async () => (await readMiniPlayerState(page))?.manualOverride, { timeout: 10000 }).toBe(true);
+			await expect
+				.poll(async () => (await readMiniPlayerState(page))?.manualOverride, { timeout: 10000 })
+				.toBe(true);
 			// setAutoActive short-circuits on the override, so scrolling in either direction must change nothing.
 			await scrollCommentsIntoView(page);
-			await expectToStay(async () => isMiniPlayerActive(page), true, { durationMs: 3000, intervalMs: 500, page });
+			await expectToStay(async () => isMiniPlayerActive(page), true, {
+				durationMs: 3000,
+				intervalMs: 500,
+				page
+			});
 			await scrollPlayerIntoView(page);
-			await expectToStay(async () => isMiniPlayerActive(page), true, { durationMs: 3000, intervalMs: 500, page });
+			await expectToStay(async () => isMiniPlayerActive(page), true, {
+				durationMs: 3000,
+				intervalMs: 500,
+				page
+			});
 		});
-		test(`should keep a manually opened mini player active across an in-page navigation on ${watch}`, async ({ page }) => {
+		test(`should keep a manually opened mini player active across an in-page navigation on ${watch}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
 			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
@@ -304,18 +375,28 @@ test.describe("miniPlayer", () => {
 			// onNavigate destroys the controller, so only its wasManualActive branch can bring the mini player back.
 			await spaNavigateToRelatedVideo(page);
 			await expectMiniPlayerActive(page);
-			await expect.poll(async () => (await readMiniPlayerState(page))?.manualOverride, { timeout: 10000 }).toBe(true);
+			await expect
+				.poll(async () => (await readMiniPlayerState(page))?.manualOverride, { timeout: 10000 })
+				.toBe(true);
 		});
-		test(`should close the mini player when the close button is clicked on ${watch}`, async ({ page }) => {
+		test(`should close the mini player when the close button is clicked on ${watch}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
 			await toggleMiniPlayerFromButton(page);
 			await expectMiniPlayerActive(page);
-			await expect.poll(async () => (await readMiniPlayerState(page))?.manualOverride, { timeout: 10000 }).toBe(true);
-			await page.locator(`#${MINI_PLAYER_CLOSE_ID}`).evaluate((el) => (el as HTMLButtonElement).click());
+			await expect
+				.poll(async () => (await readMiniPlayerState(page))?.manualOverride, { timeout: 10000 })
+				.toBe(true);
+			await page
+				.locator(`#${MINI_PLAYER_CLOSE_ID}`)
+				.evaluate((el) => (el as HTMLButtonElement).click());
 			await expectMiniPlayerInactive(page);
 			// close() force-clears the override, so the auto observer is back in charge afterwards.
-			await expect.poll(async () => (await readMiniPlayerState(page))?.manualOverride, { timeout: 10000 }).toBe(false);
+			await expect
+				.poll(async () => (await readMiniPlayerState(page))?.manualOverride, { timeout: 10000 })
+				.toBe(false);
 		});
 		test(`should persist the mini player rect after dragging on ${watch}`, async ({ page }) => {
 			await navigateToPageType(page, watch);
@@ -334,11 +415,18 @@ test.describe("miniPlayer", () => {
 			await page.mouse.up();
 			const expectedX = startRect.x - dragDelta;
 			const expectedY = startRect.y - dragDelta;
-			await expect(page.locator(`#${MINI_PLAYER_OVERLAY_ID}`)).toHaveCSS("transform", `matrix(1, 0, 0, 1, ${expectedX}, ${expectedY})`);
+			await expect(page.locator(`#${MINI_PLAYER_OVERLAY_ID}`)).toHaveCSS(
+				"transform",
+				`matrix(1, 0, 0, 1, ${expectedX}, ${expectedY})`
+			);
 			// The rect is a persisted surface: it is read back the next time the mini player activates.
-			await expect.poll(async () => (await readMiniPlayerState(page))?.rect, { timeout: 10000 }).toMatchObject({ x: expectedX, y: expectedY });
+			await expect
+				.poll(async () => (await readMiniPlayerState(page))?.rect, { timeout: 10000 })
+				.toMatchObject({ x: expectedX, y: expectedY });
 		});
-		test(`should close a manually opened mini player from the button on ${watch}`, async ({ page }) => {
+		test(`should close a manually opened mini player from the button on ${watch}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
 			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
@@ -347,7 +435,9 @@ test.describe("miniPlayer", () => {
 			// The second press is the other half of toggleManual: it closes the overlay and gives up the override.
 			await clickFeatureButton(page, watch, "yte-feature-miniPlayerButton-button", right);
 			await expectMiniPlayerInactive(page);
-			await expect.poll(async () => (await readMiniPlayerState(page))?.manualOverride, { timeout: 10000 }).toBe(false);
+			await expect
+				.poll(async () => (await readMiniPlayerState(page))?.manualOverride, { timeout: 10000 })
+				.toBe(false);
 			await expect(page.locator("ytd-player div#movie_player")).toBeAttached({ timeout: 15000 });
 		});
 		test(`should persist the mini player rect after resizing on ${watch}`, async ({ page }) => {
@@ -356,7 +446,10 @@ test.describe("miniPlayer", () => {
 			await scrollCommentsIntoView(page);
 			await expectMiniPlayerActive(page);
 			const startRect = await expectStoredRect(page);
-			const viewport = await page.evaluate(() => ({ height: window.innerHeight, width: window.innerWidth }));
+			const viewport = await page.evaluate(() => ({
+				height: window.innerHeight,
+				width: window.innerWidth
+			}));
 			const resizeHandle = page.locator(`#${MINI_PLAYER_RESIZE_ID}`);
 			const handleBox = await resizeHandle.boundingBox();
 			expect(handleBox).not.toBeNull();
@@ -376,10 +469,18 @@ test.describe("miniPlayer", () => {
 			const overlay = page.locator(`#${MINI_PLAYER_OVERLAY_ID}`);
 			await expect(overlay).toHaveCSS("width", `${expectedWidth}px`);
 			await expect(overlay).toHaveCSS("height", `${expectedHeight}px`);
-			await expect(overlay).toHaveCSS("transform", `matrix(1, 0, 0, 1, ${expectedX}, ${expectedY})`);
+			await expect(overlay).toHaveCSS(
+				"transform",
+				`matrix(1, 0, 0, 1, ${expectedX}, ${expectedY})`
+			);
 			await expect
 				.poll(async () => (await readMiniPlayerState(page))?.rect, { timeout: 10000 })
-				.toMatchObject({ height: expectedHeight, width: expectedWidth, x: expectedX, y: expectedY });
+				.toMatchObject({
+					height: expectedHeight,
+					width: expectedWidth,
+					x: expectedX,
+					y: expectedY
+				});
 		});
 		test(`should place the mini player at each default position on ${watch}`, async ({ page }) => {
 			await navigateToPageType(page, watch);
@@ -388,7 +489,10 @@ test.describe("miniPlayer", () => {
 			await expectMiniPlayerActive(page);
 			const overlay = page.locator(`#${MINI_PLAYER_OVERLAY_ID}`);
 			const rect = await expectStoredRect(page);
-			const viewport = await page.evaluate(() => ({ height: window.innerHeight, width: window.innerWidth }));
+			const viewport = await page.evaluate(() => ({
+				height: window.innerHeight,
+				width: window.innerWidth
+			}));
 			const left = viewportMargin;
 			const center = Math.round((viewport.width - rect.width) / 2);
 			const right = viewport.width - rect.width - viewportMargin;
@@ -405,12 +509,17 @@ test.describe("miniPlayer", () => {
 			// A changed default is applied to the active overlay at once, at the margin applyInitialRect keeps.
 			for (const position of miniPlayerPositions) {
 				await setOption(page, "miniPlayer.defaultPosition", position);
-				await expect(overlay, position).toHaveCSS("transform", `matrix(1, 0, 0, 1, ${corners[position].x}, ${corners[position].y})`);
+				await expect(overlay, position).toHaveCSS(
+					"transform",
+					`matrix(1, 0, 0, 1, ${corners[position].x}, ${corners[position].y})`
+				);
 			}
 		});
 	});
 	test.describe("mini seek bar interaction", () => {
-		test(`should preview the hovered time and seek on click through the mini seek bar on ${watch}`, async ({ page }) => {
+		test(`should preview the hovered time and seek on click through the mini seek bar on ${watch}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
 			await scrollCommentsIntoView(page);
@@ -421,7 +530,9 @@ test.describe("miniPlayer", () => {
 			const hoverRange = seekBar.locator(`.${MINI_SEEK_BAR_CLASS}__hover`);
 			const hoveredTime = seekBar.locator(`.${MINI_SEEK_BAR_CLASS}__preview-time`);
 			await expect(preview).toHaveCSS("display", "none");
-			const duration = await page.evaluate(() => document.querySelector<HTMLVideoElement>("video.html5-main-video")?.duration ?? 0);
+			const duration = await page.evaluate(
+				() => document.querySelector<HTMLVideoElement>("video.html5-main-video")?.duration ?? 0
+			);
 			expect(duration).toBeGreaterThan(0);
 			const box = await seekBar.boundingBox();
 			expect(box).not.toBeNull();
@@ -440,13 +551,24 @@ test.describe("miniPlayer", () => {
 			await page.mouse.down();
 			await page.mouse.up();
 			await expect
-				.poll(async () => page.evaluate(() => document.querySelector<HTMLVideoElement>("video.html5-main-video")?.currentTime ?? -1), {
-					timeout: 10000
-				})
+				.poll(
+					async () =>
+						page.evaluate(
+							() =>
+								document.querySelector<HTMLVideoElement>("video.html5-main-video")?.currentTime ??
+								-1
+						),
+					{
+						timeout: 10000
+					}
+				)
 				.toBeGreaterThan(targetSeconds - 3);
-			expect(await page.evaluate(() => document.querySelector<HTMLVideoElement>("video.html5-main-video")?.currentTime ?? -1)).toBeLessThan(
-				targetSeconds + 5
-			);
+			expect(
+				await page.evaluate(
+					() =>
+						document.querySelector<HTMLVideoElement>("video.html5-main-video")?.currentTime ?? -1
+				)
+			).toBeLessThan(targetSeconds + 5);
 			// Leaving the bar takes the preview away.
 			await page.mouse.move(pointerX, box!.y - 100, { steps: 5 });
 			await expect(preview).toHaveCSS("display", "none");

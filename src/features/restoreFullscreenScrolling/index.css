@@ -1,4 +1,5 @@
-.yte-ytd-watch-flexy-restore-fullscreen-scrolling[fullscreen] #single-column-container.ytd-watch-flexy,
+.yte-ytd-watch-flexy-restore-fullscreen-scrolling[fullscreen]
+	#single-column-container.ytd-watch-flexy,
 .yte-ytd-watch-flexy-restore-fullscreen-scrolling[fullscreen] #columns.ytd-watch-flexy {
 	display: flex !important;
 }

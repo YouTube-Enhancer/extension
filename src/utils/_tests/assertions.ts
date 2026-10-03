@@ -8,28 +8,59 @@ import { placementSelectors } from "@/src/utils/_tests/constants";
 import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 
 /** Fails when none of the selectors matches an element on the page. */
-export async function expectAnyMatch(page: Page, selectors: readonly string[], { timeout = 10000 }: { timeout?: number } = {}): Promise<void> {
+export async function expectAnyMatch(
+	page: Page,
+	selectors: readonly string[],
+	{ timeout = 10000 }: { timeout?: number } = {}
+): Promise<void> {
 	await expect
-		.poll(async () => page.evaluate((list) => list.some((selector) => document.querySelector(selector) !== null), [...selectors]), {
-			message: `expected at least one element matching: ${selectors.join(", ")}`,
-			timeout
-		})
+		.poll(
+			async () =>
+				page.evaluate(
+					(list) => list.some((selector) => document.querySelector(selector) !== null),
+					[...selectors]
+				),
+			{
+				message: `expected at least one element matching: ${selectors.join(", ")}`,
+				timeout
+			}
+		)
 		.toBe(true);
 }
-export async function expectBodyWithClass(page: Page, bodyClass: string, { timeout = 10000 }: { timeout?: number } = {}): Promise<void> {
-	await expect(page.locator("body")).toHaveClass(new RegExp(`(^|\\s)${bodyClass}(\\s|$)`), { timeout });
+export async function expectBodyWithClass(
+	page: Page,
+	bodyClass: string,
+	{ timeout = 10000 }: { timeout?: number } = {}
+): Promise<void> {
+	await expect(page.locator("body")).toHaveClass(new RegExp(`(^|\\s)${bodyClass}(\\s|$)`), {
+		timeout
+	});
 }
-export async function expectBodyWithoutClass(page: Page, bodyClass: string, { timeout = 10000 }: { timeout?: number } = {}): Promise<void> {
-	await expect(page.locator("body")).not.toHaveClass(new RegExp(`(^|\\s)${bodyClass}(\\s|$)`), { timeout });
+export async function expectBodyWithoutClass(
+	page: Page,
+	bodyClass: string,
+	{ timeout = 10000 }: { timeout?: number } = {}
+): Promise<void> {
+	await expect(page.locator("body")).not.toHaveClass(new RegExp(`(^|\\s)${bodyClass}(\\s|$)`), {
+		timeout
+	});
 }
 /**
  * Asserts the player never reports `expectedQuality` during a settle window. Enforcement is asynchronous, so a
  * single read would sample before the feature could have acted.
  */
-export async function expectCurrentQualityLevelToBeFalsy(page: Page, pageType: PageType = "watch", expectedQuality: YoutubePlayerQualityLevel) {
+export async function expectCurrentQualityLevelToBeFalsy(
+	page: Page,
+	pageType: PageType = "watch",
+	expectedQuality: YoutubePlayerQualityLevel
+) {
 	await expectToStay(
 		async () => {
-			const currentQualityLevel = await getValueFromYouTubePlayer(page, "getPlaybackQuality", pageType);
+			const currentQualityLevel = await getValueFromYouTubePlayer(
+				page,
+				"getPlaybackQuality",
+				pageType
+			);
 			expect(currentQualityLevel).toBeTruthy();
 			return currentQualityLevel !== expectedQuality;
 		},
@@ -43,7 +74,9 @@ export async function expectCurrentQualityLevelToBeTruthy(
 	expectedQuality: YoutubePlayerQualityLevel,
 	{ timeout = 10000 }: { timeout?: number } = {}
 ) {
-	await expect.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", pageType), { timeout }).toBe(expectedQuality);
+	await expect
+		.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", pageType), { timeout })
+		.toBe(expectedQuality);
 }
 /**
  * Asserts every element matching the selectors is hidden. With `mode: "any"` a single hidden match is enough.
@@ -109,7 +142,11 @@ export async function expectFeatureButtonToBeIn(
 }
 /** The button controller places buttons once the player controls exist, which a live player renders late. */
 // 30 s: a live stream's player controls, where the buttons go, can take twice as long to settle as a video's.
-export async function expectFeatureButtonToBeTruthy(page: Page, featureId: FeatureButtonId, { timeout = 30000 }: { timeout?: number } = {}) {
+export async function expectFeatureButtonToBeTruthy(
+	page: Page,
+	featureId: FeatureButtonId,
+	{ timeout = 30000 }: { timeout?: number } = {}
+) {
 	const featureButton = page.locator(`#${featureId}`);
 	await expect(featureButton).toBeAttached({ timeout });
 }
@@ -139,7 +176,11 @@ export async function expectToggleButtonState(
 export async function expectToStay(
 	getter: () => Promise<unknown>,
 	expected: unknown,
-	{ durationMs = 3000, intervalMs = 250, page }: { durationMs?: number; intervalMs?: number; page: Page }
+	{
+		durationMs = 3000,
+		intervalMs = 250,
+		page
+	}: { durationMs?: number; intervalMs?: number; page: Page }
 ): Promise<void> {
 	const end = Date.now() + durationMs;
 	do {

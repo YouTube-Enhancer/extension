@@ -9,8 +9,14 @@ import type { FilterKeysByValueType } from "@/src/utils/_tests/types";
 import { pageTypeRecord, placementSelectors } from "@/src/utils/_tests/constants";
 import { loadDefaultConfig, setOption } from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
-import { navigateToPageType, reloadPage, spaNavigateToFirstVideo, 
-spaNavigateToHome, spaNavigateToRelatedVideo, waitForExtensionReady } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	reloadPage,
+	spaNavigateToFirstVideo,
+	spaNavigateToHome,
+	spaNavigateToRelatedVideo,
+	waitForExtensionReady
+} from "@/src/utils/_tests/navigation";
 
 /**
  * Every feature at once. The per-feature specs prove each feature does its job; these cases prove that the whole
@@ -19,12 +25,29 @@ spaNavigateToHome, spaNavigateToRelatedVideo, waitForExtensionReady } from "@/sr
  * not there, a page a feature is not meant for, a teardown while another feature still holds the element.
  */
 type Switch = FilterKeysByValueType<configuration, boolean>;
-const { channel_home, channel_posts, channel_streams, channel_videos, home, live, playlist, search, shorts, subscriptions, watch } = pageTypeRecord;
+const {
+	channel_home,
+	channel_posts,
+	channel_streams,
+	channel_videos,
+	home,
+	live,
+	playlist,
+	search,
+	shorts,
+	subscriptions,
+	watch
+} = pageTypeRecord;
 /** How long the features get to finish their retry loops before the page is changed or the switches read back. */
 const SETTLE_MS = 15_000;
 
 /** Every configuration path whose last segment `matches`, found by walking the defaults. */
-function collectPaths(node: unknown, matches: (key: string) => boolean, prefix = "", out: Path<configuration>[] = []): Path<configuration>[] {
+function collectPaths(
+	node: unknown,
+	matches: (key: string) => boolean,
+	prefix = "",
+	out: Path<configuration>[] = []
+): Path<configuration>[] {
 	if (typeof node !== "object" || node === null) return out;
 	for (const [key, value] of Object.entries(node)) {
 		const path = prefix ? `${prefix}.${key}` : key;
@@ -39,7 +62,10 @@ function collectSwitches(defaults: configuration): Switch[] {
 	return collectPaths(defaults, (key) => key === "enabled") as Switch[];
 }
 
-async function enableEverythingOn(page: Page, pageType: PageType): Promise<{ errors: string[]; switches: Switch[] }> {
+async function enableEverythingOn(
+	page: Page,
+	pageType: PageType
+): Promise<{ errors: string[]; switches: Switch[] }> {
 	const switches = collectSwitches(await loadDefaultConfig());
 	expect(switches.length).toBeGreaterThan(50);
 	await navigateToPageType(page, pageType);
@@ -57,13 +83,16 @@ async function setEverySwitch(page: Page, switches: Switch[], enabled: boolean):
 function watchExtensionErrors(page: Page): string[] {
 	const errors: string[] = [];
 	page.on("pageerror", (error) => {
-		if ((error.stack ?? "").includes("chrome-extension://")) errors.push(`${error.message}\n${error.stack ?? ""}`);
+		if ((error.stack ?? "").includes("chrome-extension://"))
+			errors.push(`${error.message}\n${error.stack ?? ""}`);
 	});
 	return errors;
 }
 
 test.describe("every feature", () => {
-	test(`every feature enabled on ${watch} survives an in-page round trip through home and a full disable`, async ({ page }) => {
+	test(`every feature enabled on ${watch} survives an in-page round trip through home and a full disable`, async ({
+		page
+	}) => {
 		test.setTimeout(300_000);
 		const { errors, switches } = await enableEverythingOn(page, watch);
 		await waitForExtensionReady(page);
@@ -105,7 +134,9 @@ test.describe("every feature", () => {
 		await page.waitForTimeout(SETTLE_MS);
 		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
-	test(`every feature enabled on a ${watch} page without player controls, below-player host and owner row`, async ({ page }) => {
+	test(`every feature enabled on a ${watch} page without player controls, below-player host and owner row`, async ({
+		page
+	}) => {
 		test.setTimeout(240_000);
 		await navigateToPageType(page, watch);
 		// The hosts the buttons, the below-player container and the channel lookups attach to are gone, but the player
@@ -142,10 +173,14 @@ test.describe("every feature", () => {
 		await page.waitForTimeout(SETTLE_MS);
 		await expect(page.locator(placementSelectors.below_player)).toBeAttached();
 		// Theater mode moves the below-player container into the watch element and back.
-		await page.locator("button.ytp-size-button").evaluate((el) => (el as HTMLButtonElement).click());
+		await page
+			.locator("button.ytp-size-button")
+			.evaluate((el) => (el as HTMLButtonElement).click());
 		await page.waitForTimeout(5000);
 		await expect(page.locator(placementSelectors.below_player)).toBeAttached();
-		await page.locator("button.ytp-size-button").evaluate((el) => (el as HTMLButtonElement).click());
+		await page
+			.locator("button.ytp-size-button")
+			.evaluate((el) => (el as HTMLButtonElement).click());
 		await page.waitForTimeout(5000);
 		for (const key of placements) await setOption(page, key, "feature_menu");
 		await page.waitForTimeout(SETTLE_MS);
@@ -161,16 +196,22 @@ test.describe("every feature", () => {
 		await page.waitForTimeout(SETTLE_MS);
 		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
-	test(`every feature enabled survives a reload, theater mode and a related-video navigation on ${watch}`, async ({ page }) => {
+	test(`every feature enabled survives a reload, theater mode and a related-video navigation on ${watch}`, async ({
+		page
+	}) => {
 		test.setTimeout(300_000);
 		const { switches } = await enableEverythingOn(page, watch);
 		// A load with everything already on takes the registry's enable-all path instead of one enable at a time.
 		await reloadPage(page, watch);
 		const errors = watchExtensionErrors(page);
 		await page.waitForTimeout(SETTLE_MS);
-		await page.locator("button.ytp-size-button").evaluate((el) => (el as HTMLButtonElement).click());
+		await page
+			.locator("button.ytp-size-button")
+			.evaluate((el) => (el as HTMLButtonElement).click());
 		await page.waitForTimeout(5000);
-		await page.locator("button.ytp-size-button").evaluate((el) => (el as HTMLButtonElement).click());
+		await page
+			.locator("button.ytp-size-button")
+			.evaluate((el) => (el as HTMLButtonElement).click());
 		await page.waitForTimeout(5000);
 		await spaNavigateToRelatedVideo(page);
 		await page.waitForTimeout(SETTLE_MS);
@@ -178,12 +219,21 @@ test.describe("every feature", () => {
 		await page.waitForTimeout(SETTLE_MS);
 		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
-	test("every feature enabled across the feed and channel pages by full loads", async ({ page }) => {
+	test("every feature enabled across the feed and channel pages by full loads", async ({
+		page
+	}) => {
 		test.setTimeout(420_000);
 		const { errors, switches } = await enableEverythingOn(page, home);
 		// Each load starts the whole set on a page of that type; the channel tabs include the two the page-type
 		// detector only learned on 2026-09-07.
-		for (const pageType of [search, subscriptions, channel_home, channel_videos, channel_posts, channel_streams]) {
+		for (const pageType of [
+			search,
+			subscriptions,
+			channel_home,
+			channel_videos,
+			channel_posts,
+			channel_streams
+		]) {
 			await navigateToPageType(page, pageType);
 			await page.waitForTimeout(SETTLE_MS / 2);
 		}
@@ -200,16 +250,35 @@ test.describe("every feature", () => {
 		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
 	for (const { pageType, removed } of [
-		{ pageType: watch, removed: ["video.html5-main-video", ".ytp-chrome-bottom", "#secondary", "ytd-comments", "ytd-playlist-panel-renderer"] },
+		{
+			pageType: watch,
+			removed: [
+				"video.html5-main-video",
+				".ytp-chrome-bottom",
+				"#secondary",
+				"ytd-comments",
+				"ytd-playlist-panel-renderer"
+			]
+		},
 		{ pageType: shorts, removed: ["#shorts-player", "ytd-reel-video-renderer", "#menu-button"] },
-		{ pageType: playlist, removed: ["ytd-playlist-video-list-renderer", "ytd-playlist-header-renderer", "yt-page-header-view-model"] }
+		{
+			pageType: playlist,
+			removed: [
+				"ytd-playlist-video-list-renderer",
+				"ytd-playlist-header-renderer",
+				"yt-page-header-view-model"
+			]
+		}
 	] as const) {
-		test(`every feature enabled on a ${pageType} page stripped of ${removed.join(", ")}`, async ({ page }) => {
+		test(`every feature enabled on a ${pageType} page stripped of ${removed.join(", ")}`, async ({
+			page
+		}) => {
 			test.setTimeout(240_000);
 			await navigateToPageType(page, pageType);
 			// Each feature has to notice the part of the page it works on is missing and give up without throwing.
 			await page.evaluate((selectors) => {
-				for (const selector of selectors) document.querySelectorAll(selector).forEach((element) => element.remove());
+				for (const selector of selectors)
+					document.querySelectorAll(selector).forEach((element) => element.remove());
 			}, removed);
 			const errors = watchExtensionErrors(page);
 			const switches = collectSwitches(await loadDefaultConfig());

@@ -60,7 +60,9 @@ test.describe("customCSS", () => {
 		await navigateToPageType(page, home);
 		await navigateToPageType(page, watch);
 		await expect(page.locator("#yte-custom-css")).toBeAttached({ timeout: 15000 });
-		await expect.poll(async () => page.locator("#yte-custom-css").textContent()).toBe("body { background: red !important; }");
+		await expect
+			.poll(async () => page.locator("#yte-custom-css").textContent())
+			.toBe("body { background: red !important; }");
 	});
 	test("re-applies after disable then re-enable on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
@@ -81,7 +83,9 @@ test.describe("customCSS", () => {
 		await expect.poll(async () => page.locator("#yte-custom-css").textContent()).toBe(probeCode);
 		await expect(page.locator(`#${probeId}`)).toBeHidden();
 	});
-	test("does not inject custom CSS when the code changes while the feature is disabled on watch", async ({ page }) => {
+	test("does not inject custom CSS when the code changes while the feature is disabled on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await disableFeature(page, "customCSS.enabled");
 		await injectProbeElement(page);

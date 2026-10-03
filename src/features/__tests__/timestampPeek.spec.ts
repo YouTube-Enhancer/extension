@@ -8,7 +8,12 @@ import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 import { metadata } from "@/src/features/timestampPeek/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
-import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	clickFeatureButton,
+	disableFeature,
+	enableFeature,
+	setOption
+} from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
@@ -127,7 +132,10 @@ async function isVideoPlaying(page: Page): Promise<boolean> {
  * Reads every timestamp the description offers together with the duration they are bounded by, so a test can
  * pick a timestamp that leaves room instead of assuming the first link in the DOM does.
  */
-async function readTimestampLinks(page: Page, selector: string): Promise<{ duration: Nullable<number>; timestamps: number[] }> {
+async function readTimestampLinks(
+	page: Page,
+	selector: string
+): Promise<{ duration: Nullable<number>; timestamps: number[] }> {
 	await expect(page.locator(selector).first()).toBeAttached({ timeout: 15000 });
 	return page.evaluate(async (sel) => {
 		const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
@@ -184,7 +192,9 @@ function timestampLinkSelector(page: Page, inComment = false): string {
 
 test.describe("timestampPeek", () => {
 	for (const pageType of testPages) {
-		test(`should show preview overlay when hovering a timestamp in the description on ${pageType}`, async ({ page }) => {
+		test(`should show preview overlay when hovering a timestamp in the description on ${pageType}`, async ({
+			page
+		}) => {
 			await setupWatchPage(page, pageType);
 			await enableFeature(page, "timestampPeek.enabled");
 			await expandDescription(page);
@@ -226,7 +236,9 @@ test.describe("timestampPeek", () => {
 			await expectOverlayVisible(page);
 		});
 
-		test(`should clean up the preview overlay after navigation on ${pageType}`, async ({ page }) => {
+		test(`should clean up the preview overlay after navigation on ${pageType}`, async ({
+			page
+		}) => {
 			await setupWatchPage(page, pageType);
 			await enableFeature(page, "timestampPeek.enabled");
 			await expandDescription(page);
@@ -257,7 +269,9 @@ test.describe("timestampPeek", () => {
 			await expectOverlayVisible(page);
 		});
 
-		test(`should show preview overlay when hovering a timestamp in a comment on ${pageType}`, async ({ page }) => {
+		test(`should show preview overlay when hovering a timestamp in a comment on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType, ["commentTimestamps"]);
 			await enableFeature(page, "timestampPeek.enabled");
 			await scrollToComments(page);
@@ -265,7 +279,9 @@ test.describe("timestampPeek", () => {
 			await expectOverlayVisible(page);
 		});
 
-		test(`should seek to timestamp when clicking the preview overlay on a comment timestamp on ${pageType}`, async ({ page }) => {
+		test(`should seek to timestamp when clicking the preview overlay on a comment timestamp on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType, ["commentTimestamps"]);
 			await enableFeature(page, "timestampPeek.enabled");
 			await scrollToComments(page);
@@ -294,9 +310,13 @@ test.describe("timestampPeek", () => {
 			await expect
 				.poll(async () => getVideoTime(page), { intervals: [100], timeout: 5000 })
 				.toBeGreaterThanOrEqual(Math.max(expectedTime!, timeBeforeClick! - 0.5));
-			await expect.poll(async () => isVideoPlaying(page), { intervals: [100], timeout: 5000 }).toBe(true);
+			await expect
+				.poll(async () => isVideoPlaying(page), { intervals: [100], timeout: 5000 })
+				.toBe(true);
 			// The handler scrolls back to the player so the resumed video is on screen.
-			await expect.poll(async () => page.evaluate(() => window.scrollY), { intervals: [100], timeout: 10000 }).toBe(0);
+			await expect
+				.poll(async () => page.evaluate(() => window.scrollY), { intervals: [100], timeout: 10000 })
+				.toBe(0);
 		});
 
 		test(`should stay paused when restoring video time on ${pageType}`, async ({ page }) => {
@@ -319,11 +339,17 @@ test.describe("timestampPeek", () => {
 				relatedTarget: await page.locator("body").elementHandle()
 			});
 
-			await expect.poll(async () => getVideoTime(page), { intervals: [200], timeout: 5000 }).toBeCloseTo(preHoverTime!, 0);
-			await expect.poll(async () => isVideoPlaying(page), { intervals: [200], timeout: 5000 }).toBe(false);
+			await expect
+				.poll(async () => getVideoTime(page), { intervals: [200], timeout: 5000 })
+				.toBeCloseTo(preHoverTime!, 0);
+			await expect
+				.poll(async () => isVideoPlaying(page), { intervals: [200], timeout: 5000 })
+				.toBe(false);
 		});
 
-		test(`should play from timestamp when clicking preview overlay while paused on ${pageType}`, async ({ page }) => {
+		test(`should play from timestamp when clicking preview overlay while paused on ${pageType}`, async ({
+			page
+		}) => {
 			await setupWatchPage(page, pageType);
 			await enableFeature(page, "timestampPeek.enabled");
 			await expandDescription(page);
@@ -349,13 +375,17 @@ test.describe("timestampPeek", () => {
 			await expect
 				.poll(async () => getVideoTime(page), { intervals: [100], timeout: 5000 })
 				.toBeGreaterThanOrEqual(Math.max(expectedTime!, timeBeforeClick! - 0.5));
-			await expect.poll(async () => isVideoPlaying(page), { intervals: [100], timeout: 5000 }).toBe(true);
+			await expect
+				.poll(async () => isVideoPlaying(page), { intervals: [100], timeout: 5000 })
+				.toBe(true);
 		});
 	}
 
 	// The cases below run on watch only, which is the feature's only page; they are written against `watch`
 	// directly because each one drives a single, specific interaction rather than a per-page smoke test.
-	test(`should return the video element to the player and remove the placeholder after leaving the preview on ${watch}`, async ({ page }) => {
+	test(`should return the video element to the player and remove the placeholder after leaving the preview on ${watch}`, async ({
+		page
+	}) => {
 		await setupWatchPage(page, watch);
 		await enableFeature(page, "timestampPeek.enabled");
 		await expandDescription(page);
@@ -372,7 +402,9 @@ test.describe("timestampPeek", () => {
 		expect(await getVideoParent(page)).toBe(originalParent);
 	});
 
-	test(`should keep the preview open while the pointer travels from the timestamp into the overlay on ${watch}`, async ({ page }) => {
+	test(`should keep the preview open while the pointer travels from the timestamp into the overlay on ${watch}`, async ({
+		page
+	}) => {
 		await setupWatchPage(page, watch);
 		await enableFeature(page, "timestampPeek.enabled");
 		await expandDescription(page);
@@ -392,11 +424,15 @@ test.describe("timestampPeek", () => {
 		);
 		await expect(page.locator(SHIELD)).toBeVisible({ timeout: 5000 });
 		// A hide that was not cancelled would have put the video back long before the settle window ends.
-		await expectToStay(async () => page.locator(`${OVERLAY} video.html5-main-video`).count(), 1, { page });
+		await expectToStay(async () => page.locator(`${OVERLAY} video.html5-main-video`).count(), 1, {
+			page
+		});
 		await expect(page.locator(PLACEHOLDER)).toBeAttached();
 	});
 
-	test(`should keep the preview time when the timestamp link itself is clicked on ${watch}`, async ({ page }) => {
+	test(`should keep the preview time when the timestamp link itself is clicked on ${watch}`, async ({
+		page
+	}) => {
 		await setupWatchPage(page, watch);
 		await enableFeature(page, "timestampPeek.enabled");
 		await expandDescription(page);
@@ -425,7 +461,9 @@ test.describe("timestampPeek", () => {
 		expect(parkedTime! - linkTimestamp).toBeGreaterThan(5);
 		await hoverTimestamp(page, selector, linkIndex);
 		await expectOverlayVisible(page);
-		await expect.poll(async () => getVideoTime(page), { timeout: 10000 }).toBeLessThan(parkedTime! - 2);
+		await expect
+			.poll(async () => getVideoTime(page), { timeout: 10000 })
+			.toBeLessThan(parkedTime! - 2);
 		// pointerdown commits the seek; leaving the link right after it still schedules the restore, which now
 		// has to leave the committed time alone. The pointer is moved away for real rather than by a synthetic
 		// mouseleave: with the cursor still resting on the link, closing the preview shifts the video back and
@@ -435,14 +473,20 @@ test.describe("timestampPeek", () => {
 		await page.mouse.move(0, 0);
 		await expect(page.locator(PLACEHOLDER)).not.toBeAttached({ timeout: 10000 });
 		// The preview plays on from its own time: it never jumps back to `parkedTime` and never pauses.
-		await expectToStay(async () => (await getVideoTime(page))! < parkedTime! - 1 && (await isVideoPlaying(page)), true, { page });
+		await expectToStay(
+			async () => (await getVideoTime(page))! < parkedTime! - 1 && (await isVideoPlaying(page)),
+			true,
+			{ page }
+		);
 	});
 
 	for (const { name, pointer } of [
 		{ name: "a modified click", pointer: { button: 0, ctrlKey: true } },
 		{ name: "a secondary button", pointer: { button: 2 } }
 	]) {
-		test(`should not commit the preview on ${name} on the timestamp link on ${watch}`, async ({ page }) => {
+		test(`should not commit the preview on ${name} on the timestamp link on ${watch}`, async ({
+			page
+		}) => {
 			await setupWatchPage(page, watch);
 			await enableFeature(page, "timestampPeek.enabled");
 			await expandDescription(page);
@@ -466,18 +510,24 @@ test.describe("timestampPeek", () => {
 			expect(parkedTime).not.toBeNull();
 			await hoverTimestamp(page, selector, linkIndex);
 			await expectOverlayVisible(page);
-			await expect.poll(async () => getVideoTime(page), { timeout: 10000 }).toBeLessThan(parkedTime! - 2);
+			await expect
+				.poll(async () => getVideoTime(page), { timeout: 10000 })
+				.toBeLessThan(parkedTime! - 2);
 			// A modified or secondary press is the browser's (open in a new tab, context menu), not a seek: the preview
 			// is not committed, so leaving the link restores the parked time and the pause.
 			await page.locator(selector).nth(linkIndex).dispatchEvent("pointerdown", pointer);
 			await page.mouse.move(0, 0);
 			await expect(page.locator(PLACEHOLDER)).not.toBeAttached({ timeout: 10000 });
-			await expect.poll(async () => getVideoTime(page), { timeout: 10000 }).toBeGreaterThan(parkedTime! - 1);
+			await expect
+				.poll(async () => getVideoTime(page), { timeout: 10000 })
+				.toBeGreaterThan(parkedTime! - 1);
 			await expect.poll(async () => isVideoPlaying(page), { timeout: 10000 }).toBe(false);
 		});
 	}
 
-	test(`should ignore timestamps beyond the video duration and links to other videos on ${watch}`, async ({ page }) => {
+	test(`should ignore timestamps beyond the video duration and links to other videos on ${watch}`, async ({
+		page
+	}) => {
 		await setupWatchPage(page, watch);
 		await enableFeature(page, "timestampPeek.enabled");
 		await injectTimestampLinks(page);
@@ -487,13 +537,20 @@ test.describe("timestampPeek", () => {
 		await expectOverlayVisible(page);
 		await page.locator("#yte-test-timestamp-valid").dispatchEvent("mouseleave");
 		await expect(page.locator(PLACEHOLDER)).not.toBeAttached({ timeout: 10000 });
-		for (const ignoredLink of ["#yte-test-timestamp-out-of-range", "#yte-test-timestamp-other-video"]) {
+		for (const ignoredLink of [
+			"#yte-test-timestamp-out-of-range",
+			"#yte-test-timestamp-other-video"
+		]) {
 			await page.locator(ignoredLink).dispatchEvent("mouseenter");
-			await expectToStay(async () => page.locator(`${OVERLAY} video.html5-main-video`).count(), 0, { page });
+			await expectToStay(async () => page.locator(`${OVERLAY} video.html5-main-video`).count(), 0, {
+				page
+			});
 		}
 	});
 
-	test(`should hide and restore the mini player overlay while previewing on ${watch}`, async ({ page }) => {
+	test(`should hide and restore the mini player overlay while previewing on ${watch}`, async ({
+		page
+	}) => {
 		test.setTimeout(120_000);
 		await setupWatchPage(page, watch);
 		await enableFeature(page, "timestampPeek.enabled");

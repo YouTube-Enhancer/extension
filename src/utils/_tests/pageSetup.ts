@@ -4,10 +4,13 @@ import type { PageType } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
 const YOUTUBE_AD_SELECTORS = {
-	adCount: "div.video-ads .ytp-ad-player-overlay-layout__ad-info-container .ytp-ad-pod-index .ad-simple-attributed-string",
+	adCount:
+		"div.video-ads .ytp-ad-player-overlay-layout__ad-info-container .ytp-ad-pod-index .ad-simple-attributed-string",
 	adShowing: "#movie_player.ad-showing",
 	remainingTime: ".ytp-time-display .ytp-time-duration",
-	skipButton: [".ytp-skip-ad-button", ".ytp-ad-skip-button", ".ytp-ad-skip-button-modern"].join(", ")
+	skipButton: [".ytp-skip-ad-button", ".ytp-ad-skip-button", ".ytp-ad-skip-button-modern"].join(
+		", "
+	)
 } as const;
 
 /** Seeks the ad's video to its end so YouTube moves on to the content instead of playing the ad out. */
@@ -40,11 +43,15 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 					remainingSeconds: null
 				};
 			}
-			const remainingText = document.querySelector<HTMLElement>(selectors.remainingTime)?.textContent?.trim() ?? null;
-			const podText = document.querySelector<HTMLElement>(selectors.adCount)?.textContent?.trim() ?? null;
+			const remainingText =
+				document.querySelector<HTMLElement>(selectors.remainingTime)?.textContent?.trim() ?? null;
+			const podText =
+				document.querySelector<HTMLElement>(selectors.adCount)?.textContent?.trim() ?? null;
 			let remainingSeconds: Nullable<number> = null;
 			if (remainingText) {
-				const [hours = 0, minutes = 0, seconds = 0] = remainingText.split(":").map((value) => Number.parseInt(value, 10));
+				const [hours = 0, minutes = 0, seconds = 0] = remainingText
+					.split(":")
+					.map((value) => Number.parseInt(value, 10));
 				remainingSeconds = hours * 3600 + minutes * 60 + seconds;
 			}
 			return {
@@ -70,7 +77,11 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 	};
 	// Wait for the player to exist (or an ad to show) before deciding there is nothing to handle.
 	let adInfo = await getAdInfo();
-	while (!adInfo.isShowing && !adInfo.playerExists && Date.now() - startTime < PLAYER_WAIT_TIMEOUT) {
+	while (
+		!adInfo.isShowing &&
+		!adInfo.playerExists &&
+		Date.now() - startTime < PLAYER_WAIT_TIMEOUT
+	) {
 		await page.waitForTimeout(500);
 		adInfo = await getAdInfo();
 	}

@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
@@ -17,7 +17,11 @@ import {
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { localeText } from "@/src/utils/_tests/locale";
-import { navigateToPageType, spaNavigateBack, spaNavigateToHome } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	spaNavigateBack,
+	spaNavigateToHome
+} from "@/src/utils/_tests/navigation";
 import { freezeAndGetTime, getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
@@ -45,7 +49,11 @@ async function getButtonIconMarkup(page: Page): Promise<string> {
 async function hasRenderedEndScreenCard(page: Page): Promise<boolean> {
 	return page.evaluate(
 		(list) =>
-			list.some((selector) => Array.from(document.querySelectorAll<HTMLElement>(selector)).some((el) => getComputedStyle(el).display !== "none")),
+			list.some((selector) =>
+				Array.from(document.querySelectorAll<HTMLElement>(selector)).some(
+					(el) => getComputedStyle(el).display !== "none"
+				)
+			),
 		[...selectors]
 	);
 }
@@ -98,7 +106,9 @@ test.describe("hideEndScreenCards", () => {
 		});
 	}
 
-	test("hides the end screen cards that are visible while the feature is off on watch", async ({ page }) => {
+	test("hides the end screen cards that are visible while the feature is off on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch, ["endScreenCards"]);
 		await disableFeature(page, "hideEndScreenCards.enabled");
 		await expectBodyWithoutClass(page, bodyClass);
@@ -113,7 +123,9 @@ test.describe("hideEndScreenCards", () => {
 		await expectElementsHidden(page, selectors, { requireMatch: true });
 	});
 
-	test("removes the hide when SPA-navigating away from watch and restores it on return", async ({ page }) => {
+	test("removes the hide when SPA-navigating away from watch and restores it on return", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "hideEndScreenCards.enabled");
 		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
@@ -125,7 +137,9 @@ test.describe("hideEndScreenCards", () => {
 		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 	});
 
-	test("swaps the button icon and title when the setting is toggled live on watch", async ({ page }) => {
+	test("swaps the button icon and title when the setting is toggled live on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await disableFeature(page, "hideEndScreenCards.enabled");
 		await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
@@ -149,7 +163,9 @@ test.describe("hideEndScreenCards", () => {
 			localeText("pages.content.features.hideEndScreenCardsButton.button.toggle.off")
 		);
 	});
-	test("keeps the button aria-checked in sync when the setting is toggled live on watch", async ({ page }) => {
+	test("keeps the button aria-checked in sync when the setting is toggled live on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await disableFeature(page, "hideEndScreenCards.enabled");
 		await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
@@ -183,7 +199,9 @@ test.describe("hideEndScreenCards", () => {
 
 	test.describe("feature conflicts", () => {
 		test.describe("hideEndScreenCards vs automaticallyShowMoreVideosOnEndScreen", () => {
-			test("hideEndScreenCards CSS class is applied when both are enabled on watch", async ({ page }) => {
+			test("hideEndScreenCards CSS class is applied when both are enabled on watch", async ({
+				page
+			}) => {
 				await navigateToPageType(page, watch);
 				await enableFeature(page, "hideEndScreenCards.enabled");
 				await enableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");

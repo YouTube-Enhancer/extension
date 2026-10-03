@@ -8,7 +8,10 @@ import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { deepDarkCssID } from "@/src/utils/constants";
-import { DEEP_DARK_COLORS_ATTRIBUTE, DEEP_DARK_PRESET_ATTRIBUTE } from "@/src/utils/deep-dark-theme/dom";
+import {
+	DEEP_DARK_COLORS_ATTRIBUTE,
+	DEEP_DARK_PRESET_ATTRIBUTE
+} from "@/src/utils/deep-dark-theme/dom";
 
 const { shorts, watch } = pageTypeRecord;
 const { below } = placementRecord;
@@ -27,30 +30,44 @@ test.describe("deepDarkCSS", () => {
 	test("should inject deep dark CSS on shorts", async ({ page }) => {
 		await navigateToPageType(page, shorts);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 }).toBe(1);
+		await expect
+			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 })
+			.toBe(1);
 	});
 	test("should work on re-enable after disable on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 }).toBe(1);
+		await expect
+			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 })
+			.toBe(1);
 		await disableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 5000 }).toBe(0);
+		await expect
+			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 5000 })
+			.toBe(0);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 }).toBe(1);
+		await expect
+			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 })
+			.toBe(1);
 	});
 	test("persists deep dark CSS after full page reload on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 }).toBe(1);
+		await expect
+			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 })
+			.toBe(1);
 		await page.reload();
 		await navigateToPageType(page, watch);
-		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 15000 }).toBe(1);
+		await expect
+			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 15000 })
+			.toBe(1);
 	});
 	test("applies every bundled preset on watch", async ({ page }) => {
 		test.setTimeout(180_000);
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 }).toBe(1);
+		await expect
+			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 })
+			.toBe(1);
 		const initialContent = await page.locator(`#${deepDarkCssID}`).textContent();
 		expect(initialContent).toContain("#00adee");
 		for (const preset of deepDarkPreset) {
@@ -70,17 +87,29 @@ test.describe("deepDarkCSS", () => {
 		await setOption(page, "deepDarkCSS.colors.mainBackground", customBackground);
 		await enableFeature(page, "deepDarkCSS.enabled");
 		// The preset loop above skips "Custom", so getDeepDarkCustomThemeStyle is only exercised here.
-		await expect.poll(async () => page.locator(`#${deepDarkCssID}`).textContent(), { timeout: 10000 }).toMatch(/--main-color:\s*#ff00ff/);
-		expect(await page.locator(`#${deepDarkCssID}`).textContent()).toMatch(/--main-background:\s*#123456/);
+		await expect
+			.poll(async () => page.locator(`#${deepDarkCssID}`).textContent(), { timeout: 10000 })
+			.toMatch(/--main-color:\s*#ff00ff/);
+		expect(await page.locator(`#${deepDarkCssID}`).textContent()).toMatch(
+			/--main-background:\s*#123456/
+		);
 		await setOption(page, "deepDarkCSS.colors.mainColor", "#00ff88");
-		await expect.poll(async () => page.locator(`#${deepDarkCssID}`).textContent(), { timeout: 10000 }).toMatch(/--main-color:\s*#00ff88/);
-		expect(await page.locator(`#${deepDarkCssID}`).textContent()).not.toMatch(/--main-color:\s*#ff00ff/);
+		await expect
+			.poll(async () => page.locator(`#${deepDarkCssID}`).textContent(), { timeout: 10000 })
+			.toMatch(/--main-color:\s*#00ff88/);
+		expect(await page.locator(`#${deepDarkCssID}`).textContent()).not.toMatch(
+			/--main-color:\s*#ff00ff/
+		);
 	});
-	test("maps every Custom preset colour to its own variable in the injected CSS on watch", async ({ page }) => {
+	test("maps every Custom preset colour to its own variable in the injected CSS on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "deepDarkCSS.preset", "Custom");
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 }).toBe(1);
+		await expect
+			.poll(async () => page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 })
+			.toBe(1);
 		// Each key feeds one custom property; a key wired to the wrong variable, or dropped, would leave a stale value.
 		const colours = {
 			colorShadow: "#101010",
@@ -103,7 +132,9 @@ test.describe("deepDarkCSS", () => {
 			["mainText", /--main-text:\s*#606060/],
 			["secondBackground", /--second-background:\s*#707070/]
 		];
-		await expect.poll(async () => page.locator(`#${deepDarkCssID}`).textContent(), { timeout: 10000 }).toMatch(expectations[6][1]);
+		await expect
+			.poll(async () => page.locator(`#${deepDarkCssID}`).textContent(), { timeout: 10000 })
+			.toMatch(expectations[6][1]);
 		const css = (await page.locator(`#${deepDarkCssID}`).textContent()) ?? "";
 		for (const [key, pattern] of expectations) {
 			expect(css, `${key} reaches the sheet`).toMatch(pattern);
@@ -117,26 +148,42 @@ test.describe("deepDarkCSS", () => {
 		await setOption(page, "deepDarkCSS.colors.mainBackground", customBackground);
 		await enableFeature(page, "deepDarkCSS.enabled");
 		// Counting or reading the style tag cannot tell an applied sheet from an inert one; the painted colour can.
-		await expect.poll(async () => getHtmlBackgroundColor(page), { timeout: 15000 }).toBe(customBackgroundRgb);
+		await expect
+			.poll(async () => getHtmlBackgroundColor(page), { timeout: 15000 })
+			.toBe(customBackgroundRgb);
 		await disableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => getHtmlBackgroundColor(page), { timeout: 10000 }).not.toBe(customBackgroundRgb);
+		await expect
+			.poll(async () => getHtmlBackgroundColor(page), { timeout: 10000 })
+			.not.toBe(customBackgroundRgb);
 	});
 	test("sets, updates and clears the html deep dark data attributes on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "deepDarkCSS.preset", "Deep-Dark");
 		await enableFeature(page, "deepDarkCSS.enabled");
 		// getDeepDarkData reads these attributes to resolve button colours, so they are the feature's second output.
-		await expect(page.locator("html")).toHaveAttribute(DEEP_DARK_PRESET_ATTRIBUTE, "Deep-Dark", { timeout: 10000 });
+		await expect(page.locator("html")).toHaveAttribute(DEEP_DARK_PRESET_ATTRIBUTE, "Deep-Dark", {
+			timeout: 10000
+		});
 		await expect(page.locator("html")).not.toHaveAttribute(DEEP_DARK_COLORS_ATTRIBUTE, /.*/);
 		await setOption(page, "deepDarkCSS.preset", "Custom");
 		await setOption(page, "deepDarkCSS.colors.mainColor", customMainColor);
-		await expect(page.locator("html")).toHaveAttribute(DEEP_DARK_PRESET_ATTRIBUTE, "Custom", { timeout: 10000 });
-		await expect(page.locator("html")).toHaveAttribute(DEEP_DARK_COLORS_ATTRIBUTE, new RegExp(customMainColor), { timeout: 10000 });
+		await expect(page.locator("html")).toHaveAttribute(DEEP_DARK_PRESET_ATTRIBUTE, "Custom", {
+			timeout: 10000
+		});
+		await expect(page.locator("html")).toHaveAttribute(
+			DEEP_DARK_COLORS_ATTRIBUTE,
+			new RegExp(customMainColor),
+			{ timeout: 10000 }
+		);
 		await disableFeature(page, "deepDarkCSS.enabled");
-		await expect(page.locator("html")).not.toHaveAttribute(DEEP_DARK_PRESET_ATTRIBUTE, /.*/, { timeout: 10000 });
+		await expect(page.locator("html")).not.toHaveAttribute(DEEP_DARK_PRESET_ATTRIBUTE, /.*/, {
+			timeout: 10000
+		});
 		await expect(page.locator("html")).not.toHaveAttribute(DEEP_DARK_COLORS_ATTRIBUTE, /.*/);
 	});
-	test("recolors below player button icons for light and dark backgrounds on watch", async ({ page }) => {
+	test("recolors below player button icons for light and dark backgrounds on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "screenshotButton.button.placement", below);
 		await enableFeature(page, "screenshotButton.button.enabled");
@@ -146,15 +193,25 @@ test.describe("deepDarkCSS", () => {
 		// updateButtonsIconColor only touches the below player container, and resolveContrastColor picks the icon colour
 		// from --main-background, so a light background must flip the stroke to black.
 		await setOption(page, "deepDarkCSS.colors.mainBackground", "#FFFFFF");
-		await expect(page.locator("#yte-feature-screenshotButton-button svg")).toHaveAttribute("stroke", "#000000", { timeout: 15000 });
+		await expect(page.locator("#yte-feature-screenshotButton-button svg")).toHaveAttribute(
+			"stroke",
+			"#000000",
+			{ timeout: 15000 }
+		);
 		await setOption(page, "deepDarkCSS.colors.mainBackground", "#000000");
-		await expect(page.locator("#yte-feature-screenshotButton-button svg")).toHaveAttribute("stroke", "#FFFFFF", { timeout: 15000 });
+		await expect(page.locator("#yte-feature-screenshotButton-button svg")).toHaveAttribute(
+			"stroke",
+			"#FFFFFF",
+			{ timeout: 15000 }
+		);
 	});
 	test("does not inject deep dark CSS before it is enabled on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await expectToStay(async () => page.locator(`#${deepDarkCssID}`).count(), 0, { page });
 	});
-	test("does not inject deep dark CSS when the preset changes while disabled on watch", async ({ page }) => {
+	test("does not inject deep dark CSS when the preset changes while disabled on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await disableFeature(page, "deepDarkCSS.enabled");
 		// onConfigChange runs for disabled features too; only the deepDarkCSSExists guard keeps the sheet out of the page.

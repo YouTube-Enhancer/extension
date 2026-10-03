@@ -11,8 +11,16 @@ import {
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, spaNavigateBack, spaNavigateToHome } from "@/src/utils/_tests/navigation";
-import { loginRequiredPages, resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import {
+	navigateToPageType,
+	spaNavigateBack,
+	spaNavigateToHome
+} from "@/src/utils/_tests/navigation";
+import {
+	loginRequiredPages,
+	resolveNonTargetPage,
+	resolvePageTypes
+} from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -60,8 +68,13 @@ test.describe("hideSidebarRecommendedVideos", () => {
 		});
 	}
 
-	test(`drops the hide class when SPA navigating off ${watch} and restores it on return`, async ({ page }) => {
-		test.skip(!hasAuthState() && loginRequiredPages.includes(home), `the in-page hop lands on ${home}, which requires login`);
+	test(`drops the hide class when SPA navigating off ${watch} and restores it on return`, async ({
+		page
+	}) => {
+		test.skip(
+			!hasAuthState() && loginRequiredPages.includes(home),
+			`the in-page hop lands on ${home}, which requires login`
+		);
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "hideSidebarRecommendedVideos.enabled");
 		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
@@ -77,7 +90,12 @@ test.describe("hideSidebarRecommendedVideos", () => {
 		// A /watch URL whose player reports isLive resolves to the "live" page type, which includePages ["watch"] excludes.
 		await navigateToPageType(page, live);
 		await enableFeature(page, "hideSidebarRecommendedVideos.enabled");
-		await expectToStay(async () => page.evaluate((className) => document.body.classList.contains(className), bodyClass), false, { page });
+		await expectToStay(
+			async () =>
+				page.evaluate((className) => document.body.classList.contains(className), bodyClass),
+			false,
+			{ page }
+		);
 		// Live layouts vary (chat can take the sidebar over), so the body class above is the assertion that must hold.
 		await expectElementsNotHidden(page, selectors);
 	});

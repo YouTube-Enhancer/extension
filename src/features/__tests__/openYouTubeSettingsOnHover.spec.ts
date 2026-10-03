@@ -15,7 +15,14 @@ async function forcePlayerVisible(page: Parameters<typeof enableFeature>[0]) {
 	// sets visibility:hidden on #player-container which cascades to the settings menu popup
 	await page.evaluate(() => {
 		(
-			["#movie_player", "#player-container", "#player-container-inner", "#player-container-outer", "ytd-player", "ytd-player #container"] as const
+			[
+				"#movie_player",
+				"#player-container",
+				"#player-container-inner",
+				"#player-container-outer",
+				"ytd-player",
+				"ytd-player #container"
+			] as const
 		).forEach((sel) => {
 			const el = document.querySelector<HTMLElement>(sel);
 			if (el) el.style.visibility = "visible";
@@ -62,7 +69,9 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
 		await expect(settingsMenu).not.toBeVisible({ timeout: 3000 });
 	});
-	test("youtube settings should stop opening on hover after the feature is disabled on watch", async ({ page }) => {
+	test("youtube settings should stop opening on hover after the feature is disabled on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
 		await forcePlayerVisible(page);
@@ -113,7 +122,9 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		await page.mouse.move(10, 300);
 		await expect(settingsButton).toHaveAttribute("aria-expanded", "false");
 	});
-	test("hovering should not close a settings menu that was opened by clicking the button on watch", async ({ page }) => {
+	test("hovering should not close a settings menu that was opened by clicking the button on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
 		await forcePlayerVisible(page);
@@ -129,7 +140,9 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		await expectToStay(async () => settingsMenu.isVisible(), true, { page });
 		await expect(settingsButton).toHaveAttribute("aria-expanded", "true");
 	});
-	test("youtube settings should close when leaving the settings button on watch", async ({ page }) => {
+	test("youtube settings should close when leaving the settings button on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
 		await forcePlayerVisible(page);
@@ -145,7 +158,9 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		});
 		await expect(settingsMenu).not.toBeVisible({ timeout: 5000 });
 	});
-	test("youtube settings should close when leaving the settings menu on watch", async ({ page }) => {
+	test("youtube settings should close when leaving the settings menu on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
 		await forcePlayerVisible(page);
@@ -163,7 +178,10 @@ test.describe("openYouTubeSettingsOnHover", () => {
 			button.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true, relatedTarget: menu }));
 			menu.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true, relatedTarget: button }));
 		}, SETTINGS_MENU_SELECTOR);
-		await expectToStay(async () => settingsButton.getAttribute("aria-expanded"), "true", { durationMs: 500, page });
+		await expectToStay(async () => settingsButton.getAttribute("aria-expanded"), "true", {
+			durationMs: 500,
+			page
+		});
 		await expect(settingsMenu).toBeVisible();
 		// Move mouse away so :hover doesn't prevent hideSettings from closing
 		await page.mouse.move(0, 0);

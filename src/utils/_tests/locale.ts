@@ -15,7 +15,8 @@ const localeCache = new Map<string, Record<string, unknown>>();
  */
 export function localeSelector(locale = "en-US"): TFunction {
 	const translations = readLocale(locale) as unknown as EnUS;
-	return ((selector: (translations: EnUS) => string) => selector(translations)) as unknown as TFunction;
+	return ((selector: (translations: EnUS) => string) =>
+		selector(translations)) as unknown as TFunction;
 }
 
 /** The string at `path` in a locale file, the same one the UI renders from, so a reworded label cannot pass a stale test. */
@@ -27,14 +28,22 @@ export function localeText(path: LocalePath, locale = "en-US"): string {
 export function readLocale(locale = "en-US"): Record<string, unknown> {
 	let parsed = localeCache.get(locale);
 	if (!parsed) {
-		parsed = JSON.parse(readFileSync(`public/locales/${locale}.json`, "utf8")) as Record<string, unknown>;
+		parsed = JSON.parse(readFileSync(`public/locales/${locale}.json`, "utf8")) as Record<
+			string,
+			unknown
+		>;
 		localeCache.set(locale, parsed);
 	}
 	return parsed;
 }
 
 export function translate(locale: Record<string, unknown>, path: string): string {
-	const value = path.split(".").reduce<unknown>((accumulator, key) => (accumulator as Record<string, unknown> | undefined)?.[key], locale);
+	const value = path
+		.split(".")
+		.reduce<unknown>(
+			(accumulator, key) => (accumulator as Record<string, unknown> | undefined)?.[key],
+			locale
+		);
 	if (typeof value !== "string") throw new Error(`Missing locale string for "${path}"`);
 	return value;
 }

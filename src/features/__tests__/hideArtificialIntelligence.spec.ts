@@ -1,15 +1,25 @@
-import type { FrameLocator, Page } from '@playwright/test';
+import type { FrameLocator, Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
 import type { Nullable } from "@/src/types";
 
 import { metadata } from "@/src/features/hideArtificialIntelligence/index.metadata";
-import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
+import {
+	expectBodyWithClass,
+	expectBodyWithoutClass,
+	expectElementsHidden,
+	expectElementsNotHidden
+} from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage, spaNavigateBack, spaNavigateToHome } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	reloadPage,
+	spaNavigateBack,
+	spaNavigateToHome
+} from "@/src/utils/_tests/navigation";
 import { loginRequiredPages, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
@@ -33,14 +43,20 @@ const menuMarginSelector = `#${menuMarginHostId} ytd-menu-renderer[has-items] yt
 /** Every feature selector scoped to the injected host, so no assertion can accidentally observe YouTube's own markup. */
 const injectedSelectors = selectors.map((selector) => `#${aiHostId} ${selector}`);
 /** Taken from the generated selector so the synthetic button carries exactly the glyph the feature CSS looks for. */
-const [, aiButtonGlyph = ""] = /path\[d="([^"]+)"\]/.exec(selectors.find((selector) => selector.startsWith("button-view-model")) ?? "") ?? [];
+const [, aiButtonGlyph = ""] =
+	/path\[d="([^"]+)"\]/.exec(
+		selectors.find((selector) => selector.startsWith("button-view-model")) ?? ""
+	) ?? [];
 
 /**
  * Fails when one of the scoped selectors matches nothing. Without it a stale synthetic markup block would make the
  * display assertions iterate over zero elements and pass without ever looking at the feature's effect.
  */
 async function expectInjectedSelectorsToMatch(page: Page, list: readonly string[]): Promise<void> {
-	const unmatched = await page.evaluate((scoped) => scoped.filter((selector) => document.querySelector(selector) === null), [...list]);
+	const unmatched = await page.evaluate(
+		(scoped) => scoped.filter((selector) => document.querySelector(selector) === null),
+		[...list]
+	);
 	expect(unmatched).toEqual([]);
 }
 /**
@@ -51,7 +67,12 @@ async function expectInjectedSelectorsToMatch(page: Page, list: readonly string[
 async function getSelectorDisplays(page: Page): Promise<string[]> {
 	return page.evaluate(
 		(list) =>
-			list.flatMap((selector) => Array.from(document.querySelectorAll<HTMLElement>(selector), (element) => getComputedStyle(element).display)),
+			list.flatMap((selector) =>
+				Array.from(
+					document.querySelectorAll<HTMLElement>(selector),
+					(element) => getComputedStyle(element).display
+				)
+			),
 		[...selectors]
 	);
 }
@@ -67,7 +88,11 @@ async function getSelectorDisplays(page: Page): Promise<string[]> {
 async function injectAiMarkup(page: Page): Promise<void> {
 	await page.evaluate(
 		({ glyph, hostId }) => {
-			const addChild = (parent: Element, tag: string, attributes: Array<[string, string]> = []): HTMLElement => {
+			const addChild = (
+				parent: Element,
+				tag: string,
+				attributes: Array<[string, string]> = []
+			): HTMLElement => {
 				const element = document.createElement(tag);
 				for (const [name, value] of attributes) element.setAttribute(name, value);
 				parent.appendChild(element);
@@ -91,15 +116,29 @@ async function injectAiMarkup(page: Page): Promise<void> {
 					<span class="yte-test-ai-control"></span>
 				`
 			);
-			addChild(host, "yt-button-view-model").insertAdjacentHTML("beforeend", `<span class="you-chat-entrypoint-button"></span>`);
-			addChild(host, "yt-player-quick-action-buttons").insertAdjacentHTML("beforeend", `<span class="you-chat-entrypoint-button"></span>`);
+			addChild(host, "yt-button-view-model").insertAdjacentHTML(
+				"beforeend",
+				`<span class="you-chat-entrypoint-button"></span>`
+			);
+			addChild(host, "yt-player-quick-action-buttons").insertAdjacentHTML(
+				"beforeend",
+				`<span class="you-chat-entrypoint-button"></span>`
+			);
 			addChild(host, "ytd-engagement-panel-section-list-renderer", [["target-id", "PAyouchat"]]);
-			addChild(host, "button-view-model").insertAdjacentHTML("beforeend", `<svg><path d="${glyph}"></path></svg>`);
+			addChild(host, "button-view-model").insertAdjacentHTML(
+				"beforeend",
+				`<svg><path d="${glyph}"></path></svg>`
+			);
 			addChild(host, "yt-video-description-youchat-section-view-model");
 			const chatFrame = addChild(host, "ytd-live-chat-frame");
 			addChild(chatFrame, "yt-live-chat-banner-renderer");
-			chatFrame.insertAdjacentHTML("beforeend", `<span class="yte-test-ai-summary"></span><span class="yte-test-generative"></span>`);
-			addChild(chatFrame, "ytd-engagement-panel-section-list-renderer", [["target-id", "PAyouchat"]]);
+			chatFrame.insertAdjacentHTML(
+				"beforeend",
+				`<span class="yte-test-ai-summary"></span><span class="yte-test-generative"></span>`
+			);
+			addChild(chatFrame, "ytd-engagement-panel-section-list-renderer", [
+				["target-id", "PAyouchat"]
+			]);
 		},
 		{ glyph: aiButtonGlyph, hostId: aiHostId }
 	);
@@ -131,7 +170,8 @@ async function measureChatBannerDisplay(
 				};
 				const banner = probe(bannerId, "yt-live-chat-banner-renderer");
 				const control = probe(controlId, "yte-test-live-chat-control");
-				const displayOf = (element: HTMLElement) => chatDocument.defaultView?.getComputedStyle(element).display ?? "";
+				const displayOf = (element: HTMLElement) =>
+					chatDocument.defaultView?.getComputedStyle(element).display ?? "";
 				return {
 					bannerHidden: displayOf(banner) === "none",
 					controlHidden: displayOf(control) === "none",
@@ -153,14 +193,20 @@ async function navigateToLiveOrSkip(page: Page): Promise<void> {
 	try {
 		await navigateToPageType(page, live);
 	} catch (error) {
-		test.skip(true, `no live stream is currently available on the fixture channel (${error instanceof Error ? error.message : String(error)})`);
+		test.skip(
+			true,
+			`no live stream is currently available on the fixture channel (${error instanceof Error ? error.message : String(error)})`
+		);
 	}
 }
 
 test.describe("hideArtificialIntelligence", () => {
 	for (const pageType of testPages) {
 		test(`hides AI elements on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hideArtificialIntelligence.enabled");
 			await expectBodyWithClass(page, bodyClass);
@@ -199,7 +245,9 @@ test.describe("hideArtificialIntelligence", () => {
 		await expect(menuButton).toBeAttached();
 		// YouTube's own stylesheet spaces the button away from its neighbour; without that baseline the 0px below
 		// would be indistinguishable from the button never having had a margin.
-		const baselineMargin = await menuButton.evaluate((element) => getComputedStyle(element).marginLeft);
+		const baselineMargin = await menuButton.evaluate(
+			(element) => getComputedStyle(element).marginLeft
+		);
 		expect(baselineMargin).not.toBe("0px");
 		await enableFeature(page, "hideArtificialIntelligence.enabled");
 		// The margin rule is a second, separate declaration in the feature CSS and the only non-display effect it has.

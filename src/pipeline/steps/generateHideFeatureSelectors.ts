@@ -14,7 +14,9 @@ export default function generateHideFeatureSelectors(): void {
 
 	const allEntries: Record<string, HideSelectorEntry> = {};
 
-	const featureDirs = readdirSync(featuresDir).filter((name) => name.startsWith("hide") && statSync(join(featuresDir, name)).isDirectory());
+	const featureDirs = readdirSync(featuresDir).filter(
+		(name) => name.startsWith("hide") && statSync(join(featuresDir, name)).isDirectory()
+	);
 
 	for (const dirName of featureDirs) {
 		const cssPath = join(featuresDir, dirName, "index.css");
@@ -32,7 +34,9 @@ export default function generateHideFeatureSelectors(): void {
 			const selectors: string[] = [];
 
 			rule.walkRules((childRule) => {
-				const hasDisplayNone = childRule.nodes?.some((node) => node.type === "decl" && node.prop === "display" && node.value.includes("none"));
+				const hasDisplayNone = childRule.nodes?.some(
+					(node) => node.type === "decl" && node.prop === "display" && node.value.includes("none")
+				);
 				if (!hasDisplayNone) return;
 
 				const childSelectors = splitByTopLevelComma(childRule.selector)
@@ -84,8 +88,13 @@ function extractSection(dirName: string, bodyClass: string): string {
 }
 
 function generateTypeScriptOutput(entries: Record<string, HideSelectorEntry>): string {
-	const lines: string[] = ["// Auto-generated. Do not edit manually.", "export const hideFeatureSelectors = {"];
-	const sorted = Object.entries(entries).sort(([a], [b]) => (a as string).localeCompare(b as string)) as [string, HideSelectorEntry][];
+	const lines: string[] = [
+		"// Auto-generated. Do not edit manually.",
+		"export const hideFeatureSelectors = {"
+	];
+	const sorted = Object.entries(entries).sort(([a], [b]) =>
+		(a as string).localeCompare(b as string)
+	) as [string, HideSelectorEntry][];
 	for (const [idx, [key, { bodyClass, selectors }]] of sorted.entries()) {
 		const isLast = idx === sorted.length - 1;
 		const qBody = quote(bodyClass);

@@ -17,7 +17,13 @@ const testPages: PageType[] = [channelVideos, watch];
 /** The count itself only reaches the page through this custom property, which the grid CSS reads. */
 async function expectVideosPerRowCount(page: Page, count: number): Promise<void> {
 	await expect
-		.poll(() => page.evaluate(() => document.documentElement.style.getPropertyValue("--yte-videos-per-row-count")), { timeout: 15000 })
+		.poll(
+			() =>
+				page.evaluate(() =>
+					document.documentElement.style.getPropertyValue("--yte-videos-per-row-count")
+				),
+			{ timeout: 15000 }
+		)
 		.toBe(String(count));
 }
 
@@ -28,7 +34,9 @@ async function expectVideosPerRowCount(page: Page, count: number): Promise<void>
  */
 async function getRenderedColumnCount(page: Page): Promise<number> {
 	return page.evaluate(() => {
-		const tops = Array.from(document.querySelectorAll<HTMLElement>("ytd-rich-grid-renderer ytd-rich-item-renderer"))
+		const tops = Array.from(
+			document.querySelectorAll<HTMLElement>("ytd-rich-grid-renderer ytd-rich-item-renderer")
+		)
 			.map((tile) => tile.getBoundingClientRect())
 			.filter((rect) => rect.width > 0 && rect.height > 0)
 			.map(({ top }) => top)
@@ -110,7 +118,13 @@ test.describe("videosPerRow", () => {
 		await expectBodyWithoutClass(page, "yte-videos-per-row", { timeout: 15000 });
 		// onDisable removes the property as well; leaving it behind would resurface the stale count when the class returns.
 		await expect
-			.poll(() => page.evaluate(() => document.documentElement.style.getPropertyValue("--yte-videos-per-row-count")), { timeout: 10000 })
+			.poll(
+				() =>
+					page.evaluate(() =>
+						document.documentElement.style.getPropertyValue("--yte-videos-per-row-count")
+					),
+				{ timeout: 10000 }
+			)
 			.toBe("");
 	});
 });

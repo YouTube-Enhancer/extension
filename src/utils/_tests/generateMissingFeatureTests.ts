@@ -25,7 +25,12 @@ function getFeatureNames(featuresDir: string) {
 	// Internal helpers such as _registry, buttonController, featureMenu and scrollWheelController have no
 	// metadata of their own and are covered by the specs of the features that use them.
 	const featureFolders = readdirSync(featuresDir, { withFileTypes: true })
-		.filter((dirent) => dirent.isDirectory() && dirent.name !== "__tests__" && existsSync(join(featuresDir, dirent.name, "index.metadata.ts")))
+		.filter(
+			(dirent) =>
+				dirent.isDirectory() &&
+				dirent.name !== "__tests__" &&
+				existsSync(join(featuresDir, dirent.name, "index.metadata.ts"))
+		)
 		.map((dirent) => dirent.name);
 	return featureFolders;
 }

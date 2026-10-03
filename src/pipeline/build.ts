@@ -9,7 +9,14 @@ import updateAvailableLocales from "@/src/i18n/updateAvailableLocales";
 import updateLocalePercentages from "@/src/i18n/updateLocalePercentages";
 import { emptyOutputFolder, rootDir } from "@/src/utils/plugins/utils";
 
-import { copyOutputs, generateHideFeatureSelectors, generateManifests, makeReleaseZips, updateReadmeFeatures, validateFeatureMetadata } from "./steps";
+import {
+	copyOutputs,
+	generateHideFeatureSelectors,
+	generateManifests,
+	makeReleaseZips,
+	updateReadmeFeatures,
+	validateFeatureMetadata
+} from "./steps";
 import { buildContentScripts } from "./steps/buildContentScripts";
 import generateLocaleTypes from "./steps/generateLocaleTypes";
 import { elapsedSince, timedStep } from "./utils";
@@ -27,7 +34,9 @@ export async function runBundles(): Promise<void> {
 	console.log("[Build Pipeline] Bundling pages and content scripts in parallel...");
 	const start = Date.now();
 	await Promise.all([
-		timedStep("Pages bundle", () => viteBuild({ configFile: resolve(rootDir, "vite.config.ts"), logLevel: "warn" })),
+		timedStep("Pages bundle", () =>
+			viteBuild({ configFile: resolve(rootDir, "vite.config.ts"), logLevel: "warn" })
+		),
 		timedStep("Content-script bundles", () => buildContentScripts({ logLevel: "warn" }))
 	]);
 	console.log(`[Build Pipeline] Bundling complete! (${elapsedSince(start)}s total)`);
@@ -118,7 +127,9 @@ void (async () => {
 		const start = Date.now();
 		switch (command) {
 			case "all": {
-				console.log(`[Build Pipeline] Running full ${isDevelopment ? "development" : "production"} build...`);
+				console.log(
+					`[Build Pipeline] Running full ${isDevelopment ? "development" : "production"} build...`
+				);
 				await runPreBuildPipeline();
 				await runBundles();
 				await runPostBuildPipeline();

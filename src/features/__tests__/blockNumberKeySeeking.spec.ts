@@ -5,7 +5,11 @@ import { expect, test } from "playwright.config";
 import { metadata } from "@/src/features/blockNumberKeySeeking/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	reloadPage,
+	spaNavigateToRelatedVideo
+} from "@/src/utils/_tests/navigation";
 import { freezeAndGetTime } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 

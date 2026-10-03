@@ -11,7 +11,13 @@ import {
 	expectToStay
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
-import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	clickFeatureButton,
+	clickFeatureMenuItem,
+	disableFeature,
+	enableFeature,
+	setOption
+} from "@/src/utils/_tests/features";
 import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
@@ -19,7 +25,9 @@ const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const { left } = placementRecord;
 const { home, watch } = pageTypeRecord;
-const copiedToClipboardText = localeText("pages.content.features.screenshotButton.extras.copiedToClipboard");
+const copiedToClipboardText = localeText(
+	"pages.content.features.screenshotButton.extras.copiedToClipboard"
+);
 /**
  * Asserts the saved screenshot matches the default filename template ("Screenshot-{video id}-{date}" with the
  * iso date format) and that its contents really are a PNG, which is the configured default format.
@@ -99,7 +107,9 @@ test.describe("screenshotButton", () => {
 			.toBe(true);
 	});
 
-	test(`should take a screenshot and save as file and copy to clipboard on ${watch}`, async ({ page }) => {
+	test(`should take a screenshot and save as file and copy to clipboard on ${watch}`, async ({
+		page
+	}) => {
 		page.on("dialog", (dialog) => {
 			void (async () => {
 				await dialog.accept();
@@ -130,7 +140,9 @@ test.describe("screenshotButton", () => {
 		await expectScreenshotDownload(download, page.url());
 	});
 
-	test(`should name the downloaded file from the filename template and date format on ${watch}`, async ({ page }) => {
+	test(`should name the downloaded file from the filename template and date format on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "screenshotButton.button.enabled");
 		await setOption(page, "screenshotButton.saveAs", "file");
@@ -147,14 +159,18 @@ test.describe("screenshotButton", () => {
 		// "dayMonthYear" renders the local date as DD-MM-YYYY; both samples are accepted so a midnight rollover
 		// between the click and the assertion cannot flake.
 		const dateAfterClick = formatDayMonthYear(new Date());
-		expect([`${videoId}_${dateBeforeClick}.png`, `${videoId}_${dateAfterClick}.png`]).toContain(download.suggestedFilename());
+		expect([`${videoId}_${dateBeforeClick}.png`, `${videoId}_${dateAfterClick}.png`]).toContain(
+			download.suggestedFilename()
+		);
 	});
 
 	for (const { dateFormat, pattern } of [
 		{ dateFormat: "date", pattern: /^\d{4}-\d{2}-\d{2}$/ },
 		{ dateFormat: "dateTime", pattern: /^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}$/ }
 	] as const) {
-		test(`should render the "${dateFormat}" date format into the file name on ${watch}`, async ({ page }) => {
+		test(`should render the "${dateFormat}" date format into the file name on ${watch}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "screenshotButton.button.enabled");
 			await setOption(page, "screenshotButton.saveAs", "file");
@@ -172,12 +188,18 @@ test.describe("screenshotButton", () => {
 		});
 	}
 
-	test(`should resolve the channel and chapter placeholders in the file name on ${watch}`, async ({ page }) => {
+	test(`should resolve the channel and chapter placeholders in the file name on ${watch}`, async ({
+		page
+	}) => {
 		// The fixture with description timestamps is the one YouTube renders chapters for.
 		await navigateToPageType(page, watch, ["timestamps"]);
 		await enableFeature(page, "screenshotButton.button.enabled");
 		await setOption(page, "screenshotButton.saveAs", "file");
-		await setOption(page, "screenshotButton.filename", "{channel id}_{channel name}_{chapter name}");
+		await setOption(
+			page,
+			"screenshotButton.filename",
+			"{channel id}_{channel name}_{chapter name}"
+		);
 		await setOption(page, "screenshotButton.button.placement", left);
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
 		// The values the feature resolves come from the player response and the chapter title the player shows.
@@ -187,12 +209,13 @@ test.describe("screenshotButton", () => {
 				getVideoData?: () => Promise<{ author?: string }>;
 			};
 			const response = player?.getPlayerResponse?.();
-			const chapter = Array.from(document.querySelectorAll<HTMLElement>(".ytp-chapter-title .ytp-chapter-title-content")).find(
-				(element) => element.offsetParent !== null
-			);
+			const chapter = Array.from(
+				document.querySelectorAll<HTMLElement>(".ytp-chapter-title .ytp-chapter-title-content")
+			).find((element) => element.offsetParent !== null);
 			return {
 				channelId: response?.videoDetails?.channelId ?? "",
-				channelName: response?.videoDetails?.author ?? (await player?.getVideoData?.())?.author ?? "",
+				channelName:
+					response?.videoDetails?.author ?? (await player?.getVideoData?.())?.author ?? "",
 				chapter: chapter?.textContent?.trim() ?? ""
 			};
 		});
@@ -208,9 +231,11 @@ test.describe("screenshotButton", () => {
 		expect(name).toContain(sanitise(expected.channelName));
 		if (expected.chapter) expect(name.endsWith(`_${sanitise(expected.chapter)}`)).toBe(true);
 		else
-			test
-				.info()
-				.annotations.push({ description: "the fixture showed no chapter title, so only the channel placeholders were checked", type: "note" });
+			test.info().annotations.push({
+				description:
+					"the fixture showed no chapter title, so only the channel placeholders were checked",
+				type: "note"
+			});
 	});
 
 	test(`should save the screenshot in the selected format on ${watch}`, async ({ page }) => {
@@ -231,7 +256,9 @@ test.describe("screenshotButton", () => {
 		expect([...contents.subarray(0, 3)]).toEqual([0xff, 0xd8, 0xff]);
 	});
 
-	test(`should fall back to the default filename template when the template resolves to empty on ${watch}`, async ({ page }) => {
+	test(`should fall back to the default filename template when the template resolves to empty on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "screenshotButton.button.enabled");
 		await setOption(page, "screenshotButton.saveAs", "file");
@@ -246,7 +273,9 @@ test.describe("screenshotButton", () => {
 		await expectScreenshotDownload(download, page.url());
 	});
 
-	test(`should resolve the resolution and video timestamp placeholders in the filename on ${watch}`, async ({ page }) => {
+	test(`should resolve the resolution and video timestamp placeholders in the filename on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "screenshotButton.button.enabled");
 		await setOption(page, "screenshotButton.saveAs", "file");
@@ -313,7 +342,9 @@ test.describe("screenshotButton", () => {
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
 	});
 
-	test(`screenshot button should re-appear after disable then re-enable on ${watch}`, async ({ page }) => {
+	test(`screenshot button should re-appear after disable then re-enable on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "screenshotButton.button.enabled");
 		await setOption(page, "screenshotButton.button.placement", left);

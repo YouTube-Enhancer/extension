@@ -10,7 +10,10 @@
 	"enable_forward_rewind_buttons": true,
 	"enable_loop_button": true,
 	"enable_volume_boost": true,
-	"button_placements": { "loopButton": "player_controls_right", "screenshotButton": "below_player" },
+	"button_placements": {
+		"loopButton": "player_controls_right",
+		"screenshotButton": "below_player"
+	},
 	"custom_css_code": "body { --yte-legacy: 1; }",
 	"deep_dark_custom_theme_colors": {
 		"colorShadow": "#111111",

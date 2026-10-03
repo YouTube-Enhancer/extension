@@ -32,7 +32,8 @@ function normalise(filePath) {
 	return index >= 0 ? unified.slice(index) : unified;
 }
 function sourceFor(hash) {
-	if (!sources.has(hash)) sources.set(hash, readFileSync(join(rawDir, "sources", `${hash}.js`), "utf8"));
+	if (!sources.has(hash))
+		sources.set(hash, readFileSync(join(rawDir, "sources", `${hash}.js`), "utf8"));
 	return sources.get(hash);
 }
 
@@ -40,7 +41,8 @@ function sourceFor(hash) {
  * Left out of the report: tests, the build pipeline and the manifest, and code that only runs in development builds (the
  * registry's performance tracker is switched by DEV_MODE), like the devtools pages themselves.
  */
-const EXCLUDED = /__tests__|_tests|\.spec\.|\.d\.ts$|src[\\/]pipeline|src[\\/]manifest|featurePerformanceTracker/;
+const EXCLUDED =
+	/__tests__|_tests|\.spec\.|\.d\.ts$|src[\\/]pipeline|src[\\/]manifest|featurePerformanceTracker/;
 
 const mcr = MCR({
 	// Every product file counts, executed or not, so an untested module reads as 0 rather than going missing.
@@ -51,7 +53,10 @@ const mcr = MCR({
 	name: "YouTube Enhancer end-to-end coverage",
 	outputDir: join(root, "coverage", "report"),
 	reports: ["console-summary", "json-summary", "v8", "lcovonly"],
-	sourceFilter: (sourcePath) => sourcePath.startsWith("src/") && !EXCLUDED.test(sourcePath) && existsSync(join(root, sourcePath)),
+	sourceFilter: (sourcePath) =>
+		sourcePath.startsWith("src/") &&
+		!EXCLUDED.test(sourcePath) &&
+		existsSync(join(root, sourcePath)),
 	sourcePath: (filePath) => normalise(filePath)
 });
 

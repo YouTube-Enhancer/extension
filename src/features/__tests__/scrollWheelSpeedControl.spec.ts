@@ -54,13 +54,39 @@ async function hasPaintedPixels(page: Page) {
 test.describe("scrollWheelSpeedControl", () => {
 	for (const pageType of testPages) {
 		test(`should increase speed on ${pageType}`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Speed", direction: "up", initialValue: speed, page, pageType, steps, withModifierKey: true });
+			await adjustWithScrollWheel({
+				controlType: "Speed",
+				direction: "up",
+				initialValue: speed,
+				page,
+				pageType,
+				steps,
+				withModifierKey: true
+			});
 		});
 		test(`should decrease speed on ${pageType}`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Speed", direction: "down", initialValue: speed, page, pageType, steps, withModifierKey: true });
+			await adjustWithScrollWheel({
+				controlType: "Speed",
+				direction: "down",
+				initialValue: speed,
+				page,
+				pageType,
+				steps,
+				withModifierKey: true
+			});
 		});
-		test(`should persist scroll wheel speed control after navigation on ${pageType}`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Speed", direction: "up", initialValue: speed, page, pageType, steps: 0.25, withModifierKey: true });
+		test(`should persist scroll wheel speed control after navigation on ${pageType}`, async ({
+			page
+		}) => {
+			await adjustWithScrollWheel({
+				controlType: "Speed",
+				direction: "up",
+				initialValue: speed,
+				page,
+				pageType,
+				steps: 0.25,
+				withModifierKey: true
+			});
 			await navigateToPageType(page, home);
 			await navigateToPageType(page, pageType);
 			// Asserted in place: adjustWithScrollWheel would navigate again and re-enable the feature, which
@@ -69,24 +95,54 @@ test.describe("scrollWheelSpeedControl", () => {
 			await setValueOnYouTubePlayer(page, pageType, "setPlaybackRate", speed);
 			await expect.poll(async () => getCurrentSpeed(page, pageType)).toBe(speed);
 			await dispatchWheelNotches(page, pageType, "up", 1, { altKey: true });
-			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: 5000 }).toBe(speed + steps);
+			await expect
+				.poll(async () => getCurrentSpeed(page, pageType), { timeout: 5000 })
+				.toBe(speed + steps);
 		});
 	}
 	// The disable/re-enable transition has no shorts branch, and re-enabling on shorts is already exercised by the
 	// increase/decrease tests above, so this case runs on watch only.
 	test(`re-applies speed control after disable then re-enable on ${watch}`, async ({ page }) => {
-		await adjustWithScrollWheel({ controlType: "Speed", direction: "up", initialValue: speed, page, pageType: watch, steps, withModifierKey: true });
+		await adjustWithScrollWheel({
+			controlType: "Speed",
+			direction: "up",
+			initialValue: speed,
+			page,
+			pageType: watch,
+			steps,
+			withModifierKey: true
+		});
 		await disableFeature(page, "scrollWheelSpeedControl.enabled");
-		await adjustWithScrollWheel({ controlType: "Speed", direction: "up", initialValue: speed, page, pageType: watch, steps, withModifierKey: true });
+		await adjustWithScrollWheel({
+			controlType: "Speed",
+			direction: "up",
+			initialValue: speed,
+			page,
+			pageType: watch,
+			steps,
+			withModifierKey: true
+		});
 	});
 	// The modifier gate is a single boolean lookup on the wheel event and the direction is decided independently by
 	// the stepper sign, so only the increase direction is exercised per modifier.
 	for (const modifierKey of modifierKeys) {
-		test(`should increase speed when holding '${modifierKey === "ctrlKey" ? "Ctrl" : "Shift"}' modifier key`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Speed", direction: "up", initialValue: speed, modifierKey, page, steps, withModifierKey: true });
+		test(`should increase speed when holding '${modifierKey === "ctrlKey" ? "Ctrl" : "Shift"}' modifier key`, async ({
+			page
+		}) => {
+			await adjustWithScrollWheel({
+				controlType: "Speed",
+				direction: "up",
+				initialValue: speed,
+				modifierKey,
+				page,
+				steps,
+				withModifierKey: true
+			});
 		});
 	}
-	test(`does not change the speed when scrolling without the configured modifier key on ${watch}`, async ({ page }) => {
+	test(`does not change the speed when scrolling without the configured modifier key on ${watch}`, async ({
+		page
+	}) => {
 		await enableSpeedControl(page, speed);
 		// The speed control never claims a bare wheel; without the gate it would hijack page scrolling.
 		await dispatchWheelNotches(page, watch, "up", 1);
@@ -97,7 +153,9 @@ test.describe("scrollWheelSpeedControl", () => {
 		// Control: the configured modifier still steps the speed, so the windows above measure the gate and
 		// not a wheel event that never reached the listener.
 		await dispatchWheelNotches(page, watch, "up", 1, { altKey: true });
-		await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 }).toBe(speed + steps);
+		await expect
+			.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 })
+			.toBe(speed + steps);
 	});
 	test(`shows the on-screen display when the speed changes on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
@@ -109,12 +167,16 @@ test.describe("scrollWheelSpeedControl", () => {
 		await enableSpeedControl(page, speed);
 		await expect(page.locator(OSD_SELECTOR)).not.toBeAttached();
 		await dispatchWheelNotches(page, watch, "up", 1, { altKey: true });
-		await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 }).toBe(speed + steps);
+		await expect
+			.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 })
+			.toBe(speed + steps);
 		await expect(page.locator(OSD_SELECTOR)).toBeVisible({ timeout: 10000 });
 		// An empty canvas would satisfy attachment; the new speed has to have been drawn on it.
 		await expect.poll(async () => hasPaintedPixels(page), { timeout: 5000 }).toBe(true);
 	});
-	test(`speed control takes the wheel event when the volume control is also enabled on ${watch}`, async ({ page }) => {
+	test(`speed control takes the wheel event when the volume control is also enabled on ${watch}`, async ({
+		page
+	}) => {
 		await enableSpeedControl(page, speed);
 		await setOption(page, "scrollWheelVolumeControl.steps", 5);
 		await enableFeature(page, "scrollWheelVolumeControl.enabled");
@@ -122,7 +184,9 @@ test.describe("scrollWheelSpeedControl", () => {
 		await setVolume(page, volume, watch);
 		await expect.poll(async () => getCurrentVolume(page, watch)).toBe(volume);
 		await dispatchWheelNotches(page, watch, "up", 1, { altKey: true });
-		await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 }).toBe(speed + steps);
+		await expect
+			.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 })
+			.toBe(speed + steps);
 		// The volume control has no modifier requirement of its own here, so only the precedence rule keeps
 		// the same notch from moving the volume as well.
 		await expectToStay(async () => getCurrentVolume(page, watch), volume, { page });
@@ -133,24 +197,32 @@ test.describe("scrollWheelSpeedControl", () => {
 		test("applies every notch of a rapid wheel burst on watch", async ({ page }) => {
 			await enableSpeedControl(page, burstStartSpeed);
 			await dispatchWheelNotches(page, watch, "up", 5, { altKey: true });
-			await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 }).toBe(burstStartSpeed + 5 * steps);
+			await expect
+				.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 })
+				.toBe(burstStartSpeed + 5 * steps);
 		});
 		test("applies an updated step size without reloading on watch", async ({ page }) => {
 			await enableSpeedControl(page, speed);
 			await dispatchWheelNotches(page, watch, "up", 1, { altKey: true });
-			await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 }).toBe(speed + steps);
+			await expect
+				.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 })
+				.toBe(speed + steps);
 			// The step size is read from the live config on every apply, so a new value has to take effect
 			// without reloading the page.
 			await setOption(page, "scrollWheelSpeedControl.steps", steps * 2);
 			await setValueOnYouTubePlayer(page, watch, "setPlaybackRate", speed);
 			await expect.poll(async () => getCurrentSpeed(page, watch)).toBe(speed);
 			await dispatchWheelNotches(page, watch, "up", 1, { altKey: true });
-			await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 }).toBe(speed + steps * 2);
+			await expect
+				.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 })
+				.toBe(speed + steps * 2);
 		});
 		test("stops adjusting speed once disabled on watch", async ({ page }) => {
 			await enableSpeedControl(page, speed);
 			await dispatchWheelNotches(page, watch, "up", 1, { altKey: true });
-			await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 }).toBe(speed + steps);
+			await expect
+				.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 })
+				.toBe(speed + steps);
 			await disableFeature(page, "scrollWheelSpeedControl.enabled");
 			await waitForScrollWheelControl(page, "speed", false);
 			await dispatchWheelNotches(page, watch, "up", 1, { altKey: true });

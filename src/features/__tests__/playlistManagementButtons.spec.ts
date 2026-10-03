@@ -66,9 +66,15 @@ async function ensureWatchedPlaylistItem(page: Page): Promise<void> {
 	});
 	// YouTube reports the position to the account while the video plays and once more on leaving the page.
 	await expect
-		.poll(async () => page.evaluate(() => document.querySelector<HTMLVideoElement>("video.html5-main-video")?.currentTime ?? 0), {
-			timeout: 40000
-		})
+		.poll(
+			async () =>
+				page.evaluate(
+					() => document.querySelector<HTMLVideoElement>("video.html5-main-video")?.currentTime ?? 0
+				),
+			{
+				timeout: 40000
+			}
+		)
 		.toBeGreaterThan(20);
 	await navigateToPage(page, playlistUrl);
 	await expect
@@ -109,8 +115,13 @@ async function expectResetButtons(page: Page, timeout = 10000): Promise<void> {
 	await expect
 		.poll(
 			async () => {
-				const { unwatchedWithResetButton, watched, watchedMissingResetButton } = await readButtonCoverage(page);
-				return { hasWatchedItems: watched > 0, unwatchedWithResetButton, watchedMissingResetButton };
+				const { unwatchedWithResetButton, watched, watchedMissingResetButton } =
+					await readButtonCoverage(page);
+				return {
+					hasWatchedItems: watched > 0,
+					unwatchedWithResetButton,
+					watchedMissingResetButton
+				};
 			},
 			{ timeout }
 		)
@@ -129,10 +140,15 @@ async function readButtonCoverage(page: Page): Promise<ButtonCoverage> {
 			const watched = items.filter(isWatched);
 			return {
 				items: items.length,
-				itemsMissingRemoveButton: items.filter((item) => !item.querySelector(removeButtonSelector)).length,
-				unwatchedWithResetButton: items.filter((item) => !isWatched(item) && item.querySelector(resetButtonSelector)).length,
+				itemsMissingRemoveButton: items.filter((item) => !item.querySelector(removeButtonSelector))
+					.length,
+				unwatchedWithResetButton: items.filter(
+					(item) => !isWatched(item) && item.querySelector(resetButtonSelector)
+				).length,
 				watched: watched.length,
-				watchedMissingResetButton: watched.filter((item) => !item.querySelector(resetButtonSelector)).length
+				watchedMissingResetButton: watched.filter(
+					(item) => !item.querySelector(resetButtonSelector)
+				).length
 			};
 		},
 		{
@@ -145,7 +161,9 @@ async function readButtonCoverage(page: Page): Promise<ButtonCoverage> {
 }
 
 /** The remove-all button is only offered for fully watched items, and only inside YouTube's chip bar header. */
-async function readRemoveAllState(page: Page): Promise<{ fullyWatched: number; hasHeader: boolean }> {
+async function readRemoveAllState(
+	page: Page
+): Promise<{ fullyWatched: number; hasHeader: boolean }> {
 	return await page.evaluate(
 		({ headerSelector, itemSelector, progressSelectors }) => {
 			const items = Array.from(document.querySelectorAll(itemSelector));
@@ -161,7 +179,11 @@ async function readRemoveAllState(page: Page): Promise<{ fullyWatched: number; h
 				hasHeader: document.querySelector(headerSelector) !== null
 			};
 		},
-		{ headerSelector: PLAYLIST_HEADER_SELECTOR, itemSelector: PLAYLIST_ITEM_SELECTOR, progressSelectors: PROGRESS_BAR_SELECTORS }
+		{
+			headerSelector: PLAYLIST_HEADER_SELECTOR,
+			itemSelector: PLAYLIST_ITEM_SELECTOR,
+			progressSelectors: PROGRESS_BAR_SELECTORS
+		}
 	);
 }
 
@@ -204,14 +226,18 @@ async function scrollUntilMoreItems(page: Page, itemsBefore: number): Promise<bo
 
 test.describe("playlistManagementButtons", () => {
 	for (const pageType of testPages) {
-		test(`remove button should appear on playlist items when enabled on ${pageType}`, async ({ page }) => {
+		test(`remove button should appear on playlist items when enabled on ${pageType}`, async ({
+			page
+		}) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
 			await navigateToPageType(page, pageType, ["playlistManagementButtons"]);
 			await enableFeature(page, "playlistManagementButtons.removeButton.enabled");
 			await expectRemoveButtons(page);
 		});
 
-		test(`reset button should appear on playlist items when enabled on ${pageType}`, async ({ page }) => {
+		test(`reset button should appear on playlist items when enabled on ${pageType}`, async ({
+			page
+		}) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
 			test.setTimeout(180_000);
 			await navigateToPageType(page, pageType, ["playlistManagementButtons"]);
@@ -220,7 +246,9 @@ test.describe("playlistManagementButtons", () => {
 			await expectResetButtons(page);
 		});
 
-		test(`buttons should re-appear after disable then re-enable on ${pageType}`, async ({ page }) => {
+		test(`buttons should re-appear after disable then re-enable on ${pageType}`, async ({
+			page
+		}) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
 			test.setTimeout(180_000);
 			await navigateToPageType(page, pageType, ["playlistManagementButtons"]);
@@ -257,7 +285,9 @@ test.describe("playlistManagementButtons", () => {
 	// Both cases below edit the account's Watch Later around the same video, so they run one after the other.
 	test.describe("Watch Later", () => {
 		test.describe.configure({ mode: "default" });
-		test(`remove all watched videos button removes the fully watched videos from Watch Later on ${playlist}`, async ({ page }) => {
+		test(`remove all watched videos button removes the fully watched videos from Watch Later on ${playlist}`, async ({
+			page
+		}) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
 			test.setTimeout(300_000);
 			// The button lives in the chip bar, which regular playlists no longer render and Watch Later still does, and it
@@ -300,7 +330,9 @@ test.describe("playlistManagementButtons", () => {
 			// The click removes the fully watched videos one request at a time; each row leaves the page as its removal
 			// goes through, and with nothing watched left the feature takes its button away too.
 			await removeAllButton.click();
-			await expect.poll(async () => (await readRemoveAllState(page)).fullyWatched, { timeout: 60_000 }).toBe(0);
+			await expect
+				.poll(async () => (await readRemoveAllState(page)).fullyWatched, { timeout: 60_000 })
+				.toBe(0);
 			expect(await readRowProgress(page, WATCH_LATER_SHORT_VIDEO)).toBeNull();
 			await expect(removeAllButton).not.toBeAttached({ timeout: 10_000 });
 			// A reload shows the removal held on the server: the row does not come back.
@@ -312,7 +344,9 @@ test.describe("playlistManagementButtons", () => {
 			// Back into Watch Later for the next run.
 			await ensureInWatchLater(page, WATCH_LATER_SHORT_VIDEO);
 		});
-		test(`reset and remove buttons act on a Watch Later row and the remove-all button follows on ${playlist}`, async ({ page }) => {
+		test(`reset and remove buttons act on a Watch Later row and the remove-all button follows on ${playlist}`, async ({
+			page
+		}) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
 			test.setTimeout(300_000);
 			// The same self-contained set-up as above: the short video goes into Watch Later and is watched to the end, so
@@ -333,7 +367,9 @@ test.describe("playlistManagementButtons", () => {
 			await enableFeature(page, "playlistManagementButtons.removeButton.enabled");
 			await enableFeature(page, "playlistManagementButtons.resetButton.enabled");
 			await enableFeature(page, "playlistManagementButtons.removeAllButton.enabled");
-			const row = page.locator(PLAYLIST_ITEM_SELECTOR).filter({ has: page.locator(`a[href*="v=${WATCH_LATER_SHORT_VIDEO}"]`) });
+			const row = page
+				.locator(PLAYLIST_ITEM_SELECTOR)
+				.filter({ has: page.locator(`a[href*="v=${WATCH_LATER_SHORT_VIDEO}"]`) });
 			const removeAllButton = page.locator(REMOVE_ALL_BUTTON_SELECTOR);
 			await expect(row.locator(RESET_BUTTON_SELECTOR)).toBeAttached({ timeout: 15000 });
 			await expect(row.locator(REMOVE_BUTTON_SELECTOR)).toBeAttached();
@@ -341,16 +377,22 @@ test.describe("playlistManagementButtons", () => {
 			// Mark as unwatched: the click asks YouTube to drop the video from the watch history and takes the progress
 			// overlay off the row. With no fully watched row left, the remove-all button goes with it.
 			await row.locator(RESET_BUTTON_SELECTOR).click();
-			await expect.poll(async () => readRowProgress(page, WATCH_LATER_SHORT_VIDEO), { timeout: 30_000 }).toBe(0);
+			await expect
+				.poll(async () => readRowProgress(page, WATCH_LATER_SHORT_VIDEO), { timeout: 30_000 })
+				.toBe(0);
 			await expect(row.locator(RESET_BUTTON_SELECTOR)).not.toBeAttached({ timeout: 10_000 });
 			await expect(removeAllButton).not.toBeAttached({ timeout: 15_000 });
 			// The history edit holds on the server: after a reload the row is back without progress.
 			await reloadPage(page, playlist);
-			await expect.poll(async () => readRowProgress(page, WATCH_LATER_SHORT_VIDEO), { timeout: 30_000 }).toBe(0);
+			await expect
+				.poll(async () => readRowProgress(page, WATCH_LATER_SHORT_VIDEO), { timeout: 30_000 })
+				.toBe(0);
 			// Remove: the row leaves the page as the request goes through, and stays gone across a reload.
 			await expect(row.locator(REMOVE_BUTTON_SELECTOR)).toBeAttached({ timeout: 15000 });
 			await row.locator(REMOVE_BUTTON_SELECTOR).click();
-			await expect.poll(async () => readRowProgress(page, WATCH_LATER_SHORT_VIDEO), { timeout: 30_000 }).toBeNull();
+			await expect
+				.poll(async () => readRowProgress(page, WATCH_LATER_SHORT_VIDEO), { timeout: 30_000 })
+				.toBeNull();
 			await reloadPage(page, playlist);
 			expect(await readRowProgress(page, WATCH_LATER_SHORT_VIDEO)).toBeNull();
 			await disableFeature(page, "playlistManagementButtons.removeButton.enabled");
@@ -361,7 +403,9 @@ test.describe("playlistManagementButtons", () => {
 		});
 	});
 
-	test(`disabling only the remove button should keep the reset buttons on ${playlist}`, async ({ page }) => {
+	test(`disabling only the remove button should keep the reset buttons on ${playlist}`, async ({
+		page
+	}) => {
 		test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
 		test.setTimeout(180_000);
 		await navigateToPageType(page, playlist, ["playlistManagementButtons"]);
@@ -378,7 +422,9 @@ test.describe("playlistManagementButtons", () => {
 		await expectToStay(async () => page.locator(REMOVE_BUTTON_SELECTOR).count(), 0, { page });
 	});
 
-	test(`buttons should be added to playlist items rendered after enabling on ${playlist}`, async ({ page }) => {
+	test(`buttons should be added to playlist items rendered after enabling on ${playlist}`, async ({
+		page
+	}) => {
 		test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
 		test.setTimeout(120_000);
 		await navigateToPageType(page, playlist, ["playlistManagementButtons"]);
@@ -389,7 +435,9 @@ test.describe("playlistManagementButtons", () => {
 		// Rows YouTube renders after the initial pass can only be reached by the MutationObserver.
 		const renderedMoreItems = await scrollUntilMoreItems(page, itemsBefore);
 		test.skip(!renderedMoreItems, "the playlist fixture rendered all of its rows up front");
-		await expect.poll(async () => countPlaylistItems(page), { timeout: 10000 }).toBeGreaterThan(itemsBefore);
+		await expect
+			.poll(async () => countPlaylistItems(page), { timeout: 10000 })
+			.toBeGreaterThan(itemsBefore);
 		await expectRemoveButtons(page, 15000);
 	});
 });

@@ -15,7 +15,11 @@ import {
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	reloadPage,
+	spaNavigateToRelatedVideo
+} from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
@@ -33,11 +37,14 @@ async function applyAmbientState(page: Page, desired: boolean): Promise<boolean>
 	return page.evaluate(
 		([menuSelector, itemSelector, desiredState]) => {
 			const isAmbientActive = () => {
-				const container = document.querySelector("ytd-watch-flexy") ?? document.querySelector("ytd-watch-grid");
+				const container =
+					document.querySelector("ytd-watch-flexy") ?? document.querySelector("ytd-watch-grid");
 				return container?.hasAttribute("cinematics-active") ?? false;
 			};
 			if (isAmbientActive() === desiredState) return true;
-			const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
+			const settingsButton = document.querySelector<HTMLButtonElement>(
+				"button.ytp-settings-button"
+			);
 			const settingsMenu = document.querySelector<HTMLDivElement>(menuSelector);
 			if (!settingsButton || !settingsMenu) return false;
 			const settingsPanelMenu = settingsMenu.querySelector<HTMLDivElement>("div.ytp-panel-menu");
@@ -63,14 +70,17 @@ async function applyAmbientState(page: Page, desired: boolean): Promise<boolean>
 /** Describes what the player settings menu offers, so a failed toggle says why instead of only that it failed. */
 async function describeAmbientMenu(page: Page): Promise<string> {
 	return page.evaluate((menuSelector) => {
-		const shell = document.querySelector("ytd-watch-flexy") ?? document.querySelector("ytd-watch-grid");
+		const shell =
+			document.querySelector("ytd-watch-flexy") ?? document.querySelector("ytd-watch-grid");
 		const menu = document.querySelector<HTMLDivElement>(menuSelector);
 		const panel = menu?.querySelector<HTMLDivElement>("div.ytp-panel-menu");
-		const items = Array.from(panel?.querySelectorAll<HTMLElement>(".ytp-menuitem") ?? []).map((item) => {
-			const label = item.querySelector(".ytp-menuitem-label")?.textContent?.trim() ?? "";
-			const path = item.querySelector("svg path")?.getAttribute("d")?.slice(0, 40) ?? "";
-			return `${label} [${path}]`;
-		});
+		const items = Array.from(panel?.querySelectorAll<HTMLElement>(".ytp-menuitem") ?? []).map(
+			(item) => {
+				const label = item.querySelector(".ytp-menuitem-label")?.textContent?.trim() ?? "";
+				const path = item.querySelector("svg path")?.getAttribute("d")?.slice(0, 40) ?? "";
+				return `${label} [${path}]`;
+			}
+		);
 		return JSON.stringify({
 			cinematicsActive: shell?.hasAttribute("cinematics-active") ?? null,
 			darkTheme: document.documentElement.hasAttribute("dark"),
@@ -100,7 +110,10 @@ async function getAmbientState(page: Page): Promise<boolean | null> {
  */
 async function setAmbientState(page: Page, desired: boolean): Promise<void> {
 	if (await trySetAmbientState(page, desired)) return;
-	expect(false, `expected ambient mode to be turned ${desired ? "on" : "off"}; ${await describeAmbientMenu(page)}`).toBe(true);
+	expect(
+		false,
+		`expected ambient mode to be turned ${desired ? "on" : "off"}; ${await describeAmbientMenu(page)}`
+	).toBe(true);
 }
 /**
  * Like {@link setAmbientState} but resolves to `false` instead of failing when the page exposes no working ambient
@@ -108,7 +121,9 @@ async function setAmbientState(page: Page, desired: boolean): Promise<void> {
  */
 async function trySetAmbientState(page: Page, desired: boolean, timeout = 20000): Promise<boolean> {
 	try {
-		await expect.poll(async () => applyAmbientState(page, desired), { intervals: [500], timeout }).toBe(true);
+		await expect
+			.poll(async () => applyAmbientState(page, desired), { intervals: [500], timeout })
+			.toBe(true);
 		return true;
 	} catch {
 		return false;
@@ -122,7 +137,9 @@ async function trySetAmbientState(page: Page, desired: boolean, timeout = 20000)
  */
 async function useDarkTheme(page: Page): Promise<void> {
 	const context = page.context();
-	const preference = (await context.cookies("https://www.youtube.com")).find(({ name }) => name === "PREF");
+	const preference = (await context.cookies("https://www.youtube.com")).find(
+		({ name }) => name === "PREF"
+	);
 	const preferences = new URLSearchParams(preference?.value ?? "");
 	const flags = Number.parseInt(preferences.get("f6") ?? "0", 16) || 0;
 	preferences.set("f6", (flags | 0x400).toString(16));
@@ -138,7 +155,9 @@ async function useDarkTheme(page: Page): Promise<void> {
 }
 test.describe("automaticallyDisableAmbientMode", () => {
 	for (const pageType of testPages) {
-		test(`should persist disabled ambient mode after navigation on ${pageType}`, async ({ page }) => {
+		test(`should persist disabled ambient mode after navigation on ${pageType}`, async ({
+			page
+		}) => {
 			await useDarkTheme(page);
 			await navigateToPageType(page, pageType, ["ambientMode"]);
 			await enableFeature(page, "automaticallyDisableAmbientMode.enabled");
@@ -227,13 +246,18 @@ test.describe("automaticallyDisableAmbientMode", () => {
 	}
 
 	// The cases below run on watch only unless stated otherwise: they drive the watch branch of makeAmbientToggleTask.
-	test(`does not turn ambient mode on when it was already off before the feature was enabled on ${watch}`, async ({ page }) => {
+	test(`does not turn ambient mode on when it was already off before the feature was enabled on ${watch}`, async ({
+		page
+	}) => {
 		await useDarkTheme(page);
 		await navigateToPageType(page, watch, ["ambientMode"]);
 		test.skip((await getAmbientState(page)) === null, "no watch shell to read ambient mode from");
 		// Turning it on first proves this video really offers the control, so the state the test sets up below is one
 		// the feature could observe rather than a page that simply has no ambient mode at all.
-		test.skip(!(await trySetAmbientState(page, true, 10000)), "this video exposes no ambient mode control");
+		test.skip(
+			!(await trySetAmbientState(page, true, 10000)),
+			"this video exposes no ambient mode control"
+		);
 		// ambientModeWasEnabled is captured once, on the first run of the disable task, so ambient has to be off before
 		// the feature is switched on for the guarded onDisable branch to be the one under test.
 		await setAmbientState(page, false);
@@ -276,11 +300,16 @@ test.describe("automaticallyDisableAmbientMode", () => {
 			{ durationMs: 5000, intervalMs: 500, page }
 		);
 	});
-	test(`leaves the YouTube settings menu usable after disabling ambient mode on ${watch}`, async ({ page }) => {
+	test(`leaves the YouTube settings menu usable after disabling ambient mode on ${watch}`, async ({
+		page
+	}) => {
 		await useDarkTheme(page);
 		await navigateToPageType(page, watch, ["ambientMode"]);
 		test.skip((await getAmbientState(page)) === null, "no watch shell to read ambient mode from");
-		test.skip(!(await trySetAmbientState(page, true, 10000)), "this video exposes no ambient mode control");
+		test.skip(
+			!(await trySetAmbientState(page, true, 10000)),
+			"this video exposes no ambient mode control"
+		);
 		await enableFeature(page, "automaticallyDisableAmbientMode.enabled");
 		await expect
 			.poll(
@@ -295,7 +324,9 @@ test.describe("automaticallyDisableAmbientMode", () => {
 		// behind would make the menu unusable for the rest of the session.
 		await expect(settingsMenu).not.toHaveClass(/(^|\s)hidden(\s|$)/);
 		await ensurePlayerControlsVisible(page, watch);
-		await page.locator("button.ytp-settings-button").evaluate((el) => (el as HTMLButtonElement).click());
+		await page
+			.locator("button.ytp-settings-button")
+			.evaluate((el) => (el as HTMLButtonElement).click());
 		await expect(settingsMenu).toBeVisible();
 		await expect(settingsMenu.locator("div.ytp-panel-menu .ytp-menuitem").first()).toBeVisible();
 	});
@@ -305,12 +336,17 @@ test.describe("automaticallyDisableAmbientMode", () => {
 		// Only some live streams carry the ambient mode entry, so the hunt keeps looking for one within its own budget
 		// and the test stops with a reason only when the channel has none on air.
 		test.setTimeout(test.info().timeout + 240_000);
-		const reached = await navigateToPageType(page, live, ["ambientMode"], { deadline: Date.now() + 200_000 })
+		const reached = await navigateToPageType(page, live, ["ambientMode"], {
+			deadline: Date.now() + 200_000
+		})
 			.then(() => true)
 			.catch(() => false);
 		test.skip(!reached, "no live stream with an ambient mode control is on air right now");
 		test.skip((await getAmbientState(page)) === null, "no watch shell to read ambient mode from");
-		test.skip(!(await trySetAmbientState(page, true, 10000)), "this live stream's ambient mode control did not respond");
+		test.skip(
+			!(await trySetAmbientState(page, true, 10000)),
+			"this live stream's ambient mode control did not respond"
+		);
 		await enableFeature(page, "automaticallyDisableAmbientMode.enabled");
 		// live is outside includePages, so areDependenciesMet blocks the feature even though isWatchPage() is true for
 		// the live URL and the toggle task would otherwise happily run.
@@ -334,12 +370,22 @@ test.describe("automaticallyDisableAmbientMode", () => {
 			await useDarkTheme(page);
 			await navigateToPageType(page, shorts, ["ambientMode"]);
 			const initialState = await readShortsAmbientState(page);
-			test.skip(initialState === null, `this reel's sheet offers no ambient mode row: ${await describeShortsSheet(page)}`);
-			test.skip(initialState === false, "ambient mode is already off on this reel and YouTube's switch does not turn it back on");
+			test.skip(
+				initialState === null,
+				`this reel's sheet offers no ambient mode row: ${await describeShortsSheet(page)}`
+			);
+			test.skip(
+				initialState === false,
+				"ambient mode is already off on this reel and YouTube's switch does not turn it back on"
+			);
 			await enableFeature(page, "automaticallyDisableAmbientMode.enabled");
-			await expect.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 20000 }).toBe(false);
+			await expect
+				.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 20000 })
+				.toBe(false);
 		});
-		test(`should turn ambient mode off again after a full page reload on ${shorts}`, async ({ page }) => {
+		test(`should turn ambient mode off again after a full page reload on ${shorts}`, async ({
+			page
+		}) => {
 			await useDarkTheme(page);
 			await navigateToPageType(page, shorts, ["ambientMode"]);
 			test.skip(
@@ -347,13 +393,19 @@ test.describe("automaticallyDisableAmbientMode", () => {
 				`this reel's sheet offers no ambient mode row that is on: ${await describeShortsSheet(page)}`
 			);
 			await enableFeature(page, "automaticallyDisableAmbientMode.enabled");
-			await expect.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 20000 }).toBe(false);
+			await expect
+				.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 20000 })
+				.toBe(false);
 			// A new document starts with ambient mode on again, so the state after the reload is the feature's doing; at
 			// start-up the sheet fills slowly and the feature retries, so this read gets longer.
 			await reloadPage(page, shorts);
-			await expect.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 40000 }).toBe(false);
+			await expect
+				.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 40000 })
+				.toBe(false);
 		});
-		test(`should leave the sheet closed and the popups usable after acting on ${shorts}`, async ({ page }) => {
+		test(`should leave the sheet closed and the popups usable after acting on ${shorts}`, async ({
+			page
+		}) => {
 			const errors: string[] = [];
 			page.on("pageerror", (error) => errors.push(error.message));
 			await useDarkTheme(page);
@@ -363,12 +415,18 @@ test.describe("automaticallyDisableAmbientMode", () => {
 				`this reel's sheet offers no ambient mode row that is on: ${await describeShortsSheet(page)}`
 			);
 			await enableFeature(page, "automaticallyDisableAmbientMode.enabled");
-			await expect.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 20000 }).toBe(false);
+			await expect
+				.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 20000 })
+				.toBe(false);
 			// The next reel's sheet carries no ambient mode row, so the feature has to find that out and put the page
 			// back as it was: the popup container shown again and no sheet left open.
 			await goToNextReel(page);
 			await page.waitForTimeout(5000);
-			await expectToStay(async () => isPopupContainerShown(page), true, { durationMs: 3000, intervalMs: 500, page });
+			await expectToStay(async () => isPopupContainerShown(page), true, {
+				durationMs: 3000,
+				intervalMs: 500,
+				page
+			});
 			await expect(page.locator(shortsOpenSheetSelector)).toHaveCount(0);
 			// The sheet still opens and closes for the user.
 			await readShortsAmbientState(page);
@@ -381,10 +439,15 @@ test.describe("automaticallyDisableAmbientMode", () => {
 /** Moves to the next reel in-page through YouTube's own navigation button. */
 async function goToNextReel(page: Page): Promise<void> {
 	const before = page.url();
-	await page.locator("button[aria-label='Next video'], #navigation-button-down button").first().click();
+	await page
+		.locator("button[aria-label='Next video'], #navigation-button-down button")
+		.first()
+		.click();
 	await expect.poll(() => page.url(), { timeout: 15000 }).not.toBe(before);
 }
 /** Whether YouTube's popup container, which the feature hides while it works the sheet, is shown. */
 async function isPopupContainerShown(page: Page): Promise<boolean> {
-	return page.locator("ytd-popup-container").evaluate((element) => getComputedStyle(element).display !== "none");
+	return page
+		.locator("ytd-popup-container")
+		.evaluate((element) => getComputedStyle(element).display !== "none");
 }

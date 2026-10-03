@@ -41,11 +41,18 @@ async function isAtEndScreen(page: Page, target: number): Promise<boolean> {
  */
 async function playToEnd(page: Page): Promise<boolean> {
 	// A player that has not started reports a duration of 0, and seeking to that would play the whole video.
-	await expect.poll(async () => getValueFromYouTubePlayer(page, "getDuration", watch), { intervals: [500], timeout: 30000 }).toBeGreaterThan(0);
+	await expect
+		.poll(async () => getValueFromYouTubePlayer(page, "getDuration", watch), {
+			intervals: [500],
+			timeout: 30000
+		})
+		.toBeGreaterThan(0);
 	const duration = (await getValueFromYouTubePlayer(page, "getDuration", watch)) ?? 0;
 	const target = Math.max(0, duration - 1);
 	try {
-		await expect.poll(async () => isAtEndScreen(page, target), { intervals: [1000], timeout: 60000 }).toBe(true);
+		await expect
+			.poll(async () => isAtEndScreen(page, target), { intervals: [1000], timeout: 60000 })
+			.toBe(true);
 	} catch {
 		return false;
 	}
@@ -66,8 +73,11 @@ async function turnOffAutoPlay(page: Page): Promise<void> {
 			if ((await toggleState.getAttribute("aria-checked")) === "false") return;
 			await page.locator(".ytp-autonav-toggle").evaluate((el) => {
 				const toggle = el as HTMLButtonElement;
-				const player = document.querySelector<HTMLElement & { setAutonav?: (enabled: boolean) => void }>("#movie_player");
-				if (toggle.style.display === "none" && typeof player?.setAutonav === "function") player.setAutonav(false);
+				const player = document.querySelector<
+					HTMLElement & { setAutonav?: (enabled: boolean) => void }
+				>("#movie_player");
+				if (toggle.style.display === "none" && typeof player?.setAutonav === "function")
+					player.setAutonav(false);
 				else toggle.click();
 			});
 			const off = await expect(toggleState)
@@ -89,7 +99,9 @@ test.describe("automaticallyShowMoreVideosOnEndScreen", () => {
 			await expectBodyWithClass(page, "yte-show-html5-endscreen");
 			await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid");
 		});
-		test(`should persist show more videos classes after navigation on ${pageType}`, async ({ page }) => {
+		test(`should persist show more videos classes after navigation on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
 			await expectBodyWithClass(page, "yte-show-html5-endscreen");
@@ -103,7 +115,9 @@ test.describe("automaticallyShowMoreVideosOnEndScreen", () => {
 			await expectBodyWithClass(page, "yte-show-html5-endscreen");
 			await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid");
 		});
-		test(`persists show more videos classes after full page reload on ${pageType}`, async ({ page }) => {
+		test(`persists show more videos classes after full page reload on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
 			await expectBodyWithClass(page, "yte-show-html5-endscreen");

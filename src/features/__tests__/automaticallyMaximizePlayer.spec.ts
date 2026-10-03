@@ -7,7 +7,13 @@ import { expectToStay } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage, spaNavigateBack, spaNavigateToHome, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	reloadPage,
+	spaNavigateBack,
+	spaNavigateToHome,
+	spaNavigateToRelatedVideo
+} from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
@@ -23,7 +29,8 @@ async function clickPlayerSizeButton(page: Page): Promise<void> {
 /** Reads YouTube's own theater layout flag, the state maximizePlayer branches on and minimizePlayer restores. */
 async function isInTheaterMode(page: Page): Promise<boolean> {
 	return await page.evaluate(() => {
-		const container = document.querySelector("ytd-watch-grid") ?? document.querySelector("ytd-watch-flexy");
+		const container =
+			document.querySelector("ytd-watch-grid") ?? document.querySelector("ytd-watch-flexy");
 		return container?.hasAttribute("theater") ?? false;
 	});
 }
@@ -44,7 +51,9 @@ test.describe("automaticallyMaximizePlayer", () => {
 			await enableFeature(page, "automaticallyMaximizePlayer.enabled");
 			await expect.poll(async () => await isPlayerMaximized(page), { timeout: 15000 }).toBeTruthy();
 		});
-		test(`player should re-maximize after disable then re-enable on ${pageType}`, async ({ page }) => {
+		test(`player should re-maximize after disable then re-enable on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "automaticallyMaximizePlayer.enabled");
 			await expect.poll(async () => await isPlayerMaximized(page), { timeout: 15000 }).toBeTruthy();
@@ -77,35 +86,45 @@ test.describe("automaticallyMaximizePlayer", () => {
 		await navigateToPageType(page, nonTargetPage!);
 		await enableFeature(page, "automaticallyMaximizePlayer.enabled");
 		// The maximize task has a 20 s budget, so a single poll would sample long before a gating regression could show.
-		await expectToStay(async () => isPlayerMaximized(page), false, { durationMs: 5000, intervalMs: 500, page });
+		await expectToStay(async () => isPlayerMaximized(page), false, {
+			durationMs: 5000,
+			intervalMs: 500,
+			page
+		});
 	});
 
-	test(`maximizing sets the size-button state and viewport CSS variables on ${watch}`, async ({ page }) => {
+	test(`maximizing sets the size-button state and viewport CSS variables on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setTheaterMode(page, false);
 		await enableFeature(page, "automaticallyMaximizePlayer.enabled");
 		await expect(page.locator("body")).toHaveAttribute("yte-maximized", "", { timeout: 15000 });
 		// The layout CSS keys off these three values, so yte-maximized alone renders nothing without them.
 		await expect(page.locator("body")).toHaveAttribute("yte-size-button-state", "default");
-		const { headerHeight, mastheadHeight, videoHeight, viewportHeight } = await page.evaluate(() => {
-			const {
-				body: { style }
-			} = document;
-			const masthead = document.querySelector("#masthead-container");
-			return {
-				headerHeight: style.getPropertyValue("--yte-header-height"),
-				mastheadHeight: masthead?.getBoundingClientRect().height ?? null,
-				videoHeight: style.getPropertyValue("--yte-video-height"),
-				viewportHeight: window.innerHeight
-			};
-		});
+		const { headerHeight, mastheadHeight, videoHeight, viewportHeight } = await page.evaluate(
+			() => {
+				const {
+					body: { style }
+				} = document;
+				const masthead = document.querySelector("#masthead-container");
+				return {
+					headerHeight: style.getPropertyValue("--yte-header-height"),
+					mastheadHeight: masthead?.getBoundingClientRect().height ?? null,
+					videoHeight: style.getPropertyValue("--yte-video-height"),
+					viewportHeight: window.innerHeight
+				};
+			}
+		);
 		expect(videoHeight).toBe(`${viewportHeight}px`);
 		expect(mastheadHeight).not.toBeNull();
 		expect(Math.abs(Number.parseFloat(headerHeight) - mastheadHeight!)).toBeLessThan(1);
 		// The variable is only worth setting if the player actually grows to it.
 		await expect(page.locator("div#movie_player")).toHaveCSS("height", videoHeight);
 	});
-	test(`pressing Escape minimizes the automatically maximized player on ${watch}`, async ({ page }) => {
+	test(`pressing Escape minimizes the automatically maximized player on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "automaticallyMaximizePlayer.enabled");
 		await expect(page.locator("body")).toHaveAttribute("yte-maximized", "", { timeout: 15000 });
@@ -113,7 +132,9 @@ test.describe("automaticallyMaximizePlayer", () => {
 		await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
 		await expect(page.locator("body")).not.toHaveAttribute("yte-size-button-state");
 	});
-	test(`minimizes when navigating away in-page and re-maximizes on returning to ${watch}`, async ({ page }) => {
+	test(`minimizes when navigating away in-page and re-maximizes on returning to ${watch}`, async ({
+		page
+	}) => {
 		test.skip(!hasAuthState(), "home requires login");
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "automaticallyMaximizePlayer.enabled");
@@ -137,7 +158,9 @@ test.describe("automaticallyMaximizePlayer", () => {
 		// Without the restoring click the user is left in YouTube theater mode after switching the feature off.
 		await expect.poll(async () => isInTheaterMode(page), { timeout: 10000 }).toBe(false);
 	});
-	test(`disabling keeps theater mode when the player was already in theater on ${watch}`, async ({ page }) => {
+	test(`disabling keeps theater mode when the player was already in theater on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setTheaterMode(page, true);
 		await enableFeature(page, "automaticallyMaximizePlayer.enabled");
@@ -148,9 +171,15 @@ test.describe("automaticallyMaximizePlayer", () => {
 		await disableFeature(page, "automaticallyMaximizePlayer.enabled");
 		await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
 		// minimizePlayer only clicks the size button back for the "default" state, so the user layout survives.
-		await expectToStay(async () => isInTheaterMode(page), true, { durationMs: 3000, intervalMs: 500, page });
+		await expectToStay(async () => isInTheaterMode(page), true, {
+			durationMs: 3000,
+			intervalMs: 500,
+			page
+		});
 	});
-	test(`clicking the player size button while automatically maximized minimizes the player on ${watch}`, async ({ page }) => {
+	test(`clicking the player size button while automatically maximized minimizes the player on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setTheaterMode(page, false);
 		await enableFeature(page, "automaticallyMaximizePlayer.enabled");
@@ -162,7 +191,9 @@ test.describe("automaticallyMaximizePlayer", () => {
 		await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
 		await expect(page.locator("body")).not.toHaveAttribute("yte-size-button-state");
 	});
-	test(`reveals the header on a mouse move to the top of the viewport while maximized on ${watch}`, async ({ page }) => {
+	test(`reveals the header on a mouse move to the top of the viewport while maximized on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "automaticallyMaximizePlayer.enabled");
 		await expect(page.locator("body")).toHaveAttribute("yte-maximized", "", { timeout: 15000 });

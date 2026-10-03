@@ -13,7 +13,12 @@ import {
 	expectToStay
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord, placementSelectors } from "@/src/utils/_tests/constants";
-import { clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	clickFeatureMenuItem,
+	disableFeature,
+	enableFeature,
+	setOption
+} from "@/src/utils/_tests/features";
 import { listFeatureButtons, loadAllFeatureMetadata } from "@/src/utils/_tests/metadata";
 import { navigateToPageType, waitForExtensionReady } from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
@@ -53,7 +58,9 @@ test.describe("buttonController", () => {
 			const featureMenu = page.locator("#yte-feature-menu");
 			await expect(featureMenu).toBeVisible();
 		});
-		test("feature menu item should be added when feature enabled and removed when disabled", async ({ page }) => {
+		test("feature menu item should be added when feature enabled and removed when disabled", async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "screenshotButton.button.enabled");
 			await setOption(page, "screenshotButton.button.placement", "feature_menu");
@@ -78,7 +85,9 @@ test.describe("buttonController", () => {
 			await featureMenuButton.click();
 			await expect(featureMenu).not.toBeVisible();
 		});
-		test("feature menu should open on hover and hide after the pointer leaves when openType is hover", async ({ page }) => {
+		test("feature menu should open on hover and hide after the pointer leaves when openType is hover", async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "screenshotButton.button.enabled");
 			await setOption(page, "screenshotButton.button.placement", menu);
@@ -92,7 +101,9 @@ test.describe("buttonController", () => {
 			await page.mouse.move(0, 0);
 			await expect(featureMenu).not.toBeVisible();
 		});
-		test("switching featureMenu.openType to hover should rebind the menu listeners without a reload", async ({ page }) => {
+		test("switching featureMenu.openType to hover should rebind the menu listeners without a reload", async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "screenshotButton.button.enabled");
 			await setOption(page, "screenshotButton.button.placement", menu);
@@ -101,7 +112,10 @@ test.describe("buttonController", () => {
 			await expect(featureMenuButton).toBeVisible();
 			// The default open type is "click", so hovering must leave the menu closed.
 			await featureMenuButton.hover();
-			await expectToStay(async () => await featureMenu.isVisible(), false, { durationMs: 1500, page });
+			await expectToStay(async () => await featureMenu.isVisible(), false, {
+				durationMs: 1500,
+				page
+			});
 			await page.mouse.move(0, 0);
 			await setOption(page, "featureMenu.openType", "hover");
 			await featureMenuButton.hover();
@@ -111,11 +125,16 @@ test.describe("buttonController", () => {
 			// Back to click: the hover listeners have to be taken down again, or a hover would still open the menu.
 			await setOption(page, "featureMenu.openType", "click");
 			await featureMenuButton.hover();
-			await expectToStay(async () => await featureMenu.isVisible(), false, { durationMs: 1500, page });
+			await expectToStay(async () => await featureMenu.isVisible(), false, {
+				durationMs: 1500,
+				page
+			});
 			await featureMenuButton.click();
 			await expect(featureMenu).toBeVisible();
 		});
-		test("feature menu should close when clicking outside the menu and its button", async ({ page }) => {
+		test("feature menu should close when clicking outside the menu and its button", async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "screenshotButton.button.enabled");
 			await setOption(page, "screenshotButton.button.placement", menu);
@@ -128,7 +147,9 @@ test.describe("buttonController", () => {
 			await page.locator("div#movie_player").click();
 			await expect(featureMenu).not.toBeVisible();
 		});
-		test("clicking a feature menu item should run its action and flip its checked state", async ({ page }) => {
+		test("clicking a feature menu item should run its action and flip its checked state", async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await setOption(page, "loopButton.button.placement", menu);
 			await enableFeature(page, "loopButton.button.enabled");
@@ -144,13 +165,17 @@ test.describe("buttonController", () => {
 		test("no feature menu button should be created on shorts", async ({ page }) => {
 			await navigateToPageType(page, shorts);
 			// enableFeatureMenuButton bails on every non-watch page, so neither the button nor the menu is ever built.
-			await expectToStay(async () => await page.locator("#yte-feature-menu-button").count(), 0, { page });
+			await expectToStay(async () => await page.locator("#yte-feature-menu-button").count(), 0, {
+				page
+			});
 			await expect(page.locator("#yte-feature-menu")).not.toBeAttached();
 		});
 	});
 	test.describe("buttonPlacement", () => {
 		test.describe("fullscreen", () => {
-			test("should move loop button from left to right controls when entering fullscreen and back when exiting", async ({ page }) => {
+			test("should move loop button from left to right controls when entering fullscreen and back when exiting", async ({
+				page
+			}) => {
 				await navigateToPageType(page, watch);
 				await setOption(page, "loopButton.button.placement", left);
 				await setOption(page, "loopButton.button.fullscreenPlacement", right);
@@ -172,7 +197,9 @@ test.describe("buttonController", () => {
 				await toggleFullscreen(page, false);
 				await expectFeatureButtonToBeIn(page, "yte-feature-loopButton-button", right);
 			});
-			test("should move screenshot button to feature menu when entering fullscreen and back when exiting", async ({ page }) => {
+			test("should move screenshot button to feature menu when entering fullscreen and back when exiting", async ({
+				page
+			}) => {
 				await navigateToPageType(page, watch);
 				await setOption(page, "screenshotButton.button.placement", left);
 				await setOption(page, "screenshotButton.button.fullscreenPlacement", "feature_menu");
@@ -185,7 +212,9 @@ test.describe("buttonController", () => {
 				await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", left);
 				await expectFeatureMenuItemToBeFalsy(page, "yte-feature-screenshotButton-menuitem");
 			});
-			test("should move screenshot button from below player to left controls when entering fullscreen and back when exiting", async ({ page }) => {
+			test("should move screenshot button from below player to left controls when entering fullscreen and back when exiting", async ({
+				page
+			}) => {
 				await navigateToPageType(page, watch);
 				await setOption(page, "screenshotButton.button.placement", below);
 				await setOption(page, "screenshotButton.button.fullscreenPlacement", left);
@@ -196,7 +225,9 @@ test.describe("buttonController", () => {
 				await toggleFullscreen(page, false);
 				await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", below);
 			});
-			test("should apply a fullscreenPlacement changed after the button was already placed", async ({ page }) => {
+			test("should apply a fullscreenPlacement changed after the button was already placed", async ({
+				page
+			}) => {
 				await navigateToPageType(page, watch);
 				await setOption(page, "loopButton.button.placement", left);
 				await setOption(page, "loopButton.button.fullscreenPlacement", "same");
@@ -237,15 +268,23 @@ test.describe("buttonController", () => {
 					await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", placement);
 					if (placement === below) {
 						// The below player container must not swallow page clicks while the buttons inside it stay interactive.
-						await expect(page.locator(placementSelectors.below_player)).toHaveCSS("pointer-events", "none");
-						await expect(page.locator("#yte-feature-screenshotButton-button")).toHaveCSS("pointer-events", "auto");
+						await expect(page.locator(placementSelectors.below_player)).toHaveCSS(
+							"pointer-events",
+							"none"
+						);
+						await expect(page.locator("#yte-feature-screenshotButton-button")).toHaveCSS(
+							"pointer-events",
+							"auto"
+						);
 					}
 				});
 			}
 		});
 	});
 	test.describe("below player container", () => {
-		test("container is centred on the player and follows theater mode on watch", async ({ page }) => {
+		test("container is centred on the player and follows theater mode on watch", async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await setOption(page, "screenshotButton.button.placement", below);
 			await enableFeature(page, "screenshotButton.button.enabled");
@@ -253,15 +292,26 @@ test.describe("buttonController", () => {
 			await expectContainerToMatchPlayer(page);
 			await enableFeature(page, "automaticTheaterMode.enabled");
 			await expect
-				.poll(async () => page.evaluate(() => document.querySelector("ytd-watch-flexy, ytd-watch-grid")?.hasAttribute("theater") ?? false), {
-					timeout: 15000
-				})
+				.poll(
+					async () =>
+						page.evaluate(
+							() =>
+								document
+									.querySelector("ytd-watch-flexy, ytd-watch-grid")
+									?.hasAttribute("theater") ?? false
+						),
+					{
+						timeout: 15000
+					}
+				)
 				.toBe(true);
 			await expectContainerToMatchPlayer(page);
 		});
 	});
 	test.describe("tooltips", () => {
-		test("hovering a player controls button should show its tooltip inside the player and remove it on pointer out", async ({ page }) => {
+		test("hovering a player controls button should show its tooltip inside the player and remove it on pointer out", async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await setOption(page, "screenshotButton.button.placement", right);
 			await enableFeature(page, "screenshotButton.button.enabled");
@@ -275,11 +325,15 @@ test.describe("buttonController", () => {
 			await expect(tooltip).toBeAttached();
 			await expect(tooltip).toHaveText(title!);
 			// Buttons inside the player chrome anchor their tooltip on the player, not on the body.
-			await expect.poll(async () => await getTooltipParent(page, "yte-feature-screenshotButton-tooltip")).toBe("movie_player");
+			await expect
+				.poll(async () => await getTooltipParent(page, "yte-feature-screenshotButton-tooltip"))
+				.toBe("movie_player");
 			await page.mouse.move(0, 0);
 			await expect(tooltip).not.toBeAttached();
 		});
-		test("hovering a below player button should attach its tooltip to the document body", async ({ page }) => {
+		test("hovering a below player button should attach its tooltip to the document body", async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await setOption(page, "screenshotButton.button.placement", below);
 			await enableFeature(page, "screenshotButton.button.enabled");
@@ -291,7 +345,9 @@ test.describe("buttonController", () => {
 			const tooltip = page.locator("#yte-feature-screenshotButton-tooltip");
 			await expect(tooltip).toBeAttached();
 			await expect(tooltip).toHaveText(title!);
-			await expect.poll(async () => await getTooltipParent(page, "yte-feature-screenshotButton-tooltip")).toBe("BODY");
+			await expect
+				.poll(async () => await getTooltipParent(page, "yte-feature-screenshotButton-tooltip"))
+				.toBe("BODY");
 			await page.mouse.move(0, 0);
 			await expect(tooltip).not.toBeAttached();
 		});
@@ -305,10 +361,14 @@ test.describe("buttonController", () => {
 			await navigateToPageType(page, home);
 			await page.goBack();
 			await waitForExtensionReady(page);
-			await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", left, { timeout: 30000 });
+			await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", left, {
+				timeout: 30000
+			});
 			// A live placement change only lands when the restore re-registered the storage listener.
 			await setOption(page, "screenshotButton.button.placement", right);
-			await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", right, { timeout: 30000 });
+			await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", right, {
+				timeout: 30000
+			});
 		});
 	});
 });
@@ -323,7 +383,10 @@ async function expectContainerToMatchPlayer(page: Page): Promise<void> {
 					if (!container || !player) return false;
 					const containerRect = container.getBoundingClientRect();
 					const playerRect = player.getBoundingClientRect();
-					return Math.abs(containerRect.left - playerRect.left) <= 1 && Math.abs(containerRect.width - playerRect.width) <= 1;
+					return (
+						Math.abs(containerRect.left - playerRect.left) <= 1 &&
+						Math.abs(containerRect.width - playerRect.width) <= 1
+					);
 				}, placementSelectors.below_player),
 			{ timeout: 10000 }
 		)

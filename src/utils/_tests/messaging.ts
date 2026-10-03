@@ -6,7 +6,10 @@ import { MESSAGE_ORIGIN } from "@/src/utils/messaging";
  * Sends a message from the extension side (simulating the content script response).
  * Uses window.postMessage with the project's origin protocol.
  */
-export async function sendExtensionMessage(page: Page, message: Record<string, unknown>): Promise<void> {
+export async function sendExtensionMessage(
+	page: Page,
+	message: Record<string, unknown>
+): Promise<void> {
 	await safeEvaluate(
 		page,
 		(msg) => {
@@ -21,7 +24,10 @@ export async function sendExtensionMessage(page: Page, message: Record<string, u
  * Sends a message from the YouTube/embedded-script side (simulating the page sending to the content script).
  * Uses window.postMessage with the project's origin protocol.
  */
-export async function sendYouTubeMessage(page: Page, message: Record<string, unknown>): Promise<void> {
+export async function sendYouTubeMessage(
+	page: Page,
+	message: Record<string, unknown>
+): Promise<void> {
 	await safeEvaluate(
 		page,
 		(msg) => {
@@ -33,7 +39,12 @@ export async function sendYouTubeMessage(page: Page, message: Record<string, unk
 	await page.waitForTimeout(20);
 }
 
-async function safeEvaluate<T>(page: Page, fn: (msg: Record<string, unknown>) => T, message: Record<string, unknown>, retries = 3): Promise<T> {
+async function safeEvaluate<T>(
+	page: Page,
+	fn: (msg: Record<string, unknown>) => T,
+	message: Record<string, unknown>,
+	retries = 3
+): Promise<T> {
 	for (let attempt = 0; attempt < retries; attempt++) {
 		try {
 			return await page.evaluate(fn, message);

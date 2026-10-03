@@ -1,14 +1,23 @@
-import type { Page } from '@playwright/test';
+import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
 
-import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
+import {
+	expectBodyWithClass,
+	expectBodyWithoutClass,
+	expectElementsHidden,
+	expectElementsNotHidden
+} from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, spaNavigateBack, spaNavigateToHome } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	spaNavigateBack,
+	spaNavigateToHome
+} from "@/src/utils/_tests/navigation";
 import { loginRequiredPages } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
@@ -39,7 +48,10 @@ const [, memberBadgeGlyph = ""] = /path\[d="([^"]+)"\]/.exec(firstSelector) ?? [
  * display assertions iterate over zero elements and pass without ever looking at the feature's effect.
  */
 async function expectInjectedSelectorsToMatch(page: Page): Promise<void> {
-	const unmatched = await page.evaluate((scoped) => scoped.filter((selector) => document.querySelector(selector) === null), [...injectedSelectors]);
+	const unmatched = await page.evaluate(
+		(scoped) => scoped.filter((selector) => document.querySelector(selector) === null),
+		[...injectedSelectors]
+	);
 	expect(unmatched).toEqual([]);
 }
 /**
@@ -62,12 +74,15 @@ async function injectMembersOnlyMarkup(page: Page): Promise<void> {
 				element.style.display = "block";
 				return element;
 			};
-			const addBadge = (parent: Element): void => parent.insertAdjacentHTML("beforeend", `<svg><path d="${glyph}"></path></svg>`);
+			const addBadge = (parent: Element): void =>
+				parent.insertAdjacentHTML("beforeend", `<svg><path d="${glyph}"></path></svg>`);
 			const host = document.createElement("div");
 			host.id = hostId;
 			document.body.appendChild(host);
 			addBadge(addChild(host, "ytd-rich-item-renderer"));
-			addBadge(addChild(addChild(host, "ytd-item-section-renderer"), "yt-horizontal-list-renderer"));
+			addBadge(
+				addChild(addChild(host, "ytd-item-section-renderer"), "yt-horizontal-list-renderer")
+			);
 			addBadge(addChild(host, "yt-lockup-view-model"));
 			host.insertAdjacentHTML("beforeend", `<span class="yte-test-members-control"></span>`);
 		},
@@ -78,7 +93,10 @@ async function injectMembersOnlyMarkup(page: Page): Promise<void> {
 test.describe("hideMembersOnlyVideos", () => {
 	for (const pageType of testPages) {
 		test(`hides members only videos on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hideMembersOnlyVideos.enabled");
 			await expectBodyWithClass(page, bodyClass);
@@ -109,7 +127,9 @@ test.describe("hideMembersOnlyVideos", () => {
 		});
 	}
 
-	test("hides an injected members only item for every generated selector on watch", async ({ page }) => {
+	test("hides an injected members only item for every generated selector on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await disableFeature(page, "hideMembersOnlyVideos.enabled");
 		await injectMembersOnlyMarkup(page);
@@ -122,7 +142,9 @@ test.describe("hideMembersOnlyVideos", () => {
 		// A sibling matching none of the selectors must keep its display, so the rule cannot be hiding the whole subtree.
 		await expectElementsNotHidden(page, [membersControlSelector], { requireMatch: true });
 	});
-	test("keeps members only items visible while a sponsorships hub is on the page on watch", async ({ page }) => {
+	test("keeps members only items visible while a sponsorships hub is on the page on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "hideMembersOnlyVideos.enabled");
 		await expectBodyWithClass(page, bodyClass);

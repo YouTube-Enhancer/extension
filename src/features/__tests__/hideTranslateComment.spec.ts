@@ -3,7 +3,12 @@ import type { Page } from "@playwright/test";
 import { test } from "playwright.config";
 
 import { metadata } from "@/src/features/hideTranslateComment/index.metadata";
-import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
+import {
+	expectBodyWithClass,
+	expectBodyWithoutClass,
+	expectElementsHidden,
+	expectElementsNotHidden
+} from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
@@ -14,7 +19,11 @@ import {
 	spaNavigateToHome,
 	spaNavigateToRelatedVideo
 } from "@/src/utils/_tests/navigation";
-import { loginRequiredPages, resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import {
+	loginRequiredPages,
+	resolveNonTargetPage,
+	resolvePageTypes
+} from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -24,7 +33,8 @@ const {
 
 const { channel_videos: channelVideos, home, watch } = pageTypeRecord;
 
-const injectedTranslateButtonSelector = "#yte-test-translate-button-host ytd-tri-state-button-view-model.translate-button";
+const injectedTranslateButtonSelector =
+	"#yte-test-translate-button-host ytd-tri-state-button-view-model.translate-button";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 
@@ -56,7 +66,9 @@ test.describe("hideTranslateComment", () => {
 			await expectBodyWithoutClass(page, bodyClass);
 			await injectTranslateButton(page);
 			// Scoped to the injected button: real translate buttons can be display:none for YouTube's own reasons.
-			await expectElementsNotHidden(page, [injectedTranslateButtonSelector], { requireMatch: true });
+			await expectElementsNotHidden(page, [injectedTranslateButtonSelector], {
+				requireMatch: true
+			});
 		});
 		test(`hides translate comment after navigation on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -90,8 +102,13 @@ test.describe("hideTranslateComment", () => {
 		});
 	}
 
-	test(`drops the hide class when SPA navigating off ${watch} and restores it on return`, async ({ page }) => {
-		test.skip(!hasAuthState() && loginRequiredPages.includes(home), `the in-page hop lands on ${home}, which requires login`);
+	test(`drops the hide class when SPA navigating off ${watch} and restores it on return`, async ({
+		page
+	}) => {
+		test.skip(
+			!hasAuthState() && loginRequiredPages.includes(home),
+			`the in-page hop lands on ${home}, which requires login`
+		);
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "hideTranslateComment.enabled");
 		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
@@ -101,7 +118,9 @@ test.describe("hideTranslateComment", () => {
 		await spaNavigateBack(page, "watch");
 		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 	});
-	test(`applies the hide class when SPA navigating from ${channelVideos} to a watch page`, async ({ page }) => {
+	test(`applies the hide class when SPA navigating from ${channelVideos} to a watch page`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, channelVideos);
 		await enableFeature(page, "hideTranslateComment.enabled");
 		// The feature is gated to watch, so nothing is applied while the channel page is showing.

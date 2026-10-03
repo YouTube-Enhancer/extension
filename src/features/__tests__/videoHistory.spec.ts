@@ -35,7 +35,9 @@ async function isOfficialArtistVideo(page: Page): Promise<boolean> {
 		const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 		return (await player?.getVideoData())?.author ?? "";
 	});
-	return author.endsWith(" - Topic") || (await page.locator(OFFICIAL_ARTIST_BADGE_SELECTOR).count()) > 0;
+	return (
+		author.endsWith(" - Topic") || (await page.locator(OFFICIAL_ARTIST_BADGE_SELECTOR).count()) > 0
+	);
 }
 
 async function isVideoPaused(page: Page): Promise<boolean> {
@@ -73,7 +75,9 @@ async function markVideoWatched(page: Page): Promise<void> {
 async function readStoredEntry(page: Page): Promise<Nullable<VideoHistoryEntry>> {
 	const videoId = new URL(page.url()).searchParams.get("v");
 	if (!videoId) return null;
-	const { videoHistory } = (await readStoredState(page)) as { videoHistory?: { storage?: Record<string, VideoHistoryEntry> } };
+	const { videoHistory } = (await readStoredState(page)) as {
+		videoHistory?: { storage?: Record<string, VideoHistoryEntry> };
+	};
 	return videoHistory?.storage?.[videoId] ?? null;
 }
 
@@ -97,14 +101,18 @@ async function seekToQuarterDuration(page: Page): Promise<number> {
 
 /** Waits until the feature has persisted a history entry at (or past) `atLeast`, and returns it. */
 async function waitForStoredTimestamp(page: Page, atLeast: number): Promise<number> {
-	await expect.poll(async () => (await readStoredEntry(page))?.timestamp ?? 0, { timeout: 20000 }).toBeGreaterThanOrEqual(atLeast);
+	await expect
+		.poll(async () => (await readStoredEntry(page))?.timestamp ?? 0, { timeout: 20000 })
+		.toBeGreaterThanOrEqual(atLeast);
 	const entry = await readStoredEntry(page);
 	expect(entry?.status).toBe("watching");
 	return entry!.timestamp;
 }
 
 test.describe("videoHistory", () => {
-	test("video history resume prompt button should resume playback when clicked", async ({ page }) => {
+	test("video history resume prompt button should resume playback when clicked", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch, ["videoHistory"]);
 		await enableFeature(page, "videoHistory.enabled");
 		await setOption(page, "videoHistory.resumeType", "prompt");
@@ -120,7 +128,9 @@ test.describe("videoHistory", () => {
 		const resumeButton = page.locator("#resume-prompt-button");
 		await expect(resumeButton).toBeVisible();
 		await resumeButton.click();
-		await expect.poll(async () => getCurrentTime(page), { timeout: 15000 }).toBeGreaterThan(storedTime - 2);
+		await expect
+			.poll(async () => getCurrentTime(page), { timeout: 15000 })
+			.toBeGreaterThan(storedTime - 2);
 		await expect.poll(async () => isVideoPaused(page), { timeout: 15000 }).toBe(false);
 	});
 	test("video history close button should hide the resume prompt", async ({ page }) => {
@@ -150,10 +160,14 @@ test.describe("videoHistory", () => {
 		await navigateToPageType(page, home);
 		await navigateToPageType(page, watch, ["videoHistory"]);
 		// seekTo is asynchronous, so a single read as soon as the video is decodable races the extension.
-		await expect.poll(async () => getCurrentTime(page), { timeout: 20000 }).toBeGreaterThan(storedTime - 2);
+		await expect
+			.poll(async () => getCurrentTime(page), { timeout: 20000 })
+			.toBeGreaterThan(storedTime - 2);
 		await expect(page.locator("#resume-prompt")).not.toBeAttached();
 	});
-	test("in-page navigation to another video clears the old prompt and tracks the new video", async ({ page }) => {
+	test("in-page navigation to another video clears the old prompt and tracks the new video", async ({
+		page
+	}) => {
 		test.setTimeout(120_000);
 		await navigateToPageType(page, watch, ["videoHistory"]);
 		await enableFeature(page, "videoHistory.enabled");
@@ -171,8 +185,12 @@ test.describe("videoHistory", () => {
 		await expect(page.locator("#resume-prompt")).not.toBeAttached();
 		// The feature leaves official artist channels alone (see the case below), and the related list often leads
 		// with music videos, so those are hopped over until a video the feature tracks comes up.
-		for (let hop = 0; hop < 4 && (await isOfficialArtistVideo(page)); hop++) await spaNavigateToRelatedVideo(page);
-		test.skip(await isOfficialArtistVideo(page), "every related video within four hops was from an official artist channel");
+		for (let hop = 0; hop < 4 && (await isOfficialArtistVideo(page)); hop++)
+			await spaNavigateToRelatedVideo(page);
+		test.skip(
+			await isOfficialArtistVideo(page),
+			"every related video within four hops was from an official artist channel"
+		);
 		// A pre-roll can start right after the navigation, once the helper's own ad handling has finished, and
 		// nothing is written to the history while an ad holds the video element.
 		await pageSetup(page);
@@ -234,7 +252,10 @@ test.describe("videoHistory", () => {
 		// The default watch fixture is a music video on a channel with the official artist badge; the feature leaves
 		// those alone, since resuming a song part-way is not what anyone wants.
 		await navigateToPageType(page, watch);
-		test.skip(!(await isOfficialArtistVideo(page)), "the watch fixture's channel carries no official artist badge right now");
+		test.skip(
+			!(await isOfficialArtistVideo(page)),
+			"the watch fixture's channel carries no official artist badge right now"
+		);
 		await enableFeature(page, "videoHistory.enabled");
 		await setOption(page, "videoHistory.resumeType", "prompt");
 		await expect(page.locator("div#movie_player video")).toBeAttached();
