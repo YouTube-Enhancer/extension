@@ -1,3 +1,4 @@
+// Maximize conflicts with mini player; its CSS must not apply while mini player is active.
 import "./index.css";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
