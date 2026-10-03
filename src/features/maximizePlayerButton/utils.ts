@@ -251,7 +251,12 @@ function attachRuntimeListeners() {
 	// Delegated from document: YouTube replaces the player control buttons when the player layout
 	// changes (theater/fullscreen toggles re-render the controls), which orphans per-element click
 	// listeners and leaves the extension unable to react to its own runtime exit paths.
-	eventManager.addEventListener(document, "click", handleRuntimeButtonClick, "maximizePlayerButton");
+	eventManager.addEventListener(
+		document,
+		"click",
+		handleRuntimeButtonClick,
+		"maximizePlayerButton"
+	);
 	document.addEventListener("keydown", onKeyDown, true);
 	setPlayerControllerState((prev) => ({
 		...prev,
