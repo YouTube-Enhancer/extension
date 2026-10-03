@@ -13,16 +13,24 @@ import {
 	expectToStay
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
-import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	clickFeatureButton,
+	clickFeatureMenuItem,
+	disableFeature,
+	enableFeature,
+	setOption
+} from "@/src/utils/_tests/features";
 import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType, spaNavigateToHome } from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
-const maximizeOffTitle = localeText("pages.content.features.maximizePlayerButton.button.toggle.off");
+const maximizeOffTitle = localeText(
+	"pages.content.features.maximizePlayerButton.button.toggle.off"
+);
 const maximizeOnTitle = localeText("pages.content.features.maximizePlayerButton.button.toggle.on");
-const { left, menu } = placementRecord;
+const { left, menu, right } = placementRecord;
 const { home, watch } = pageTypeRecord;
 test.describe("maximizePlayerButton", () => {
 	for (const pageType of testPages) {
@@ -40,7 +48,9 @@ test.describe("maximizePlayerButton", () => {
 			await clickFeatureButton(page, pageType, "yte-feature-maximizePlayerButton-button", left);
 			await expect(page.locator("body")).toHaveAttribute("yte-maximized");
 		});
-		test(`maximize player button should persist after navigation on ${pageType}`, async ({ page }) => {
+		test(`maximize player button should persist after navigation on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "maximizePlayerButton.button.placement", left);
 			await enableFeature(page, "maximizePlayerButton.button.enabled");
@@ -64,7 +74,9 @@ test.describe("maximizePlayerButton", () => {
 	});
 
 	// The enable/disable transition goes through featureButtonManager with no page-dependent code, so this only runs on watch.
-	test(`maximize player button should re-appear after disable then re-enable on watch`, async ({ page }) => {
+	test(`maximize player button should re-appear after disable then re-enable on watch`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "maximizePlayerButton.button.placement", left);
 		await enableFeature(page, "maximizePlayerButton.button.enabled");
@@ -95,7 +107,9 @@ test.describe("maximizePlayerButton", () => {
 		await expectFeatureMenuItemToBeFalsy(page, "yte-feature-maximizePlayerButton-menuitem");
 	});
 
-	test("clicking the maximize feature menu item should maximize and restore the player on watch", async ({ page }) => {
+	test("clicking the maximize feature menu item should maximize and restore the player on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "maximizePlayerButton.button.placement", menu);
 		await enableFeature(page, "maximizePlayerButton.button.enabled");
@@ -121,13 +135,19 @@ test.describe("maximizePlayerButton", () => {
 		await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", left);
 		await clickFeatureButton(page, watch, "yte-feature-maximizePlayerButton-button", left);
 		await expect(page.locator("body")).toHaveAttribute("yte-maximized");
-		await expectToggleButtonState(page, "yte-feature-maximizePlayerButton-button", true, { title: maximizeOnTitle });
+		await expectToggleButtonState(page, "yte-feature-maximizePlayerButton-button", true, {
+			title: maximizeOnTitle
+		});
 		await page.keyboard.press("Escape");
 		await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
-		await expectToggleButtonState(page, "yte-feature-maximizePlayerButton-button", false, { title: maximizeOffTitle });
+		await expectToggleButtonState(page, "yte-feature-maximizePlayerButton-button", false, {
+			title: maximizeOffTitle
+		});
 	});
 
-	test("typing t in the search box should not restore a maximized player on watch", async ({ page }) => {
+	test("typing t in the search box should not restore a maximized player on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "maximizePlayerButton.button.placement", left);
 		await enableFeature(page, "maximizePlayerButton.button.enabled");
@@ -142,10 +162,16 @@ test.describe("maximizePlayerButton", () => {
 			.evaluate((element: HTMLInputElement) => element.focus());
 		await page.keyboard.press("t");
 		// The keydown handler bails for events coming from an input, textarea or contenteditable.
-		await expectToStay(async () => await page.evaluate(() => document.body.hasAttribute("yte-maximized")), true, { page });
+		await expectToStay(
+			async () => await page.evaluate(() => document.body.hasAttribute("yte-maximized")),
+			true,
+			{ page }
+		);
 	});
 
-	test("clicking the player size button while maximized should restore the player on watch", async ({ page }) => {
+	test("clicking the player size button while maximized should restore the player on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "maximizePlayerButton.button.placement", left);
 		await enableFeature(page, "maximizePlayerButton.button.enabled");
@@ -156,10 +182,14 @@ test.describe("maximizePlayerButton", () => {
 		// A user click on YouTube's own size button is one of the runtime exit paths.
 		await page.locator("button.ytp-size-button").click();
 		await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
-		await expectToggleButtonState(page, "yte-feature-maximizePlayerButton-button", false, { title: maximizeOffTitle });
+		await expectToggleButtonState(page, "yte-feature-maximizePlayerButton-button", false, {
+			title: maximizeOffTitle
+		});
 	});
 
-	test("navigating away from watch in page while maximized should restore the player", async ({ page }) => {
+	test("navigating away from watch in page while maximized should restore the player", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "maximizePlayerButton.button.placement", left);
 		await enableFeature(page, "maximizePlayerButton.button.enabled");
@@ -173,7 +203,9 @@ test.describe("maximizePlayerButton", () => {
 		await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
 	});
 
-	test("masthead should hide while maximized and come back when the pointer reaches the top on watch", async ({ page }) => {
+	test("masthead should hide while maximized and come back when the pointer reaches the top on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "maximizePlayerButton.button.placement", left);
 		await enableFeature(page, "maximizePlayerButton.button.enabled");
@@ -185,10 +217,14 @@ test.describe("maximizePlayerButton", () => {
 		await expect.poll(async () => (await masthead.boundingBox())?.y ?? 0).toBeLessThan(0);
 		await movePointerToTop(page);
 		await expect(masthead).toHaveClass(/yte-header-visible/);
-		await expect.poll(async () => (await masthead.boundingBox())?.y ?? -1).toBeGreaterThanOrEqual(0);
+		await expect
+			.poll(async () => (await masthead.boundingBox())?.y ?? -1)
+			.toBeGreaterThanOrEqual(0);
 	});
 
-	test("button should be added in the checked state when the player is already maximized on watch", async ({ page }) => {
+	test("button should be added in the checked state when the player is already maximized on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "automaticallyMaximizePlayer.enabled");
 		await expect(page.locator("body")).toHaveAttribute("yte-maximized", { timeout: 20000 });
@@ -196,10 +232,14 @@ test.describe("maximizePlayerButton", () => {
 		await enableFeature(page, "maximizePlayerButton.button.enabled");
 		await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", left);
 		// isPlayerMaximized decides both initialChecked and the label the button is built with.
-		await expectToggleButtonState(page, "yte-feature-maximizePlayerButton-button", true, { title: maximizeOnTitle });
+		await expectToggleButtonState(page, "yte-feature-maximizePlayerButton-button", true, {
+			title: maximizeOnTitle
+		});
 	});
 
-	test("maximizing from theater mode should leave theater mode untouched on restore on watch", async ({ page }) => {
+	test("maximizing from theater mode should leave theater mode untouched on restore on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "automaticTheaterMode.enabled");
 		await expect.poll(async () => await isInTheaterMode(page), { timeout: 20000 }).toBe(true);
@@ -215,7 +255,9 @@ test.describe("maximizePlayerButton", () => {
 		await expect.poll(async () => await isInTheaterMode(page)).toBe(true);
 	});
 
-	test("maximizing should record the layout state and clear it again on restore on watch", async ({ page }) => {
+	test("maximizing should record the layout state and clear it again on restore on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "maximizePlayerButton.button.placement", left);
 		await enableFeature(page, "maximizePlayerButton.button.enabled");
@@ -241,13 +283,45 @@ test.describe("maximizePlayerButton", () => {
 			});
 	});
 
+	// Regression test for #1442: the maximize viewport styles must stop applying while mini player is
+	// active, or the overlay shows only a corner of the video.
+	test("maximize styles must not apply while mini player is active on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await setOption(page, "maximizePlayerButton.button.placement", left);
+		await enableFeature(page, "maximizePlayerButton.button.enabled");
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+		await clickFeatureButton(page, watch, "yte-feature-maximizePlayerButton-button", left);
+		await expect(page.locator("body")).toHaveAttribute("yte-maximized");
+		// Control: while mini player is inactive the maximize CSS must match, so the
+		// html:not(.yte-mini-player-active) guard cannot silently disable it entirely.
+		await expect(page.locator("#movie_player")).toHaveCSS("position", "sticky");
+		await setOption(page, "miniPlayerButton.button.placement", right);
+		await enableFeature(page, "miniPlayerButton.button.enabled");
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-miniPlayerButton-button");
+		await clickFeatureButton(page, watch, "yte-feature-miniPlayerButton-button", right);
+		await expect(page.locator("html")).toHaveClass(/yte-mini-player-active/);
+		// The mini player must actually be open: the player lives inside the corner
+		// overlay, sized well below the window, not full-bleed under maximize.
+		const overlay = page.locator("#yte-mini-player-overlay");
+		await expect(page.locator("#yte-mini-player-overlay #movie_player")).toBeVisible();
+		const overlayBox = await overlay.boundingBox();
+		expect(overlayBox).not.toBeNull();
+		expect(overlayBox?.width ?? 0).toBeLessThan((page.viewportSize()?.width ?? 0) / 2);
+		await expect(page.locator("#movie_player")).not.toHaveCSS("position", "sticky");
+	});
+
 	test.describe("feature conflicts", () => {
 		test.describe("automaticallyMaximizePlayer vs automaticTheaterMode", () => {
 			test("maximize is active when enabled after theater on watch", async ({ page }) => {
 				await navigateToPageType(page, watch);
 				await enableFeature(page, "automaticTheaterMode.enabled");
 				await enableFeature(page, "automaticallyMaximizePlayer.enabled");
-				await expect.poll(async () => await page.evaluate(() => document.body.hasAttribute("yte-maximized")), { timeout: 20000 }).toBeTruthy();
+				await expect
+					.poll(
+						async () => await page.evaluate(() => document.body.hasAttribute("yte-maximized")),
+						{ timeout: 20000 }
+					)
+					.toBeTruthy();
 			});
 
 			test("theater mode is active when enabled after maximize on watch", async ({ page }) => {
@@ -289,7 +363,9 @@ test.describe("maximizePlayerButton", () => {
 			await expect(button).toHaveAttribute("aria-checked", "true");
 			await expect.poll(async () => button.getAttribute("data-title")).not.toBe(offTitle);
 		});
-		test("keeps the cued thumbnail overlay above the maximized video on watch", async ({ page }) => {
+		test("keeps the cued thumbnail overlay above the maximized video on watch", async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "automaticallyMaximizePlayer.enabled");
 			await expect(page.locator("body")).toHaveAttribute("yte-maximized", { timeout: 15000 });
@@ -305,11 +381,15 @@ async function getMaximizedLayoutState(page: Page) {
 	return page.evaluate(() => ({
 		hasHeaderHeight: document.body.style.getPropertyValue("--yte-header-height") !== "",
 		sizeButtonState: document.body.getAttribute("yte-size-button-state"),
-		videoHeightMatchesViewport: document.body.style.getPropertyValue("--yte-video-height") === `${window.innerHeight}px`
+		videoHeightMatchesViewport:
+			document.body.style.getPropertyValue("--yte-video-height") === `${window.innerHeight}px`
 	}));
 }
 async function isInTheaterMode(page: Page): Promise<boolean> {
-	return page.evaluate(() => document.querySelector("ytd-watch-flexy, ytd-watch-grid")?.hasAttribute("theater") ?? false);
+	return page.evaluate(
+		() =>
+			document.querySelector("ytd-watch-flexy, ytd-watch-grid")?.hasAttribute("theater") ?? false
+	);
 }
 /**
  * Sweeps the pointer up to the top edge of the viewport the way a real pointer travels, in steps.
