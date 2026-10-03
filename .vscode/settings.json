@@ -6,8 +6,12 @@
 		"source.fixAll.oxc": "always"
 	},
 	"editor.formatOnSave": true,
+	"editor.formatOnSaveMode": "file",
 	"editor.defaultFormatter": "oxc.oxc-vscode",
 	"editor.snippets.codeActions.enabled": true,
 	"js/ts.validate.enabled": true,
-	"js/ts.tsserver.experimental.enableProjectDiagnostics": true
+	"js/ts.tsserver.experimental.enableProjectDiagnostics": true,
+	"oxc.fmt.configPath": ".oxfmtrc.json",
+	"oxc.fmt.disableNestedConfig": true,
+	"prettier.enable": false
 }
