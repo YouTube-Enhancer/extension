@@ -223,7 +223,8 @@ function reapplyEnforcedSpeed(urlVideoId: Nullable<string>) {
 		[makePlayerSpeedTask(speed, channelSpeeds)],
 		["reapplySpeed"],
 		{
-			maxAttempts: 5,
+			maxAttempts: 30,
+			overallTimeout: 30000,
 			pageTypes: ["watch", "shorts"],
 			waitForLoaded: true
 		}
@@ -275,8 +276,9 @@ export default createFeature({
 			[makePlayerSpeedTask(speed, channelSpeeds)],
 			["setSpeed"],
 			{
-				maxAttempts: 10,
+				maxAttempts: 30,
 				onPlayerStateChange: true,
+				overallTimeout: 30000,
 				pageTypes: ["watch", "shorts"],
 				waitForLoaded: true
 			}
@@ -297,7 +299,8 @@ export default createFeature({
 			[makePlayerSpeedTask(speed)],
 			["restoreSpeed"],
 			{
-				maxAttempts: 10,
+				maxAttempts: 30,
+				overallTimeout: 30000,
 				pageTypes: ["watch", "shorts"],
 				waitForLoaded: true
 			}
@@ -317,8 +320,9 @@ export default createFeature({
 			[makePlayerSpeedTask(speed, channelSpeeds)],
 			["setSpeed"],
 			{
-				maxAttempts: 10,
+				maxAttempts: 30,
 				onPlayerStateChange: true,
+				overallTimeout: 30000,
 				pageTypes: ["watch", "shorts"],
 				waitForLoaded: true
 			}
@@ -342,8 +346,9 @@ export default createFeature({
 			[makePlayerSpeedTask(effectiveSpeed, channelSpeeds)],
 			["setSpeed"],
 			{
-				maxAttempts: 10,
+				maxAttempts: 30,
 				onPlayerStateChange: true,
+				overallTimeout: 30000,
 				pageTypes: ["watch", "shorts"],
 				waitForLoaded: true
 			}
