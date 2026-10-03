@@ -5,12 +5,18 @@ import { expect, test } from "playwright.config";
 import { metadata } from "@/src/features/shareShortener/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage, spaNavigateToFirstVideo } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	reloadPage,
+	spaNavigateToFirstVideo
+} from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 // A live stream is a /watch document and neither index.ts nor utils.ts has a live/VOD branch, so the live case
 // duplicates watch while raising the test budget to 120 s and burning a channel crawl.
-const pageTypes = resolvePageTypes(metadata.dependencies?.includePages).filter((pageType) => pageType !== "live");
+const pageTypes = resolvePageTypes(metadata.dependencies?.includePages).filter(
+	(pageType) => pageType !== "live"
+);
 const { search, watch } = pageTypeRecord;
 
 // YouTube leaves a closed share dialog's input in the DOM, so a bare `#share-url` matches more than one
@@ -27,7 +33,9 @@ async function closeShareDialog(page: Page): Promise<void> {
 /** How many rendered result links still carry a tracking param; `cleanSearchPage` has to take this to 0. */
 async function countTrackedResultLinks(page: Page): Promise<number> {
 	const hrefs = await page.evaluate(() =>
-		Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href^="/watch?v="]')).map((anchor) => anchor.getAttribute("href") ?? "")
+		Array.from(document.querySelectorAll<HTMLAnchorElement>('a[href^="/watch?v="]')).map(
+			(anchor) => anchor.getAttribute("href") ?? ""
+		)
 	);
 	return hrefs.filter((href) => SHARE_PARAM_REGEXP.test(href)).length;
 }
@@ -37,7 +45,9 @@ async function countTrackedResultLinks(page: Page): Promise<number> {
  */
 async function expectShareUrlWithoutParams(page: Page): Promise<void> {
 	await expect.poll(async () => getShareUrl(page), { timeout: 10000 }).toMatch(SHARE_URL_REGEXP);
-	await expect.poll(async () => getShareUrl(page), { timeout: 10000 }).not.toMatch(SHARE_PARAM_REGEXP);
+	await expect
+		.poll(async () => getShareUrl(page), { timeout: 10000 })
+		.not.toMatch(SHARE_PARAM_REGEXP);
 }
 async function getShareUrl(page: Page): Promise<string> {
 	return await page.locator(SHARE_URL_SELECTOR).inputValue();
@@ -102,16 +112,22 @@ test.describe("shareShortener", () => {
 	});
 	// cleanSearchPage only runs on /results, and it is the one branch of the feature that never touches the
 	// share dialog.
-	test(`should strip tracking params from search result links when enabled on ${search}`, async ({ page }) => {
+	test(`should strip tracking params from search result links when enabled on ${search}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, search);
 		await disableFeature(page, "shareShortener.enabled");
 		// The rewrite runs over the links that exist when the feature is enabled, so tracked links have to be
 		// there first - otherwise "no tracked links" would be true before the feature ever ran.
-		await expect.poll(async () => countTrackedResultLinks(page), { timeout: 15000 }).toBeGreaterThan(0);
+		await expect
+			.poll(async () => countTrackedResultLinks(page), { timeout: 15000 })
+			.toBeGreaterThan(0);
 		await enableFeature(page, "shareShortener.enabled");
 		await expect.poll(async () => countTrackedResultLinks(page), { timeout: 15000 }).toBe(0);
 	});
-	test(`should keep the share URL clean when the dialog is opened for a second video on ${search}`, async ({ page }) => {
+	test(`should keep the share URL clean when the dialog is opened for a second video on ${search}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, search);
 		await enableFeature(page, "shareShortener.enabled");
 		await openShareDialog(page, search);
@@ -124,7 +140,9 @@ test.describe("shareShortener", () => {
 		await expect.poll(async () => getShareUrl(page), { timeout: 10000 }).not.toBe(firstShareUrl);
 		await expectShareUrlWithoutParams(page);
 	});
-	test(`should clean the share URL after in-page navigation from ${search} to ${watch}`, async ({ page }) => {
+	test(`should clean the share URL after in-page navigation from ${search} to ${watch}`, async ({
+		page
+	}) => {
 		test.setTimeout(120_000);
 		await navigateToPageType(page, search);
 		await enableFeature(page, "shareShortener.enabled");
@@ -143,6 +161,8 @@ test.describe("shareShortener", () => {
 		await closeShareDialog(page);
 		await disableFeature(page, "shareShortener.enabled");
 		await openShareDialog(page, watch);
-		await expect.poll(async () => getShareUrl(page), { timeout: 10000 }).toMatch(SHARE_PARAM_REGEXP);
+		await expect
+			.poll(async () => getShareUrl(page), { timeout: 10000 })
+			.toMatch(SHARE_PARAM_REGEXP);
 	});
 });

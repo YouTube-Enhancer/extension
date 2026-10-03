@@ -1,15 +1,23 @@
-import type { Page } from '@playwright/test';
+import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/hideLiveStreamChat/index.metadata";
-import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
+import {
+	expectBodyWithClass,
+	expectBodyWithoutClass,
+	expectElementsHidden,
+	expectElementsNotHidden
+} from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage, waitForExtensionReady } from 
-"@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	reloadPage,
+	waitForExtensionReady
+} from "@/src/utils/_tests/navigation";
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 

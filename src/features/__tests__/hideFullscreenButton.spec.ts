@@ -1,14 +1,21 @@
 import { test } from "playwright.config";
 
 import { metadata } from "@/src/features/hideFullscreenButton/index.metadata";
-import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
+import {
+	expectBodyWithClass,
+	expectBodyWithoutClass,
+	expectElementsHidden,
+	expectElementsNotHidden
+} from "@/src/utils/_tests/assertions";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
-const { hideFullscreenButton: { bodyClass, selectors } } = hideFeatureSelectors;
+const {
+	hideFullscreenButton: { bodyClass, selectors }
+} = hideFeatureSelectors;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 

@@ -19,12 +19,18 @@ export const hideFeatureSelectors = {
 		]
 	},
 	hideAutoplayButton: { bodyClass: "yte-hide-autoplay-button", selectors: [".ytp-autonav-toggle"] },
-	hideEndScreenCards: { bodyClass: "yte-hide-end-screen-cards", selectors: [".ytp-ce-element", ".ytp-ce-hide-button-container"] },
+	hideEndScreenCards: {
+		bodyClass: "yte-hide-end-screen-cards",
+		selectors: [".ytp-ce-element", ".ytp-ce-hide-button-container"]
+	},
 	hideEndscreenRecommendedVideos: {
 		bodyClass: "yte-hide-endscreen-recommended-videos",
 		selectors: ["div.ytp-fullscreen-grid", ".ytp-videowall-still"]
 	},
-	hideFullscreenButton: { bodyClass: "yte-hide-fullscreen-button", selectors: [".ytp-fullscreen-button"] },
+	hideFullscreenButton: {
+		bodyClass: "yte-hide-fullscreen-button",
+		selectors: [".ytp-fullscreen-button"]
+	},
 	hideLiveStreamChat: {
 		bodyClass: "yte-hide-live-stream-chat",
 		selectors: [
@@ -54,7 +60,10 @@ export const hideFeatureSelectors = {
 		bodyClass: "yte-hide-paid-promotion-banner",
 		selectors: [".ytp-paid-content-overlay", "ytm-paid-content-overlay-renderer"]
 	},
-	hidePlayables: { bodyClass: "yte-hide-playables", selectors: ['ytd-rich-section-renderer:has(a[href="/playables"])'] },
+	hidePlayables: {
+		bodyClass: "yte-hide-playables",
+		selectors: ['ytd-rich-section-renderer:has(a[href="/playables"])']
+	},
 	hidePlaylistRecommendations: {
 		bodyClass: "yte-hide-playlist-recommendations",
 		selectors: [
@@ -64,14 +73,25 @@ export const hideFeatureSelectors = {
 	},
 	hidePlaylistRecommendationsFromHomePage: {
 		bodyClass: "yte-hide-playlist-recommendations-from-home-page",
-		selectors: ['ytd-browse[page-subtype="home"] ytd-rich-item-renderer:has(yt-collection-thumbnail-view-model)']
+		selectors: [
+			'ytd-browse[page-subtype="home"] ytd-rich-item-renderer:has(yt-collection-thumbnail-view-model)'
+		]
 	},
-	hidePosts: { bodyClass: "yte-hide-posts", selectors: ["ytd-rich-section-renderer:has([is-post])"] },
+	hidePosts: {
+		bodyClass: "yte-hide-posts",
+		selectors: ["ytd-rich-section-renderer:has([is-post])"]
+	},
 	hideShortsChannel: {
 		bodyClass: "yte-hide-shorts-channel",
-		selectors: ['ytd-item-section-renderer[page-subtype="channels"] ytd-reel-shelf-renderer:has(#title-container)', 'yt-tab-shape[tab-title="Shorts"]']
+		selectors: [
+			'ytd-item-section-renderer[page-subtype="channels"] ytd-reel-shelf-renderer:has(#title-container)',
+			'yt-tab-shape[tab-title="Shorts"]'
+		]
 	},
-	hideShortsHome: { bodyClass: "yte-hide-shorts-home", selectors: ['ytd-browse[page-subtype="home"] ytd-rich-section-renderer:has([is-shorts])'] },
+	hideShortsHome: {
+		bodyClass: "yte-hide-shorts-home",
+		selectors: ['ytd-browse[page-subtype="home"] ytd-rich-section-renderer:has([is-shorts])']
+	},
 	hideShortsSearch: {
 		bodyClass: "yte-hide-shorts-search",
 		selectors: [
@@ -81,11 +101,16 @@ export const hideFeatureSelectors = {
 	},
 	hideShortsSidebar: {
 		bodyClass: "yte-hide-shorts-sidebar",
-		selectors: ['ytd-guide-entry-renderer:has(a[title="Shorts"])', 'ytd-mini-guide-entry-renderer:has(a[title="Shorts"])']
+		selectors: [
+			'ytd-guide-entry-renderer:has(a[title="Shorts"])',
+			'ytd-mini-guide-entry-renderer:has(a[title="Shorts"])'
+		]
 	},
 	hideShortsSubscriptions: {
 		bodyClass: "yte-hide-shorts-subscriptions",
-		selectors: ['ytd-browse[page-subtype="subscriptions"] ytd-rich-section-renderer:has([is-shorts])']
+		selectors: [
+			'ytd-browse[page-subtype="subscriptions"] ytd-rich-section-renderer:has([is-shorts])'
+		]
 	},
 	hideShortsVideos: {
 		bodyClass: "yte-hide-shorts-videos",
@@ -94,10 +119,20 @@ export const hideFeatureSelectors = {
 			"ytd-watch-next-secondary-results-renderer ytd-reel-shelf-renderer:has(#title-container)"
 		]
 	},
-	hideSidebarRecommendedVideos: { bodyClass: "yte-hide-sidebar-recommended-videos", selectors: ["#secondary #secondary-inner #related"] },
-	hideTranslateComment: { bodyClass: "yte-hide-translate-comment", selectors: ["ytd-tri-state-button-view-model.translate-button"] },
+	hideSidebarRecommendedVideos: {
+		bodyClass: "yte-hide-sidebar-recommended-videos",
+		selectors: ["#secondary #secondary-inner #related"]
+	},
+	hideTranslateComment: {
+		bodyClass: "yte-hide-translate-comment",
+		selectors: ["ytd-tri-state-button-view-model.translate-button"]
+	},
 	hideVideoDuration: {
 		bodyClass: "yte-hide-video-duration",
-		selectors: ["ytd-thumbnail-overlay-time-status-renderer", ".thumbnail-overlay-badge-shape", ".ytThumbnailBottomOverlayViewModelBadgeContainer"]
+		selectors: [
+			"ytd-thumbnail-overlay-time-status-renderer",
+			".thumbnail-overlay-badge-shape",
+			".ytThumbnailBottomOverlayViewModelBadgeContainer"
+		]
 	}
 } as const;

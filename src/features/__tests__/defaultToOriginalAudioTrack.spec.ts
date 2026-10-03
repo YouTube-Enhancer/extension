@@ -20,7 +20,9 @@ type AudioTrack = { id: string; isAutoDubbed: boolean };
 
 /** Polls the player until it reports a track whose descriptor is explicitly not auto-dubbed. */
 async function expectOriginalAudioTrack(page: Page): Promise<void> {
-	await expect.poll(async () => isAutoDubbed(page), { intervals: [500], timeout: 30000 }).toBe(false);
+	await expect
+		.poll(async () => isAutoDubbed(page), { intervals: [500], timeout: 30000 })
+		.toBe(false);
 }
 
 /**
@@ -29,10 +31,14 @@ async function expectOriginalAudioTrack(page: Page): Promise<void> {
  */
 async function getAudioTrack(page: Page): Promise<AudioTrack | null> {
 	return await page.evaluate(async () => {
-		const selector = document.location.pathname.startsWith("/shorts") ? "#shorts-player" : "div#movie_player";
-		const player = document.querySelector<HTMLDivElement & { getAudioTrack?: () => Promise<Record<string, unknown>> | Record<string, unknown> }>(
-			selector
-		);
+		const selector = document.location.pathname.startsWith("/shorts")
+			? "#shorts-player"
+			: "div#movie_player";
+		const player = document.querySelector<
+			HTMLDivElement & {
+				getAudioTrack?: () => Promise<Record<string, unknown>> | Record<string, unknown>;
+			}
+		>(selector);
 		if (!player?.getAudioTrack) return null;
 		const parseTrack = (value: unknown): null | { id: string; isAutoDubbed: boolean } => {
 			if (typeof value !== "object" || value === null || Array.isArray(value)) return null;
@@ -63,15 +69,26 @@ async function getAudioTrackId(page: Page): Promise<null | string> {
  * evaluate so both describe the same moment: after an in-page switch the player keeps answering with the previous
  * video's tracks for a while, and a list read then does not belong to the video that is playing now.
  */
-async function getAudioTrackState(page: Page): Promise<{ availableIds: string[]; currentId: null | string }> {
-	return { availableIds: await getAvailableAudioTrackIds(page), currentId: await getAudioTrackId(page) };
+async function getAudioTrackState(
+	page: Page
+): Promise<{ availableIds: string[]; currentId: null | string }> {
+	return {
+		availableIds: await getAvailableAudioTrackIds(page),
+		currentId: await getAudioTrackId(page)
+	};
 }
 /** Reads the ids of every audio track the current video offers, using the same descriptor shape the feature parses. */
 async function getAvailableAudioTrackIds(page: Page): Promise<string[]> {
 	return await page.evaluate(async () => {
-		const selector = document.location.pathname.startsWith("/shorts") ? "#shorts-player" : "div#movie_player";
+		const selector = document.location.pathname.startsWith("/shorts")
+			? "#shorts-player"
+			: "div#movie_player";
 		const player = document.querySelector<
-			HTMLDivElement & { getAvailableAudioTracks?: () => Promise<Record<string, unknown>[]> | Record<string, unknown>[] }
+			HTMLDivElement & {
+				getAvailableAudioTracks?: () =>
+					| Promise<Record<string, unknown>[]>
+					| Record<string, unknown>[];
+			}
 		>(selector);
 		if (!player?.getAvailableAudioTracks) return [];
 		const parseId = (value: unknown): null | string => {
@@ -88,7 +105,9 @@ async function getAvailableAudioTrackIds(page: Page): Promise<string[]> {
 			return null;
 		};
 		const tracks = await player.getAvailableAudioTracks();
-		const ids = tracks.map((raw) => parseId(raw) ?? Object.values(raw).map(parseId).find(Boolean) ?? null).filter((id): id is string => id !== null);
+		const ids = tracks
+			.map((raw) => parseId(raw) ?? Object.values(raw).map(parseId).find(Boolean) ?? null)
+			.filter((id): id is string => id !== null);
 		return [...new Set(ids)];
 	});
 }
@@ -98,8 +117,14 @@ function getPlayerSelector(pageType: PageType) {
 /** Reads the video id the player itself reports, so an assertion can tell which video a track belongs to. */
 async function getPlayerVideoId(page: Page): Promise<null | string> {
 	return await page.evaluate(async () => {
-		const selector = document.location.pathname.startsWith("/shorts") ? "#shorts-player" : "div#movie_player";
-		const player = document.querySelector<HTMLDivElement & { getVideoData?: () => Promise<{ video_id?: string }> | { video_id?: string } }>(selector);
+		const selector = document.location.pathname.startsWith("/shorts")
+			? "#shorts-player"
+			: "div#movie_player";
+		const player = document.querySelector<
+			HTMLDivElement & {
+				getVideoData?: () => Promise<{ video_id?: string }> | { video_id?: string };
+			}
+		>(selector);
 		if (!player?.getVideoData) return null;
 		const data = await player.getVideoData();
 		return data.video_id ?? null;
@@ -120,7 +145,10 @@ async function requireAutoDubbedStart(page: Page): Promise<void> {
 	const startedAutoDubbed = await waitForAutoDubbed(page, 5000);
 	if (!startedAutoDubbed) {
 		const selected = await selectAutoDubbedTrack(page);
-		test.skip(!selected, "this video offers no auto-dubbed track, so there is nothing to switch away from");
+		test.skip(
+			!selected,
+			"this video offers no auto-dubbed track, so there is nothing to switch away from"
+		);
 		const autoDubbed = await waitForAutoDubbed(page, 10000);
 		test.skip(!autoDubbed, "the player did not take the auto-dubbed track it offers");
 	}
@@ -129,10 +157,14 @@ async function requireAutoDubbedStart(page: Page): Promise<void> {
 /** Selects the video's auto-dubbed track through the player API; false when the video offers none. */
 async function selectAutoDubbedTrack(page: Page): Promise<boolean> {
 	return await page.evaluate(async () => {
-		const selector = document.location.pathname.startsWith("/shorts") ? "#shorts-player" : "div#movie_player";
+		const selector = document.location.pathname.startsWith("/shorts")
+			? "#shorts-player"
+			: "div#movie_player";
 		const player = document.querySelector<
 			HTMLDivElement & {
-				getAvailableAudioTracks?: () => Promise<Record<string, unknown>[]> | Record<string, unknown>[];
+				getAvailableAudioTracks?: () =>
+					| Promise<Record<string, unknown>[]>
+					| Record<string, unknown>[];
 				setAudioTrack?: (track: Record<string, unknown>) => unknown;
 			}
 		>(selector);
@@ -143,7 +175,9 @@ async function selectAutoDubbedTrack(page: Page): Promise<boolean> {
 			return typeof track.id === "string" && track.isAutoDubbed === true;
 		};
 		const tracks = await player.getAvailableAudioTracks();
-		const autoDubbed = tracks.find((raw) => describesAutoDubbed(raw) || Object.values(raw).some(describesAutoDubbed));
+		const autoDubbed = tracks.find(
+			(raw) => describesAutoDubbed(raw) || Object.values(raw).some(describesAutoDubbed)
+		);
 		if (!autoDubbed) return false;
 		await player.setAudioTrack(autoDubbed);
 		return true;
@@ -157,7 +191,9 @@ async function selectAutoDubbedTrack(page: Page): Promise<boolean> {
 async function spaNavigateBackToVideo(page: Page, expectedVideoId: string): Promise<void> {
 	await page.evaluate(() => history.back());
 	await page.waitForURL((url) => url.searchParams.get("v") === expectedVideoId, { timeout: 30000 });
-	await expect.poll(async () => getPlayerVideoId(page), { intervals: [500], timeout: 30000 }).toBe(expectedVideoId);
+	await expect
+		.poll(async () => getPlayerVideoId(page), { intervals: [500], timeout: 30000 })
+		.toBe(expectedVideoId);
 	await waitForYoutubePlayerReady(page, watch);
 }
 
@@ -170,9 +206,16 @@ async function spaNavigateToMultiAudioVideo(page: Page): Promise<void> {
 	for (let hop = 0; hop < 5; hop++) {
 		await spaNavigateToRelatedVideo(page);
 		const videoId = new URL(page.url()).searchParams.get("v");
-		await expect.poll(async () => getPlayerVideoId(page), { intervals: [500], timeout: 30000 }).toBe(videoId);
+		await expect
+			.poll(async () => getPlayerVideoId(page), { intervals: [500], timeout: 30000 })
+			.toBe(videoId);
 		try {
-			await expect.poll(async () => (await getAvailableAudioTrackIds(page)).length > 1, { intervals: [500], timeout: 10000 }).toBe(true);
+			await expect
+				.poll(async () => (await getAvailableAudioTrackIds(page)).length > 1, {
+					intervals: [500],
+					timeout: 10000
+				})
+				.toBe(true);
 			return;
 		} catch {
 			// this video has a single track; try the next related one
@@ -192,7 +235,9 @@ async function waitForAutoDubbed(page: Page, timeout: number): Promise<boolean> 
 
 test.describe("defaultToOriginalAudioTrack", () => {
 	for (const pageType of testPages) {
-		test(`should switch to original (non-auto-dubbed) audio track on ${pageType}`, async ({ page }) => {
+		test(`should switch to original (non-auto-dubbed) audio track on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType, ["dubbedAudio"]);
 			await requireAutoDubbedStart(page);
 			await enableFeature(page, "defaultToOriginalAudioTrack.enabled");
@@ -212,13 +257,17 @@ test.describe("defaultToOriginalAudioTrack", () => {
 			await expectOriginalAudioTrack(page);
 			await disableFeature(page, "defaultToOriginalAudioTrack.enabled");
 
-			await expect.poll(async () => getAudioTrackId(page), { intervals: [500], timeout: 30000 }).toBe(originalTrackId);
+			await expect
+				.poll(async () => getAudioTrackId(page), { intervals: [500], timeout: 30000 })
+				.toBe(originalTrackId);
 
 			await enableFeature(page, "defaultToOriginalAudioTrack.enabled");
 			await expectOriginalAudioTrack(page);
 		});
 
-		test(`should switch to original audio track after navigation on ${pageType}`, async ({ page }) => {
+		test(`should switch to original audio track after navigation on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType, ["dubbedAudio"]);
 			await requireAutoDubbedStart(page);
 			await enableFeature(page, "defaultToOriginalAudioTrack.enabled");
@@ -240,11 +289,17 @@ test.describe("defaultToOriginalAudioTrack", () => {
 		await expect(page.locator(getPlayerSelector(watch))).toBeVisible({ timeout: 10000 });
 		// With the feature off the auto-dubbed track this load started on has to stay selected.
 		await requireAutoDubbedStart(page);
-		await expectToStay(async () => isAutoDubbed(page), true, { durationMs: 3000, intervalMs: 500, page });
+		await expectToStay(async () => isAutoDubbed(page), true, {
+			durationMs: 3000,
+			intervalMs: 500,
+			page
+		});
 	});
 
 	// Watch only: onNavigate takes the same code path on both pages the feature declares.
-	test(`should re-apply the original audio track after an in-page navigation on ${watch}`, async ({ page }) => {
+	test(`should re-apply the original audio track after an in-page navigation on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch, ["dubbedAudio"]);
 		await requireAutoDubbedStart(page);
 		const dubbedVideoId = new URL(page.url()).searchParams.get("v");
@@ -258,7 +313,9 @@ test.describe("defaultToOriginalAudioTrack", () => {
 		await spaNavigateBackToVideo(page, dubbedVideoId!);
 		await expectOriginalAudioTrack(page);
 	});
-	test(`should restore the current video's audio track, not the previous one's, after an in-page switch on ${watch}`, async ({ page }) => {
+	test(`should restore the current video's audio track, not the previous one's, after an in-page switch on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch, ["dubbedAudio"]);
 		await requireAutoDubbedStart(page);
 		await enableFeature(page, "defaultToOriginalAudioTrack.enabled");
@@ -269,7 +326,9 @@ test.describe("defaultToOriginalAudioTrack", () => {
 		await spaNavigateToMultiAudioVideo(page);
 		const switchedVideoId = new URL(page.url()).searchParams.get("v");
 		expect(switchedVideoId).not.toBeNull();
-		await expect.poll(async () => getPlayerVideoId(page), { intervals: [500], timeout: 30000 }).toBe(switchedVideoId);
+		await expect
+			.poll(async () => getPlayerVideoId(page), { intervals: [500], timeout: 30000 })
+			.toBe(switchedVideoId);
 		// The player answers with the previous video's tracks for a moment after the switch, and a list read then
 		// would make the assertion below compare the restored track against the wrong video's offering.
 		await expect
@@ -287,9 +346,15 @@ test.describe("defaultToOriginalAudioTrack", () => {
 
 		// Restoring has to put back a track of the video that is playing now, never one carried over from before:
 		// the previous video's saved track is not among this video's own, so it could not pass this.
-		await expect.poll(async () => getAudioTrackId(page), { intervals: [500], timeout: 30000 }).not.toBeNull();
-		const { availableIds: restoredVideoTrackIds, currentId: restoredTrackId } = await getAudioTrackState(page);
-		expect(await getPlayerVideoId(page), "the restore must not move the player off the video it was on").toBe(switchedVideoId);
+		await expect
+			.poll(async () => getAudioTrackId(page), { intervals: [500], timeout: 30000 })
+			.not.toBeNull();
+		const { availableIds: restoredVideoTrackIds, currentId: restoredTrackId } =
+			await getAudioTrackState(page);
+		expect(
+			await getPlayerVideoId(page),
+			"the restore must not move the player off the video it was on"
+		).toBe(switchedVideoId);
 		expect(restoredVideoTrackIds).toEqual(switchedVideoTrackIds);
 		expect(switchedVideoTrackIds).toContain(restoredTrackId);
 	});

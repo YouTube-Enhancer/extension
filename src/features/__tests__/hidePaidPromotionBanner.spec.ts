@@ -1,10 +1,19 @@
 import { test } from "playwright.config";
 
 import { metadata } from "@/src/features/hidePaidPromotionBanner/index.metadata";
-import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden } from "@/src/utils/_tests/assertions";
+import {
+	expectBodyWithClass,
+	expectBodyWithoutClass,
+	expectElementsHidden
+} from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, spaNavigateBack, spaNavigateToHome, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	spaNavigateBack,
+	spaNavigateToHome,
+	spaNavigateToRelatedVideo
+} from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
@@ -58,7 +67,9 @@ test.describe("hidePaidPromotionBanner", () => {
 		});
 	}
 
-	test("removes the hide on in-page navigation away from watch and restores it on return", async ({ page }) => {
+	test("removes the hide on in-page navigation away from watch and restores it on return", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "hidePaidPromotionBanner.enabled");
 		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });

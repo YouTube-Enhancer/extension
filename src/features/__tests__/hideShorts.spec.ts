@@ -5,12 +5,21 @@ import { test } from "playwright.config";
 import type { PageType } from "@/src/features/_registry/types";
 
 import { metadata } from "@/src/features/hideShorts/index.metadata";
-import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
+import {
+	expectBodyWithClass,
+	expectBodyWithoutClass,
+	expectElementsHidden,
+	expectElementsNotHidden
+} from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { injectDynamicContentWhenPresent } from "@/src/utils/_tests/dom";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, spaNavigateToFirstVideo, spaNavigateToHome } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	spaNavigateToFirstVideo,
+	spaNavigateToHome
+} from "@/src/utils/_tests/navigation";
 import { loginRequiredPages, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
@@ -60,7 +69,13 @@ const subFeatures = [
 		selectors: hideFeatureSelectors.hideShortsSubscriptions.selectors,
 		subFeature: "subscriptions"
 	}
-] satisfies { bodyClass: string; config: string; page: PageType; selectors: readonly string[]; subFeature: string }[];
+] satisfies {
+	bodyClass: string;
+	config: string;
+	page: PageType;
+	selectors: readonly string[];
+	subFeature: string;
+}[];
 
 /**
  * A watch page without a Shorts shelf gets a synthetic one. YouTube's Polymer element stamps its own template when
@@ -96,7 +111,9 @@ test.describe("hideShorts", () => {
 				await expectBodyWithClass(pageObj, bodyClass);
 				await expectElementsHidden(pageObj, selectors, { mode: hiddenMode });
 			});
-			test(`${subFeature} hiding should persist after navigation on ${page}`, async ({ page: pageObj }) => {
+			test(`${subFeature} hiding should persist after navigation on ${page}`, async ({
+				page: pageObj
+			}) => {
 				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
 				await navigateToPageType(pageObj, page);
 				await enableFeature(pageObj, config);
@@ -107,7 +124,9 @@ test.describe("hideShorts", () => {
 				await expectBodyWithClass(pageObj, bodyClass);
 				await expectElementsHidden(pageObj, selectors);
 			});
-			test(`${subFeature} hiding should work on re-enable after disable on ${page}`, async ({ page: pageObj }) => {
+			test(`${subFeature} hiding should work on re-enable after disable on ${page}`, async ({
+				page: pageObj
+			}) => {
 				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
 				await navigateToPageType(pageObj, page);
 				await enableFeature(pageObj, config);
@@ -120,7 +139,9 @@ test.describe("hideShorts", () => {
 				await expectBodyWithClass(pageObj, bodyClass);
 				await expectElementsHidden(pageObj, selectors);
 			});
-			test(`${subFeature} hiding should persist after full page reload on ${page}`, async ({ page: pageObj }) => {
+			test(`${subFeature} hiding should persist after full page reload on ${page}`, async ({
+				page: pageObj
+			}) => {
 				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
 				await navigateToPageType(pageObj, page);
 				await enableFeature(pageObj, config);
@@ -133,7 +154,9 @@ test.describe("hideShorts", () => {
 			});
 			if (subFeature === "videos") {
 				// Hiding is a static body-class CSS rule with no observer, so one sub-feature covers dynamically added content.
-				test(`${subFeature} hiding should apply to dynamically added content on ${page}`, async ({ page: pageObj }) => {
+				test(`${subFeature} hiding should apply to dynamically added content on ${page}`, async ({
+					page: pageObj
+				}) => {
 					test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
 					await navigateToPageType(pageObj, page);
 					await enableFeature(pageObj, config);
@@ -141,7 +164,9 @@ test.describe("hideShorts", () => {
 					await expectElementsHidden(pageObj, selectors);
 					// The Shorts shelf is not part of every watch-next response, so when YouTube served none a synthetic shelf
 					// stands in for the one it would render later; elsewhere there is only something to clone when a shelf exists.
-					const injected = await injectDynamicContentWhenPresent(pageObj, selectors, { timeout: page === watch ? 3000 : 10000 });
+					const injected = await injectDynamicContentWhenPresent(pageObj, selectors, {
+						timeout: page === watch ? 3000 : 10000
+					});
 					if (!injected && page === watch) await injectShortsShelfOnWatch(pageObj);
 					test.skip(!injected && page !== watch, `${page} showed no Shorts to clone`);
 					await expectBodyWithClass(pageObj, bodyClass);
@@ -153,7 +178,9 @@ test.describe("hideShorts", () => {
 
 	// The channel section applies to every tab of a channel. The page-type detector only learned the posts and streams
 	// tabs on 2026-09-07, so each tab in the feature's scope is opened on its own.
-	for (const channelPage of resolvePageTypes(metadata.dependencies?.includePages).filter((pageType) => pageType.startsWith("channel_"))) {
+	for (const channelPage of resolvePageTypes(metadata.dependencies?.includePages).filter(
+		(pageType) => pageType.startsWith("channel_")
+	)) {
 		test(`channel hiding applies on ${channelPage}`, async ({ page: pageObj }) => {
 			await navigateToPageType(pageObj, channelPage);
 			await enableFeature(pageObj, "hideShorts.channel.enabled");
@@ -164,7 +191,9 @@ test.describe("hideShorts", () => {
 	}
 	// The sub-key tests above only ever assert their own class, so a mis-keyed entry in shortsClassMap would pass them
 	// all as long as the intended class also happened to be written.
-	test(`enabling one sub-feature does not add the other five body classes`, async ({ page: pageObj }) => {
+	test(`enabling one sub-feature does not add the other five body classes`, async ({
+		page: pageObj
+	}) => {
 		await navigateToPageType(pageObj, watch);
 		for (const { bodyClass, config } of subFeatures) {
 			await enableFeature(pageObj, config);
@@ -188,7 +217,9 @@ test.describe("hideShorts", () => {
 			await expectBodyWithClass(pageObj, bodyClass);
 		}
 	});
-	test(`disabling one sub-feature keeps the other enabled section hidden`, async ({ page: pageObj }) => {
+	test(`disabling one sub-feature keeps the other enabled section hidden`, async ({
+		page: pageObj
+	}) => {
 		await navigateToPageType(pageObj, watch);
 		await enableFeature(pageObj, "hideShorts.sidebar.enabled");
 		await enableFeature(pageObj, "hideShorts.videos.enabled");
@@ -200,25 +231,40 @@ test.describe("hideShorts", () => {
 		await expectBodyWithClass(pageObj, hideFeatureSelectors.hideShortsSidebar.bodyClass);
 		await expectElementsHidden(pageObj, hideFeatureSelectors.hideShortsSidebar.selectors);
 	});
-	test(`does not apply the body classes on a page outside includePages`, async ({ page: pageObj }) => {
+	test(`does not apply the body classes on a page outside includePages`, async ({
+		page: pageObj
+	}) => {
 		await navigateToPageType(pageObj, watch);
 		await enableFeature(pageObj, "hideShorts.sidebar.enabled");
 		await expectBodyWithClass(pageObj, hideFeatureSelectors.hideShortsSidebar.bodyClass);
 		// includePages lists neither shorts nor live nor playlist, so the dependency gate must disable the feature there.
 		await navigateToPageType(pageObj, shorts);
-		await expectBodyWithoutClass(pageObj, hideFeatureSelectors.hideShortsSidebar.bodyClass, { timeout: 15000 });
+		await expectBodyWithoutClass(pageObj, hideFeatureSelectors.hideShortsSidebar.bodyClass, {
+			timeout: 15000
+		});
 		await navigateToPageType(pageObj, watch);
-		await expectBodyWithClass(pageObj, hideFeatureSelectors.hideShortsSidebar.bodyClass, { timeout: 15000 });
+		await expectBodyWithClass(pageObj, hideFeatureSelectors.hideShortsSidebar.bodyClass, {
+			timeout: 15000
+		});
 	});
-	test(`keeps the sidebar class across SPA navigation between included pages`, async ({ page: pageObj }) => {
-		test.skip(!hasAuthState() && loginRequiredPages.includes(home), `the in-page hop lands on ${home}, which requires login`);
+	test(`keeps the sidebar class across SPA navigation between included pages`, async ({
+		page: pageObj
+	}) => {
+		test.skip(
+			!hasAuthState() && loginRequiredPages.includes(home),
+			`the in-page hop lands on ${home}, which requires login`
+		);
 		await navigateToPageType(pageObj, watch);
 		await enableFeature(pageObj, "hideShorts.sidebar.enabled");
 		await expectBodyWithClass(pageObj, hideFeatureSelectors.hideShortsSidebar.bodyClass);
 		// Both watch and home are in includePages, so onNavigate must re-apply the class instead of the gate dropping it.
 		await spaNavigateToHome(pageObj);
-		await expectBodyWithClass(pageObj, hideFeatureSelectors.hideShortsSidebar.bodyClass, { timeout: 15000 });
+		await expectBodyWithClass(pageObj, hideFeatureSelectors.hideShortsSidebar.bodyClass, {
+			timeout: 15000
+		});
 		await spaNavigateToFirstVideo(pageObj);
-		await expectBodyWithClass(pageObj, hideFeatureSelectors.hideShortsSidebar.bodyClass, { timeout: 15000 });
+		await expectBodyWithClass(pageObj, hideFeatureSelectors.hideShortsSidebar.bodyClass, {
+			timeout: 15000
+		});
 	});
 });

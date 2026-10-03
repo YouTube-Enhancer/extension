@@ -1,14 +1,20 @@
 import { test } from "playwright.config";
 
 import { metadata } from "@/src/features/hidePlaylistRecommendations/index.metadata";
-import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden } from "@/src/utils/_tests/assertions";
+import {
+	expectBodyWithClass,
+	expectBodyWithoutClass,
+	expectElementsHidden
+} from "@/src/utils/_tests/assertions";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
-const { hidePlaylistRecommendations: { bodyClass, selectors } } = hideFeatureSelectors;
+const {
+	hidePlaylistRecommendations: { bodyClass, selectors }
+} = hideFeatureSelectors;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
 test.describe("hidePlaylistRecommendations", () => {

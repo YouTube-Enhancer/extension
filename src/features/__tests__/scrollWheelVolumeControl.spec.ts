@@ -5,7 +5,11 @@ import { expect, test } from "playwright.config";
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/scrollWheelVolumeControl/index.metadata";
-import { expectBodyWithClass, expectBodyWithoutClass, expectToStay } from "@/src/utils/_tests/assertions";
+import {
+	expectBodyWithClass,
+	expectBodyWithoutClass,
+	expectToStay
+} from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord, volume } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
@@ -45,12 +49,18 @@ async function dispatchMouseEventOnPlayer(page: Page, type: string): Promise<boo
  * Dispatches one wheel notch on an element inside the player, so the control's listener receives the event
  * with that element as its target rather than the player container.
  */
-async function dispatchWheelOverElement(page: Page, selector: string, direction: "down" | "up"): Promise<void> {
+async function dispatchWheelOverElement(
+	page: Page,
+	selector: string,
+	direction: "down" | "up"
+): Promise<void> {
 	await page.evaluate(
 		([selector, deltaY]) => {
 			const target = document.querySelector(selector);
 			if (!target) throw new Error(`Wheel target ${selector} not found`);
-			target.dispatchEvent(new WheelEvent("wheel", { bubbles: true, cancelable: true, deltaMode: 0, deltaY }));
+			target.dispatchEvent(
+				new WheelEvent("wheel", { bubbles: true, cancelable: true, deltaMode: 0, deltaY })
+			);
 		},
 		[selector, direction === "up" ? -WHEEL_DELTA_PER_NOTCH : WHEEL_DELTA_PER_NOTCH] as const
 	);
@@ -80,17 +90,38 @@ async function mutePlayer(page: Page): Promise<void> {
 test.describe("scrollWheelVolumeControl", () => {
 	for (const pageType of testPages) {
 		test(`should increase volume on ${pageType}`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, pageType, steps: 5 });
+			await adjustWithScrollWheel({
+				controlType: "Volume",
+				direction: "up",
+				initialValue: volume,
+				page,
+				pageType,
+				steps: 5
+			});
 		});
 	}
 	// The only page-specific branch is findPlayerContainer's container lookup, which the increase test above already
 	// exercises on every page type; direction and navigation add no page-specific path, so these run on watch only
 	// (the live fixture re-crawls the channel and costs up to 120 s per iteration).
 	test(`should decrease volume on ${watch}`, async ({ page }) => {
-		await adjustWithScrollWheel({ controlType: "Volume", direction: "down", initialValue: volume, page, pageType: watch, steps: 5 });
+		await adjustWithScrollWheel({
+			controlType: "Volume",
+			direction: "down",
+			initialValue: volume,
+			page,
+			pageType: watch,
+			steps: 5
+		});
 	});
 	test(`should persist volume control after navigation on ${watch}`, async ({ page }) => {
-		await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, pageType: watch, steps: 5 });
+		await adjustWithScrollWheel({
+			controlType: "Volume",
+			direction: "up",
+			initialValue: volume,
+			page,
+			pageType: watch,
+			steps: 5
+		});
 		await navigateToPageType(page, home);
 		await navigateToPageType(page, watch);
 		// Asserted in place: adjustWithScrollWheel would navigate again and re-enable the feature, which would
@@ -99,15 +130,15 @@ test.describe("scrollWheelVolumeControl", () => {
 		await setVolume(page, volume, watch);
 		await expect.poll(async () => getCurrentVolume(page, watch)).toBe(volume);
 		await dispatchWheelNotches(page, watch, "up");
-		await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + 5);
+		await expect
+			.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+			.toBe(volume + 5);
 	});
 	// The modifier gate is a single boolean lookup on the wheel event and the direction is decided independently by
 	// the stepper sign, so only the increase direction is exercised per modifier plus one decrease control below.
 	for (const modifierKey of modifierKeys) {
 		test(`should increase volume when holding '${
-			modifierKey === "altKey" ? "Alt"
-			: modifierKey === "ctrlKey" ? "Ctrl"
-			: "Shift"
+			modifierKey === "altKey" ? "Alt" : modifierKey === "ctrlKey" ? "Ctrl" : "Shift"
 		}' modifier key`, async ({ page }) => {
 			await adjustWithScrollWheel({
 				controlType: "Volume",
@@ -133,7 +164,9 @@ test.describe("scrollWheelVolumeControl", () => {
 	});
 	// onWheel evaluates the modifier gate and the right-click gate as independent conjuncts, so a single combination
 	// is enough to prove they compose.
-	test("should increase volume when holding 'Alt' modifier key and holding 'Right' click", async ({ page }) => {
+	test("should increase volume when holding 'Alt' modifier key and holding 'Right' click", async ({
+		page
+	}) => {
 		await adjustWithScrollWheel({
 			controlType: "Volume",
 			direction: "up",
@@ -146,11 +179,20 @@ test.describe("scrollWheelVolumeControl", () => {
 		});
 	});
 	test("should increase volume when holding 'Right' click", async ({ page }) => {
-		await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, steps: 5, withRightClick: true });
+		await adjustWithScrollWheel({
+			controlType: "Volume",
+			direction: "up",
+			initialValue: volume,
+			page,
+			steps: 5,
+			withRightClick: true
+		});
 	});
 	// The gate cases below run on watch only: onWheel has no page-specific branch and the live fixture costs
 	// up to 120 s per iteration.
-	test(`ignores a wheel notch with the wrong modifier when 'holdModifierKey' is on on ${watch}`, async ({ page }) => {
+	test(`ignores a wheel notch with the wrong modifier when 'holdModifierKey' is on on ${watch}`, async ({
+		page
+	}) => {
 		await enableVolumeControl(page);
 		await enableFeature(page, "scrollWheelVolumeControl.holdModifierKey");
 		await setOption(page, "scrollWheelVolumeControl.modifierKey", "ctrlKey");
@@ -163,25 +205,35 @@ test.describe("scrollWheelVolumeControl", () => {
 		// Control: the configured modifier is still accepted, so the windows above measure the gate rather
 		// than a wheel event that never reached the listener.
 		await dispatchWheelNotches(page, watch, "up", 1, { ctrlKey: true });
-		await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
+		await expect
+			.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+			.toBe(volume + steps);
 	});
-	test(`does not change the volume when 'holdRightClick' is on and no button is held on ${watch}`, async ({ page }) => {
+	test(`does not change the volume when 'holdRightClick' is on and no button is held on ${watch}`, async ({
+		page
+	}) => {
 		await enableVolumeControl(page);
 		await enableFeature(page, "scrollWheelVolumeControl.holdRightClick");
 		await dispatchWheelNotches(page, watch, "up", 1);
 		await expectToStay(async () => getCurrentVolume(page, watch), volume, { page });
 		// Control: the same notch with the right button held is accepted.
 		await dispatchWheelNotches(page, watch, "up", 1, { buttons: 2 });
-		await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
+		await expect
+			.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+			.toBe(volume + steps);
 	});
-	test(`suppresses the context menu while right-click scrolling and restores it on ${watch}`, async ({ page }) => {
+	test(`suppresses the context menu while right-click scrolling and restores it on ${watch}`, async ({
+		page
+	}) => {
 		await enableVolumeControl(page);
 		await enableFeature(page, "scrollWheelVolumeControl.holdRightClick");
 		await expectBodyWithoutClass(page, CONTEXT_MENU_CLASS);
 		await dispatchWheelNotches(page, watch, "up", 1, { buttons: 2 });
 		// The class is what keeps YouTube's context menu off the screen for the duration of the gesture.
 		await expectBodyWithClass(page, CONTEXT_MENU_CLASS);
-		await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
+		await expect
+			.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+			.toBe(volume + steps);
 		// Releasing the right button ends the gesture and gives the menu back.
 		await dispatchMouseEventOnPlayer(page, "mouseup");
 		await expectBodyWithoutClass(page, CONTEXT_MENU_CLASS);
@@ -205,34 +257,46 @@ test.describe("scrollWheelVolumeControl", () => {
 		expect(await getCurrentSpeed(page, watch)).toBe(1.25);
 		// Without the speed modifier the same notch belongs to the volume control again.
 		await dispatchWheelNotches(page, watch, "up", 1);
-		await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
+		await expect
+			.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+			.toBe(volume + steps);
 	});
-	test(`unmutes the player when the volume is scrolled while muted on ${watch}`, async ({ page }) => {
+	test(`unmutes the player when the volume is scrolled while muted on ${watch}`, async ({
+		page
+	}) => {
 		await enableVolumeControl(page);
 		await mutePlayer(page);
 		await expect.poll(async () => isPlayerMuted(page), { timeout: 5000 }).toBe(true);
 		await dispatchWheelNotches(page, watch, "up");
 		await expect.poll(async () => isPlayerMuted(page), { timeout: 5000 }).toBe(false);
-		await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
+		await expect
+			.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+			.toBe(volume + steps);
 	});
 	test(`ignores wheel events over the volume boost button on ${watch}`, async ({ page }) => {
 		await enableVolumeControl(page);
 		await enableFeature(page, "volumeBoost.enabled");
 		await setOption(page, "volumeBoost.mode", "per_video");
 		await setOption(page, "volumeBoost.button.placement", right);
-		await expect(page.locator(`.ytp-right-controls #${VOLUME_BOOST_BUTTON_ID}`)).toBeAttached({ timeout: 10000 });
+		await expect(page.locator(`.ytp-right-controls #${VOLUME_BOOST_BUTTON_ID}`)).toBeAttached({
+			timeout: 10000
+		});
 		// The button lives inside the player, so the notch does reach the control's listener; the button has
 		// its own wheel handler and the player volume must be left alone.
 		await dispatchWheelOverElement(page, `#${VOLUME_BOOST_BUTTON_ID}`, "up");
 		await expectToStay(async () => getCurrentVolume(page, watch), volume, { page });
 		// Control: the same notch over the player itself does move the volume.
 		await dispatchWheelNotches(page, watch, "up");
-		await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
+		await expect
+			.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+			.toBe(volume + steps);
 	});
 	test(`ignores wheel events over the YouTube settings panel on ${watch}`, async ({ page }) => {
 		await enableVolumeControl(page);
 		await page.locator("div#movie_player").hover();
-		await page.locator(".ytp-settings-button").evaluate((button: HTMLButtonElement) => button.click());
+		await page
+			.locator(".ytp-settings-button")
+			.evaluate((button: HTMLButtonElement) => button.click());
 		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
 		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
 		// Scrolling inside the open panel has to scroll the panel, not the volume.
@@ -240,9 +304,13 @@ test.describe("scrollWheelVolumeControl", () => {
 		await expectToStay(async () => getCurrentVolume(page, watch), volume, { page });
 		// Control: the same notch over the player itself does move the volume.
 		await dispatchWheelNotches(page, watch, "up");
-		await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
+		await expect
+			.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+			.toBe(volume + steps);
 	});
-	test(`keeps adjusting the volume after an in-page navigation to another video on ${watch}`, async ({ page }) => {
+	test(`keeps adjusting the volume after an in-page navigation to another video on ${watch}`, async ({
+		page
+	}) => {
 		test.setTimeout(120_000);
 		await enableVolumeControl(page);
 		// A genuine in-document navigation, which is the only path that runs onNavigate; YouTube reuses the
@@ -253,9 +321,13 @@ test.describe("scrollWheelVolumeControl", () => {
 		await setVolume(page, volume, watch);
 		await expect.poll(async () => getCurrentVolume(page, watch)).toBe(volume);
 		await dispatchWheelNotches(page, watch, "up");
-		await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
+		await expect
+			.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+			.toBe(volume + steps);
 	});
-	test(`keeps adjusting the volume after moving to the next short on ${shorts}`, async ({ page }) => {
+	test(`keeps adjusting the volume after moving to the next short on ${shorts}`, async ({
+		page
+	}) => {
 		test.setTimeout(120_000);
 		await navigateToPageType(page, shorts);
 		await setOption(page, "scrollWheelVolumeControl.steps", steps);
@@ -264,37 +336,52 @@ test.describe("scrollWheelVolumeControl", () => {
 		// Moving to the next short is an in-page navigation after which YouTube swaps the shorts player element, so
 		// a control pinned to the element it found on enable would be driving a discarded player.
 		const before = page.url();
-		const next = page.locator("#navigation-button-down button, button[aria-label='Next video']").first();
+		const next = page
+			.locator("#navigation-button-down button, button[aria-label='Next video']")
+			.first();
 		await expect(next).toBeVisible({ timeout: 15000 });
 		await next.click();
-		await page.waitForURL((url) => url.toString() !== before && url.pathname.startsWith("/shorts/"), { timeout: 30000 });
+		await page.waitForURL(
+			(url) => url.toString() !== before && url.pathname.startsWith("/shorts/"),
+			{ timeout: 30000 }
+		);
 		await waitForYoutubePlayerReady(page, shorts);
 		await pageSetup(page);
 		await waitForScrollWheelVolumeControl(page, true);
 		await setVolume(page, volume, shorts);
 		await expect.poll(async () => getCurrentVolume(page, shorts)).toBe(volume);
 		await dispatchWheelNotches(page, shorts, "up");
-		await expect.poll(async () => getCurrentVolume(page, shorts), { timeout: 5000 }).toBe(volume + steps);
+		await expect
+			.poll(async () => getCurrentVolume(page, shorts), { timeout: 5000 })
+			.toBe(volume + steps);
 	});
 	test.describe("stepper", () => {
 		test("applies every notch of a rapid wheel burst on watch", async ({ page }) => {
 			await enableVolumeControl(page);
 			// Five notches in one burst exceed the per-apply cap, so the stepper has to flush the remainder instead of dropping it.
 			await dispatchWheelNotches(page, watch, "up", 5);
-			await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + 5 * steps);
+			await expect
+				.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+				.toBe(volume + 5 * steps);
 		});
 		test("applies an updated step size without reloading on watch", async ({ page }) => {
 			await enableVolumeControl(page);
 			await dispatchWheelNotches(page, watch, "up");
-			await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
+			await expect
+				.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+				.toBe(volume + steps);
 			await setOption(page, "scrollWheelVolumeControl.steps", steps * 2);
 			// The control snaps the volume to a multiple of the step size, so start the second notch from one.
 			await setVolume(page, steps * 4, watch);
 			await expect.poll(async () => getCurrentVolume(page, watch)).toBe(steps * 4);
 			await dispatchWheelNotches(page, watch, "up");
-			await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(steps * 6);
+			await expect
+				.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+				.toBe(steps * 6);
 		});
-		test("clamps and snaps the volume to a multiple of the step size on watch", async ({ page }) => {
+		test("clamps and snaps the volume to a multiple of the step size on watch", async ({
+			page
+		}) => {
 			const stepSize = 7;
 			// 10 is not a multiple of 7, so the result has to be snapped up to the next multiple.
 			await enableVolumeControl(page, stepSize);
@@ -309,7 +396,9 @@ test.describe("scrollWheelVolumeControl", () => {
 		test("stops adjusting volume once disabled on watch", async ({ page }) => {
 			await enableVolumeControl(page);
 			await dispatchWheelNotches(page, watch, "up");
-			await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
+			await expect
+				.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+				.toBe(volume + steps);
 			await disableFeature(page, "scrollWheelVolumeControl.enabled");
 			await waitForScrollWheelVolumeControl(page, false);
 			await dispatchWheelNotches(page, watch, "up");
@@ -318,7 +407,9 @@ test.describe("scrollWheelVolumeControl", () => {
 			await enableFeature(page, "scrollWheelVolumeControl.enabled");
 			await waitForScrollWheelVolumeControl(page, true);
 			await dispatchWheelNotches(page, watch, "up");
-			await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + 2 * steps);
+			await expect
+				.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 })
+				.toBe(volume + 2 * steps);
 		});
 	});
 });

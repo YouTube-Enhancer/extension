@@ -13,7 +13,12 @@ export async function readStoredOptions(page: Page): Promise<configuration> {
 			}, 5_000);
 			const handler = (event: MessageEvent) => {
 				if (event.source !== window) return;
-				const msg = event.data as { action?: string; data?: { options?: unknown }; origin?: string; type?: string; };
+				const msg = event.data as {
+					action?: string;
+					data?: { options?: unknown };
+					origin?: string;
+					type?: string;
+				};
 				if (msg?.origin !== origin) return;
 				if (msg.type === "options" && msg.action === "data_response") {
 					clearTimeout(timeout);
@@ -47,7 +52,12 @@ export async function readStoredState(page: Page): Promise<Record<string, unknow
 
 			const handler = (event: MessageEvent) => {
 				if (event.source !== window) return;
-				const msg = event.data as { action?: string; data?: Record<string, unknown>; origin?: string; type?: string; };
+				const msg = event.data as {
+					action?: string;
+					data?: Record<string, unknown>;
+					origin?: string;
+					type?: string;
+				};
 				if (msg?.origin !== origin) return;
 				if (msg.type === "state" && msg.action === "data_response") {
 					clearTimeout(timeout);

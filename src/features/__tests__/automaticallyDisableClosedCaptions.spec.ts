@@ -8,7 +8,12 @@ import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { localeText } from "@/src/utils/_tests/locale";
 import { reloadPage } from "@/src/utils/_tests/navigation";
 import { setCheckbox } from "@/src/utils/_tests/options";
-import { ensureCaptionsState, expectStableCaptionsState, getCaptionsState, waitForCaptionsAvailable } from "@/src/utils/_tests/player";
+import {
+	ensureCaptionsState,
+	expectStableCaptionsState,
+	getCaptionsState,
+	waitForCaptionsAvailable
+} from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -16,8 +21,12 @@ const { watch } = pageTypeRecord;
 // The feature watches the first 15 s of the video for captions YouTube turns on late; the wait has to outlast that.
 const disableTimeout = 20000;
 // The rendered options labels the conflict test drives; they come from the same locale entries the metadata points at.
-const autoDisableLabel = localeText("settings.sections.miscellaneous.settings.automaticallyDisableClosedCaptions.enable.label");
-const autoEnableLabel = localeText("settings.sections.miscellaneous.settings.automaticallyEnableClosedCaptions.enable.label");
+const autoDisableLabel = localeText(
+	"settings.sections.miscellaneous.settings.automaticallyDisableClosedCaptions.enable.label"
+);
+const autoEnableLabel = localeText(
+	"settings.sections.miscellaneous.settings.automaticallyEnableClosedCaptions.enable.label"
+);
 
 test.describe("automaticallyDisableClosedCaptions", () => {
 	for (const pageType of testPages) {
@@ -50,7 +59,11 @@ test.describe("automaticallyDisableClosedCaptions", () => {
 		await expectStableCaptionsState(page, false, { timeout: disableTimeout });
 		// The feature's startup run ends once captions have stayed off for two attempts; a caption turned on before
 		// that would be taken for YouTube's late restore and turned off again.
-		await expectToStay(async () => getCaptionsState(page), false, { durationMs: 2000, intervalMs: 500, page });
+		await expectToStay(async () => getCaptionsState(page), false, {
+			durationMs: 2000,
+			intervalMs: 500,
+			page
+		});
 		// Turn captions back on so the navigation has something to disable, then navigate in-page: onNavigate only
 		// runs on a real SPA navigation, and navigateToPageType would be a document load that re-runs onEnable.
 		test.skip(!(await ensureCaptionsState(page, true)), "captions could not be turned on");
@@ -65,7 +78,11 @@ test.describe("automaticallyDisableClosedCaptions", () => {
 		await expectStableCaptionsState(page, false, { timeout: disableTimeout });
 		// The feature's startup run ends once captions have stayed off for two attempts; a caption turned on before
 		// that would be taken for YouTube's late restore and turned off again.
-		await expectToStay(async () => getCaptionsState(page), false, { durationMs: 2000, intervalMs: 500, page });
+		await expectToStay(async () => getCaptionsState(page), false, {
+			durationMs: 2000,
+			intervalMs: 500,
+			page
+		});
 		// Leave captions on so YouTube restores them after the reload; otherwise onEnable takes its early return and
 		// the assertion below would hold even if the feature did nothing.
 		test.skip(!(await ensureCaptionsState(page, true)), "captions could not be turned on");
@@ -74,7 +91,9 @@ test.describe("automaticallyDisableClosedCaptions", () => {
 		await expectStableCaptionsState(page, false, { timeout: disableTimeout });
 	});
 
-	test(`does not re-enable captions on disable when they were off before enabling on ${watch}`, async ({ page }) => {
+	test(`does not re-enable captions on disable when they were off before enabling on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToCaptionedPage(page, watch);
 		test.skip(!(await ensureCaptionsState(page, false)), "captions could not be turned off");
 		await enableFeature(page, "automaticallyDisableClosedCaptions.enabled");
@@ -82,9 +101,15 @@ test.describe("automaticallyDisableClosedCaptions", () => {
 		await disableFeature(page, "automaticallyDisableClosedCaptions.enabled");
 		// onEnable recorded captions as already off, so onDisable has nothing to restore and must leave the subtitles
 		// button alone; a single poll would sample before an unguarded click could land.
-		await expectToStay(async () => getCaptionsState(page), false, { durationMs: 4000, intervalMs: 500, page });
+		await expectToStay(async () => getCaptionsState(page), false, {
+			durationMs: 4000,
+			intervalMs: 500,
+			page
+		});
 	});
-	test(`keeps captions disabled after an in-page navigation to another video on ${watch}`, async ({ page }) => {
+	test(`keeps captions disabled after an in-page navigation to another video on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToCaptionedPage(page, watch);
 		test.skip(!(await ensureCaptionsState(page, true)), "captions could not be turned on");
 		await enableFeature(page, "automaticallyDisableClosedCaptions.enabled");
@@ -96,16 +121,19 @@ test.describe("automaticallyDisableClosedCaptions", () => {
 	});
 });
 optionsTest.describe("automaticallyDisableClosedCaptions options", () => {
-	optionsTest("conflict checkbox is disabled and shows the reason while auto-enable CC is on", async ({ page }) => {
-		const autoDisableCheckbox = page.getByLabel(autoDisableLabel, { exact: true });
-		await expect(autoDisableCheckbox).toBeEnabled({ timeout: 15000 });
-		const conflictReason = page.locator(`label:text-is("${autoDisableLabel}") + span`);
-		await expect(conflictReason).toHaveCount(0);
-		await setCheckbox(page, autoEnableLabel, true);
-		await expect(autoDisableCheckbox).toBeDisabled();
-		await expect(conflictReason).toHaveText(/cannot be enabled while/i);
-		await setCheckbox(page, autoEnableLabel, false);
-		await expect(autoDisableCheckbox).toBeEnabled();
-		await expect(conflictReason).toHaveCount(0);
-	});
+	optionsTest(
+		"conflict checkbox is disabled and shows the reason while auto-enable CC is on",
+		async ({ page }) => {
+			const autoDisableCheckbox = page.getByLabel(autoDisableLabel, { exact: true });
+			await expect(autoDisableCheckbox).toBeEnabled({ timeout: 15000 });
+			const conflictReason = page.locator(`label:text-is("${autoDisableLabel}") + span`);
+			await expect(conflictReason).toHaveCount(0);
+			await setCheckbox(page, autoEnableLabel, true);
+			await expect(autoDisableCheckbox).toBeDisabled();
+			await expect(conflictReason).toHaveText(/cannot be enabled while/i);
+			await setCheckbox(page, autoEnableLabel, false);
+			await expect(autoDisableCheckbox).toBeEnabled();
+			await expect(conflictReason).toHaveCount(0);
+		}
+	);
 });

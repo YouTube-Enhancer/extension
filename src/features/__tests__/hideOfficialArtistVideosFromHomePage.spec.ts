@@ -1,14 +1,27 @@
-import type { Page } from '@playwright/test';
+import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/hideOfficialArtistVideosFromHomePage/index.metadata";
-import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
+import {
+	expectBodyWithClass,
+	expectBodyWithoutClass,
+	expectElementsHidden,
+	expectElementsNotHidden
+} from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, spaNavigateToFirstVideo, spaNavigateToHome } from "@/src/utils/_tests/navigation";
-import { loginRequiredPages, resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import {
+	navigateToPageType,
+	spaNavigateToFirstVideo,
+	spaNavigateToHome
+} from "@/src/utils/_tests/navigation";
+import {
+	loginRequiredPages,
+	resolveNonTargetPage,
+	resolvePageTypes
+} from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -33,7 +46,10 @@ const [, artistBadgeGlyph = ""] = /path\[d="([^"]+)"\]/.exec(firstSelector) ?? [
  * assertions iterate over zero elements and pass without ever looking at the feature's effect.
  */
 async function expectInjectedSelectorsToMatch(page: Page): Promise<void> {
-	const unmatched = await page.evaluate((scoped) => scoped.filter((selector) => document.querySelector(selector) === null), [...injectedSelectors]);
+	const unmatched = await page.evaluate(
+		(scoped) => scoped.filter((selector) => document.querySelector(selector) === null),
+		[...injectedSelectors]
+	);
 	expect(unmatched).toEqual([]);
 }
 /**
@@ -65,21 +81,30 @@ async function injectOfficialArtistMarkup(page: Page): Promise<void> {
 test.describe("hideOfficialArtistVideosFromHomePage", () => {
 	for (const pageType of testPages) {
 		test(`adds the hide class on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
 			await expectBodyWithClass(page, bodyClass);
 			await expectElementsHidden(page, selectors);
 		});
 		test(`shows official artist videos when disabled on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await disableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
 			await expectBodyWithoutClass(page, bodyClass);
 			await expectElementsNotHidden(page, selectors);
 		});
 		test(`hides elements after navigation on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
 			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
@@ -92,7 +117,10 @@ test.describe("hideOfficialArtistVideosFromHomePage", () => {
 			await expectElementsHidden(page, selectors);
 		});
 		test(`persists hide after full page reload on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
 			await expectBodyWithClass(page, bodyClass);
@@ -103,7 +131,10 @@ test.describe("hideOfficialArtistVideosFromHomePage", () => {
 			await expectElementsHidden(page, selectors);
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
 			await expectBodyWithClass(page, bodyClass);
@@ -117,7 +148,9 @@ test.describe("hideOfficialArtistVideosFromHomePage", () => {
 		});
 	}
 
-	test("hides an injected official artist card and shows it again when disabled on home", async ({ page }) => {
+	test("hides an injected official artist card and shows it again when disabled on home", async ({
+		page
+	}) => {
 		test.skip(!hasAuthState() && loginRequiredPages.includes(home), `${home} requires login`);
 		await navigateToPageType(page, home);
 		await disableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
@@ -144,7 +177,9 @@ test.describe("hideOfficialArtistVideosFromHomePage", () => {
 		await expectInjectedSelectorsToMatch(page);
 		await expectElementsNotHidden(page, injectedSelectors);
 	});
-	test("removes the hide when SPA-navigating away from home and restores it on return", async ({ page }) => {
+	test("removes the hide when SPA-navigating away from home and restores it on return", async ({
+		page
+	}) => {
 		test.skip(!hasAuthState() && loginRequiredPages.includes(home), `${home} requires login`);
 		await navigateToPageType(page, home);
 		await enableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");

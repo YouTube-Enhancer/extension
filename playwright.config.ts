@@ -1,4 +1,12 @@
-import { test as base, type BrowserContext, chromium, defineConfig, devices, firefox, type Page } from "@playwright/test";
+import {
+	test as base,
+	type BrowserContext,
+	chromium,
+	defineConfig,
+	devices,
+	firefox,
+	type Page
+} from "@playwright/test";
 import { createHash } from "crypto";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { cp, mkdtemp, rm } from "fs/promises";
@@ -50,13 +58,18 @@ type OptionsFixtures = Fixtures & {
 	extensionId: string;
 };
 
-async function createExtensionContext(browserName: string): Promise<{ context: BrowserContext; userDataDir: string }> {
+async function createExtensionContext(
+	browserName: string
+): Promise<{ context: BrowserContext; userDataDir: string }> {
 	const pathToExtension = getExtensionPath(browserName);
 	const baseBrowser = browserName === "firefox" ? firefox : chromium;
 	const browserType = withExtension(baseBrowser, pathToExtension);
 	const userDataDir = await mkdtemp(join(tmpdir(), `pw-${browserName}-`));
 	if (!isCI && existsSync(AUTH_PROFILE)) {
-		await cp(AUTH_PROFILE, userDataDir, { filter: (source) => !PROFILE_COPY_SKIP.has(basename(source)), recursive: true });
+		await cp(AUTH_PROFILE, userDataDir, {
+			filter: (source) => !PROFILE_COPY_SKIP.has(basename(source)),
+			recursive: true
+		});
 	}
 	const context = await browserType.launchPersistentContext(userDataDir, {
 		acceptDownloads: true,
@@ -75,7 +88,8 @@ async function createExtensionContext(browserName: string): Promise<{ context: B
 async function getExtensionOrigin(context: BrowserContext): Promise<string> {
 	// The background service worker (and any page the extension opened on install) carries the id, so no
 	// YouTube load is needed to learn it; the load is only the fallback for a browser that offers neither.
-	const isExtensionUrl = (url: string) => url.startsWith("chrome-extension://") || url.startsWith("moz-extension://");
+	const isExtensionUrl = (url: string) =>
+		url.startsWith("chrome-extension://") || url.startsWith("moz-extension://");
 	const known =
 		context
 			.pages()
@@ -91,13 +105,18 @@ async function getExtensionOrigin(context: BrowserContext): Promise<string> {
 		return `${protocol}//${host}`;
 	};
 	if (known) return originOf(known);
-	const worker = await context.waitForEvent("serviceworker", { predicate: (w) => isExtensionUrl(w.url()), timeout: 10_000 }).catch(() => null);
+	const worker = await context
+		.waitForEvent("serviceworker", { predicate: (w) => isExtensionUrl(w.url()), timeout: 10_000 })
+		.catch(() => null);
 	if (worker) return originOf(worker.url());
 
 	const page = context.pages()[0] ?? (await context.newPage());
 
 	await page.goto("https://www.youtube.com", { waitUntil: "domcontentloaded" });
-	await page.waitForSelector('script[src*="/src/pages/embedded/index.js"]', { state: "attached", timeout: 15_000 });
+	await page.waitForSelector('script[src*="/src/pages/embedded/index.js"]', {
+		state: "attached",
+		timeout: 15_000
+	});
 
 	const origin = await page.evaluate(() => {
 		const script = document.querySelector('script[src*="/src/pages/embedded/index.js"]');
@@ -111,9 +130,7 @@ function getExtensionPath(browserName: string): string {
 	return join(
 		cwd(),
 		`dist/${
-			browserName === "chromium" ? "Chrome"
-			: browserName === "firefox" ? "Firefox"
-			: "Chrome"
+			browserName === "chromium" ? "Chrome" : browserName === "firefox" ? "Firefox" : "Chrome"
 		}`
 	);
 }
@@ -297,7 +314,9 @@ export default defineConfig({
 			}
 		}
 	],
-	reporter: isCI ? [["dot"], ["github"], ["html", { open: "never" }]] : [["html", { host: "0.0.0.0", open: "on-failure", port: 9323 }]],
+	reporter: isCI
+		? [["dot"], ["github"], ["html", { open: "never" }]]
+		: [["html", { host: "0.0.0.0", open: "on-failure", port: 9323 }]],
 	retries: isCI ? 2 : 1,
 	testDir: ".",
 	timeout: 120_000,

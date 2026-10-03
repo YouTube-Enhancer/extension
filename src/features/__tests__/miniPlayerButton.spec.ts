@@ -13,7 +13,13 @@ import {
 	expectToggleButtonState
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
-import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	clickFeatureButton,
+	clickFeatureMenuItem,
+	disableFeature,
+	enableFeature,
+	setOption
+} from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
@@ -42,7 +48,9 @@ test.describe("miniPlayerButton", () => {
 			await setOption(page, "miniPlayerButton.button.placement", right);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-miniPlayerButton-button");
 		});
-		test(`clicking mini player button again should deactivate mini player on ${pageType}`, async ({ page }) => {
+		test(`clicking mini player button again should deactivate mini player on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "miniPlayerButton.button.enabled");
 			await setOption(page, "miniPlayerButton.button.placement", right);
@@ -50,7 +58,9 @@ test.describe("miniPlayerButton", () => {
 			await clickFeatureButton(page, pageType, "yte-feature-miniPlayerButton-button", right);
 			await expect(page.locator("html")).toHaveClass(/yte-mini-player-active/, { timeout: 10000 });
 			await clickFeatureButton(page, pageType, "yte-feature-miniPlayerButton-button", right);
-			await expect(page.locator("html")).not.toHaveClass(/yte-mini-player-active/, { timeout: 10000 });
+			await expect(page.locator("html")).not.toHaveClass(/yte-mini-player-active/, {
+				timeout: 10000
+			});
 		});
 	}
 
@@ -65,7 +75,9 @@ test.describe("miniPlayerButton", () => {
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-miniPlayerButton-button");
 	});
 
-	test(`mini player button should re-appear after disable then re-enable on ${watch}`, async ({ page }) => {
+	test(`mini player button should re-appear after disable then re-enable on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "miniPlayerButton.button.enabled");
 		await setOption(page, "miniPlayerButton.button.placement", right);
@@ -96,7 +108,9 @@ test.describe("miniPlayerButton", () => {
 	// navigateToPageType is a document load, so this cannot observe cleanup across an in-page navigation; it pins
 	// the includePages gate on a fresh load while the feature is already enabled (the sibling miniPlayer sentinel
 	// test covers the same parity case).
-	test(`mini player button should not be present after navigating from ${watch} to ${nonTargetPage}`, async ({ page }) => {
+	test(`mini player button should not be present after navigating from ${watch} to ${nonTargetPage}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "miniPlayerButton.button.enabled");
 		await setOption(page, "miniPlayerButton.button.placement", right);
@@ -111,16 +125,26 @@ test.describe("miniPlayerButton", () => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "miniPlayerButton.button.enabled");
 		await setOption(page, "miniPlayerButton.button.placement", right);
-		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", false, { title: offTitle });
+		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", false, {
+			title: offTitle
+		});
 		await clickFeatureButton(page, watch, "yte-feature-miniPlayerButton-button", right);
 		await expect(page.locator("html")).toHaveClass(/yte-mini-player-active/, { timeout: 10000 });
-		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", true, { title: onTitle });
+		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", true, {
+			title: onTitle
+		});
 		await clickFeatureButton(page, watch, "yte-feature-miniPlayerButton-button", right);
-		await expect(page.locator("html")).not.toHaveClass(/yte-mini-player-active/, { timeout: 10000 });
-		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", false, { title: offTitle });
+		await expect(page.locator("html")).not.toHaveClass(/yte-mini-player-active/, {
+			timeout: 10000
+		});
+		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", false, {
+			title: offTitle
+		});
 	});
 
-	test(`clicking the mini player feature menu item should toggle the mini player on ${watch}`, async ({ page }) => {
+	test(`clicking the mini player feature menu item should toggle the mini player on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "miniPlayerButton.button.placement", "feature_menu");
 		await enableFeature(page, "miniPlayerButton.button.enabled");
@@ -133,42 +157,60 @@ test.describe("miniPlayerButton", () => {
 		// The menu item moved into the overlay together with the player, so the second toggle is dispatched on the
 		// item itself rather than by re-opening the menu.
 		await clickOpenFeatureMenuItem(page, "yte-feature-miniPlayerButton-menuitem");
-		await expect(page.locator("html")).not.toHaveClass(/yte-mini-player-active/, { timeout: 10000 });
+		await expect(page.locator("html")).not.toHaveClass(/yte-mini-player-active/, {
+			timeout: 10000
+		});
 		await expect(menuItem).toHaveAttribute("aria-checked", "false");
 	});
 
-	test(`mini player button should stay checked when its placement changes while the mini player is active on ${watch}`, async ({ page }) => {
+	test(`mini player button should stay checked when its placement changes while the mini player is active on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "miniPlayerButton.button.enabled");
 		await setOption(page, "miniPlayerButton.button.placement", right);
 		await clickFeatureButton(page, watch, "yte-feature-miniPlayerButton-button", right);
 		await expect(page.locator("html")).toHaveClass(/yte-mini-player-active/, { timeout: 10000 });
-		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", true, { title: onTitle });
+		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", true, {
+			title: onTitle
+		});
 		// A placement change removes and re-adds the button, and add() re-seeds the checked state and the label
 		// from isMiniPlayerActive(), so the rebuilt button has to keep reporting the mini player as on.
 		await setOption(page, "miniPlayerButton.button.placement", left);
 		await expectFeatureButtonToBeIn(page, "yte-feature-miniPlayerButton-button", left);
 		await expect(page.locator("html")).toHaveClass(/yte-mini-player-active/);
-		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", true, { title: onTitle });
+		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", true, {
+			title: onTitle
+		});
 	});
 
-	test(`closing the overlay with its close button should uncheck the mini player button on ${watch}`, async ({ page }) => {
+	test(`closing the overlay with its close button should uncheck the mini player button on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "miniPlayerButton.button.enabled");
 		// below_player keeps the button outside the player element the overlay steals, so it stays observable.
 		await setOption(page, "miniPlayerButton.button.placement", below);
 		await clickFeatureButton(page, watch, "yte-feature-miniPlayerButton-button", below);
 		await expect(page.locator("html")).toHaveClass(/yte-mini-player-active/, { timeout: 10000 });
-		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", true, { title: onTitle });
+		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", true, {
+			title: onTitle
+		});
 		await page.locator("#yte-mini-player-close").click();
-		await expect(page.locator("html")).not.toHaveClass(/yte-mini-player-active/, { timeout: 10000 });
-		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", false, { title: offTitle });
+		await expect(page.locator("html")).not.toHaveClass(/yte-mini-player-active/, {
+			timeout: 10000
+		});
+		await expectToggleButtonState(page, "yte-feature-miniPlayerButton-button", false, {
+			title: offTitle
+		});
 	});
 
 	test.describe("button placement", () => {
 		// Deliberately no placement setOption: this feature overrides the shared button defaults (feature_menu /
 		// same) with below_player / player_controls_right, and only an untouched config proves those defaults ship.
-		test(`should use its own default placement and fullscreen placement on ${watch}`, async ({ page }) => {
+		test(`should use its own default placement and fullscreen placement on ${watch}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayerButton.button.enabled");
 			await expectFeatureButtonToBeIn(page, "yte-feature-miniPlayerButton-button", below);

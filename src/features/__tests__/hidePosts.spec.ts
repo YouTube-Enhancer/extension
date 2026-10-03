@@ -13,8 +13,16 @@ import {
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, spaNavigateToFirstVideo, spaNavigateToHome } from "@/src/utils/_tests/navigation";
-import { loginRequiredPages, resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import {
+	navigateToPageType,
+	spaNavigateToFirstVideo,
+	spaNavigateToHome
+} from "@/src/utils/_tests/navigation";
+import {
+	loginRequiredPages,
+	resolveNonTargetPage,
+	resolvePageTypes
+} from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -28,13 +36,21 @@ const { home, watch } = pageTypeRecord;
 
 /** A single read would sample before the feature could have added the class, so hold the expectation for a settle window. */
 async function expectBodyClassToStayAbsent(page: Page): Promise<void> {
-	await expectToStay(async () => page.evaluate((className) => document.body.classList.contains(className), bodyClass), false, { page });
+	await expectToStay(
+		async () =>
+			page.evaluate((className) => document.body.classList.contains(className), bodyClass),
+		false,
+		{ page }
+	);
 }
 
 test.describe("hidePosts", () => {
 	for (const pageType of testPages) {
 		test(`hides posts section on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await expectBodyWithoutClass(page, bodyClass);
 			await enableFeature(page, "hidePosts.enabled");
@@ -42,7 +58,10 @@ test.describe("hidePosts", () => {
 			await expectElementsHidden(page, selectors);
 		});
 		test(`hides elements after navigation on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hidePosts.enabled");
 			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
@@ -55,7 +74,10 @@ test.describe("hidePosts", () => {
 			await expectElementsHidden(page, selectors);
 		});
 		test(`persists hide after full page reload on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hidePosts.enabled");
 			await expectBodyWithClass(page, bodyClass);
@@ -66,7 +88,10 @@ test.describe("hidePosts", () => {
 			await expectElementsHidden(page, selectors);
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hidePosts.enabled");
 			await expectBodyWithClass(page, bodyClass);
@@ -80,7 +105,9 @@ test.describe("hidePosts", () => {
 		});
 	}
 
-	test(`drops the hide class when SPA navigating off home and restores it on return`, async ({ page }) => {
+	test(`drops the hide class when SPA navigating off home and restores it on return`, async ({
+		page
+	}) => {
 		test.skip(!hasAuthState() && loginRequiredPages.includes(home), `${home} requires login`);
 		await navigateToPageType(page, home);
 		await enableFeature(page, "hidePosts.enabled");

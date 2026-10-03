@@ -4,7 +4,10 @@ import type { Nullable } from "@/src/types";
 
 /** Returns true when at least one of the selectors currently matches an element. */
 export async function hasAnyMatch(page: Page, selectors: readonly string[]): Promise<boolean> {
-	return page.evaluate((list) => list.some((selector) => document.querySelector(selector) !== null), [...selectors]);
+	return page.evaluate(
+		(list) => list.some((selector) => document.querySelector(selector) !== null),
+		[...selectors]
+	);
 }
 /**
  * Injects a new DOM element matching one of the given selectors to simulate
@@ -25,9 +28,14 @@ export async function hasAnyMatch(page: Page, selectors: readonly string[]): Pro
  * @returns The selector that was injected. Throws when no existing element matched, so a test can never pass
  * without having injected anything.
  */
-export async function injectDynamicContent(page: Page, selectors: readonly string[], options: { timeout?: number } = {}): Promise<string> {
+export async function injectDynamicContent(
+	page: Page,
+	selectors: readonly string[],
+	options: { timeout?: number } = {}
+): Promise<string> {
 	const injected = await injectDynamicContentWhenPresent(page, selectors, options);
-	if (!injected) throw new Error(`injectDynamicContent: no element matched any of: ${selectors.join(", ")}`);
+	if (!injected)
+		throw new Error(`injectDynamicContent: no element matched any of: ${selectors.join(", ")}`);
 	return injected;
 }
 /**
@@ -48,7 +56,10 @@ export async function injectDynamicContentWhenPresent(
 	} while (Date.now() < deadline);
 	return null;
 }
-async function injectDynamicContentIfPresent(page: Page, selectors: readonly string[]): Promise<Nullable<string>> {
+async function injectDynamicContentIfPresent(
+	page: Page,
+	selectors: readonly string[]
+): Promise<Nullable<string>> {
 	return page.evaluate(
 		({ selectors }) => {
 			for (const selector of selectors) {

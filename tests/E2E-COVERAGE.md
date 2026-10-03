@@ -8,12 +8,12 @@ The first measurement, on 2026-09-06, was published as 82.9 % of statements and 
 
 Product code that runs in pages: the content script, the embedded script with every feature, and the options page. Left out, like the developer tools, is the registry's performance tracker, which is switched by `DEV_MODE` and never runs in the tested build.
 
-| Measure | Covered | Total | Coverage |
-|---|---|---|---|
-| Statements | 8,978 | 9,990 | 89.9 % |
-| Branches | 3,826 | 5,114 | 74.8 % |
-| Functions | 2,347 | 2,465 | 95.2 % |
-| Executable lines | 7,873 | 8,457 | 93.1 % |
+| Measure          | Covered | Total | Coverage |
+| ---------------- | ------- | ----- | -------- |
+| Statements       | 8,978   | 9,990 | 89.9 %   |
+| Branches         | 3,826   | 5,114 | 74.8 %   |
+| Functions        | 2,347   | 2,465 | 95.2 %   |
+| Executable lines | 7,873   | 8,457 | 93.1 %   |
 
 Executed is not asserted: a line the suite runs is not a line the suite would notice breaking, so the per-feature table pairs the measured figures with what the spec checks. Functions in the mid nineties means nearly every function the extension ships is entered by some test; the branch figure means one decision in four only ever goes one way under the suite, and the section on the branch floor below says what those decisions are.
 
@@ -21,20 +21,20 @@ Not measured, because page coverage cannot see it: the background service worker
 
 ## By area
 
-| Area | Files | Executable lines | Lines % | Branches % | Functions % | Files never executed |
-|---|---|---|---|---|---|---|
-| src/features | 192 | 5843 | 94 | 75 | 96 | 0 |
-| src/utils | 52 | 987 | 90 | 73 | 93 | 0 |
-| src/components | 92 | 905 | 91 | 75 | 94 | 11 |
-| src/pages | 10 | 211 | 95 | 67 | 98 | 1 |
-| src/ui | 3 | 136 | 97 | 76 | 94 | 0 |
-| src/hooks | 15 | 107 | 90 | 73 | 97 | 1 |
-| src/_setup | 4 | 86 | 83 | 64 | 73 | 0 |
-| src (root files) | 4 | 61 | 98 | 85 | 96 | 0 |
-| src/events | 1 | 48 | 100 | 85 | 100 | 0 |
-| src/i18n | 7 | 39 | 92 | 64 | 100 | 0 |
-| src/validation | 3 | 26 | 92 | 82 | 100 | 0 |
-| src/types | 1 | 8 | 100 | 0 | 100 | 0 |
+| Area             | Files | Executable lines | Lines % | Branches % | Functions % | Files never executed |
+| ---------------- | ----- | ---------------- | ------- | ---------- | ----------- | -------------------- |
+| src/features     | 192   | 5843             | 94      | 75         | 96          | 0                    |
+| src/utils        | 52    | 987              | 90      | 73         | 93          | 0                    |
+| src/components   | 92    | 905              | 91      | 75         | 94          | 11                   |
+| src/pages        | 10    | 211              | 95      | 67         | 98          | 1                    |
+| src/ui           | 3     | 136              | 97      | 76         | 94          | 0                    |
+| src/hooks        | 15    | 107              | 90      | 73         | 97          | 1                    |
+| src/_setup       | 4     | 86               | 83      | 64         | 73          | 0                    |
+| src (root files) | 4     | 61               | 98      | 85         | 96          | 0                    |
+| src/events       | 1     | 48               | 100     | 85         | 100         | 0                    |
+| src/i18n         | 7     | 39               | 92      | 64         | 100         | 0                    |
+| src/validation   | 3     | 26               | 92      | 82         | 100         | 0                    |
+| src/types        | 1     | 8                | 100     | 0          | 100         | 0                    |
 
 Files never executed are almost all barrel files of two lines (`index.tsx` re-exports that the bundler resolves away) and the developer-tools components; no feature file is among them.
 
@@ -42,70 +42,70 @@ Files never executed are almost all barrel files of two lines (`index.tsx` re-ex
 
 Executable lines and their coverage per feature folder, joined with the structural analysis of its spec: configuration keys the spec never sets, pages in the feature's scope the spec never opens, and lifecycle hooks the spec never asserts on. "Cases" is the number of generated cases in the run. Sorted from least to most covered.
 
-| Feature | Executable lines | Lines % | Branches % | Cases | Keys the spec never sets | Pages in scope never opened | Hook never asserted |
-|---|---|---|---|---|---|---|---|
-| automaticallyDisableAmbientMode | 65 | 63 | 48 | 6 | - | - | - |
-| pauseBackgroundPlayers | 38 | 84 | 75 | 9 | - | - | - |
-| _registry | 843 | 85 | 72 | via every spec | - | - | - |
-| customCSS | 25 | 88 | 62 | 8 | - | channel_home, channel_posts, channel_streams, channel_videos, live, playlist, shorts, subscriptions | - |
-| playlistReverseButton | 278 | 89 | 66 | 16 | - | - | - |
-| hideLiveStreamChat | 18 | 89 | 67 | 6 | - | - | - |
-| playerSpeed | 215 | 93 | 69 | 13 | - | - | - |
-| automaticallyDisableAutoPlay | 108 | 94 | 77 | 6 | - | - | onConfigChange |
-| playerQuality | 173 | 94 | 71 | 14 | - | - | - |
-| automaticallyDisableClosedCaptions | 35 | 94 | 90 | 7 | - | - | - |
-| saveToWatchLaterButton | 176 | 94 | 73 | 19 | - | - | - |
-| screenshotButton | 108 | 94 | 66 | 16 | button.fullscreenPlacement | - | - |
-| defaultToOriginalAudioTrack | 76 | 95 | 73 | 6 | - | - | - |
-| shareShortener | 38 | 95 | 94 | 12 | - | - | - |
-| buttonController | 590 | 95 | 76 | 36 | - | - | - |
-| playlistManagementButtons | 177 | 95 | 77 | 8 | - | - | - |
-| playbackSpeedButtons | 72 | 96 | 77 | 15 | - | - | - |
-| miniPlayer | 682 | 96 | 73 | 23 | - | - | - |
-| videoHistory | 181 | 96 | 74 | 8 | - | - | - |
-| remainingTime | 52 | 96 | 69 | 8 | - | - | - |
-| shortsAutoScroll | 33 | 97 | 83 | 7 | - | - | - |
-| volumeBoost | 67 | 97 | 85 | 21 | button.fullscreenPlacement | - | - |
-| maximizePlayerButton | 172 | 97 | 82 | 23 | button.fullscreenPlacement | - | - |
-| scrollWheelController | 207 | 97 | 78 | via the two scroll wheel specs | - | - | - |
-| deepDarkCSS | 35 | 97 | 69 | 11 | - | channel_home, channel_posts, channel_streams, channel_videos, home, live, playlist, search, subscriptions | - |
-| timestampPeek | 265 | 98 | 78 | 16 | - | - | - |
-| hideArtificialIntelligence | 71 | 99 | 73 | 18 | - | - | - |
-| playlistLength | 220 | 99 | 86 | 16 | - | - | - |
-| automaticTheaterMode | 25 | 100 | 83 | 7 | - | - | - |
-| automaticallyEnableClosedCaptions | 30 | 100 | 86 | 12 | - | - | - |
-| automaticallyMaximizePlayer | 8 | 100 | 0 | 14 | - | - | - |
-| automaticallyShowMoreVideosOnEndScreen | 8 | 100 | 0 | 6 | - | - | - |
-| blockNumberKeySeeking | 8 | 100 | 100 | 7 | - | - | - |
-| copyTimestampUrlButton | 22 | 100 | 50 | 10 | button.fullscreenPlacement | - | - |
-| flipVideoButtons | 23 | 100 | 83 | 14 | - | - | - |
-| forwardRewindButtons | 27 | 100 | 78 | 13 | - | - | - |
-| globalVolume | 33 | 100 | 91 | 13 | - | - | - |
-| hideEndScreenCards | 18 | 100 | 75 | 10 | - | - | onConfigChange |
-| hideEndScreenCardsButton | 25 | 100 | 88 | 9 | button.fullscreenPlacement | - | - |
-| hideMembersOnlyVideos | 4 | 100 | 0 | 13 | - | channel_posts, channel_streams, live, playlist, shorts, subscriptions | - |
-| hideOfficialArtistVideosFromHomePage | 4 | 100 | 0 | 8 | - | - | - |
-| hidePaidPromotionBanner | 4 | 100 | 0 | 6 | - | - | - |
-| hidePlayables | 4 | 100 | 0 | 7 | - | channel_home, channel_posts, channel_streams, channel_videos, live, playlist, search, shorts, subscriptions | - |
-| hidePlaylistRecommendationsFromHomePage | 4 | 100 | 0 | 7 | - | - | - |
-| hidePosts | 4 | 100 | 0 | 6 | - | - | - |
-| hideScrollBar | 9 | 100 | 50 | 5 | - | channel_home, channel_posts, channel_streams, channel_videos, live, playlist, search, shorts, subscriptions | - |
-| hideShorts | 10 | 100 | 100 | 34 | - | - | - |
-| hideSidebarRecommendedVideos | 4 | 100 | 0 | 6 | - | - | - |
-| hideTranslateComment | 4 | 100 | 0 | 8 | - | - | - |
-| keywordBlocklist | 257 | 100 | 89 | 17 | - | channel_home, channel_posts, channel_streams, live, playlist, shorts, subscriptions | - |
-| loopButton | 34 | 100 | 86 | 12 | button.fullscreenPlacement | - | - |
-| miniPlayerButton | 25 | 100 | 86 | 16 | button.fullscreenPlacement | - | - |
-| monoToStereoButton | 47 | 100 | 88 | 10 | - | - | - |
-| openTranscriptButton | 15 | 100 | 50 | 8 | button.fullscreenPlacement | - | - |
-| openYouTubeSettingsOnHover | 47 | 100 | 76 | 11 | - | - | - |
-| rememberVolume | 34 | 100 | 84 | 14 | - | - | - |
-| removeRedirect | 34 | 100 | 81 | 8 | - | channel_home, channel_posts, channel_streams, channel_videos, home, live, playlist, search, shorts, subscriptions | - |
-| restoreFullscreenScrolling | 12 | 100 | 50 | 6 | - | - | onNavigate |
-| scrollWheelSpeedControl | 8 | 100 | 100 | 15 | - | - | onNavigate |
-| scrollWheelVolumeControl | 8 | 100 | 100 | 24 | - | - | - |
-| skipContinueWatching | 17 | 100 | 50 | 5 | - | - | - |
-| videosPerRow | 7 | 100 | 0 | 10 | - | channel_home, channel_posts, channel_streams, channel_videos, home, live, playlist, search, shorts, subscriptions | - |
+| Feature                                 | Executable lines | Lines % | Branches % | Cases                          | Keys the spec never sets   | Pages in scope never opened                                                                                       | Hook never asserted |
+| --------------------------------------- | ---------------- | ------- | ---------- | ------------------------------ | -------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------- |
+| automaticallyDisableAmbientMode         | 65               | 63      | 48         | 6                              | -                          | -                                                                                                                 | -                   |
+| pauseBackgroundPlayers                  | 38               | 84      | 75         | 9                              | -                          | -                                                                                                                 | -                   |
+| _registry                               | 843              | 85      | 72         | via every spec                 | -                          | -                                                                                                                 | -                   |
+| customCSS                               | 25               | 88      | 62         | 8                              | -                          | channel_home, channel_posts, channel_streams, channel_videos, live, playlist, shorts, subscriptions               | -                   |
+| playlistReverseButton                   | 278              | 89      | 66         | 16                             | -                          | -                                                                                                                 | -                   |
+| hideLiveStreamChat                      | 18               | 89      | 67         | 6                              | -                          | -                                                                                                                 | -                   |
+| playerSpeed                             | 215              | 93      | 69         | 13                             | -                          | -                                                                                                                 | -                   |
+| automaticallyDisableAutoPlay            | 108              | 94      | 77         | 6                              | -                          | -                                                                                                                 | onConfigChange      |
+| playerQuality                           | 173              | 94      | 71         | 14                             | -                          | -                                                                                                                 | -                   |
+| automaticallyDisableClosedCaptions      | 35               | 94      | 90         | 7                              | -                          | -                                                                                                                 | -                   |
+| saveToWatchLaterButton                  | 176              | 94      | 73         | 19                             | -                          | -                                                                                                                 | -                   |
+| screenshotButton                        | 108              | 94      | 66         | 16                             | button.fullscreenPlacement | -                                                                                                                 | -                   |
+| defaultToOriginalAudioTrack             | 76               | 95      | 73         | 6                              | -                          | -                                                                                                                 | -                   |
+| shareShortener                          | 38               | 95      | 94         | 12                             | -                          | -                                                                                                                 | -                   |
+| buttonController                        | 590              | 95      | 76         | 36                             | -                          | -                                                                                                                 | -                   |
+| playlistManagementButtons               | 177              | 95      | 77         | 8                              | -                          | -                                                                                                                 | -                   |
+| playbackSpeedButtons                    | 72               | 96      | 77         | 15                             | -                          | -                                                                                                                 | -                   |
+| miniPlayer                              | 682              | 96      | 73         | 23                             | -                          | -                                                                                                                 | -                   |
+| videoHistory                            | 181              | 96      | 74         | 8                              | -                          | -                                                                                                                 | -                   |
+| remainingTime                           | 52               | 96      | 69         | 8                              | -                          | -                                                                                                                 | -                   |
+| shortsAutoScroll                        | 33               | 97      | 83         | 7                              | -                          | -                                                                                                                 | -                   |
+| volumeBoost                             | 67               | 97      | 85         | 21                             | button.fullscreenPlacement | -                                                                                                                 | -                   |
+| maximizePlayerButton                    | 172              | 97      | 82         | 23                             | button.fullscreenPlacement | -                                                                                                                 | -                   |
+| scrollWheelController                   | 207              | 97      | 78         | via the two scroll wheel specs | -                          | -                                                                                                                 | -                   |
+| deepDarkCSS                             | 35               | 97      | 69         | 11                             | -                          | channel_home, channel_posts, channel_streams, channel_videos, home, live, playlist, search, subscriptions         | -                   |
+| timestampPeek                           | 265              | 98      | 78         | 16                             | -                          | -                                                                                                                 | -                   |
+| hideArtificialIntelligence              | 71               | 99      | 73         | 18                             | -                          | -                                                                                                                 | -                   |
+| playlistLength                          | 220              | 99      | 86         | 16                             | -                          | -                                                                                                                 | -                   |
+| automaticTheaterMode                    | 25               | 100     | 83         | 7                              | -                          | -                                                                                                                 | -                   |
+| automaticallyEnableClosedCaptions       | 30               | 100     | 86         | 12                             | -                          | -                                                                                                                 | -                   |
+| automaticallyMaximizePlayer             | 8                | 100     | 0          | 14                             | -                          | -                                                                                                                 | -                   |
+| automaticallyShowMoreVideosOnEndScreen  | 8                | 100     | 0          | 6                              | -                          | -                                                                                                                 | -                   |
+| blockNumberKeySeeking                   | 8                | 100     | 100        | 7                              | -                          | -                                                                                                                 | -                   |
+| copyTimestampUrlButton                  | 22               | 100     | 50         | 10                             | button.fullscreenPlacement | -                                                                                                                 | -                   |
+| flipVideoButtons                        | 23               | 100     | 83         | 14                             | -                          | -                                                                                                                 | -                   |
+| forwardRewindButtons                    | 27               | 100     | 78         | 13                             | -                          | -                                                                                                                 | -                   |
+| globalVolume                            | 33               | 100     | 91         | 13                             | -                          | -                                                                                                                 | -                   |
+| hideEndScreenCards                      | 18               | 100     | 75         | 10                             | -                          | -                                                                                                                 | onConfigChange      |
+| hideEndScreenCardsButton                | 25               | 100     | 88         | 9                              | button.fullscreenPlacement | -                                                                                                                 | -                   |
+| hideMembersOnlyVideos                   | 4                | 100     | 0          | 13                             | -                          | channel_posts, channel_streams, live, playlist, shorts, subscriptions                                             | -                   |
+| hideOfficialArtistVideosFromHomePage    | 4                | 100     | 0          | 8                              | -                          | -                                                                                                                 | -                   |
+| hidePaidPromotionBanner                 | 4                | 100     | 0          | 6                              | -                          | -                                                                                                                 | -                   |
+| hidePlayables                           | 4                | 100     | 0          | 7                              | -                          | channel_home, channel_posts, channel_streams, channel_videos, live, playlist, search, shorts, subscriptions       | -                   |
+| hidePlaylistRecommendationsFromHomePage | 4                | 100     | 0          | 7                              | -                          | -                                                                                                                 | -                   |
+| hidePosts                               | 4                | 100     | 0          | 6                              | -                          | -                                                                                                                 | -                   |
+| hideScrollBar                           | 9                | 100     | 50         | 5                              | -                          | channel_home, channel_posts, channel_streams, channel_videos, live, playlist, search, shorts, subscriptions       | -                   |
+| hideShorts                              | 10               | 100     | 100        | 34                             | -                          | -                                                                                                                 | -                   |
+| hideSidebarRecommendedVideos            | 4                | 100     | 0          | 6                              | -                          | -                                                                                                                 | -                   |
+| hideTranslateComment                    | 4                | 100     | 0          | 8                              | -                          | -                                                                                                                 | -                   |
+| keywordBlocklist                        | 257              | 100     | 89         | 17                             | -                          | channel_home, channel_posts, channel_streams, live, playlist, shorts, subscriptions                               | -                   |
+| loopButton                              | 34               | 100     | 86         | 12                             | button.fullscreenPlacement | -                                                                                                                 | -                   |
+| miniPlayerButton                        | 25               | 100     | 86         | 16                             | button.fullscreenPlacement | -                                                                                                                 | -                   |
+| monoToStereoButton                      | 47               | 100     | 88         | 10                             | -                          | -                                                                                                                 | -                   |
+| openTranscriptButton                    | 15               | 100     | 50         | 8                              | button.fullscreenPlacement | -                                                                                                                 | -                   |
+| openYouTubeSettingsOnHover              | 47               | 100     | 76         | 11                             | -                          | -                                                                                                                 | -                   |
+| rememberVolume                          | 34               | 100     | 84         | 14                             | -                          | -                                                                                                                 | -                   |
+| removeRedirect                          | 34               | 100     | 81         | 8                              | -                          | channel_home, channel_posts, channel_streams, channel_videos, home, live, playlist, search, shorts, subscriptions | -                   |
+| restoreFullscreenScrolling              | 12               | 100     | 50         | 6                              | -                          | -                                                                                                                 | onNavigate          |
+| scrollWheelSpeedControl                 | 8                | 100     | 100        | 15                             | -                          | -                                                                                                                 | onNavigate          |
+| scrollWheelVolumeControl                | 8                | 100     | 100        | 24                             | -                          | -                                                                                                                 | -                   |
+| skipContinueWatching                    | 17               | 100     | 50         | 5                              | -                          | -                                                                                                                 | -                   |
+| videosPerRow                            | 7                | 100     | 0          | 10                             | -                          | channel_home, channel_posts, channel_streams, channel_videos, home, live, playlist, search, shorts, subscriptions | -                   |
 
 Notes on the structural columns:
 

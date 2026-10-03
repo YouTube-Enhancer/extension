@@ -15,14 +15,17 @@ const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const { home, watch } = pageTypeRecord;
 // The insertion point the feature actually uses (index.ts:56, 71).
-const REMAINING_TIME_SELECTOR = ".ytp-time-display > .ytp-time-wrapper > .ytp-time-contents > span#ytp-time-remaining";
+const REMAINING_TIME_SELECTOR =
+	".ytp-time-display > .ytp-time-wrapper > .ytp-time-contents > span#ytp-time-remaining";
 // ` (-M:SS)`, ` (-H:MM:SS)` or ` (-<seconds>)`; a zero remaining time would mean the arithmetic is broken.
 const REMAINING_TIME_TEXT = /^ \(-(\d+(:\d{2}){1,3}|[1-9]\d*)\)$/;
 
 /** Forces one `timeupdate` so the listener recomputes without waiting for playback to tick. */
 async function dispatchTimeUpdate(page: Page): Promise<void> {
 	await page.evaluate(() => {
-		document.querySelector<HTMLVideoElement>("div#movie_player video")?.dispatchEvent(new Event("timeupdate"));
+		document
+			.querySelector<HTMLVideoElement>("div#movie_player video")
+			?.dispatchEvent(new Event("timeupdate"));
 	});
 }
 
@@ -32,7 +35,10 @@ async function getPlayerRemainingSeconds(page: Page): Promise<Nullable<number>> 
 		const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 		const video = player?.querySelector<HTMLVideoElement>("video");
 		if (!player?.getDuration || !player.getCurrentTime || !video) return null;
-		const [duration, currentTime] = await Promise.all([player.getDuration(), player.getCurrentTime()]);
+		const [duration, currentTime] = await Promise.all([
+			player.getDuration(),
+			player.getCurrentTime()
+		]);
 		return (duration - currentTime) / video.playbackRate;
 	});
 }
@@ -56,7 +62,9 @@ test.describe("remainingTime", () => {
 			const remainingTimeElement = page.locator(REMAINING_TIME_SELECTOR);
 			await expect(remainingTimeElement).toBeAttached();
 			// textContent, not toHaveText: the latter normalizes whitespace and would drop the leading space.
-			await expect.poll(async () => remainingTimeElement.textContent(), { timeout: 10000 }).toMatch(REMAINING_TIME_TEXT);
+			await expect
+				.poll(async () => remainingTimeElement.textContent(), { timeout: 10000 })
+				.toMatch(REMAINING_TIME_TEXT);
 		});
 		test(`remaining time shouldn't be displayed on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -83,7 +91,9 @@ test.describe("remainingTime", () => {
 		await enableFeature(page, "remainingTime.enabled");
 		const remainingTimeElement = page.locator(REMAINING_TIME_SELECTOR);
 		await expect(remainingTimeElement).toBeAttached();
-		await expect.poll(async () => remainingTimeElement.textContent(), { timeout: 10000 }).toMatch(REMAINING_TIME_TEXT);
+		await expect
+			.poll(async () => remainingTimeElement.textContent(), { timeout: 10000 })
+			.toMatch(REMAINING_TIME_TEXT);
 		const initial = await readRemainingSeconds(page);
 		expect(initial).not.toBeNull();
 		await page.evaluate(async () => {
@@ -94,10 +104,14 @@ test.describe("remainingTime", () => {
 			} catch {}
 		});
 		// Without the timeupdate listener the span keeps the value it was seeded with at setup time.
-		await expect.poll(async () => readRemainingSeconds(page), { timeout: 30000 }).toBeLessThanOrEqual(initial! - 2);
+		await expect
+			.poll(async () => readRemainingSeconds(page), { timeout: 30000 })
+			.toBeLessThanOrEqual(initial! - 2);
 	});
 
-	test(`remaining time should be removed when the feature is disabled on ${watch}`, async ({ page }) => {
+	test(`remaining time should be removed when the feature is disabled on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		// Enabling first is what makes this observe onDisable instead of the shipped default.
 		await enableFeature(page, "remainingTime.enabled");
@@ -108,14 +122,20 @@ test.describe("remainingTime", () => {
 		await expect(page.locator(REMAINING_TIME_SELECTOR)).toBeAttached();
 	});
 
-	test(`remaining time should halve when the playback rate doubles on ${watch}`, async ({ page }) => {
+	test(`remaining time should halve when the playback rate doubles on ${watch}`, async ({
+		page
+	}) => {
 		test.setTimeout(120_000);
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "remainingTime.enabled");
 		// Pausing pins currentTime, so the playback rate divisor is the only thing left that can move the value.
-		await page.evaluate(() => document.querySelector<HTMLVideoElement>("div#movie_player video")?.pause());
+		await page.evaluate(() =>
+			document.querySelector<HTMLVideoElement>("div#movie_player video")?.pause()
+		);
 		await setValueOnYouTubePlayer(page, watch, "setPlaybackRate", 1);
-		await expect.poll(async () => page.locator(REMAINING_TIME_SELECTOR).textContent(), { timeout: 10000 }).toMatch(REMAINING_TIME_TEXT);
+		await expect
+			.poll(async () => page.locator(REMAINING_TIME_SELECTOR).textContent(), { timeout: 10000 })
+			.toMatch(REMAINING_TIME_TEXT);
 		await dispatchTimeUpdate(page);
 		const atNormalSpeed = await readRemainingSeconds(page);
 		expect(atNormalSpeed).not.toBeNull();
@@ -133,7 +153,9 @@ test.describe("remainingTime", () => {
 		expect(await readRemainingSeconds(page)).toBeGreaterThanOrEqual(atNormalSpeed! / 2 - 2);
 	});
 
-	test(`remaining time should not duplicate after in-page navigation to another video on ${watch}`, async ({ page }) => {
+	test(`remaining time should not duplicate after in-page navigation to another video on ${watch}`, async ({
+		page
+	}) => {
 		test.setTimeout(120_000);
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "remainingTime.enabled");
@@ -147,7 +169,10 @@ test.describe("remainingTime", () => {
 		await expect
 			.poll(
 				async () => {
-					const [shown, actual] = await Promise.all([readRemainingSeconds(page), getPlayerRemainingSeconds(page)]);
+					const [shown, actual] = await Promise.all([
+						readRemainingSeconds(page),
+						getPlayerRemainingSeconds(page)
+					]);
 					if (shown === null || actual === null) return null;
 					return Math.abs(shown - actual);
 				},

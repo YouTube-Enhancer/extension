@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
@@ -8,7 +8,12 @@ import { metadata } from "@/src/features/shortsAutoScroll/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage, spaNavigateToHome, waitForExtensionReady } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	reloadPage,
+	spaNavigateToHome,
+	waitForExtensionReady
+} from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -25,7 +30,10 @@ async function expectAutoScroll(page: Page, initialId: Nullable<string>): Promis
 async function expectNoAutoScroll(page: Page, initialId: Nullable<string>): Promise<void> {
 	// expect.poll stops at its first passing sample, and the URL is necessarily still the initial one the
 	// moment the end of the short is simulated - so the absence of a scroll has to be held over a window.
-	await expectToStay(() => Promise.resolve(getShortId(page.url())), initialId, { durationMs: 3000, page });
+	await expectToStay(() => Promise.resolve(getShortId(page.url())), initialId, {
+		durationMs: 3000,
+		page
+	});
 }
 
 function getShortId(url: string): Nullable<string> {
@@ -48,7 +56,13 @@ async function simulateProgressThenRestart(page: Page, fraction: number): Promis
 			const p = document.querySelector<YouTubePlayerDiv>("#shorts-player");
 			if (p) {
 				const v = p.querySelector<HTMLVideoElement>("video");
-				if (v && Number.isFinite(v.duration) && v.duration > 0 && typeof p.getProgressState === "function") break;
+				if (
+					v &&
+					Number.isFinite(v.duration) &&
+					v.duration > 0 &&
+					typeof p.getProgressState === "function"
+				)
+					break;
 			}
 			await delay(100);
 		}
@@ -112,7 +126,9 @@ test.describe("shortsAutoScroll", () => {
 			await seekToEnd(page);
 			await expectAutoScroll(page, disabledId);
 		});
-		test(`should keep auto-scrolling on the next short after an advance on ${pageType}`, async ({ page }) => {
+		test(`should keep auto-scrolling on the next short after an advance on ${pageType}`, async ({
+			page
+		}) => {
 			test.setTimeout(120_000);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "shortsAutoScroll.enabled");
@@ -141,7 +157,9 @@ test.describe("shortsAutoScroll", () => {
 		});
 	}
 
-	test(`should resume auto-scroll after in-page navigation away from and back to ${shorts}`, async ({ page }) => {
+	test(`should resume auto-scroll after in-page navigation away from and back to ${shorts}`, async ({
+		page
+	}) => {
 		test.setTimeout(120_000);
 		await navigateToPageType(page, shorts);
 		await enableFeature(page, "shortsAutoScroll.enabled");
@@ -155,7 +173,9 @@ test.describe("shortsAutoScroll", () => {
 		await expectAutoScroll(page, initialId);
 	});
 
-	test(`should not automatically scroll when the video restarts without reaching the end on ${shorts}`, async ({ page }) => {
+	test(`should not automatically scroll when the video restarts without reaching the end on ${shorts}`, async ({
+		page
+	}) => {
 		test.setTimeout(120_000);
 		await navigateToPageType(page, shorts);
 		await enableFeature(page, "shortsAutoScroll.enabled");

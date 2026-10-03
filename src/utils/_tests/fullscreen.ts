@@ -3,7 +3,9 @@ import type { Page } from "@playwright/test";
 import { expect } from "playwright.config";
 
 export async function toggleFullscreen(page: Page, fullscreen: boolean): Promise<void> {
-	const isFullscreen = await page.locator("ytd-app").evaluate((el) => el.hasAttribute("fullscreen"));
+	const isFullscreen = await page
+		.locator("ytd-app")
+		.evaluate((el) => el.hasAttribute("fullscreen"));
 	if (isFullscreen === fullscreen) return;
 	await page.locator("div#movie_player").hover();
 	await page.locator("button.ytp-fullscreen-button").click();

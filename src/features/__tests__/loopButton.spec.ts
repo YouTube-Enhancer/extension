@@ -12,7 +12,13 @@ import {
 	expectToStay
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
-import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	clickFeatureButton,
+	clickFeatureMenuItem,
+	disableFeature,
+	enableFeature,
+	setOption
+} from "@/src/utils/_tests/features";
 import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
@@ -64,7 +70,9 @@ test.describe("loopButton", () => {
 			});
 			await expect.poll(async () => await getLoopButtonIcon(page)).toBe(offIcon);
 		});
-		test("loop button icon should follow the loop attribute when it is changed outside the extension", async ({ page }) => {
+		test("loop button icon should follow the loop attribute when it is changed outside the extension", async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "loopButton.button.enabled");
 			await setOption(page, "loopButton.button.placement", left);
@@ -143,13 +151,22 @@ test.describe("loopButton", () => {
 		await setOption(page, "loopButton.button.placement", left);
 		await enableFeature(page, "loopButton.button.enabled");
 		// A live /watch URL is classified as the "live" page type, which loopButton does not include.
-		await expectToStay(async () => await page.locator("#yte-feature-loopButton-button, #yte-feature-loopButton-menuitem").count(), 0, { page });
+		await expectToStay(
+			async () =>
+				await page
+					.locator("#yte-feature-loopButton-button, #yte-feature-loopButton-menuitem")
+					.count(),
+			0,
+			{ page }
+		);
 	});
 });
 
 /** Serialised markup of the svg currently rendered inside the loop button, used to observe the on/off icon swap. */
 async function getLoopButtonIcon(page: Page): Promise<null | string> {
-	return page.evaluate(() => document.querySelector("#yte-feature-loopButton-button svg")?.outerHTML ?? null);
+	return page.evaluate(
+		() => document.querySelector("#yte-feature-loopButton-button svg")?.outerHTML ?? null
+	);
 }
 async function setVideoLoopAttribute(page: Page, loop: boolean): Promise<void> {
 	await page.evaluate((shouldLoop) => {

@@ -85,7 +85,9 @@ test.describe("skipContinueWatching", () => {
 
 	// Watch only: onNavigate has no live branch and the live fixture has no sidebar of regular videos to click
 	// through to.
-	test(`should keep the handler patched after in-page navigation to another video on ${watch}`, async ({ page }) => {
+	test(`should keep the handler patched after in-page navigation to another video on ${watch}`, async ({
+		page
+	}) => {
 		test.setTimeout(120_000);
 		await navigateToPageType(page, watch);
 		const original = await getHandler(page);

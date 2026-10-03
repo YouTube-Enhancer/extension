@@ -11,7 +11,13 @@ import {
 	expectToggleButtonState
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
-import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	clickFeatureButton,
+	clickFeatureMenuItem,
+	disableFeature,
+	enableFeature,
+	setOption
+} from "@/src/utils/_tests/features";
 import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
@@ -32,15 +38,33 @@ test.describe("hideEndScreenCardsButton", () => {
 			await setOption(page, "hideEndScreenCardsButton.button.placement", right);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-hideEndScreenCardsButton-button");
 			// aria-checked === true means the cards are hidden, and the label is the action the next click performs.
-			await expectToggleButtonState(page, "yte-feature-hideEndScreenCardsButton-button", false, { title: hideLabel });
-			await clickFeatureButton(page, pageType, "yte-feature-hideEndScreenCardsButton-button", right);
+			await expectToggleButtonState(page, "yte-feature-hideEndScreenCardsButton-button", false, {
+				title: hideLabel
+			});
+			await clickFeatureButton(
+				page,
+				pageType,
+				"yte-feature-hideEndScreenCardsButton-button",
+				right
+			);
 			await expectBodyWithClass(page, "yte-hide-end-screen-cards");
-			await expectToggleButtonState(page, "yte-feature-hideEndScreenCardsButton-button", true, { title: showLabel });
-			await clickFeatureButton(page, pageType, "yte-feature-hideEndScreenCardsButton-button", right);
+			await expectToggleButtonState(page, "yte-feature-hideEndScreenCardsButton-button", true, {
+				title: showLabel
+			});
+			await clickFeatureButton(
+				page,
+				pageType,
+				"yte-feature-hideEndScreenCardsButton-button",
+				right
+			);
 			await expectBodyWithoutClass(page, "yte-hide-end-screen-cards");
-			await expectToggleButtonState(page, "yte-feature-hideEndScreenCardsButton-button", false, { title: hideLabel });
+			await expectToggleButtonState(page, "yte-feature-hideEndScreenCardsButton-button", false, {
+				title: hideLabel
+			});
 		});
-		test(`button should re-appear after disable then re-enable on ${pageType}`, async ({ page }) => {
+		test(`button should re-appear after disable then re-enable on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
 			await setOption(page, "hideEndScreenCardsButton.button.placement", right);
@@ -69,7 +93,9 @@ test.describe("hideEndScreenCardsButton", () => {
 		await expectFeatureButtonToBeFalsy(page, "yte-feature-hideEndScreenCardsButton-button");
 	});
 
-	test("clicking the hide end screen cards menu item should hide the end screen cards on watch", async ({ page }) => {
+	test("clicking the hide end screen cards menu item should hide the end screen cards on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "hideEndScreenCardsButton.button.placement", menu);
 		await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
@@ -78,7 +104,9 @@ test.describe("hideEndScreenCardsButton", () => {
 		await expectBodyWithClass(page, "yte-hide-end-screen-cards");
 	});
 
-	test("button should be built in the cards-hidden state and show the cards on click on watch", async ({ page }) => {
+	test("button should be built in the cards-hidden state and show the cards on click on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "hideEndScreenCards.enabled");
 		await expectBodyWithClass(page, "yte-hide-end-screen-cards");
@@ -86,13 +114,19 @@ test.describe("hideEndScreenCardsButton", () => {
 		await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
 		await expectFeatureButtonToBeIn(page, "yte-feature-hideEndScreenCardsButton-button", right);
 		// endScreenCardsAreHidden drives both initialChecked (= hidden) and the initial label.
-		await expectToggleButtonState(page, "yte-feature-hideEndScreenCardsButton-button", true, { title: showLabel });
+		await expectToggleButtonState(page, "yte-feature-hideEndScreenCardsButton-button", true, {
+			title: showLabel
+		});
 		await clickFeatureButton(page, watch, "yte-feature-hideEndScreenCardsButton-button", right);
 		await expectBodyWithoutClass(page, "yte-hide-end-screen-cards");
-		await expectToggleButtonState(page, "yte-feature-hideEndScreenCardsButton-button", false, { title: hideLabel });
+		await expectToggleButtonState(page, "yte-feature-hideEndScreenCardsButton-button", false, {
+			title: hideLabel
+		});
 	});
 
-	test("changing hideEndScreenCards outside the button should re-sync the button label on watch", async ({ page }) => {
+	test("changing hideEndScreenCards outside the button should re-sync the button label on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "hideEndScreenCardsButton.button.placement", right);
 		await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
@@ -110,7 +144,9 @@ test.describe("hideEndScreenCardsButton", () => {
 
 	test.describe("feature conflicts", () => {
 		test.describe("hideEndScreenCardsButton → hideEndScreenCards", () => {
-			test("hideEndScreenCards toggled by the button resets after navigation on watch", async ({ page }) => {
+			test("hideEndScreenCards toggled by the button resets after navigation on watch", async ({
+				page
+			}) => {
 				await navigateToPageType(page, watch);
 				await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
 				await setOption(page, "hideEndScreenCardsButton.button.placement", right);
@@ -134,7 +170,11 @@ test.describe("hideEndScreenCardsButton", () => {
 				await setOption(page, "hideEndScreenCardsButton.button.placement", placement);
 				await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
 				await expectFeatureButtonToBeTruthy(page, "yte-feature-hideEndScreenCardsButton-button");
-				await expectFeatureButtonToBeIn(page, "yte-feature-hideEndScreenCardsButton-button", placement);
+				await expectFeatureButtonToBeIn(
+					page,
+					"yte-feature-hideEndScreenCardsButton-button",
+					placement
+				);
 			});
 		}
 	});

@@ -21,8 +21,12 @@ const { home, live, watch } = pageTypeRecord;
 /** Reads the channel id the feature resolves for the loaded video, so channelSpeeds can be keyed on it. */
 async function readCurrentChannelId(page: Page): Promise<Nullable<string>> {
 	return page.evaluate(async () => {
-		const player = document.querySelector("div#movie_player") as unknown as Nullable<YouTubePlayerDiv>;
-		const playerResponse = player?.getPlayerResponse?.() as undefined | { videoDetails?: { channelId?: string } };
+		const player = document.querySelector(
+			"div#movie_player"
+		) as unknown as Nullable<YouTubePlayerDiv>;
+		const playerResponse = player?.getPlayerResponse?.() as
+			| undefined
+			| { videoDetails?: { channelId?: string } };
 		if (playerResponse?.videoDetails?.channelId) return playerResponse.videoDetails.channelId;
 		const videoData = (await player?.getVideoData?.()) as undefined | { channel_id?: string };
 		return videoData?.channel_id ?? null;
@@ -33,7 +37,9 @@ async function readCurrentChannelId(page: Page): Promise<Nullable<string>> {
  * onto the video (the event the feature listens for) is not guaranteed to reach the player's own bookkeeping.
  */
 async function readVideoPlaybackRate(page: Page): Promise<Nullable<number>> {
-	return page.evaluate(() => document.querySelector<HTMLVideoElement>("video.html5-main-video")?.playbackRate ?? null);
+	return page.evaluate(
+		() => document.querySelector<HTMLVideoElement>("video.html5-main-video")?.playbackRate ?? null
+	);
 }
 
 test.describe("playerSpeed", () => {
@@ -42,13 +48,21 @@ test.describe("playerSpeed", () => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "playerSpeed.speed", speed);
 			await enableFeature(page, "playerSpeed.enabled");
-			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: pageType === "shorts" ? 15000 : 5000 }).toBe(speed);
+			await expect
+				.poll(async () => getCurrentSpeed(page, pageType), {
+					timeout: pageType === "shorts" ? 15000 : 5000
+				})
+				.toBe(speed);
 		});
 		test(`should persist playback speed after navigation on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "playerSpeed.speed", 2);
 			await enableFeature(page, "playerSpeed.enabled");
-			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: pageType === "shorts" ? 15000 : 5000 }).toBe(2);
+			await expect
+				.poll(async () => getCurrentSpeed(page, pageType), {
+					timeout: pageType === "shorts" ? 15000 : 5000
+				})
+				.toBe(2);
 			await navigateToPageType(page, home);
 			await navigateToPageType(page, pageType);
 			// No disable/enable round trip: the assertion has to measure the navigation path, not a fresh onEnable.
@@ -73,24 +87,38 @@ test.describe("playerSpeed", () => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "playerSpeed.speed", 2);
 			await enableFeature(page, "playerSpeed.enabled");
-			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: pageType === "shorts" ? 15000 : 5000 }).toBe(2);
+			await expect
+				.poll(async () => getCurrentSpeed(page, pageType), {
+					timeout: pageType === "shorts" ? 15000 : 5000
+				})
+				.toBe(2);
 			await disableFeature(page, "playerSpeed.enabled");
 			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: 5000 }).toBe(1);
 			await enableFeature(page, "playerSpeed.enabled");
-			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: pageType === "shorts" ? 15000 : 5000 }).toBe(2);
+			await expect
+				.poll(async () => getCurrentSpeed(page, pageType), {
+					timeout: pageType === "shorts" ? 15000 : 5000
+				})
+				.toBe(2);
 		});
 		test(`persists speed after full page reload on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "playerSpeed.speed", 2);
 			await enableFeature(page, "playerSpeed.enabled");
-			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: pageType === "shorts" ? 15000 : 5000 }).toBe(2);
+			await expect
+				.poll(async () => getCurrentSpeed(page, pageType), {
+					timeout: pageType === "shorts" ? 15000 : 5000
+				})
+				.toBe(2);
 			await page.reload();
 			await navigateToPageType(page, pageType);
 			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: 15000 }).toBe(2);
 		});
 	}
 
-	test(`applies the channel-specific speed from channelSpeeds instead of the global speed on ${watch}`, async ({ page }) => {
+	test(`applies the channel-specific speed from channelSpeeds instead of the global speed on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		const channelId = await readCurrentChannelId(page);
 		expect(channelId).toBeTruthy();
@@ -99,14 +127,18 @@ test.describe("playerSpeed", () => {
 		await setOption(page, "playerSpeed.channelSpeeds", `${channelId}:${channelSpeed}`);
 		await enableFeature(page, "playerSpeed.enabled");
 		// The per-channel entry has to win over the global speed, which is deliberately a different value.
-		await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 15000 }).toBe(channelSpeed);
+		await expect
+			.poll(async () => getCurrentSpeed(page, watch), { timeout: 15000 })
+			.toBe(channelSpeed);
 		await disableFeature(page, "playerSpeed.enabled");
 		// An entry for some other channel must leave the global speed in charge.
 		await setOption(page, "playerSpeed.channelSpeeds", `UCnotTheChannelOfThisVid:${channelSpeed}`);
 		await enableFeature(page, "playerSpeed.enabled");
 		await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 15000 }).toBe(speed);
 	});
-	test(`a manual speed change is not reverted while playerSpeed is enabled on ${watch}`, async ({ page }) => {
+	test(`a manual speed change is not reverted while playerSpeed is enabled on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "playerSpeed.speed", speed);
 		await enableFeature(page, "playerSpeed.enabled");
@@ -116,12 +148,19 @@ test.describe("playerSpeed", () => {
 		const manualSpeed = speed - 0.25;
 		await page.keyboard.press("Shift+Comma");
 		await expect.poll(async () => readVideoPlaybackRate(page), { timeout: 5000 }).toBe(manualSpeed);
-		await expectToStay(async () => readVideoPlaybackRate(page), manualSpeed, { durationMs: 5000, page });
+		await expectToStay(async () => readVideoPlaybackRate(page), manualSpeed, {
+			durationMs: 5000,
+			page
+		});
 		// onDisable restores the speed the user last chose - the default 1 would mean the change was never recorded.
 		await disableFeature(page, "playerSpeed.enabled");
-		await expect.poll(async () => readVideoPlaybackRate(page), { timeout: 15000 }).toBe(manualSpeed);
+		await expect
+			.poll(async () => readVideoPlaybackRate(page), { timeout: 15000 })
+			.toBe(manualSpeed);
 	});
-	test(`changing playerSpeed.speed while the feature is enabled applies immediately on ${watch}`, async ({ page }) => {
+	test(`changing playerSpeed.speed while the feature is enabled applies immediately on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "playerSpeed.speed", speed);
 		await enableFeature(page, "playerSpeed.enabled");
@@ -150,7 +189,9 @@ test.describe("playerSpeed", () => {
 			await page.locator(".ytp-settings-button").click();
 			await expect(page.locator(settingsPanelMenuSelector)).toBeVisible();
 			await page.evaluate(() => {
-				const speedItem = Array.from(document.querySelectorAll<HTMLDivElement>(".ytp-menuitem")).find((item) =>
+				const speedItem = Array.from(
+					document.querySelectorAll<HTMLDivElement>(".ytp-menuitem")
+				).find((item) =>
 					item.querySelector(".ytp-menuitem-label")?.textContent?.toLowerCase().includes("speed")
 				);
 				speedItem?.click();
@@ -158,7 +199,9 @@ test.describe("playerSpeed", () => {
 			// The panel the feature observes to record the speed; waiting for it replaces the fixed sleeps.
 			await expect(page.locator(".ytp-variable-speed-panel-content")).toBeVisible();
 			// The state write travels content script -> background -> storage, so it has to be polled for.
-			await expect.poll(async () => (await readStoredState(page)).playerSpeed).toMatchObject({ playbackSpeed: 2 });
+			await expect
+				.poll(async () => (await readStoredState(page)).playerSpeed)
+				.toMatchObject({ playbackSpeed: 2 });
 		});
 	});
 });

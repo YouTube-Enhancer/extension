@@ -3,7 +3,12 @@ import { expect, type Page } from "@playwright/test";
 import type { YouTubePlayerDiv } from "@/src/types";
 import type { YtButtonViewModelElement } from "@/src/utils/dom/nativeComponents";
 
-import { ACTIONS_ROW_SELECTOR, BUTTON_CLASS, SAVED_ICON, UNSAVED_ICON } from "@/src/features/saveToWatchLaterButton/constants";
+import {
+	ACTIONS_ROW_SELECTOR,
+	BUTTON_CLASS,
+	SAVED_ICON,
+	UNSAVED_ICON
+} from "@/src/features/saveToWatchLaterButton/constants";
 import { enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPage, waitForExtensionReady } from "@/src/utils/_tests/navigation";
 
@@ -25,9 +30,14 @@ export async function ensureInWatchLater(page: Page, videoId: string): Promise<v
 	await navigateToPage(page, `https://www.youtube.com/watch?v=${videoId}`);
 	await waitForExtensionReady(page);
 	await enableFeature(page, "saveToWatchLaterButton.enabled");
-	await expect(page.locator(WATCH_LATER_ACTIONS_ROW_BUTTON_SELECTOR)).toBeAttached({ timeout: 20000 });
+	await expect(page.locator(WATCH_LATER_ACTIONS_ROW_BUTTON_SELECTOR)).toBeAttached({
+		timeout: 20000
+	});
 	if ((await settleActionsRowIcon(page)) === WATCH_LATER_SAVED_ICON) return;
-	const saveRequest = page.waitForResponse((response) => response.url().includes("/youtubei/v1/browse/edit_playlist"), { timeout: 20000 });
+	const saveRequest = page.waitForResponse(
+		(response) => response.url().includes("/youtubei/v1/browse/edit_playlist"),
+		{ timeout: 20000 }
+	);
 	await page.locator(`${WATCH_LATER_ACTIONS_ROW_BUTTON_SELECTOR} button`).first().click();
 	expect((await saveRequest).ok()).toBe(true);
 	expect(await settleActionsRowIcon(page)).toBe(WATCH_LATER_SAVED_ICON);
@@ -39,7 +49,10 @@ export async function readActionsRowIcon(page: Page): Promise<null | string> {
 		const host = document.querySelector<YtButtonViewModelElement>(selector);
 		// The component exposes its data through a getter; the feature's function also carries the properties.
 		const data: unknown = host?.rawProps?.data;
-		const resolved = (typeof data === "function" ? (data as () => unknown)() : data) as null | Record<string, unknown> | undefined;
+		const resolved = (typeof data === "function" ? (data as () => unknown)() : data) as
+			| null
+			| Record<string, unknown>
+			| undefined;
 		const iconName: unknown = resolved?.iconName;
 		return typeof iconName === "string" ? iconName : null;
 	}, WATCH_LATER_ACTIONS_ROW_BUTTON_SELECTOR);
@@ -83,13 +96,14 @@ export async function watchToTheEnd(
 						const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 						if (!player || !video) return "no player";
 						const data = await player.getVideoData();
-						if (data.video_id !== videoId || player.classList.contains("ad-showing")) return "not the video yet";
+						if (data.video_id !== videoId || player.classList.contains("ad-showing"))
+							return "not the video yet";
 						video.muted = true;
 						if (video.playbackRate !== rate) video.playbackRate = rate;
 						if (video.paused && !video.ended) await video.play().catch(() => {});
-						return video.ended || (video.duration > 0 && video.currentTime >= video.duration - 0.25) ?
-								"ended"
-							:	`at ${Math.round(video.currentTime)}s`;
+						return video.ended || (video.duration > 0 && video.currentTime >= video.duration - 0.25)
+							? "ended"
+							: `at ${Math.round(video.currentTime)}s`;
 					},
 					{ rate, videoId }
 				),

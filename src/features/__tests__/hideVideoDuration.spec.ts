@@ -8,7 +8,9 @@ import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
-const { hideVideoDuration: { bodyClass } } = hideFeatureSelectors;
+const {
+	hideVideoDuration: { bodyClass }
+} = hideFeatureSelectors;
 // Live streams don't have duration overlays, so exclude live from test pages.
 const testPages = resolvePageTypes(metadata.dependencies?.includePages).filter((p) => p !== "live");
 

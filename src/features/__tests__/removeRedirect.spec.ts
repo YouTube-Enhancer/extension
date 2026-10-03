@@ -7,7 +7,11 @@ import type { PageType } from "@/src/features/_registry/types";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	reloadPage,
+	spaNavigateToRelatedVideo
+} from "@/src/utils/_tests/navigation";
 
 const { channel_home: channelHome, watch } = pageTypeRecord;
 
@@ -84,7 +88,11 @@ test.describe("removeRedirect", () => {
 		await navigateToPageType(page, watch);
 		await disableFeature(page, "removeRedirect.enabled");
 		await injectRedirectAnchor(page);
-		await expectToStay(async () => page.locator(`#${INJECTED_ANCHOR_ID}`).getAttribute("href"), REDIRECT_URL, { page });
+		await expectToStay(
+			async () => page.locator(`#${INJECTED_ANCHOR_ID}`).getAttribute("href"),
+			REDIRECT_URL,
+			{ page }
+		);
 	});
 	test("should clean dynamically added redirect links on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
@@ -94,14 +102,20 @@ test.describe("removeRedirect", () => {
 		await expect(page.locator(`#${INJECTED_ANCHOR_ID}`)).toHaveAttribute("href", REDIRECT_TARGET);
 		await expectNoRedirects(page);
 	});
-	test("should stop unwrapping newly added redirect links after the feature is disabled on watch", async ({ page }) => {
+	test("should stop unwrapping newly added redirect links after the feature is disabled on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "removeRedirect.enabled");
 		await injectRedirectAnchor(page);
 		await expect(page.locator(`#${INJECTED_ANCHOR_ID}`)).toHaveAttribute("href", REDIRECT_TARGET);
 		await disableFeature(page, "removeRedirect.enabled");
 		await injectRedirectAnchor(page, LATE_ANCHOR_ID);
-		await expectToStay(async () => page.locator(`#${LATE_ANCHOR_ID}`).getAttribute("href"), REDIRECT_URL, { page });
+		await expectToStay(
+			async () => page.locator(`#${LATE_ANCHOR_ID}`).getAttribute("href"),
+			REDIRECT_URL,
+			{ page }
+		);
 	});
 	test("should unwrap redirect links rendered after SPA navigation on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
@@ -113,7 +127,9 @@ test.describe("removeRedirect", () => {
 		await expect(page.locator(`#${INJECTED_ANCHOR_ID}`)).toHaveAttribute("href", REDIRECT_TARGET);
 		await expectNoRedirects(page);
 	});
-	test("should unwrap redirect links nested inside a dynamically added subtree on watch", async ({ page }) => {
+	test("should unwrap redirect links nested inside a dynamically added subtree on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "removeRedirect.enabled");
 		await expectNoRedirects(page);

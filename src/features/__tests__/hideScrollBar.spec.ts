@@ -7,7 +7,12 @@ import type { PageType } from "@/src/features/_registry/types";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage, spaNavigateBack, spaNavigateToHome } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	reloadPage,
+	spaNavigateBack,
+	spaNavigateToHome
+} from "@/src/utils/_tests/navigation";
 import { loginRequiredPages } from "@/src/utils/_tests/utils";
 
 // The feature has no page-specific branch; an explicit page set avoids running every test on all 11 page types.
@@ -19,11 +24,19 @@ const hideScrollBarStyleId = "yte-hide-scroll-bar";
 
 async function expectScrollbarHidden(page: Page): Promise<void> {
 	await expect(page.locator(`#${hideScrollBarStyleId}`)).toBeAttached();
-	await expect.poll(() => page.evaluate(() => document.documentElement.clientWidth >= window.innerWidth), { timeout: 10000 }).toBe(true);
+	await expect
+		.poll(() => page.evaluate(() => document.documentElement.clientWidth >= window.innerWidth), {
+			timeout: 10000
+		})
+		.toBe(true);
 }
 async function expectScrollbarVisible(page: Page): Promise<void> {
 	await expect(page.locator(`#${hideScrollBarStyleId}`)).not.toBeAttached();
-	await expect.poll(() => page.evaluate(() => document.documentElement.clientWidth >= window.innerWidth), { timeout: 10000 }).toBe(false);
+	await expect
+		.poll(() => page.evaluate(() => document.documentElement.clientWidth >= window.innerWidth), {
+			timeout: 10000
+		})
+		.toBe(false);
 }
 /**
  * Guarantees the document overflows vertically. Without overflow `clientWidth >= innerWidth` is trivially true,
@@ -38,7 +51,11 @@ async function forceOverflow(page: Page): Promise<void> {
 		spacer.style.width = "1px";
 		document.body.appendChild(spacer);
 	}, overflowSpacerId);
-	await expect.poll(() => page.evaluate(() => document.documentElement.scrollHeight > window.innerHeight), { timeout: 10000 }).toBe(true);
+	await expect
+		.poll(() => page.evaluate(() => document.documentElement.scrollHeight > window.innerHeight), {
+			timeout: 10000
+		})
+		.toBe(true);
 }
 
 test.describe("hideScrollBar", () => {
@@ -63,7 +80,9 @@ test.describe("hideScrollBar", () => {
 			await forceOverflow(page);
 			await expectScrollbarHidden(page);
 		});
-		test(`re-applies scrollbar hide after disable then re-enable on ${pageType}`, async ({ page }) => {
+		test(`re-applies scrollbar hide after disable then re-enable on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType);
 			await forceOverflow(page);
 			await enableFeature(page, "hideScrollBar.enabled");
@@ -76,7 +95,10 @@ test.describe("hideScrollBar", () => {
 	}
 
 	test(`keeps the scrollbar hidden across SPA navigation on ${watch}`, async ({ page }) => {
-		test.skip(!hasAuthState() && loginRequiredPages.includes(home), `the in-page hop lands on ${home}, which requires login`);
+		test.skip(
+			!hasAuthState() && loginRequiredPages.includes(home),
+			`the in-page hop lands on ${home}, which requires login`
+		);
 		await navigateToPageType(page, watch);
 		await forceOverflow(page);
 		await enableFeature(page, "hideScrollBar.enabled");

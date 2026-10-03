@@ -6,7 +6,10 @@ import type { YoutubePlayerQualityLevel } from "@/src/features/playerQuality/typ
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/playerQuality/index.metadata";
-import { youtubePlayerQualityLabels, youtubePlayerQualityLevels } from "@/src/features/playerQuality/types";
+import {
+	youtubePlayerQualityLabels,
+	youtubePlayerQualityLevels
+} from "@/src/features/playerQuality/types";
 import { expectCurrentQualityLevelToBeTruthy, expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
@@ -33,7 +36,11 @@ async function clickPlayerMenuItem(page: Page, labelPrefix: string): Promise<boo
 			const menu = document.querySelector(root);
 			if (!menu) return false;
 			const item = Array.from(menu.querySelectorAll<HTMLDivElement>(".ytp-menuitem")).find((el) =>
-				el.querySelector(".ytp-menuitem-label")?.textContent?.trim().toLowerCase().startsWith(prefix.toLowerCase())
+				el
+					.querySelector(".ytp-menuitem-label")
+					?.textContent?.trim()
+					.toLowerCase()
+					.startsWith(prefix.toLowerCase())
 			);
 			item?.click();
 			return !!item;
@@ -57,7 +64,10 @@ async function keepPlaybackRunning(page: Page): Promise<void> {
 			if (!video.paused) return;
 			void video.play().catch(() => {});
 			// After a skipped ad the element alone does not always resume; the player API does.
-			const player = document.querySelector("div#movie_player") as unknown as null | { mute?: () => void; playVideo?: () => void };
+			const player = document.querySelector("div#movie_player") as unknown as null | {
+				mute?: () => void;
+				playVideo?: () => void;
+			};
 			player?.mute?.();
 			player?.playVideo?.();
 		};
@@ -68,7 +78,9 @@ async function keepPlaybackRunning(page: Page): Promise<void> {
 /** The frame rate of the format the player is actually streaming, as recorded in the itag database. */
 async function readAppliedFps(page: Page): Promise<Nullable<number>> {
 	const formatId = await page.evaluate(() => {
-		const player = document.querySelector("div#movie_player") as unknown as Nullable<YouTubePlayerDiv>;
+		const player = document.querySelector(
+			"div#movie_player"
+		) as unknown as Nullable<YouTubePlayerDiv>;
 		return player?.getVideoStats?.()?.fmt ?? null;
 	});
 	if (formatId === null) return null;
@@ -76,13 +88,17 @@ async function readAppliedFps(page: Page): Promise<Nullable<number>> {
 }
 async function readQualityFormats(page: Page): Promise<Nullable<QualityFormat[]>> {
 	return page.evaluate(() => {
-		const player = document.querySelector("div#movie_player") as unknown as Nullable<YouTubePlayerDiv>;
+		const player = document.querySelector(
+			"div#movie_player"
+		) as unknown as Nullable<YouTubePlayerDiv>;
 		if (!player?.getAvailableQualityData) return null;
-		return player.getAvailableQualityData().map(({ formatId, paygatedQualityDetails, quality }) => ({
-			formatId,
-			isPremium: !!paygatedQualityDetails,
-			quality
-		}));
+		return player
+			.getAvailableQualityData()
+			.map(({ formatId, paygatedQualityDetails, quality }) => ({
+				formatId,
+				isPremium: !!paygatedQualityDetails,
+				quality
+			}));
 	});
 }
 /** Finds a quality the player offers at more than one frame rate, which is the only case fpsPreference decides. */
@@ -94,7 +110,8 @@ function resolveFpsCandidate(formats: QualityFormat[]) {
 	for (const [quality, frameRates] of byQuality) {
 		const highestFps = Math.max(...frameRates);
 		const lowestFps = Math.min(...frameRates);
-		if (highestFps !== lowestFps) return { highestFps, lowestFps, quality: quality as YoutubePlayerQualityLevel };
+		if (highestFps !== lowestFps)
+			return { highestFps, lowestFps, quality: quality as YoutubePlayerQualityLevel };
 	}
 	return null;
 }
@@ -105,10 +122,17 @@ test.describe("playerQuality", () => {
 			await setOption(page, "playerQuality.quality", qualityLevel);
 			await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
 			await enableFeature(page, "playerQuality.enabled");
-			const closestQuality = await getClosestQuality(page, pageType, qualityLevel, fallbackStrategy);
+			const closestQuality = await getClosestQuality(
+				page,
+				pageType,
+				qualityLevel,
+				fallbackStrategy
+			);
 			if (!closestQuality) return; // quality selection not supported (e.g. live stream with only "auto")
 			// A live stream only plays the requested level once its next segments arrive at that level.
-			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality, { timeout: pageType === live ? 30000 : 10000 });
+			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality, {
+				timeout: pageType === live ? 30000 : 10000
+			});
 		});
 	}
 	// The cases below have no live- or shorts-specific code path: the only page-dependent line is getPlayer's
@@ -119,7 +143,11 @@ test.describe("playerQuality", () => {
 		await disableFeature(page, "playerQuality.enabled");
 		// Whatever quality YouTube picks on its own says nothing about the feature; the observable signal is
 		// data-default-quality, which the feature writes on the player whenever it enforces or restores.
-		await expectToStay(async () => page.locator("div#movie_player").getAttribute("data-default-quality"), null, { page });
+		await expectToStay(
+			async () => page.locator("div#movie_player").getAttribute("data-default-quality"),
+			null,
+			{ page }
+		);
 	});
 	test(`should set quality to hd720 on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
@@ -163,7 +191,9 @@ test.describe("playerQuality", () => {
 		const originalQuality = await getValueFromYouTubePlayer(page, "getPlaybackQuality", watch);
 		if (!originalQuality) return;
 		const supportsSetQuality = await page.evaluate(() => {
-			const p = document.querySelector("div#movie_player") as unknown as { setPlaybackQuality?: unknown };
+			const p = document.querySelector("div#movie_player") as unknown as {
+				setPlaybackQuality?: unknown;
+			};
 			return typeof p?.setPlaybackQuality === "function";
 		});
 		if (!supportsSetQuality) return;
@@ -176,9 +206,15 @@ test.describe("playerQuality", () => {
 		await disableFeature(page, "playerQuality.enabled");
 		// onDisable restores the quality captured before enforcement and records it on the player element,
 		// so the restore has to be observed there rather than performed by the test itself.
-		await expect(page.locator(`div#movie_player[data-default-quality="${originalQuality}"]`)).toBeAttached({ timeout: 15000 });
+		await expect(
+			page.locator(`div#movie_player[data-default-quality="${originalQuality}"]`)
+		).toBeAttached({ timeout: 15000 });
 		if (originalQuality !== closestQuality) {
-			await expect.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", watch), { timeout: 10000 }).toBe(originalQuality);
+			await expect
+				.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", watch), {
+					timeout: 10000
+				})
+				.toBe(originalQuality);
 		}
 	});
 	test("suspends enforcement after a manual quality change on watch", async ({ page }) => {
@@ -189,8 +225,14 @@ test.describe("playerQuality", () => {
 		const closestQuality = await getClosestQuality(page, watch, "hd720", fallbackStrategy);
 		if (!closestQuality) return;
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
-		const availableLevels = await getValueFromYouTubePlayer(page, "getAvailableQualityLevels", watch);
-		const manualQuality = availableLevels?.filter((level) => level !== "auto" && level !== closestQuality).at(-1);
+		const availableLevels = await getValueFromYouTubePlayer(
+			page,
+			"getAvailableQualityLevels",
+			watch
+		);
+		const manualQuality = availableLevels
+			?.filter((level) => level !== "auto" && level !== closestQuality)
+			.at(-1);
 		if (!manualQuality) return;
 		// The two calls YouTube makes when a quality is picked from its own menu. They only change what the
 		// player has been *asked* to play: getPlaybackQuality() keeps reporting the enforced level until the
@@ -205,13 +247,19 @@ test.describe("playerQuality", () => {
 		}, manualQuality);
 		await expectCurrentQualityLevelToBeTruthy(page, watch, manualQuality);
 		// Enforcement used to snap the quality straight back; it must now leave the manual choice alone.
-		await expectToStay(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", watch), manualQuality, { durationMs: 5000, page });
+		await expectToStay(
+			async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", watch),
+			manualQuality,
+			{ durationMs: 5000, page }
+		);
 		// A config change clears the suspension and the configured quality is enforced again.
 		await disableFeature(page, "playerQuality.enabled");
 		await enableFeature(page, "playerQuality.enabled");
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
 	});
-	test(`applies the configured fps preference when several formats share a quality on ${watch}`, async ({ page }) => {
+	test(`applies the configured fps preference when several formats share a quality on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		const formats = await readQualityFormats(page);
 		if (!formats) return; // the player exposes no per-format data
@@ -224,13 +272,17 @@ test.describe("playerQuality", () => {
 		await expectCurrentQualityLevelToBeTruthy(page, watch, candidate.quality);
 		// getVideoStats().fmt is the format the player actually streams, so it distinguishes two formats that
 		// report the same quality level - which getPlaybackQuality() cannot.
-		await expect.poll(async () => readAppliedFps(page), { timeout: 15000 }).toBe(candidate.highestFps);
+		await expect
+			.poll(async () => readAppliedFps(page), { timeout: 15000 })
+			.toBe(candidate.highestFps);
 		// playerQuality has no onConfigChange, so the opposite preference needs a fresh enable to be applied.
 		await disableFeature(page, "playerQuality.enabled");
 		await setOption(page, "playerQuality.fpsPreference", "lower");
 		await enableFeature(page, "playerQuality.enabled");
 		await expectCurrentQualityLevelToBeTruthy(page, watch, candidate.quality);
-		await expect.poll(async () => readAppliedFps(page), { timeout: 15000 }).toBe(candidate.lowestFps);
+		await expect
+			.poll(async () => readAppliedFps(page), { timeout: 15000 })
+			.toBe(candidate.lowestFps);
 	});
 	test(`prefers a premium format when preferPremium is enabled on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
@@ -239,7 +291,8 @@ test.describe("playerQuality", () => {
 		// Premium formats only exist for paying accounts, so the case is unreachable on an anonymous profile.
 		const premium = formats.find(({ isPremium }) => isPremium);
 		if (!premium) return;
-		if (!formats.some(({ isPremium, quality }) => quality === premium.quality && !isPremium)) return;
+		if (!formats.some(({ isPremium, quality }) => quality === premium.quality && !isPremium))
+			return;
 		await setOption(page, "playerQuality.quality", premium.quality as YoutubePlayerQualityLevel);
 		await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
 		await setOption(page, "playerQuality.preferPremium", true);
@@ -248,14 +301,18 @@ test.describe("playerQuality", () => {
 			.poll(
 				async () =>
 					page.evaluate(() => {
-						const player = document.querySelector("div#movie_player") as unknown as Nullable<YouTubePlayerDiv>;
+						const player = document.querySelector(
+							"div#movie_player"
+						) as unknown as Nullable<YouTubePlayerDiv>;
 						return player?.getVideoStats?.()?.fmt ?? null;
 					}),
 				{ timeout: 15000 }
 			)
 			.toBe(premium.formatId);
 	});
-	test(`re-applies quality after an in-page navigation to another video on ${watch}`, async ({ page }) => {
+	test(`re-applies quality after an in-page navigation to another video on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "playerQuality.quality", qualityLevel);
 		await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
@@ -265,18 +322,29 @@ test.describe("playerQuality", () => {
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
 		// The apply path records the enforced level on the player; clearing it first means the marker can only
 		// come back if onNavigate ran a fresh apply task rather than the enable that happened before.
-		await expect(page.locator(`div#movie_player[data-default-quality="${closestQuality}"]`)).toBeAttached({ timeout: 15000 });
-		await page.evaluate(() => document.querySelector("div#movie_player")?.removeAttribute("data-default-quality"));
+		await expect(
+			page.locator(`div#movie_player[data-default-quality="${closestQuality}"]`)
+		).toBeAttached({ timeout: 15000 });
+		await page.evaluate(() =>
+			document.querySelector("div#movie_player")?.removeAttribute("data-default-quality")
+		);
 		// Armed before the switch so the next video starts the moment it exists: the retry loop onNavigate begins
 		// has a fixed budget, and a player still reporting "unknown" when it expires never gets its level applied.
 		await keepPlaybackRunning(page);
 		// A genuine in-document navigation is the only path that reaches onNavigate.
 		await spaNavigateToRelatedVideo(page);
-		const closestQualityAfterNavigation = await getClosestQuality(page, watch, qualityLevel, fallbackStrategy);
+		const closestQualityAfterNavigation = await getClosestQuality(
+			page,
+			watch,
+			qualityLevel,
+			fallbackStrategy
+		);
 		if (!closestQualityAfterNavigation) return;
 		// The marker is the direct evidence that onNavigate ran a fresh apply, and it appears as soon as the
 		// level has been requested rather than once the player has finished switching to it.
-		await expect(page.locator(`div#movie_player[data-default-quality="${closestQualityAfterNavigation}"]`)).toBeAttached({ timeout: 30000 });
+		await expect(
+			page.locator(`div#movie_player[data-default-quality="${closestQualityAfterNavigation}"]`)
+		).toBeAttached({ timeout: 30000 });
 		// Streaming the requested level takes longer than requesting it, and a 4K level may never finish buffering
 		// here, so the level the player itself reports as requested counts as well as the level playing.
 		await expect
@@ -293,7 +361,9 @@ test.describe("playerQuality", () => {
 			)
 			.toContain(closestQualityAfterNavigation);
 	});
-	test(`suspends enforcement when quality is changed from the player settings menu on ${watch}`, async ({ page }) => {
+	test(`suspends enforcement when quality is changed from the player settings menu on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "playerQuality.quality", "hd720");
 		await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
@@ -301,10 +371,17 @@ test.describe("playerQuality", () => {
 		const closestQuality = await getClosestQuality(page, watch, "hd720", fallbackStrategy);
 		if (!closestQuality) return;
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
-		const availableLevels = await getValueFromYouTubePlayer(page, "getAvailableQualityLevels", watch);
-		const manualQuality = availableLevels?.filter((level) => level !== "auto" && level !== closestQuality).at(-1);
+		const availableLevels = await getValueFromYouTubePlayer(
+			page,
+			"getAvailableQualityLevels",
+			watch
+		);
+		const manualQuality = availableLevels
+			?.filter((level) => level !== "auto" && level !== closestQuality)
+			.at(-1);
 		if (!manualQuality) return;
-		const { [youtubePlayerQualityLevels.indexOf(manualQuality)]: manualLabel } = youtubePlayerQualityLabels;
+		const { [youtubePlayerQualityLevels.indexOf(manualQuality)]: manualLabel } =
+			youtubePlayerQualityLabels;
 		// Going through YouTube's own menu is what makes the switch observable: it changes the streamed format,
 		// which is the signal hasForeignQuality() reads first.
 		await page.locator("div#movie_player").hover();
@@ -317,13 +394,19 @@ test.describe("playerQuality", () => {
 		expect(await clickPlayerMenuItem(page, manualLabel)).toBe(true);
 		await expectCurrentQualityLevelToBeTruthy(page, watch, manualQuality);
 		// Enforcement must leave the manual choice alone instead of snapping the quality straight back.
-		await expectToStay(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", watch), manualQuality, { durationMs: 5000, page });
+		await expectToStay(
+			async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", watch),
+			manualQuality,
+			{ durationMs: 5000, page }
+		);
 		// A config change clears the suspension and the configured quality is enforced again.
 		await disableFeature(page, "playerQuality.enabled");
 		await enableFeature(page, "playerQuality.enabled");
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
 	});
-	test(`chooses between several formats of one level by frame rate and premium preference on ${watch}`, async ({ page }) => {
+	test(`chooses between several formats of one level by frame rate and premium preference on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		// The player only exposes format ids in its quality data to a YouTube Premium account, and the test profile is
 		// not one (checked 2026-09-06 on six videos, 60 fps and premium ones included: no entry carried a formatId), so
@@ -340,7 +423,11 @@ test.describe("playerQuality", () => {
 		};
 		const stubbed = await page.evaluate(
 			({ formatsByLevel }) => {
-				type QualityEntry = { formatId?: number; paygatedQualityDetails?: unknown; quality: string };
+				type QualityEntry = {
+					formatId?: number;
+					paygatedQualityDetails?: unknown;
+					quality: string;
+				};
 				type PlayerWithQualityData = HTMLElement & {
 					getAvailableQualityData?: () => QualityEntry[];
 					setPlaybackQualityRange: (...args: unknown[]) => unknown;
@@ -351,9 +438,13 @@ test.describe("playerQuality", () => {
 				player.getAvailableQualityData = () =>
 					readQualityData().flatMap((entry) => {
 						const { [entry.quality]: formats } = formatsByLevel;
-						return formats ?
-								formats.map(({ formatId, premium }) => ({ ...entry, formatId, paygatedQualityDetails: premium ? {} : undefined }))
-							:	[entry];
+						return formats
+							? formats.map(({ formatId, premium }) => ({
+									...entry,
+									formatId,
+									paygatedQualityDetails: premium ? {} : undefined
+								}))
+							: [entry];
 					});
 				const requests: unknown[][] = [];
 				(window as { yteQualityRequests?: unknown[][] }).yteQualityRequests = requests;
@@ -371,7 +462,9 @@ test.describe("playerQuality", () => {
 		const readRequestedFormat = async () =>
 			page.evaluate(() => {
 				const requests = (window as { yteQualityRequests?: unknown[][] }).yteQualityRequests ?? [];
-				return (requests.filter((args) => args.length > 2).at(-1)?.[2] as number | undefined) ?? null;
+				return (
+					(requests.filter((args) => args.length > 2).at(-1)?.[2] as number | undefined) ?? null
+				);
 			});
 		await setOption(page, "playerQuality.quality", "hd720");
 		await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);

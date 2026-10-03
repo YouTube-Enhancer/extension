@@ -19,7 +19,9 @@ async function ensureVideoIsPlaying(page: Page, pageType: PageType): Promise<voi
 	const state = await getValueFromYouTubePlayer(page, "getPlayerState", pageType);
 	if (state !== PlayerStates.PLAYING) {
 		await page.evaluate(async () => {
-			const player = document.querySelector<HTMLDivElement & { playVideo?: () => Promise<void> }>("#movie_player");
+			const player = document.querySelector<HTMLDivElement & { playVideo?: () => Promise<void> }>(
+				"#movie_player"
+			);
 			await player?.playVideo?.();
 			const video = document.querySelector<HTMLVideoElement>(".html5-main-video");
 			if (video?.paused) {
@@ -29,12 +31,23 @@ async function ensureVideoIsPlaying(page: Page, pageType: PageType): Promise<voi
 		});
 	}
 	await expect
-		.poll(async () => await getValueFromYouTubePlayer(page, "getPlayerState", pageType), { timeout: pageType === "live" ? 30000 : 15000 })
+		.poll(async () => await getValueFromYouTubePlayer(page, "getPlayerState", pageType), {
+			timeout: pageType === "live" ? 30000 : 15000
+		})
 		.toBe(PlayerStates.PLAYING);
 }
 
-async function expectPlayerState(page: Page, state: number, pageType: PageType, timeout = 15000): Promise<void> {
-	await expect.poll(async () => await getValueFromYouTubePlayer(page, "getPlayerState", pageType), { timeout }).toBe(state);
+async function expectPlayerState(
+	page: Page,
+	state: number,
+	pageType: PageType,
+	timeout = 15000
+): Promise<void> {
+	await expect
+		.poll(async () => await getValueFromYouTubePlayer(page, "getPlayerState", pageType), {
+			timeout
+		})
+		.toBe(state);
 }
 
 async function openAndPlayVideo(page: Page, pageType: PageType): Promise<void> {
@@ -52,7 +65,12 @@ test.describe("pauseBackgroundPlayers", () => {
 			await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
 			await expectPlayerState(pageA, PlayerStates.PLAYING, pageType);
 			await openAndPlayVideo(pageB, pageType);
-			await expectPlayerState(pageA, PlayerStates.PAUSED, pageType, pageType === "live" ? 30000 : 15000);
+			await expectPlayerState(
+				pageA,
+				PlayerStates.PAUSED,
+				pageType,
+				pageType === "live" ? 30000 : 15000
+			);
 			await pageB.close();
 		});
 	}
@@ -68,10 +86,17 @@ test.describe("pauseBackgroundPlayers", () => {
 		await expectPlayerState(pageA, PlayerStates.PAUSED, watch);
 		// The background handler skips the sender tab, so the tab whose playback triggered the broadcast has
 		// to keep playing - without that skip the feature would pause the video the user just started.
-		await expectToStay(async () => getValueFromYouTubePlayer(pageB, "getPlayerState", watch), PlayerStates.PLAYING, { page: pageB });
+		await expectToStay(
+			async () => getValueFromYouTubePlayer(pageB, "getPlayerState", watch),
+			PlayerStates.PLAYING,
+			{ page: pageB }
+		);
 		await pageB.close();
 	});
-	test("should stop pausing other tabs after being disabled on watch", async ({ context, page }) => {
+	test("should stop pausing other tabs after being disabled on watch", async ({
+		context,
+		page
+	}) => {
 		test.setTimeout(120_000);
 		const pageA = page;
 		const pageB = await context.newPage();
@@ -85,10 +110,17 @@ test.describe("pauseBackgroundPlayers", () => {
 		// sender: resuming it must no longer reach the background handler.
 		await pageA.bringToFront();
 		await ensureVideoIsPlaying(pageA, watch);
-		await expectToStay(async () => getValueFromYouTubePlayer(pageB, "getPlayerState", watch), PlayerStates.PLAYING, { page: pageB });
+		await expectToStay(
+			async () => getValueFromYouTubePlayer(pageB, "getPlayerState", watch),
+			PlayerStates.PLAYING,
+			{ page: pageB }
+		);
 		await pageB.close();
 	});
-	test("should not pause other tabs when playback starts in a hidden tab on watch", async ({ context, page }) => {
+	test("should not pause other tabs when playback starts in a hidden tab on watch", async ({
+		context,
+		page
+	}) => {
 		test.setTimeout(120_000);
 		const pageA = page;
 		const pageB = await context.newPage();
@@ -112,9 +144,15 @@ test.describe("pauseBackgroundPlayers", () => {
 		if (!isHidden) {
 			await pageB.evaluate(() => {
 				Object.defineProperty(document, "hidden", { configurable: true, get: () => true });
-				Object.defineProperty(document, "visibilityState", { configurable: true, get: () => "hidden" });
+				Object.defineProperty(document, "visibilityState", {
+					configurable: true,
+					get: () => "hidden"
+				});
 			});
-			test.info().annotations.push({ description: "document.hidden stubbed: Playwright keeps every page visible", type: "note" });
+			test.info().annotations.push({
+				description: "document.hidden stubbed: Playwright keeps every page visible",
+				type: "note"
+			});
 		}
 		await expect.poll(async () => pageB.evaluate(() => document.hidden)).toBe(true);
 		await pageB.evaluate(async () => {
@@ -125,10 +163,17 @@ test.describe("pauseBackgroundPlayers", () => {
 		});
 		await expectPlayerState(pageB, PlayerStates.PLAYING, watch);
 		// A background tab resuming playback must never steal playback from the tab the user is watching.
-		await expectToStay(async () => getValueFromYouTubePlayer(pageA, "getPlayerState", watch), PlayerStates.PLAYING, { page: pageA });
+		await expectToStay(
+			async () => getValueFromYouTubePlayer(pageA, "getPlayerState", watch),
+			PlayerStates.PLAYING,
+			{ page: pageA }
+		);
 		await pageB.close();
 	});
-	test("should persist background player pausing after navigation on watch", async ({ context, page }) => {
+	test("should persist background player pausing after navigation on watch", async ({
+		context,
+		page
+	}) => {
 		test.setTimeout(120_000);
 		const pageA = page;
 		const pageB = await context.newPage();
@@ -173,10 +218,17 @@ test.describe("pauseBackgroundPlayers", () => {
 		await expectPlayerState(pageA, PlayerStates.PLAYING, watch);
 		// shorts sits outside includePages, so a player starting there must never pause the watch tab.
 		await openAndPlayVideo(pageB, shorts);
-		await expectToStay(async () => getValueFromYouTubePlayer(pageA, "getPlayerState", watch), PlayerStates.PLAYING, { page: pageA });
+		await expectToStay(
+			async () => getValueFromYouTubePlayer(pageA, "getPlayerState", watch),
+			PlayerStates.PLAYING,
+			{ page: pageA }
+		);
 		await pageB.close();
 	});
-	test("should keep pausing other tabs after an in-page navigation on watch", async ({ context, page }) => {
+	test("should keep pausing other tabs after an in-page navigation on watch", async ({
+		context,
+		page
+	}) => {
 		test.setTimeout(120_000);
 		const pageA = page;
 		const pageB = await context.newPage();

@@ -26,7 +26,9 @@ test.describe("customFontFamily", () => {
 		});
 		test(`does not apply font by default on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
-			const hasStyle = await page.evaluate(() => !!document.getElementById("yte-custom-font-family"));
+			const hasStyle = await page.evaluate(
+				() => !!document.getElementById("yte-custom-font-family")
+			);
 			test.expect(hasStyle).toBe(false);
 		});
 		test(`removes style element after disable on ${pageType}`, async ({ page }) => {

@@ -10,7 +10,13 @@ import {
 	expectFeatureMenuItemToBeTruthy
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
-import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	clickFeatureButton,
+	clickFeatureMenuItem,
+	disableFeature,
+	enableFeature,
+	setOption
+} from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 import { freezeAndGetTime, waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
@@ -41,12 +47,18 @@ test.describe("copyTimestampUrlButton", () => {
 			// The label is only "Copied" for 1000 ms after the click, so read it before the (slower) clipboard.
 			await expect
 				.poll(async () => {
-					return await page.locator("#yte-feature-copyTimestampUrlButton-button").getAttribute("data-title");
+					return await page
+						.locator("#yte-feature-copyTimestampUrlButton-button")
+						.getAttribute("data-title");
 				})
 				.toContain("Copied");
-			await expect.poll(async () => await getClipboardText(page)).toMatch(new RegExp(`^https:\\/\\/youtu\\.be\\/.+\\?t=${expectedTimestamp}$`));
+			await expect
+				.poll(async () => await getClipboardText(page))
+				.toMatch(new RegExp(`^https:\\/\\/youtu\\.be\\/.+\\?t=${expectedTimestamp}$`));
 		});
-		test(`copy timestamp url button should restore the button label one second after copying on ${pageType}`, async ({ page }) => {
+		test(`copy timestamp url button should restore the button label one second after copying on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "copyTimestampUrlButton.button.placement", left);
 			await enableFeature(page, "copyTimestampUrlButton.button.enabled");
@@ -59,7 +71,9 @@ test.describe("copyTimestampUrlButton", () => {
 			// The button is not a toggle: the click listener restores the original label 1000 ms later.
 			await expect.poll(async () => await button.getAttribute("data-title")).toBe(label);
 		});
-		test(`copy timestamp url button should persist after navigation on ${pageType}`, async ({ page }) => {
+		test(`copy timestamp url button should persist after navigation on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "copyTimestampUrlButton.button.placement", left);
 			await enableFeature(page, "copyTimestampUrlButton.button.enabled");
@@ -68,7 +82,9 @@ test.describe("copyTimestampUrlButton", () => {
 			await navigateToPageType(page, pageType);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-copyTimestampUrlButton-button");
 		});
-		test(`copy timestamp url button should re-appear after disable then re-enable on ${pageType}`, async ({ page }) => {
+		test(`copy timestamp url button should re-appear after disable then re-enable on ${pageType}`, async ({
+			page
+		}) => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "copyTimestampUrlButton.button.placement", left);
 			await enableFeature(page, "copyTimestampUrlButton.button.enabled");
@@ -91,7 +107,9 @@ test.describe("copyTimestampUrlButton", () => {
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-copyTimestampUrlButton-button");
 	});
 
-	test("copy timestamp url button should copy the timestamp url from the feature menu item on watch", async ({ page }) => {
+	test("copy timestamp url button should copy the timestamp url from the feature menu item on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await waitForYoutubePlayerReady(page, watch);
 		const start = await freezeAndGetTime(page, watch);
@@ -102,18 +120,31 @@ test.describe("copyTimestampUrlButton", () => {
 		await expectFeatureMenuItemToBeTruthy(page, "yte-feature-copyTimestampUrlButton-menuitem");
 		await clickFeatureMenuItem(page, watch, "yte-feature-copyTimestampUrlButton-menuitem");
 		// getFeatureButton resolves to the menu item, so the "Copied!" feedback lands on it instead of a button.
-		await expect.poll(async () => await page.locator("#yte-feature-copyTimestampUrlButton-menuitem").getAttribute("data-title")).toContain("Copied");
-		await expect.poll(async () => await getClipboardText(page)).toMatch(new RegExp(`^https:\\/\\/youtu\\.be\\/.+\\?t=${expectedTimestamp}$`));
+		await expect
+			.poll(
+				async () =>
+					await page
+						.locator("#yte-feature-copyTimestampUrlButton-menuitem")
+						.getAttribute("data-title")
+			)
+			.toContain("Copied");
+		await expect
+			.poll(async () => await getClipboardText(page))
+			.toMatch(new RegExp(`^https:\\/\\/youtu\\.be\\/.+\\?t=${expectedTimestamp}$`));
 	});
 
-	test("copy timestamp url button should use its configured default placement on watch", async ({ page }) => {
+	test("copy timestamp url button should use its configured default placement on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		// The feature overrides the shared buttonField default of feature_menu with the right player controls.
 		await enableFeature(page, "copyTimestampUrlButton.button.enabled");
 		await expectFeatureButtonToBeIn(page, "yte-feature-copyTimestampUrlButton-button", right);
 	});
 
-	test("copy timestamp url button should keep working after an in-page navigation on watch", async ({ page }) => {
+	test("copy timestamp url button should keep working after an in-page navigation on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "copyTimestampUrlButton.button.placement", left);
 		await enableFeature(page, "copyTimestampUrlButton.button.enabled");
@@ -124,10 +155,14 @@ test.describe("copyTimestampUrlButton", () => {
 		expect(videoId).toBeTruthy();
 		// The re-added button must copy the video that is playing now, not the one the page started on.
 		await clickFeatureButton(page, watch, "yte-feature-copyTimestampUrlButton-button", left);
-		await expect.poll(async () => await getClipboardText(page)).toContain(`https://youtu.be/${videoId}?t=`);
+		await expect
+			.poll(async () => await getClipboardText(page))
+			.toContain(`https://youtu.be/${videoId}?t=`);
 	});
 
-	test("copy timestamp url button should show Copied! in its hover tooltip and drop it a second later on watch", async ({ page }) => {
+	test("copy timestamp url button should show Copied! in its hover tooltip and drop it a second later on watch", async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "copyTimestampUrlButton.button.placement", right);
 		await enableFeature(page, "copyTimestampUrlButton.button.enabled");

@@ -13,8 +13,16 @@ import {
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, spaNavigateToFirstVideo, spaNavigateToHome } from "@/src/utils/_tests/navigation";
-import { loginRequiredPages, resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import {
+	navigateToPageType,
+	spaNavigateToFirstVideo,
+	spaNavigateToHome
+} from "@/src/utils/_tests/navigation";
+import {
+	loginRequiredPages,
+	resolveNonTargetPage,
+	resolvePageTypes
+} from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -33,13 +41,21 @@ const regularTileSelector =
 
 /** A single read would sample before the feature could have added the class, so hold the expectation for a settle window. */
 async function expectBodyClassToStayAbsent(page: Page): Promise<void> {
-	await expectToStay(async () => page.evaluate((className) => document.body.classList.contains(className), bodyClass), false, { page });
+	await expectToStay(
+		async () =>
+			page.evaluate((className) => document.body.classList.contains(className), bodyClass),
+		false,
+		{ page }
+	);
 }
 
 test.describe("hidePlaylistRecommendationsFromHomePage", () => {
 	for (const pageType of testPages) {
 		test(`hides playlist recommendations on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await expectBodyWithoutClass(page, bodyClass);
 			await enableFeature(page, "hidePlaylistRecommendationsFromHomePage.enabled");
@@ -47,7 +63,10 @@ test.describe("hidePlaylistRecommendationsFromHomePage", () => {
 			await expectElementsHidden(page, selectors);
 		});
 		test(`hides elements after navigation on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hidePlaylistRecommendationsFromHomePage.enabled");
 			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
@@ -60,7 +79,10 @@ test.describe("hidePlaylistRecommendationsFromHomePage", () => {
 			await expectElementsHidden(page, selectors);
 		});
 		test(`persists hide after full page reload on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hidePlaylistRecommendationsFromHomePage.enabled");
 			await expectBodyWithClass(page, bodyClass);
@@ -71,7 +93,10 @@ test.describe("hidePlaylistRecommendationsFromHomePage", () => {
 			await expectElementsHidden(page, selectors);
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
+			test.skip(
+				!hasAuthState() && loginRequiredPages.includes(pageType),
+				`${pageType} requires login`
+			);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hidePlaylistRecommendationsFromHomePage.enabled");
 			await expectBodyWithClass(page, bodyClass);
@@ -95,7 +120,10 @@ test.describe("hidePlaylistRecommendationsFromHomePage", () => {
 		const sampleTiles = async () =>
 			page.evaluate((selector) => {
 				const sampled = Array.from(document.querySelectorAll<HTMLElement>(selector)).slice(0, 12);
-				return { hidden: sampled.filter((tile) => getComputedStyle(tile).display === "none").length, total: sampled.length };
+				return {
+					hidden: sampled.filter((tile) => getComputedStyle(tile).display === "none").length,
+					total: sampled.length
+				};
 			}, regularTileSelector);
 		let tiles = await sampleTiles();
 		for (let attempt = 0; attempt < 5 && tiles.total === 0; attempt++) {
@@ -107,7 +135,9 @@ test.describe("hidePlaylistRecommendationsFromHomePage", () => {
 		test.skip(tiles.total === 0, "home feed lists no video tiles");
 		expect(tiles.hidden).toBe(0);
 	});
-	test(`drops the hide class when SPA navigating off home and restores it on return`, async ({ page }) => {
+	test(`drops the hide class when SPA navigating off home and restores it on return`, async ({
+		page
+	}) => {
 		test.skip(!hasAuthState() && loginRequiredPages.includes(home), `${home} requires login`);
 		await navigateToPageType(page, home);
 		await enableFeature(page, "hidePlaylistRecommendationsFromHomePage.enabled");

@@ -6,7 +6,12 @@ import { metadata } from "@/src/features/automaticallyDisableAutoPlay/index.meta
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage, spaNavigateToFirstVideo, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	reloadPage,
+	spaNavigateToFirstVideo,
+	spaNavigateToRelatedVideo
+} from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -34,7 +39,10 @@ async function setAutoPlayState(page: Page, enabled: boolean) {
 		await reloadPage(page, watch);
 		await expect(toggle).toBeAttached();
 	}
-	test.skip(!(await toggle.isVisible()), "YouTube folded the autoplay toggle away on this load, so neither the test nor the feature can click it");
+	test.skip(
+		!(await toggle.isVisible()),
+		"YouTube folded the autoplay toggle away on this load, so neither the test nor the feature can click it"
+	);
 	const currentState = await getAutoPlayState(page);
 	if (currentState !== enabled) {
 		await toggle.click();
@@ -56,9 +64,17 @@ test.describe("automaticallyDisableAutoPlay", () => {
 			await enableFeature(page, "automaticallyDisableAutoPlay.enabled");
 			// Autoplay is already off, so a single poll would pass on its first sample. Watch the state for longer
 			// than the enable task's settle window (10 x 300 ms) so a stray click would be observed.
-			await expectToStay(() => getAutoPlayState(page), false, { durationMs: 4000, intervalMs: 500, page });
+			await expectToStay(() => getAutoPlayState(page), false, {
+				durationMs: 4000,
+				intervalMs: 500,
+				page
+			});
 			await disableFeature(page, "automaticallyDisableAutoPlay.enabled");
-			await expectToStay(() => getAutoPlayState(page), false, { durationMs: 4000, intervalMs: 500, page });
+			await expectToStay(() => getAutoPlayState(page), false, {
+				durationMs: 4000,
+				intervalMs: 500,
+				page
+			});
 		});
 		test(`restores autoplay when disabled after being enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType, ["autoPlay"]);
@@ -84,7 +100,9 @@ test.describe("automaticallyDisableAutoPlay", () => {
 	}
 
 	// The cases below run on watch only: makeNavigateTask and makeEnableTask have no page branch beyond isWatchPage().
-	test(`keeps autoplay on for later videos once the user turns it back on on ${watch}`, async ({ page }) => {
+	test(`keeps autoplay on for later videos once the user turns it back on on ${watch}`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch, ["autoPlay"]);
 		await setAutoPlayState(page, true);
 		await enableFeature(page, "automaticallyDisableAutoPlay.enabled");
@@ -97,9 +115,15 @@ test.describe("automaticallyDisableAutoPlay", () => {
 		// reads as on again only once that has happened. The navigate task then gets 10 attempts at the default
 		// 500 ms interval, so watch longer than that window.
 		await expect.poll(() => getAutoPlayState(page), { timeout: 10000 }).toBe(true);
-		await expectToStay(() => getAutoPlayState(page), true, { durationMs: 6000, intervalMs: 500, page });
+		await expectToStay(() => getAutoPlayState(page), true, {
+			durationMs: 6000,
+			intervalMs: 500,
+			page
+		});
 	});
-	test(`disables autoplay after an in-page navigation from ${channelVideosPage} onto a watch page`, async ({ page }) => {
+	test(`disables autoplay after an in-page navigation from ${channelVideosPage} onto a watch page`, async ({
+		page
+	}) => {
 		await navigateToPageType(page, watch, ["autoPlay"]);
 		// YouTube remembers the autonav preference across loads, so turning it on here is what makes the video reached
 		// below start with autoplay on and the final assertion depend on the feature.

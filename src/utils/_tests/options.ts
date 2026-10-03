@@ -14,12 +14,23 @@ const CHECKBOX_SETTLE_TIMEOUT = 15000;
  * and then polling the rendered state waits for that storage round trip instead, so a settled `toBeChecked()`
  * doubles as proof that the write landed.
  */
-export async function setCheckbox(page: Page, label: string, checked: boolean, timeout = CHECKBOX_SETTLE_TIMEOUT): Promise<Locator> {
+export async function setCheckbox(
+	page: Page,
+	label: string,
+	checked: boolean,
+	timeout = CHECKBOX_SETTLE_TIMEOUT
+): Promise<Locator> {
 	const checkbox = page.getByLabel(label, { exact: true });
-	await expect(checkbox, `checkbox "${label}" has to be interactable before it can be toggled`).toBeEnabled({ timeout });
+	await expect(
+		checkbox,
+		`checkbox "${label}" has to be interactable before it can be toggled`
+	).toBeEnabled({ timeout });
 	if ((await checkbox.isChecked()) !== checked) {
 		await checkbox.click();
 	}
-	await expect(checkbox, `checkbox "${label}" should have settled on ${checked ? "checked" : "unchecked"}`).toBeChecked({ checked, timeout });
+	await expect(
+		checkbox,
+		`checkbox "${label}" should have settled on ${checked ? "checked" : "unchecked"}`
+	).toBeChecked({ checked, timeout });
 	return checkbox;
 }

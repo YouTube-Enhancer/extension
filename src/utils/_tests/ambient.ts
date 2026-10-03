@@ -20,8 +20,11 @@ const openSheetAmbientRowSelector = `${shortsOpenSheetSelector} :is(${shortsAmbi
 export async function describeShortsSheet(page: Page): Promise<string> {
 	return page.evaluate(
 		([menuButton, openSheet, items, row]) => {
-			const dropdowns = Array.from(document.querySelectorAll("ytd-popup-container tp-yt-iron-dropdown")).map(
-				(element) => `aria-hidden=${element.getAttribute("aria-hidden")} style=${(element.getAttribute("style") ?? "").slice(0, 40)}`
+			const dropdowns = Array.from(
+				document.querySelectorAll("ytd-popup-container tp-yt-iron-dropdown")
+			).map(
+				(element) =>
+					`aria-hidden=${element.getAttribute("aria-hidden")} style=${(element.getAttribute("style") ?? "").slice(0, 40)}`
 			);
 			const visibleItems = Array.from(document.querySelectorAll(items)).map((element) =>
 				(element.textContent ?? "").replace(/\s+/g, " ").trim().slice(0, 30)
@@ -34,7 +37,12 @@ export async function describeShortsSheet(page: Page): Promise<string> {
 				visibleItems
 			});
 		},
-		[shortsMenuButtonSelector, shortsOpenSheetSelector, openSheetItemsSelector, openSheetAmbientRowSelector] as const
+		[
+			shortsMenuButtonSelector,
+			shortsOpenSheetSelector,
+			openSheetItemsSelector,
+			openSheetAmbientRowSelector
+		] as const
 	);
 }
 
@@ -48,7 +56,9 @@ export async function hasAmbientModeMenuItem(page: Page, timeout = 4000): Promis
 	do {
 		const found = await page.evaluate(
 			([menuSelector, itemSelector]) => {
-				const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
+				const settingsButton = document.querySelector<HTMLButtonElement>(
+					"button.ytp-settings-button"
+				);
 				const settingsMenu = document.querySelector<HTMLDivElement>(menuSelector);
 				if (!settingsButton || !settingsMenu) return false;
 				const panel = settingsMenu.querySelector<HTMLDivElement>("div.ytp-panel-menu");
@@ -78,14 +88,21 @@ export async function readShortsAmbientState(page: Page): Promise<boolean | null
 	// The feature hides YouTube's popup container while it works the sheet itself; a read waits for that to be over
 	// rather than fight it for the one sheet.
 	await expect
-		.poll(async () => page.locator("ytd-popup-container").evaluate((element) => getComputedStyle(element).display !== "none"), { timeout: 5000 })
+		.poll(
+			async () =>
+				page
+					.locator("ytd-popup-container")
+					.evaluate((element) => getComputedStyle(element).display !== "none"),
+			{ timeout: 5000 }
+		)
 		.toBe(true)
 		.catch(() => {});
 	// Chained locators rather than one selector: the runner's selector engine does not take :is().
 	const sheetItems = page.locator(shortsOpenSheetSelector).locator(shortsSheetItemSelector);
 	let opened = false;
 	for (let attempt = 0; attempt < 3 && !opened; attempt++) {
-		if ((await sheetItems.count()) === 0) await page.locator(shortsMenuButtonSelector).first().click();
+		if ((await sheetItems.count()) === 0)
+			await page.locator(shortsMenuButtonSelector).first().click();
 		opened = await sheetItems
 			.first()
 			.waitFor({ state: "visible", timeout: 3000 })
@@ -108,7 +125,10 @@ export async function readShortsAmbientState(page: Page): Promise<boolean | null
 			throw error;
 		}
 	);
-	const state = hasRow ? (await row.locator(shortsAmbientSwitchSelector).first().getAttribute("aria-checked")) === "true" : null;
+	const state = hasRow
+		? (await row.locator(shortsAmbientSwitchSelector).first().getAttribute("aria-checked")) ===
+			"true"
+		: null;
 	await page.keyboard.press("Escape");
 	await sheetItems
 		.first()

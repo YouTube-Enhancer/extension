@@ -10,7 +10,13 @@ import {
 	expectFeatureMenuItemToBeTruthy
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
-import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	clickFeatureButton,
+	clickFeatureMenuItem,
+	disableFeature,
+	enableFeature,
+	setOption
+} from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
@@ -26,7 +32,11 @@ test.describe("flipVideoButtons", () => {
 			test(`horizontal flip button should be present on ${pageType}`, async ({ page }) => {
 				await navigateToPageType(page, pageType);
 				await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
-				await setOption(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.placement", right);
+				await setOption(
+					page,
+					"flipVideoButtons.buttons.flipVideoHorizontalButton.placement",
+					right
+				);
 				await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoHorizontalButton-button");
 			});
 		});
@@ -106,20 +116,38 @@ test.describe("flipVideoButtons", () => {
 		for (const placement of [left, right] as const) {
 			test(`flip buttons should render in ${placement}`, async ({ page }) => {
 				await navigateToPageType(page, watch);
-				await setOption(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.placement", placement);
-				await setOption(page, "flipVideoButtons.buttons.flipVideoVerticalButton.placement", placement);
+				await setOption(
+					page,
+					"flipVideoButtons.buttons.flipVideoHorizontalButton.placement",
+					placement
+				);
+				await setOption(
+					page,
+					"flipVideoButtons.buttons.flipVideoVerticalButton.placement",
+					placement
+				);
 				await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
 				await enableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
 				await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoHorizontalButton-button");
 				await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoVerticalButton-button");
-				await expectFeatureButtonToBeIn(page, "yte-feature-flipVideoHorizontalButton-button", placement);
-				await expectFeatureButtonToBeIn(page, "yte-feature-flipVideoVerticalButton-button", placement);
+				await expectFeatureButtonToBeIn(
+					page,
+					"yte-feature-flipVideoHorizontalButton-button",
+					placement
+				);
+				await expectFeatureButtonToBeIn(
+					page,
+					"yte-feature-flipVideoVerticalButton-button",
+					placement
+				);
 			});
 		}
 	});
 
 	test.describe("flipping the video", () => {
-		test("horizontal flip button should flip the video and restore it on a second click on watch", async ({ page }) => {
+		test("horizontal flip button should flip the video and restore it on a second click on watch", async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await setOption(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.placement", right);
 			await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
@@ -129,7 +157,9 @@ test.describe("flipVideoButtons", () => {
 			await clickFeatureButton(page, watch, "yte-feature-flipVideoHorizontalButton-button", right);
 			await expectVideoTransform(page, "scale(1, 1)");
 		});
-		test("vertical flip button should flip the video and restore it on a second click on watch", async ({ page }) => {
+		test("vertical flip button should flip the video and restore it on a second click on watch", async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await setOption(page, "flipVideoButtons.buttons.flipVideoVerticalButton.placement", right);
 			await enableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
@@ -155,7 +185,9 @@ test.describe("flipVideoButtons", () => {
 			await clickFeatureButton(page, watch, "yte-feature-flipVideoHorizontalButton-button", right);
 			await expectVideoTransform(page, "scale(1, -1)");
 		});
-		test("flip buttons should render in the feature menu and flip the video from it on watch", async ({ page }) => {
+		test("flip buttons should render in the feature menu and flip the video from it on watch", async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await setOption(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.placement", menu);
 			await setOption(page, "flipVideoButtons.buttons.flipVideoVerticalButton.placement", menu);
@@ -169,12 +201,22 @@ test.describe("flipVideoButtons", () => {
 	});
 
 	test.describe("fullscreen transition", () => {
-		test("flip buttons should move from left to right on fullscreen enter/exit", async ({ page }) => {
+		test("flip buttons should move from left to right on fullscreen enter/exit", async ({
+			page
+		}) => {
 			await navigateToPageType(page, watch);
 			await setOption(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.placement", left);
-			await setOption(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.fullscreenPlacement", right);
+			await setOption(
+				page,
+				"flipVideoButtons.buttons.flipVideoHorizontalButton.fullscreenPlacement",
+				right
+			);
 			await setOption(page, "flipVideoButtons.buttons.flipVideoVerticalButton.placement", left);
-			await setOption(page, "flipVideoButtons.buttons.flipVideoVerticalButton.fullscreenPlacement", right);
+			await setOption(
+				page,
+				"flipVideoButtons.buttons.flipVideoVerticalButton.fullscreenPlacement",
+				right
+			);
 			await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
 			await enableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
 			await expectFeatureButtonToBeIn(page, "yte-feature-flipVideoHorizontalButton-button", left);
@@ -192,6 +234,12 @@ test.describe("flipVideoButtons", () => {
 /** Asserts the inline transform the feature writes on the player's video element. */
 async function expectVideoTransform(page: Page, expected: string): Promise<void> {
 	await expect
-		.poll(async () => page.evaluate(() => document.querySelector<HTMLVideoElement>("#movie_player video.html5-main-video")?.style.transform ?? null))
+		.poll(async () =>
+			page.evaluate(
+				() =>
+					document.querySelector<HTMLVideoElement>("#movie_player video.html5-main-video")?.style
+						.transform ?? null
+			)
+		)
 		.toBe(expected);
 }
