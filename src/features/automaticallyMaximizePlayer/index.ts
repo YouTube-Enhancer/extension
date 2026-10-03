@@ -20,8 +20,8 @@ export default createFeature({
 			[makeMaximizeTask()],
 			["maximize"],
 			{
-				maxAttempts: 15,
-				overallTimeout: 20000,
+				maxAttempts: 60,
+				overallTimeout: 45000,
 				waitForLoaded: true
 			}
 		);
@@ -32,8 +32,8 @@ export default createFeature({
 			[makeMaximizeTask()],
 			["maximize"],
 			{
-				maxAttempts: 15,
-				overallTimeout: 20000,
+				maxAttempts: 60,
+				overallTimeout: 45000,
 				waitForLoaded: true
 			}
 		);
