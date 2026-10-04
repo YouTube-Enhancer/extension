@@ -32,7 +32,10 @@ export async function waitForAllElements(
 			if (resolved) return;
 			resolved = true;
 			observer.disconnect();
-			clearTimeout(retryTimer);
+			if (retryTimer !== undefined) {
+				clearTimeout(retryTimer);
+				retryTimer = undefined;
+			}
 			const missing = selectors.filter((_, i) => !foundElements[i]);
 			if (missing.length) {
 				console.warn(
@@ -57,7 +60,7 @@ export async function waitForAllElements(
 		const observer = new MutationObserver(check);
 		observer.observe(document.body, { childList: true, subtree: true });
 
-		let retryTimer: ReturnType<typeof setTimeout>;
+		let retryTimer: ReturnType<typeof setTimeout> | undefined;
 		let attempts = 0;
 
 		const scheduleRetry = () => {
@@ -144,9 +147,14 @@ export function waitForElement<T extends Element>(
 		if (existing) return resolve(existing);
 
 		let resolved = false;
+		let timeoutId: ReturnType<typeof setTimeout> | undefined;
 		const finish = (el: Nullable<T>) => {
 			if (resolved) return;
 			resolved = true;
+			if (timeoutId !== undefined) {
+				clearTimeout(timeoutId);
+				timeoutId = undefined;
+			}
 			unsubscribe();
 			resolve(el);
 		};
@@ -160,7 +168,7 @@ export function waitForElement<T extends Element>(
 			{ parent }
 		);
 
-		setTimeout(() => {
+		timeoutId = setTimeout(() => {
 			if (mode === "required") {
 				console.warn(
 					`[waitForElement] Timeout after ${timeout}ms — element not found: ${selector}`
@@ -178,6 +186,7 @@ export function waitForElement<T extends Element>(
  *
  * @param player - The YouTube movie player element (`#movie_player`)
  * @param timeout - Maximum time to wait in milliseconds before rejecting (default: 10000ms)
+ * @param options.isCancelled - Optional predicate; when it returns true the wait rejects and stops polling.
  *
  * @returns A promise that resolves with the initialized player element
  *
@@ -185,7 +194,8 @@ export function waitForElement<T extends Element>(
  */
 export async function waitForPlayerLoaded(
 	player: Nullable<YouTubePlayer>,
-	timeout = 10000
+	timeout = 10000,
+	options?: { isCancelled?: () => boolean }
 ): Promise<YouTubePlayer> {
 	if (!player) {
 		throw new Error("Player does not exist");
@@ -193,6 +203,10 @@ export async function waitForPlayerLoaded(
 	const start = performance.now();
 	return new Promise((resolve, reject) => {
 		const check = (): void => {
+			if (options?.isCancelled?.()) {
+				reject(new Error("Cancelled waiting for player to load"));
+				return;
+			}
 			let loaded = false;
 			try {
 				const state = player.getPlayerStateObject();
