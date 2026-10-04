@@ -1,13 +1,15 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync } from "fs";
 import { join, resolve } from "path";
 import postcss from "postcss";
+
+import { writeFormattedFile } from "@/src/utils/plugins/writeFormattedFile";
 
 interface HideSelectorEntry {
 	bodyClass: string;
 	selectors: string[];
 }
 
-export default function generateHideFeatureSelectors(): void {
+export default async function generateHideFeatureSelectors(): Promise<void> {
 	const featuresDir = resolve(process.cwd(), "src/features");
 	const outputDir = resolve(featuresDir, "__tests__", "__generated__");
 	const outputFile = resolve(outputDir, "hideFeatureSelectors.ts");
@@ -69,11 +71,11 @@ export default function generateHideFeatureSelectors(): void {
 		mkdirSync(outputDir, { recursive: true });
 	}
 
-	// Write the generated output.
 	const output = generateTypeScriptOutput(allEntries);
-
-	writeFileSync(outputFile, output, "utf-8");
-	console.log(`Generated ${outputFile}`);
+	const written = await writeFormattedFile(outputFile, output);
+	if (written) {
+		console.log(`Generated ${outputFile}`);
+	}
 }
 
 function capitalize(s: string): string {
@@ -88,38 +90,20 @@ function extractSection(dirName: string, bodyClass: string): string {
 }
 
 function generateTypeScriptOutput(entries: Record<string, HideSelectorEntry>): string {
+	const sorted = (Object.entries(entries) as [string, HideSelectorEntry][]).sort(([a], [b]) =>
+		a.localeCompare(b)
+	);
 	const lines: string[] = [
 		"// Auto-generated. Do not edit manually.",
 		"export const hideFeatureSelectors = {"
 	];
-	const sorted = Object.entries(entries).sort(([a], [b]) =>
-		(a as string).localeCompare(b as string)
-	) as [string, HideSelectorEntry][];
 	for (const [idx, [key, { bodyClass, selectors }]] of sorted.entries()) {
 		const isLast = idx === sorted.length - 1;
-		const qBody = quote(bodyClass);
-		const qSelectors = selectors.map((s: string) => quote(s));
-		const selectorLine = `selectors: [${qSelectors.join(", ")}]`;
-		const fullLine = `\t${key}: { bodyClass: ${qBody}, ${selectorLine} }${isLast ? "" : ","}`;
-		if (selectors.length > 0 && fullLine.length <= 150) {
-			lines.push(fullLine);
-		} else {
-			const entryComma = isLast ? "" : ",";
-			lines.push(`\t${key}: {`);
-			lines.push(`\t\tbodyClass: ${qBody},`);
-			const inlineSelectors = `\t\tselectors: [${qSelectors.join(", ")}]`;
-			if (inlineSelectors.length <= 150) {
-				lines.push(inlineSelectors);
-			} else {
-				lines.push(`\t\tselectors: [`);
-				for (let i = 0; i < qSelectors.length; i++) {
-					const comma = i < qSelectors.length - 1 ? "," : "";
-					lines.push(`\t\t\t${qSelectors[i]}${comma}`);
-				}
-				lines.push(`\t\t]`);
-			}
-			lines.push(`\t}${entryComma}`);
-		}
+		const qSelectors = selectors.map((s: string) => quote(s)).join(", ");
+		lines.push(`\t${key}: {`);
+		lines.push(`\t\tbodyClass: ${quote(bodyClass)},`);
+		lines.push(`\t\tselectors: [${qSelectors}]`);
+		lines.push(`\t}${isLast ? "" : ","}`);
 	}
 	lines.push("} as const;");
 	lines.push("");
