@@ -136,12 +136,21 @@ export function setNativeButtonBusy(host: YtButtonViewModelElement, busy: boolea
  */
 export function waitForNativeButtonComponent(timeout = 10000): Promise<boolean> {
 	if (isNativeButtonComponentAvailable()) return Promise.resolve(true);
-	return Promise.race([
-		customElements.whenDefined("yt-button-view-model").then(() => true),
-		new Promise<boolean>((resolve) => {
-			window.setTimeout(() => resolve(false), timeout);
-		})
-	]);
+	return new Promise((resolve) => {
+		let settled = false;
+		let timer: number | undefined;
+		const settle = (value: boolean) => {
+			if (settled) return;
+			settled = true;
+			if (timer !== undefined) {
+				clearTimeout(timer);
+				timer = undefined;
+			}
+			resolve(value);
+		};
+		timer = window.setTimeout(() => settle(false), timeout);
+		void customElements.whenDefined("yt-button-view-model").then(() => settle(true));
+	});
 }
 
 const customIconClasses = new Map<string, string>();
