@@ -97,7 +97,9 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 
 		if (resolved.waitForLoaded) {
 			try {
-				await waitForPlayerLoaded(player, resolved.overallTimeout);
+				await waitForPlayerLoaded(player, resolved.overallTimeout, {
+					isCancelled: () => this.runGenerations.get(featureId) !== generation
+				});
 			} catch {
 				return tasks.map(() => false);
 			}
