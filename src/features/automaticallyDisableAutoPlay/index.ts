@@ -207,7 +207,7 @@ export default createFeature({
 	},
 	onDisable: () => {
 		unwatchToggle();
-		void registry.playerManager.executeWithRetries(
+		void registry.executeWithRetries(
 			metadata.id,
 			[makeDisableTask()],
 			["disableAutoPlay"],
@@ -219,7 +219,7 @@ export default createFeature({
 		);
 	},
 	onEnable: () => {
-		void registry.playerManager.executeWithRetries(
+		void registry.executeWithRetries(
 			metadata.id,
 			[makeEnableTask()],
 			["enableAutoPlay"],
@@ -234,7 +234,7 @@ export default createFeature({
 		// Each video gets its own click budget and stability count; both otherwise reset only on disable.
 		toggleClickAttempts = 0;
 		stableOffReads = 0;
-		void registry.playerManager.executeWithRetries(
+		void registry.executeWithRetries(
 			metadata.id,
 			[makeNavigateTask()],
 			["navigateAutoPlay"],

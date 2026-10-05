@@ -26,7 +26,7 @@ function disableCaptions() {
 	captionsWhereEnabled = false;
 	quietAttempts = 0;
 	// A pre-roll ad can run for the better part of a minute; the attempts have to outlast it.
-	void registry.playerManager.executeWithRetries(
+	void registry.executeWithRetries(
 		"automaticallyDisableClosedCaptions",
 		[disableCaptionsTask],
 		["disableCaptions"],
@@ -73,7 +73,7 @@ export default createFeature({
 	...metadata,
 	onDisable: async () => {
 		// A run still watching captions must not turn them off after the feature is off
-		registry.playerManager.cleanup("automaticallyDisableClosedCaptions");
+		registry.cleanupPlayerRetry("automaticallyDisableClosedCaptions");
 		const subtitlesButton = await clickSubtitlesButton();
 		// If player element is not available, return
 		if (!subtitlesButton) return;

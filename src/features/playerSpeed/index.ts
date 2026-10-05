@@ -126,7 +126,7 @@ function setupPlaybackSpeedChangeListener() {
 			if (speed === lastSpeed) return;
 			lastSpeed = speed;
 			void updateSpeedButtons(speed);
-			const stateAPI = registry.stateManager.getStateAPI(metadata.id);
+			const stateAPI = registry.getStateAPI(metadata.id);
 			stateAPI.setState((prev) => ({ ...prev, playbackSpeed: speed }));
 		};
 		const parseSpeed = (text: Nullable<string>): Nullable<number> => {
@@ -232,7 +232,7 @@ function reapplyEnforcedSpeed(urlVideoId: Nullable<string>) {
 	if (automaticReapplies.count >= MAX_AUTOMATIC_REAPPLIES) return;
 	automaticReapplies.count++;
 	const { channelSpeeds, speed } = enforcedConfig;
-	void registry.playerManager.executeWithRetries(
+	void registry.executeWithRetries(
 		metadata.id,
 		[makePlayerSpeedTask(speed, channelSpeeds)],
 		["reapplySpeed"],
@@ -248,7 +248,7 @@ function reapplyEnforcedSpeed(urlVideoId: Nullable<string>) {
 function recordExternalSpeed(speed: number) {
 	if (speed === lastRecordedSpeed) return;
 	lastRecordedSpeed = speed;
-	const stateAPI = registry.stateManager.getStateAPI(metadata.id);
+	const stateAPI = registry.getStateAPI(metadata.id);
 	stateAPI.setState((prev) => ({ ...prev, playbackSpeed: speed }));
 	updatePlaybackSpeedButtons(speed);
 }
@@ -285,7 +285,7 @@ export default createFeature({
 		if (!enabled) return;
 		enforcedConfig = { channelSpeeds, speed };
 		clearSessionSpeed();
-		void registry.playerManager.executeWithRetries(
+		void registry.executeWithRetries(
 			metadata.id,
 			[makePlayerSpeedTask(speed, channelSpeeds)],
 			["setSpeed"],
@@ -301,14 +301,14 @@ export default createFeature({
 	},
 	onDisable: () => {
 		enforcedConfig = null;
-		registry.playerManager.cleanup(metadata.id);
+		registry.cleanupPlayerRetry(metadata.id);
 		detachRateChangeListener();
 		clearManualOverride();
 		clearSessionSpeed();
 		resetRecordedSpeed();
-		const speed = registry.stateManager.getStateAPI(metadata.id).getState()?.playbackSpeed ?? 1;
+		const speed = registry.getStateAPI(metadata.id).getState()?.playbackSpeed ?? 1;
 		browserColorLog(`Restoring player speed to ${speed}`, "FgMagenta");
-		void registry.playerManager.executeWithRetries(
+		void registry.executeWithRetries(
 			metadata.id,
 			[makePlayerSpeedTask(speed)],
 			["restoreSpeed"],
@@ -329,7 +329,7 @@ export default createFeature({
 		clearManualOverride();
 		clearSessionSpeed();
 		resetRecordedSpeed();
-		void registry.playerManager.executeWithRetries(
+		void registry.executeWithRetries(
 			metadata.id,
 			[makePlayerSpeedTask(speed, channelSpeeds)],
 			["setSpeed"],
@@ -358,7 +358,7 @@ export default createFeature({
 		setupPlaybackSpeedChangeListener();
 		clearManualOverride();
 		resetRecordedSpeed();
-		void registry.playerManager.executeWithRetries(
+		void registry.executeWithRetries(
 			metadata.id,
 			[makePlayerSpeedTask(effectiveSpeed, channelSpeeds)],
 			["setSpeed"],

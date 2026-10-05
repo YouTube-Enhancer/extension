@@ -13,7 +13,7 @@ import { restorePlayerVolume, setPlayerVolume } from "./utils";
  * initialization, which reads YouTube's stored volume back.
  */
 function applyVolume(volume: number) {
-	void registry.playerManager.executeWithRetries(
+	void registry.executeWithRetries(
 		"globalVolume",
 		[() => applyVolumeTask(volume)],
 		["applyVolume"],
@@ -50,7 +50,7 @@ export default createFeature({
 		applyVolume(volume);
 	},
 	onDisable: async () => {
-		registry.playerManager.cleanup("globalVolume");
+		registry.cleanupPlayerRetry("globalVolume");
 		const playerContainer = getPlayerContainer();
 		if (!playerContainer) return;
 		await restorePlayerVolume(playerContainer);

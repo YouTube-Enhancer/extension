@@ -343,6 +343,6 @@ export default createFeature({
 	},
 	onNavigate: () => {
 		cleanupPlaylistManagementButtons();
-		setupPlaylistManagementButtons(registry.configManager.getLast("playlistManagementButtons"));
+		setupPlaylistManagementButtons(registry.getConfig("playlistManagementButtons"));
 	}
 });

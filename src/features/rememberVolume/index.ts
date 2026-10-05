@@ -29,7 +29,7 @@ function queueVolumeReapply(stateAPI: FeatureStateAPI<"rememberVolume">): void {
 		}
 		return true;
 	};
-	void registry.playerManager.executeWithRetries("rememberVolume", [task], ["reapplyVolume"], {
+	void registry.executeWithRetries("rememberVolume", [task], ["reapplyVolume"], {
 		waitForLoaded: true
 	});
 }

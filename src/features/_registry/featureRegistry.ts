@@ -1,8 +1,14 @@
 import type {
-	AnyFeatureBase,
-	FeatureKeys,
-	FeatureKeysWithState,
-	FeatureState
+    PlayerRetryConfig,
+    PlayerRetryKey,
+    PlayerTask
+} from "@/src/features/_registry/featurePlayerManager";
+import type {
+    AnyFeatureBase,
+    FeatureKeys,
+    FeatureKeysWithState,
+    FeatureState,
+    FeatureStateAPI
 } from "@/src/features/_registry/types";
 import type { configuration } from "@/src/types";
 
@@ -20,17 +26,32 @@ import { FeatureOrchestrator } from "./featureOrchestrator";
 import { hasState, isFeature, resolveEnabled } from "./featureRegistryCore";
 import { featureStateManager } from "./featureStateManager";
 
+/**
+ * Public registry surface for features, lifecycle wiring, and devtools.
+ * Managers stay private; callers use the facades below instead of reaching into
+ * orchestrator / lifecycleManager / playerManager / stateManager objects.
+ */
 export class FeatureRegistry extends FeatureManagerBase {
-	public configManager = featureConfigManager;
-	public readonly lifecycleManager = new FeatureLifecycleManager(
+	private readonly configManager = featureConfigManager;
+	private features = new Map<FeatureKeys, AnyFeatureBase>();
+	private readonly lifecycleManager = new FeatureLifecycleManager(
 		featureStateManager,
 		featureConfigManager
 	);
-	public navigationManager = featureNavigationManager;
-	public orchestrator = new FeatureOrchestrator(this);
-	public playerManager = featurePlayerManager;
-	public stateManager = featureStateManager;
-	private features = new Map<FeatureKeys, AnyFeatureBase>();
+	private readonly navigationManager = featureNavigationManager;
+	private readonly orchestrator: FeatureOrchestrator;
+	private readonly playerManager = featurePlayerManager;
+	private readonly stateManager = featureStateManager;
+
+	constructor() {
+		super();
+		this.orchestrator = new FeatureOrchestrator(this, this.lifecycleManager);
+	}
+
+	cleanupPlayerRetry(featureId?: PlayerRetryKey): void {
+		this.playerManager.cleanup(featureId);
+	}
+
 	destroyNavigationListener() {
 		this.navigationManager.destroyListener();
 	}
@@ -40,12 +61,44 @@ export class FeatureRegistry extends FeatureManagerBase {
 	async enableAll(options: Partial<configuration>) {
 		await this.orchestrator.enableAll(options);
 	}
+
+	executeWithRetries(
+		featureId: PlayerRetryKey,
+		tasks: PlayerTask[],
+		taskNames: string[],
+		config?: PlayerRetryConfig
+	): Promise<boolean[]> {
+		return this.playerManager.executeWithRetries(featureId, tasks, taskNames, config);
+	}
+
 	getAll() {
 		return Array.from(this.features.values());
 	}
+
+	getConfig<K extends FeatureKeys>(id: K): configuration[K] {
+		return this.configManager.getLast(id);
+	}
+
+	getConfigOr<K extends FeatureKeys>(id: K, fallback: configuration[K]): configuration[K] {
+		return this.configManager.getLastOr(id, fallback);
+	}
+
 	getFeature<K extends FeatureKeys>(id: K) {
 		return this.features.get(id);
 	}
+
+	getFeaturesSortedByPriority(): AnyFeatureBase[] {
+		return this.orchestrator.getFeaturesSortedByPriority();
+	}
+
+	getFeatureState<K extends FeatureKeysWithState>(id: K) {
+		return this.stateManager.getFeatureState(id);
+	}
+
+	getStateAPI<K extends FeatureKeysWithState>(id: K): FeatureStateAPI<K> {
+		return this.stateManager.getStateAPI(id);
+	}
+
 	hasButtons<K extends FeatureKeys>(
 		feature: AnyFeatureBase,
 		id: K
@@ -64,13 +117,31 @@ export class FeatureRegistry extends FeatureManagerBase {
 				"navigate",
 				() =>
 					runNavigationPipeline({
-						registry: this,
-						signature: navigationType
+						areDependenciesMet: (feature) => this.navigationManager.areDependenciesMet(feature),
+						getFeatures: () => this.orchestrator.getFeaturesSortedByPriority(),
+						invalidateButtonCache: () => this.orchestrator.invalidateButtonCache(),
+						isFeatureEnabled: (id) => this.orchestrator.isFeatureEnabled(id),
+						navigateFeature: (feature, config, signature) =>
+							this.lifecycleManager.navigateFeature(feature, config, signature),
+						signature: navigationType,
+						updateFeatureEnabledState: (id, enabled, config, options) =>
+							this.orchestrator.updateFeatureEnabledState(id, enabled, config, options),
+						verifyButtonPlacement: (id, config, canEnable) =>
+							this.orchestrator.verifyButtonPlacement(id, config, canEnable)
 					}),
 				{ subPhase: "pipeline" }
 			);
 		});
 	}
+
+	invalidateButtonCache(): void {
+		this.orchestrator.invalidateButtonCache();
+	}
+
+	isFeatureEnabled(id: FeatureKeys): boolean {
+		return this.orchestrator.isFeatureEnabled(id);
+	}
+
 	async notifyConfigChange<K extends FeatureKeys>(id: K, config: configuration[K]) {
 		await this.orchestrator.notifyConfigChange(id, config);
 	}
@@ -113,7 +184,24 @@ export class FeatureRegistry extends FeatureManagerBase {
 			await this.orchestrator.updateFeatureEnabledState(feature.id, enabled, config);
 		}
 	}
-	setSchema<K extends FeatureKeys>(id: K) {
+
+	setFeatureEnabled(id: FeatureKeys, enabled: boolean): void {
+		this.orchestrator.setFeatureEnabled(id, enabled);
+	}
+
+	async updateFeatureEnabledState<K extends FeatureKeys>(
+		id: K,
+		enabled: boolean,
+		config: configuration[K]
+	) {
+		await this.orchestrator.updateFeatureEnabledState(id, enabled, config);
+	}
+
+	protected override getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
+		return "featureRegistry" as FeatureKeys;
+	}
+
+	private setSchema<K extends FeatureKeys>(id: K) {
 		const featureMetadata = metadataRegistry.get(id);
 		if (!featureMetadata) return;
 		const feature = this.getFeature(id);
@@ -122,7 +210,8 @@ export class FeatureRegistry extends FeatureManagerBase {
 		if (!schema) return;
 		feature.schema = schema;
 	}
-	setStateSchema<K extends FeatureKeysWithState>(id: K) {
+
+	private setStateSchema<K extends FeatureKeysWithState>(id: K) {
 		const featureMetadata = metadataRegistry.get(id);
 		if (!featureMetadata) return;
 		const feature = this.getFeature(id);
@@ -130,16 +219,6 @@ export class FeatureRegistry extends FeatureManagerBase {
 		const schema = metadataRegistry.getStateSchema(id);
 		if (!schema) return;
 		feature.stateSchema = schema;
-	}
-	async updateFeatureEnabledState<K extends FeatureKeys>(
-		id: K,
-		enabled: boolean,
-		config: configuration[K]
-	) {
-		await this.orchestrator.updateFeatureEnabledState(id, enabled, config);
-	}
-	protected override getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
-		return "featureRegistry" as FeatureKeys;
 	}
 }
 export const registry = new FeatureRegistry();

@@ -137,7 +137,7 @@ function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController): void {
 		);
 		return true;
 	};
-	void registry.playerManager.executeWithRetries(
+	void registry.executeWithRetries(
 		"miniPlayer",
 		[task],
 		["attach-comments-auto-mini-player"],

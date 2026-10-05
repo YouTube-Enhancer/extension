@@ -1,3 +1,5 @@
+import type { configuration } from "@/src/types";
+
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
@@ -18,9 +20,15 @@ function clickSizeButton(): boolean {
 async function disableMaximizeIfEnabled() {
 	const maximizeFeature = registry.getFeature("automaticallyMaximizePlayer");
 	if (!maximizeFeature) return;
-	if (!registry.orchestrator.isFeatureEnabled("automaticallyMaximizePlayer")) return;
-	const config = registry.configManager.getLast("automaticallyMaximizePlayer");
-	await registry.lifecycleManager.disableFeature(maximizeFeature, config);
+	if (!registry.isFeatureEnabled("automaticallyMaximizePlayer")) return;
+	await registry.updateFeatureEnabledState(
+		"automaticallyMaximizePlayer",
+		false,
+		registry.getConfigOr(
+			"automaticallyMaximizePlayer",
+			maximizeFeature.defaults as configuration["automaticallyMaximizePlayer"]
+		)
+	);
 }
 
 function isInTheaterMode(): boolean {
@@ -51,40 +59,25 @@ function makeTheaterTask(desired: boolean) {
 export default createFeature({
 	...metadata,
 	onDisable: () => {
-		void registry.playerManager.executeWithRetries(
-			metadata.id,
-			[makeTheaterTask(false)],
-			["disableTheater"],
-			{
-				interval: 300,
-				maxAttempts: 20,
-				waitForLoaded: false
-			}
-		);
+		void registry.executeWithRetries(metadata.id, [makeTheaterTask(false)], ["disableTheater"], {
+			interval: 300,
+			maxAttempts: 20,
+			waitForLoaded: false
+		});
 	},
 	onEnable: async () => {
 		await disableMaximizeIfEnabled();
-		void registry.playerManager.executeWithRetries(
-			metadata.id,
-			[makeTheaterTask(true)],
-			["enableTheater"],
-			{
-				interval: 300,
-				maxAttempts: 20,
-				waitForLoaded: false
-			}
-		);
+		void registry.executeWithRetries(metadata.id, [makeTheaterTask(true)], ["enableTheater"], {
+			interval: 300,
+			maxAttempts: 20,
+			waitForLoaded: false
+		});
 	},
 	onNavigate: () => {
-		void registry.playerManager.executeWithRetries(
-			metadata.id,
-			[makeTheaterTask(true)],
-			["enableTheater"],
-			{
-				interval: 300,
-				maxAttempts: 20,
-				waitForLoaded: false
-			}
-		);
+		void registry.executeWithRetries(metadata.id, [makeTheaterTask(true)], ["enableTheater"], {
+			interval: 300,
+			maxAttempts: 20,
+			waitForLoaded: false
+		});
 	}
 });
