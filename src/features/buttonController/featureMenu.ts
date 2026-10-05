@@ -3,7 +3,7 @@ import type { AllButtonNames, Nullable } from "@/src/types";
 import eventManager from "@/src/events/EventManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featurePlayerManager } from "@/src/features/_registry/featurePlayerManager";
-import { getFeatureMenuConfig } from "@/src/ui/coreConfigStore";
+import { getFeatureMenuConfig } from "@/src/ui/configProvider";
 import { createStyledElement, createSVGElement } from "@/src/utils/dom/elements";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";

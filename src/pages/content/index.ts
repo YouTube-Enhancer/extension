@@ -13,6 +13,7 @@ import type {
 	ContentToBackgroundSendOnlyMessages,
 	ExtensionSendOnlyMessageMappings,
 	Messages,
+	Nullable,
 	Path,
 	PathValue,
 	StorageChanges
@@ -86,7 +87,7 @@ const getStoredSettings = async (): Promise<configuration> => {
 	if (Object.keys(storedSettings).length === 0) return defaultConfiguration;
 	return deepMerge(defaultConfiguration, storedSettings) as configuration;
 };
-let cachedSettings: configuration | null = null;
+let cachedSettings: Nullable<configuration> = null;
 const getCachedSettings = async (): Promise<configuration> => {
 	if (cachedSettings) return cachedSettings;
 	cachedSettings = await getStoredSettings();
@@ -95,9 +96,12 @@ const getCachedSettings = async (): Promise<configuration> => {
 const invalidateSettingsCache = (): void => {
 	cachedSettings = null;
 };
-const getStoredState = async (): Promise<{
+type StoredFeatureState = {
 	[K in FeatureKeysWithState]: FeatureState[`state:${K}`];
-}> => {
+};
+let cachedState: Nullable<StoredFeatureState> = null;
+const getStoredState = async (): Promise<StoredFeatureState> => {
+	if (cachedState) return cachedState;
 	const stateKeys = metadataRegistry
 		.getAll()
 		.filter((feature) => "stateSchemaInput" in feature)
@@ -106,9 +110,8 @@ const getStoredState = async (): Promise<{
 	const state = stateKeys.reduce(
 		(acc, key) => Object.assign(acc, { [key.replace("state:", "")]: result[key] }),
 		{}
-	) as {
-		[K in FeatureKeysWithState]: FeatureState[`state:${K}`];
-	};
+	) as StoredFeatureState;
+	cachedState = state;
 	return state;
 };
 void (async () => {
@@ -180,6 +183,9 @@ const onWindowMessage = (event: MessageEvent) => {
 						await storage.local.set({
 							[`state:${id}`]: state
 						});
+						if (cachedState) {
+							cachedState = { ...cachedState, [id]: state };
+						}
 						break;
 					}
 					case "pageLoaded": {

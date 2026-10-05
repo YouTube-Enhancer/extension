@@ -1,7 +1,7 @@
 import type { ExtensionSendOnlyMessages, Messages, Nullable } from "@/src/types";
 
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { setFeatureMenuConfig, setOnScreenDisplayConfig } from "@/src/ui/coreConfigStore";
+import { setFeatureMenuConfig, setOnScreenDisplayConfig } from "@/src/ui/configProvider";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { MESSAGE_ORIGIN } from "@/src/utils/messaging";
 
