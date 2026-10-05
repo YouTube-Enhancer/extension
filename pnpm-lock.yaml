@@ -52,7 +52,7 @@ importers:
         version: 0.4.6
       vite-plugin-css-injected-by-js:
         specifier: ^5.0.2
-        version: 5.0.2(vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13))
+        version: 5.0.2(vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)(yaml@2.9.1))
       webextension-polyfill:
         specifier: ^0.12.0
         version: 0.12.0
@@ -101,7 +101,7 @@ importers:
         version: 5.5.11
       '@vitejs/plugin-react-swc':
         specifier: ^4.3.3
-        version: 4.3.3(vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13))
+        version: 4.3.3(vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)(yaml@2.9.1))
       archiver:
         specifier: ^8.0.0
         version: 8.0.0
@@ -125,13 +125,19 @@ importers:
         version: 5.11.1(eslint@10.11.0(jiti@1.21.7)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@7.0.2)
       eslint-plugin-tailwindcss:
         specifier: 3.18.2
-        version: 3.18.2(tailwindcss@3.4.19(tsx@4.23.13))
+        version: 3.18.2(tailwindcss@3.4.19(tsx@4.23.13)(yaml@2.9.1))
       fs-extra:
         specifier: ^11.4.0
         version: 11.4.0
       get-installed-browsers:
         specifier: ^0.1.7
         version: 0.1.7
+      husky:
+        specifier: ^9.1.7
+        version: 9.1.7
+      lint-staged:
+        specifier: ^17.6.0
+        version: 17.6.0
       oxfmt:
         specifier: ^0.64.0
         version: 0.64.0
@@ -158,7 +164,7 @@ importers:
         version: 3.7.0
       tailwindcss:
         specifier: ^3.4.19
-        version: 3.4.19(tsx@4.23.13)
+        version: 3.4.19(tsx@4.23.13)(yaml@2.9.1)
       ts-json-as-const:
         specifier: ^1.0.7
         version: 1.0.7(typescript@7.0.2)
@@ -173,7 +179,7 @@ importers:
         version: 7.0.2
       vite:
         specifier: ^8.3.0
-        version: 8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)
+        version: 8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)(yaml@2.9.1)
       ws:
         specifier: ^8.21.3
         version: 8.21.3
@@ -2156,6 +2162,11 @@ packages:
     resolution: {integrity: sha512-eKCa6bwnJhvxj14kZk5NCPc6Hb6BdsU9DZcOnmQKSnO1VKrfV0zCvtttPZUsBvjmNDn8rpcJfpwSYnHBjc95MQ==}
     engines: {node: '>=18.18.0'}
 
+  husky@9.1.7:
+    resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   i18next@26.4.2:
     resolution: {integrity: sha512-RX+R0VLg13IbvRuJSxnqykUFS9vQZTl8wYpWPCIUDWVrSGjsQywB5Y+pjzrkboxGAuYfJZVH1InFTdgBdxq6ug==}
     peerDependencies:
@@ -2409,6 +2420,11 @@ packages:
 
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
+
+  lint-staged@17.6.0:
+    resolution: {integrity: sha512-nOhBfYkZEwkFtNzD5pK9s9LkcWoxJ+whLzEnhqi9nl7zTB5n7tg8+9iYgMGx2Wm3VlLu8cbNj0RACzY+nWi5iQ==}
+    engines: {node: '>=22.22.1'}
+    hasBin: true
 
   load-json-file@4.0.0:
     resolution: {integrity: sha512-Kx8hMakjX03tiGTLAIdJ+lL0htKnXjEZN6hk/tozf/WOuYGdZBJrZ+rCJRbVCugsjB3jMLn9746NsQIf5VjBMw==}
@@ -3107,6 +3123,10 @@ packages:
   streamx@2.28.1:
     resolution: {integrity: sha512-zEzXb0s5Cds7tqMH6rhZ05lcJydCWiQPEwiNngVqzsxCc962vLY4Uw+mW7od8kDH258k2Uz/JrOkdIAAhSh9VA==}
 
+  string-argv@0.3.2:
+    resolution: {integrity: sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q==}
+    engines: {node: '>=0.6.19'}
+
   string-width@4.2.3:
     resolution: {integrity: sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==}
     engines: {node: '>=8'}
@@ -3230,6 +3250,10 @@ packages:
 
   tiny-invariant@1.3.3:
     resolution: {integrity: sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==}
+
+  tinyexec@1.3.1:
+    resolution: {integrity: sha512-GCvB3aoys96IuDFBMcTB46JOR6mdMtAToqwiW8JlWhsoh1mhHi/xn9ss/Dg7N555GiJyEt2qzoG/NHCwM6h1EA==}
+    engines: {node: '>=18'}
 
   tinyglobby@0.2.17:
     resolution: {integrity: sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==}
@@ -3491,6 +3515,11 @@ packages:
   y18n@5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
     engines: {node: '>=10'}
+
+  yaml@2.9.1:
+    resolution: {integrity: sha512-3NxN8+78OdzbT7C/WjGsyfPAtJaN3FNDsWxv7Y7mcDsT/oOmgW8BpyQQFFBnvZE3j9Y2Sdz1ULFLezL7Eb2yFw==}
+    engines: {node: '>= 14.6'}
+    hasBin: true
 
   yargs-parser@20.2.9:
     resolution: {integrity: sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w==}
@@ -4439,11 +4468,11 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  '@vitejs/plugin-react-swc@4.3.3(vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13))':
+  '@vitejs/plugin-react-swc@4.3.3(vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)(yaml@2.9.1))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       '@swc/core': 1.16.2
-      vite: 8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)
+      vite: 8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)(yaml@2.9.1)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -4933,11 +4962,11 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-tailwindcss@3.18.2(tailwindcss@3.4.19(tsx@4.23.13)):
+  eslint-plugin-tailwindcss@3.18.2(tailwindcss@3.4.19(tsx@4.23.13)(yaml@2.9.1)):
     dependencies:
       fast-glob: 3.3.3
       postcss: 8.5.28
-      tailwindcss: 3.4.19(tsx@4.23.13)
+      tailwindcss: 3.4.19(tsx@4.23.13)(yaml@2.9.1)
 
   eslint-scope@9.1.2:
     dependencies:
@@ -5239,6 +5268,8 @@ snapshots:
 
   human-signals@8.0.1: {}
 
+  husky@9.1.7: {}
+
   i18next@26.4.2(typescript@7.0.2):
     optionalDependencies:
       typescript: 7.0.2
@@ -5418,6 +5449,14 @@ snapshots:
   lilconfig@3.1.3: {}
 
   lines-and-columns@1.2.4: {}
+
+  lint-staged@17.6.0:
+    dependencies:
+      picomatch: 4.0.7
+      string-argv: 0.3.2
+      tinyexec: 1.3.1
+    optionalDependencies:
+      yaml: 2.9.1
 
   load-json-file@4.0.0:
     dependencies:
@@ -5736,13 +5775,14 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.5.28
 
-  postcss-load-config@6.0.1(jiti@1.21.7)(postcss@8.5.28)(tsx@4.23.13):
+  postcss-load-config@6.0.1(jiti@1.21.7)(postcss@8.5.28)(tsx@4.23.13)(yaml@2.9.1):
     dependencies:
       lilconfig: 3.1.3
     optionalDependencies:
       jiti: 1.21.7
       postcss: 8.5.28
       tsx: 4.23.13
+      yaml: 2.9.1
 
   postcss-nested@6.2.0(postcss@8.5.28):
     dependencies:
@@ -6061,6 +6101,8 @@ snapshots:
       - bare-abort-controller
       - react-native-b4a
 
+  string-argv@0.3.2: {}
+
   string-width@4.2.3:
     dependencies:
       emoji-regex: 8.0.0
@@ -6149,7 +6191,7 @@ snapshots:
     dependencies:
       '@types/node': 20.19.43
 
-  tailwindcss@3.4.19(tsx@4.23.13):
+  tailwindcss@3.4.19(tsx@4.23.13)(yaml@2.9.1):
     dependencies:
       '@alloc/quick-lru': 5.3.0
       arg: 5.0.2
@@ -6168,7 +6210,7 @@ snapshots:
       postcss: 8.5.28
       postcss-import: 15.1.0(postcss@8.5.28)
       postcss-js: 4.1.0(postcss@8.5.28)
-      postcss-load-config: 6.0.1(jiti@1.21.7)(postcss@8.5.28)(tsx@4.23.13)
+      postcss-load-config: 6.0.1(jiti@1.21.7)(postcss@8.5.28)(tsx@4.23.13)(yaml@2.9.1)
       postcss-nested: 6.2.0(postcss@8.5.28)
       postcss-selector-parser: 6.1.4
       resolve: 1.22.12
@@ -6228,6 +6270,8 @@ snapshots:
       convert-hrtime: 5.0.0
 
   tiny-invariant@1.3.3: {}
+
+  tinyexec@1.3.1: {}
 
   tinyglobby@0.2.17:
     dependencies:
@@ -6394,11 +6438,11 @@ snapshots:
       d3-time: 3.1.0
       d3-timer: 3.0.1
 
-  vite-plugin-css-injected-by-js@5.0.2(vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)):
+  vite-plugin-css-injected-by-js@5.0.2(vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)(yaml@2.9.1)):
     dependencies:
-      vite: 8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)
+      vite: 8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)(yaml@2.9.1)
 
-  vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13):
+  vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)(yaml@2.9.1):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -6411,6 +6455,7 @@ snapshots:
       fsevents: 2.3.3
       jiti: 1.21.7
       tsx: 4.23.13
+      yaml: 2.9.1
 
   web-worker@1.5.0: {}
 
@@ -6443,6 +6488,9 @@ snapshots:
   xtend@4.0.2: {}
 
   y18n@5.0.8: {}
+
+  yaml@2.9.1:
+    optional: true
 
   yargs-parser@20.2.9: {}
 
