@@ -5,11 +5,28 @@ import { featureConfigManager } from "@/src/features/_registry/featureConfigMana
 import { resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
 import { reseedForNavigation } from "@/src/ui/configProvider";
 
-import type { FeatureRegistry } from "./featureRegistry";
-
 type NavigationPipelineDeps = {
-	registry: FeatureRegistry;
+	areDependenciesMet: (feature: AnyFeatureBase) => boolean;
+	getFeatures: () => AnyFeatureBase[];
+	invalidateButtonCache: () => void;
+	isFeatureEnabled: (id: FeatureKeys) => boolean;
+	navigateFeature: (
+		feature: AnyFeatureBase,
+		config: configuration[FeatureKeys],
+		signature: string
+	) => Promise<void>;
 	signature: string;
+	updateFeatureEnabledState: (
+		id: FeatureKeys,
+		enabled: boolean,
+		config: configuration[FeatureKeys],
+		options?: { skipButtons?: boolean }
+	) => Promise<void>;
+	verifyButtonPlacement: (
+		id: FeatureKeys,
+		config: configuration[FeatureKeys],
+		canEnable: boolean
+	) => Promise<void>;
 };
 
 type PreviousConfigs = Map<FeatureKeys, configuration[FeatureKeys]>;
@@ -22,30 +39,27 @@ type PreviousConfigs = Map<FeatureKeys, configuration[FeatureKeys]>;
  * Same-feature buttons stay sequential: each feature is fully processed before the next starts.
  */
 export async function runNavigationPipeline(deps: NavigationPipelineDeps): Promise<void> {
-	const { registry, signature } = deps;
-	const previousConfigs = capturePreviousConfigs(registry);
+	const previousConfigs = capturePreviousConfigs(deps.getFeatures());
 	const configs = await reseedForNavigation();
-	registry.orchestrator.invalidateButtonCache();
+	deps.invalidateButtonCache();
 
-	const features = registry.orchestrator.getFeaturesSortedByPriority();
-	for (const feature of features) {
-		await applyNavigationForFeature(registry, feature, configs, previousConfigs, signature);
+	for (const feature of deps.getFeatures()) {
+		await applyNavigationForFeature(deps, feature, configs, previousConfigs);
 	}
 }
 
 async function applyNavigationForFeature(
-	registry: FeatureRegistry,
+	deps: NavigationPipelineDeps,
 	feature: AnyFeatureBase,
 	configs: configuration,
-	previousConfigs: PreviousConfigs,
-	signature: string
+	previousConfigs: PreviousConfigs
 ): Promise<void> {
 	const { id } = feature;
 	const config = configs[id] ?? feature.defaults;
 	const enabled = resolveEnabled(config);
-	const depsMet = registry.navigationManager.areDependenciesMet(feature);
+	const depsMet = deps.areDependenciesMet(feature);
 	const canEnable = enabled && depsMet;
-	const wasEnabled = registry.orchestrator.isFeatureEnabled(id);
+	const wasEnabled = deps.isFeatureEnabled(id);
 	const previousConfig = previousConfigs.get(id);
 	const configChanged = featureConfigManager.hasChanged(previousConfig, config);
 	const stateChanged = canEnable !== wasEnabled;
@@ -55,26 +69,24 @@ async function applyNavigationForFeature(
 	if (stateChanged || configChanged) {
 		if (canEnable) {
 			// Lifecycle + config only; buttons are placed once after onNavigate below.
-			await registry.orchestrator.updateFeatureEnabledState(id, canEnable, config, {
-				skipButtons: true
-			});
+			await deps.updateFeatureEnabledState(id, canEnable, config, { skipButtons: true });
 		} else {
 			// Disable path must remove buttons and run onDisable.
-			await registry.orchestrator.updateFeatureEnabledState(id, canEnable, config);
+			await deps.updateFeatureEnabledState(id, canEnable, config);
 		}
 	}
 
 	if (!canEnable) return;
 
-	await registry.lifecycleManager.navigateFeature(feature, config, signature);
+	await deps.navigateFeature(feature, config, deps.signature);
 	// One placement pass per feature per navigation. handleButtonPlacement keeps same-feature
 	// buttons sequential so they stay adjacent.
-	await registry.orchestrator.verifyButtonPlacement(id, config, true);
+	await deps.verifyButtonPlacement(id, config, true);
 }
 
-function capturePreviousConfigs(registry: FeatureRegistry): PreviousConfigs {
+function capturePreviousConfigs(features: AnyFeatureBase[]): PreviousConfigs {
 	const previousConfigs: PreviousConfigs = new Map();
-	for (const feature of registry.getAll()) {
+	for (const feature of features) {
 		previousConfigs.set(feature.id, featureConfigManager.getLastOr(feature.id, feature.defaults));
 	}
 	return previousConfigs;

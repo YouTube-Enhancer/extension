@@ -4,7 +4,7 @@ import eventManager from "@/src/events/EventManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
-const stateAPI = registry.stateManager.getStateAPI("rememberVolume");
+const stateAPI = registry.getStateAPI("rememberVolume");
 export async function setupVolumeChangeListener() {
 	const IsWatchPage = isWatchPage();
 	const IsLivePage = isLivePage();

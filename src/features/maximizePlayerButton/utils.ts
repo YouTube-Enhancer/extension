@@ -12,7 +12,7 @@ import {
 import { getFeatureIcon } from "@/src/icons";
 import { waitForElement, waitForPlayerLoaded } from "@/src/utils/dom/wait";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
-const maximizePlayerButtonStateAPI = registry.stateManager.getStateAPI("maximizePlayerButton");
+const maximizePlayerButtonStateAPI = registry.getStateAPI("maximizePlayerButton");
 export type PlayerControllerState = {
 	header: HeaderState;
 	isProgrammaticClick: boolean;
@@ -201,7 +201,7 @@ export async function maximizePlayer(timeout = 2500) {
 				isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy"
 			)
 			?.hasAttribute("theater") ?? false;
-	const theaterConfig = registry.configManager.getLast("automaticTheaterMode");
+	const theaterConfig = registry.getConfig("automaticTheaterMode");
 	const theaterEnabled = "enabled" in theaterConfig && theaterConfig.enabled;
 	if (!inTheaterMode && !theaterEnabled) clickAndRestore(sizeElement);
 	adjustPlayer("add");
@@ -222,7 +222,7 @@ export async function minimizePlayer() {
 	const lastState = document.body.getAttribute("yte-size-button-state");
 	const sizeElement = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
 	if (lastState === "default" && sizeElement) {
-		const autoTheaterConfig = registry.configManager.getLast("automaticTheaterMode");
+		const autoTheaterConfig = registry.getConfig("automaticTheaterMode");
 		if (!("enabled" in autoTheaterConfig) || !autoTheaterConfig.enabled)
 			clickAndRestore(sizeElement);
 	}

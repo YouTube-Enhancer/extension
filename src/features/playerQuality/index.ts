@@ -313,7 +313,7 @@ function markManualOverride(): void {
 		"Manual quality change detected - suspending enforcement until navigation or config change",
 		"FgYellow"
 	);
-	registry.playerManager.cleanup(metadata.id);
+	registry.cleanupPlayerRetry(metadata.id);
 }
 
 /**
@@ -363,9 +363,9 @@ export default createFeature({
 	onDisable: () => {
 		// The enable run leaves a player state hook behind. Left alone it re-runs enforcement on the next state
 		// change, which supersedes the restore run below before it has done anything, so it goes first.
-		registry.playerManager.cleanup(metadata.id);
+		registry.cleanupPlayerRetry(metadata.id);
 		detachQualityChangeListener();
-		void registry.playerManager.executeWithRetries(
+		void registry.executeWithRetries(
 			metadata.id,
 			[makeRestoreQualityTask()],
 			["restoreQuality"],
@@ -388,7 +388,7 @@ export default createFeature({
 			preferPremium ?? false,
 			fpsPreference ?? "default"
 		);
-		void registry.playerManager.executeWithRetries(
+		void registry.executeWithRetries(
 			metadata.id,
 			[applyTask, verifyTask],
 			["applyQuality", "verifyQuality"],
@@ -408,7 +408,7 @@ export default createFeature({
 			preferPremium ?? false,
 			fpsPreference ?? "default"
 		);
-		void registry.playerManager.executeWithRetries(
+		void registry.executeWithRetries(
 			metadata.id,
 			[applyTask, verifyTask],
 			["applyQuality", "verifyQuality"],

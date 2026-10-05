@@ -15,7 +15,7 @@ export default createFeature({
 	...metadata,
 	onDisable: () => minimizePlayer(),
 	onEnable: () => {
-		void registry.playerManager.executeWithRetries(
+		void registry.executeWithRetries(
 			"automaticallyMaximizePlayer",
 			[makeMaximizeTask()],
 			["maximize"],
@@ -27,7 +27,7 @@ export default createFeature({
 		);
 	},
 	onNavigate: () => {
-		void registry.playerManager.executeWithRetries(
+		void registry.executeWithRetries(
 			"automaticallyMaximizePlayer",
 			[makeMaximizeTask()],
 			["maximize"],

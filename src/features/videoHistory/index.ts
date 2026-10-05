@@ -264,7 +264,7 @@ async function handleVideoChange(resumeType: VideoHistoryResumeType) {
 	]);
 	if (isArtist) return;
 	const { [videoId]: video_history_entry } = getVideoHistory(
-		registry.stateManager.getStateAPI("videoHistory")
+		registry.getStateAPI("videoHistory")
 	);
 	if (
 		video_history_entry &&
@@ -296,7 +296,7 @@ async function handleVideoChange(resumeType: VideoHistoryResumeType) {
 			videoId,
 			currentTime,
 			isWatched ? "watched" : "watching",
-			registry.stateManager.getStateAPI("videoHistory")
+			registry.getStateAPI("videoHistory")
 		);
 	};
 	eventManager.addEventListener(
@@ -359,7 +359,7 @@ function queueVideoChange(resumeType: VideoHistoryResumeType): void {
 		}
 		return true;
 	};
-	void registry.playerManager.executeWithRetries("videoHistory", [task], ["video-change"], {
+	void registry.executeWithRetries("videoHistory", [task], ["video-change"], {
 		waitForLoaded: true
 	});
 }

@@ -10,6 +10,7 @@ import { featureConfigManager } from "@/src/features/_registry/featureConfigMana
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featureNavigationManager } from "@/src/features/_registry/featureNavigationManager";
 
+import type { FeatureLifecycleManager } from "./featureLifecycleManager";
 import type { FeatureRegistry } from "./featureRegistry";
 
 import { FeatureManagerBase } from "./featureManagerBase";
@@ -53,7 +54,10 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 	private sortedFeaturesCacheDirty = true;
 	private updatingFeatures = new Set<FeatureKeys>();
 
-	constructor(private registry: FeatureRegistry) {
+	constructor(
+		private registry: FeatureRegistry,
+		private lifecycle: FeatureLifecycleManager
+	) {
 		super();
 	}
 
@@ -125,7 +129,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		featureConfigManager.setLast(id, config);
 		if (!featureConfigManager.hasChanged(prevConfig, config)) return;
 		await this.safelyExecute<void>(id, "config:lifecycle", async () => {
-			await this.registry.lifecycleManager.configChange(feature, config);
+			await this.lifecycle.configChange(feature, config);
 		});
 		const depsMet =
 			this.safelyExecuteSync<boolean>(
@@ -232,7 +236,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			await this.safelyExecute(
 				id,
 				"navigate",
-				async () => this.registry.lifecycleManager.navigateFeature(feature, config, navigationType),
+				async () => this.lifecycle.navigateFeature(feature, config, navigationType),
 				{
 					subPhase: "lifecycle"
 				}
@@ -293,7 +297,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			await this.safelyExecute(
 				id,
 				"enable",
-				async () => this.registry.lifecycleManager.enableFeature(feature, config),
+				async () => this.lifecycle.enableFeature(feature, config),
 				{ subPhase: "lifecycle" }
 			);
 		}
@@ -301,7 +305,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			await this.safelyExecute(
 				id,
 				"disable",
-				async () => this.registry.lifecycleManager.disableFeature(feature, config),
+				async () => this.lifecycle.disableFeature(feature, config),
 				{
 					subPhase: "lifecycle"
 				}
@@ -314,7 +318,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		for (const feature of features) {
 			const { [feature.id]: featureConfig } = options;
 			if (!featureConfig) continue;
-			await this.registry.lifecycleManager.initFeature(feature, featureConfig);
+			await this.lifecycle.initFeature(feature, featureConfig);
 			const enabledResult = this.safelyExecuteSync<boolean>(
 				feature.id,
 				"init:dependencies",

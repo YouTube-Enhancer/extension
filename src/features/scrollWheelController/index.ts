@@ -203,7 +203,7 @@ async function findPlayerContainer(
 		if (element) playerContainer = element;
 		return playerContainer !== null;
 	};
-	await registry.playerManager.executeWithRetries(
+	await registry.executeWithRetries(
 		controlFeatureIds[type],
 		[findPlayerTask],
 		["find player"],

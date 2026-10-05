@@ -65,7 +65,7 @@ const handleDevToolsMessage = async <T extends DevToolsMessageType>(
 				for (const feature of features) {
 					try {
 						(configs as Record<string, configuration[FeatureKeys]>)[feature.id] =
-							registry.configManager.getLast(feature.id);
+							registry.getConfig(feature.id);
 					} catch {
 						(configs as Record<string, configuration[FeatureKeys]>)[feature.id] = feature.defaults;
 					}
@@ -93,7 +93,7 @@ const handleDevToolsMessage = async <T extends DevToolsMessageType>(
 				let config: configuration[FeatureKeys] | undefined;
 				if (feature) {
 					try {
-						config = registry.configManager.getLast(message.data.id);
+						config = registry.getConfig(message.data.id);
 					} catch {
 						config = feature.defaults;
 					}
@@ -109,7 +109,7 @@ const handleDevToolsMessage = async <T extends DevToolsMessageType>(
 			}
 
 			case "devtools_get_feature_state": {
-				const state = registry.stateManager.getFeatureState(message.data.id);
+				const state = registry.getFeatureState(message.data.id);
 
 				return {
 					...messageBase,
