@@ -1,7 +1,8 @@
 import type { CoreFeatureKeys, FeatureKeys, NonFeatureKeys } from "@/src/features/_registry/types";
 import type { configuration, Path } from "@/src/types";
 
-import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
+import { featureLightDefaults } from "@/src/features/_registry/generatedFeatureLightManifest";
+
 const coreConfiguration = {
 	featureMenu: { openType: "click" },
 	language: "en-US",
@@ -20,6 +21,6 @@ export type CoreSettingsKey = Path<typeof coreConfiguration>;
 export const getDefaultConfiguration = () => {
 	return {
 		...coreConfiguration,
-		...(metadataRegistry.getDefaults() as Pick<configuration, FeatureKeys>)
+		...(featureLightDefaults as Pick<configuration, FeatureKeys>)
 	} satisfies configuration;
 };

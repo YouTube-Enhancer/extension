@@ -1,8 +1,8 @@
 import type { AnyFeatureBase, FeatureBase, FeatureKeys } from "@/src/features/_registry/types";
 
-import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
+import { featureLightFeatureIds } from "@/src/features/_registry/generatedFeatureLightManifest";
 
-const featureKeys = metadataRegistry.getAll().map((m) => m.id) as FeatureKeys[];
+const featureKeys: readonly FeatureKeys[] = featureLightFeatureIds;
 
 export function hasState(
 	feature: AnyFeatureBase

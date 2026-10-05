@@ -13,6 +13,8 @@ import type { configuration, Nullable } from "@/src/types";
 
 import { onDevToolsCacheInvalidate, sendDevToolsMessage } from "@/src/utils/messaging/devtools";
 
+export { invalidateDevToolsCache } from "@/src/utils/messaging/devtools";
+
 export type AllConfigsData = { [K in FeatureKeys]?: configuration[K] };
 
 export type CoreConfigData = {
@@ -125,10 +127,6 @@ export function coreConfigUpdateMutation(path: CoreFeatureKeys | NonFeatureKeys,
 
 let invalidateListener: Nullable<() => void> = null;
 let messageListenerAdded = false;
-
-export async function invalidateDevToolsCache(keys: string[]): Promise<void> {
-	await sendDevToolsMessage("devtools_invalidate_cache", { keys });
-}
 
 export function setupDevToolsMessageListener(): void {
 	if (messageListenerAdded) return;

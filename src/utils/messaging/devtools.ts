@@ -41,6 +41,11 @@ let pendingRequestCleanupIntervalId: Nullable<NodeJS.Timeout> = null;
 
 const onInvalidateCallbacks: Array<(keys: string[]) => void> = [];
 
+/** Content-script-safe cache invalidation; lives here so content never imports React Query hooks. */
+export async function invalidateDevToolsCache(keys: string[]): Promise<void> {
+	await sendDevToolsMessage("devtools_invalidate_cache", { keys });
+}
+
 export function onDevToolsCacheInvalidate(callback: (keys: string[]) => void): () => void {
 	onInvalidateCallbacks.push(callback);
 	return () => {
