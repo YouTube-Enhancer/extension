@@ -1,4 +1,4 @@
-import type { ButtonPlacement, FullscreenPlacement, YouTubePlayerDiv } from "@/src/types";
+import type { ButtonPlacement, FullscreenPlacement } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
@@ -11,8 +11,8 @@ import {
 } from "@/src/features/buttonController";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import { getFeatureIcon } from "@/src/icons";
+import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 import { createTooltip } from "@/src/utils/dom/tooltip";
-import { waitForElement } from "@/src/utils/dom/wait";
 import { getOSDConfig, showOSD } from "@/src/utils/osd";
 import { calculateAdjustedSpeed, getMinSpeed } from "@/src/utils/speed";
 
@@ -73,7 +73,7 @@ async function addPlaybackSpeedButton(
 	if (!videoElement) return;
 	const minSpeed = getMinSpeed(speed);
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
-	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+	const playerContainer = await waitForPagePlayer();
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();
 	if (playerVideoData.isLive && checkIfFeatureButtonExists(buttonName, placement)) {
@@ -144,7 +144,7 @@ function playbackSpeedButtonClickListener(
 					direction
 				);
 				if (newSpeed === currentPlaybackSpeed) return;
-				const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+				const playerContainer = await waitForPagePlayer();
 				if (!playerContainer) return;
 				const onScreenDisplay = getOSDConfig();
 				if (onScreenDisplay) {
@@ -193,7 +193,7 @@ export default createFeature({
 		}
 	],
 	onConfigChange: async ({ speed: playbackSpeedPerClick }) => {
-		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+		const playerContainer = await waitForPagePlayer();
 		if (!playerContainer) return;
 		const video = playerContainer.querySelector<HTMLVideoElement>("video.html5-main-video");
 		if (!video) return;

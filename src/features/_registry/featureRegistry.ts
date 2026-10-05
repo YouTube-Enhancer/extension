@@ -1,19 +1,22 @@
 import type {
-    PlayerRetryConfig,
-    PlayerRetryKey,
-    PlayerTask
+	PlayerRetryConfig,
+	PlayerRetryKey,
+	PlayerTask
 } from "@/src/features/_registry/featurePlayerManager";
 import type {
-    AnyFeatureBase,
-    FeatureKeys,
-    FeatureKeysWithState,
-    FeatureState,
-    FeatureStateAPI
+	AnyFeatureBase,
+	FeatureKeys,
+	FeatureKeysWithState,
+	FeatureState,
+	FeatureStateAPI
 } from "@/src/features/_registry/types";
 import type { configuration } from "@/src/types";
 
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
-import { FeatureLifecycleManager } from "@/src/features/_registry/featureLifecycleManager";
+import {
+	addFeatureDisposer,
+	FeatureLifecycleManager
+} from "@/src/features/_registry/featureLifecycleManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featureNavigationManager } from "@/src/features/_registry/featureNavigationManager";
 import { runNavigationPipeline } from "@/src/features/_registry/featureNavigationPipeline";
@@ -46,6 +49,14 @@ export class FeatureRegistry extends FeatureManagerBase {
 	constructor() {
 		super();
 		this.orchestrator = new FeatureOrchestrator(this, this.lifecycleManager);
+	}
+
+	/**
+	 * Register a teardown that runs when this feature is disabled.
+	 * Prefer this over calling playerManager.cleanup or removing listeners by hand in onDisable.
+	 */
+	addDisposer(featureId: FeatureKeys, fn: () => void): void {
+		addFeatureDisposer(featureId, fn);
 	}
 
 	cleanupPlayerRetry(featureId?: PlayerRetryKey): void {

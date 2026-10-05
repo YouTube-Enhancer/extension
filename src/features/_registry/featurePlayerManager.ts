@@ -4,10 +4,14 @@ import type {
 	FeatureKeysWithState,
 	PageType
 } from "@/src/features/_registry/types";
-import type { Nullable, YouTubePlayerDiv } from "@/src/types";
+import type { Nullable } from "@/src/types";
 
 import { FeatureManagerBase } from "@/src/features/_registry/featureManagerBase";
-import { waitForElement, waitForPlayerLoaded } from "@/src/utils/dom/wait";
+import {
+	getPagePlayerElement,
+	waitForPagePlayer,
+	waitForPagePlayerReady
+} from "@/src/utils/dom/pageReadiness";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
 export type PlayerRetryConfig = {
@@ -87,25 +91,14 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 			return tasks.map(() => false);
 		}
 
-		const playerSelector = isShortsPage() ? "div#shorts-player" : "div#movie_player";
-		const player = await waitForElement<YouTubePlayerDiv>(playerSelector, resolved.overallTimeout);
+		const isCancelled = () => this.runGenerations.get(featureId) !== generation;
+		const player = resolved.waitForLoaded
+			? await waitForPagePlayerReady({ isCancelled, timeout: resolved.overallTimeout })
+			: await waitForPagePlayer({ isCancelled, timeout: resolved.overallTimeout });
 
 		// A cleanup (navigation, disable) or a newer run for the feature superseded this one while it waited.
-		if (!player || this.runGenerations.get(featureId) !== generation) {
+		if (!player || isCancelled()) {
 			return tasks.map(() => false);
-		}
-
-		if (resolved.waitForLoaded) {
-			try {
-				await waitForPlayerLoaded(player, resolved.overallTimeout, {
-					isCancelled: () => this.runGenerations.get(featureId) !== generation
-				});
-			} catch {
-				return tasks.map(() => false);
-			}
-			if (this.runGenerations.get(featureId) !== generation) {
-				return tasks.map(() => false);
-			}
 		}
 
 		const state: ActiveRetryState = {
@@ -225,9 +218,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		if (!entry) return;
 		if (entry.cooldownId) clearTimeout(entry.cooldownId);
 		entry.adObserver?.disconnect();
-		const player = document.querySelector<YouTubePlayerDiv>(
-			isShortsPage() ? "div#shorts-player" : "div#movie_player"
-		);
+		const player = getPagePlayerElement();
 		if (player) {
 			player.removeEventListener("onStateChange", entry.handler);
 		}
@@ -255,9 +246,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 
 		this.stateHooks.set(featureId, entry);
 
-		const player = document.querySelector<YouTubePlayerDiv>(
-			isShortsPage() ? "div#shorts-player" : "div#movie_player"
-		);
+		const player = getPagePlayerElement();
 		if (!player) return;
 
 		player.addEventListener("onStateChange", handler);

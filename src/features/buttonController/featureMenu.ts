@@ -5,6 +5,7 @@ import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegist
 import { featurePlayerManager } from "@/src/features/_registry/featurePlayerManager";
 import { getFeatureMenuConfig } from "@/src/ui/configProvider";
 import { createStyledElement, createSVGElement } from "@/src/utils/dom/elements";
+import { pageReadinessSelectors, waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
 import { isWatchPage } from "@/src/utils/url";
@@ -12,7 +13,6 @@ import { isWatchPage } from "@/src/utils/url";
 import type { BasicIcon, FeatureMenuOpenType, ListenerType } from "./types";
 
 import { updateTrackedButtonChecked } from "./buttonState";
-import { playerControlsSelectors } from "./constants";
 import { getOrCreateRightControlsContainer } from "./containerTracking";
 
 const menuId = "#yte-feature-menu";
@@ -108,7 +108,7 @@ export async function enableFeatureMenu() {
 export async function enableFeatureMenuButton() {
 	if (!isWatchPage()) return;
 	if (document.querySelector(menuButtonId)) return;
-	if (document.querySelector(playerControlsSelectors.player_controls_right)) {
+	if (document.querySelector(pageReadinessSelectors.playerControlsRight)) {
 		await createFeatureMenuButton();
 		return;
 	}
@@ -354,7 +354,7 @@ async function createFeatureMenuButton(): Promise<boolean> {
 	if (!container) return false;
 	container.insertAdjacentElement("afterend", featureMenuButton);
 
-	const playerContainer = await waitForElement<HTMLDivElement>("#movie_player");
+	const playerContainer = await waitForPagePlayer();
 	if (!playerContainer) return false;
 	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
 

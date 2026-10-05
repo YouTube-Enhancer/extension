@@ -3,8 +3,8 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { captionsAvailable } from "@/src/utils/dom/captions";
+import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 import { playerShowsPageVideo } from "@/src/utils/dom/player";
-import { waitForElement } from "@/src/utils/dom/wait";
 
 import { metadata } from "./index.metadata";
 
@@ -55,7 +55,7 @@ export default createFeature({
 		// A run still waiting for captions must not turn them on after the feature is off
 		registry.cleanupPlayerRetry("automaticallyEnableClosedCaptions");
 		// Get the player element
-		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+		const playerContainer = await waitForPagePlayer();
 		// If player element is not available, return
 		if (!playerContainer) return;
 		// If captions were enabled, return
@@ -65,7 +65,7 @@ export default createFeature({
 	},
 	onEnable: async () => {
 		// Get the player element
-		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+		const playerContainer = await waitForPagePlayer();
 		const subtitlesButton = document.querySelector<HTMLButtonElement>(
 			"button.ytp-subtitles-button"
 		);

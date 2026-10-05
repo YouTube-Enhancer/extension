@@ -9,7 +9,7 @@ import {
 	resetState,
 	restorePreviewedVideo
 } from "@/src/features/timestampPeek/utils";
-import { waitForAllElements } from "@/src/utils/dom/wait";
+import { waitForPlayerShell } from "@/src/utils/dom/pageReadiness";
 
 import "./index.css";
 import { metadata } from "./index.metadata";
@@ -34,19 +34,17 @@ function cleanupTimestampObserver() {
 }
 
 function setupTimestampPeek() {
-	void waitForAllElements(["#movie_player", "#player-container", "#player-container-outer"]).then(
-		async () => {
-			const videoHref = getVideoHref();
-			if (!videoHref) return;
-			eventManager.removeEventListeners("timestampPeek");
-			document.addEventListener("yt-navigate-start", navigateStartHandler);
-			cleanupTimestampObserver();
-			await handleTimestampElementsHover();
-			const unsub = await observeTimestampElements();
-			if (unsub) unsubscribeTimestampBus = unsub;
-			return undefined;
-		}
-	);
+	void waitForPlayerShell().then(async () => {
+		const videoHref = getVideoHref();
+		if (!videoHref) return;
+		eventManager.removeEventListeners("timestampPeek");
+		document.addEventListener("yt-navigate-start", navigateStartHandler);
+		cleanupTimestampObserver();
+		await handleTimestampElementsHover();
+		const unsub = await observeTimestampElements();
+		if (unsub) unsubscribeTimestampBus = unsub;
+		return undefined;
+	});
 }
 
 export default createFeature({

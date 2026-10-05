@@ -11,6 +11,7 @@ import { registry } from "@/src/features/_registry/featureRegistry";
 import { formatTime } from "@/src/features/remainingTime/utils";
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import { createStyledElement } from "@/src/utils/dom/elements";
+import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { browserColorLog } from "@/src/utils/logging";
@@ -238,7 +239,7 @@ export default createFeature({
 async function handleVideoChange(resumeType: VideoHistoryResumeType) {
 	// At start-up the player is not always in the document yet, and nothing runs this again until the next
 	// navigation, so it is waited for rather than looked up once.
-	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 15000);
+	const playerContainer = await waitForPagePlayer({ timeout: 15000 });
 	if (!playerContainer) return;
 	// The video element and video data wait are independent once the player container exists, so run
 	// them in parallel to avoid adding the video element wait to the critical path.
@@ -263,9 +264,7 @@ async function handleVideoChange(resumeType: VideoHistoryResumeType) {
 		playerContainer.getDuration()
 	]);
 	if (isArtist) return;
-	const { [videoId]: video_history_entry } = getVideoHistory(
-		registry.getStateAPI("videoHistory")
-	);
+	const { [videoId]: video_history_entry } = getVideoHistory(registry.getStateAPI("videoHistory"));
 	if (
 		video_history_entry &&
 		video_history_entry.status === "watching" &&

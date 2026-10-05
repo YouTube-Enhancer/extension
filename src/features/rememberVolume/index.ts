@@ -1,10 +1,9 @@
 import type { FeatureStateAPI } from "@/src/features/_registry/types";
-import type { YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { waitForElement } from "@/src/utils/dom/wait";
+import { getPagePlayerElement, waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
@@ -18,9 +17,7 @@ import { setupVolumeChangeListener } from "./utils";
 function queueVolumeReapply(stateAPI: FeatureStateAPI<"rememberVolume">): void {
 	const task = async () => {
 		const { shortsPageVolume, watchPageVolume } = stateAPI.getState();
-		const playerContainer = document.querySelector<YouTubePlayerDiv>(
-			isShortsPage() ? "div#shorts-player" : "div#movie_player"
-		);
+		const playerContainer = getPagePlayerElement();
 		if (!playerContainer?.setVolume) return false;
 		if ((isWatchPage() || isLivePage()) && watchPageVolume) {
 			await playerContainer.setVolume(watchPageVolume);
@@ -39,13 +36,8 @@ async function restoreVolume(stateAPI: FeatureStateAPI<"rememberVolume">) {
 	const IsWatchPage = isWatchPage();
 	const IsLivePage = isLivePage();
 	const IsShortsPage = isShortsPage();
-	// Get the player container element
-	const playerContainer =
-		IsWatchPage || IsLivePage
-			? await waitForElement<YouTubePlayerDiv>("div#movie_player")
-			: IsShortsPage
-				? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
-				: null;
+	if (!IsWatchPage && !IsLivePage && !IsShortsPage) return;
+	const playerContainer = await waitForPagePlayer();
 	// If player container is not available, return
 	if (!playerContainer) return;
 	// If setVolume method is not available in the player container, return
