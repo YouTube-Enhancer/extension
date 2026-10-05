@@ -11,6 +11,7 @@ import { emptyOutputFolder, rootDir } from "@/src/utils/plugins/utils";
 
 import {
 	copyOutputs,
+	generateFeatureLightManifest,
 	generateHideFeatureSelectors,
 	generateManifests,
 	makeReleaseZips,
@@ -78,6 +79,7 @@ export async function runPreBuildPipeline(): Promise<void> {
 	const start = Date.now();
 	await timedStep("Clearing output folder", () => emptyOutputFolder());
 	await timedStep("Validating feature metadata", () => validateFeatureMetadata());
+	await timedStep("Generating feature light manifest", () => generateFeatureLightManifest());
 	await timedStep("Updating available locales", () => updateAvailableLocales());
 	const shouldBypass = process.env.BYPASS_LOCALE_CHECK === "true";
 

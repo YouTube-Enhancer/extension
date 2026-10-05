@@ -28,6 +28,7 @@ import {
 import { startHmrServer } from "./hmrServer";
 import { startHotReloadServer } from "./hotReloadServer";
 import { buildContentScripts } from "./steps/buildContentScripts";
+import { generateFeatureLightManifest } from "./steps/generateFeatureLightManifest";
 import generateLocaleTypes from "./steps/generateLocaleTypes";
 import generateManifests from "./steps/generateManifests";
 import { loadFeatureMetadata } from "./steps/loadFeatureMetadata";
@@ -147,6 +148,7 @@ export async function startWatch(argv: string[]): Promise<void> {
 				try {
 					await loadFeatureMetadata({ fresh: true });
 					await validateFeatureMetadata();
+					await generateFeatureLightManifest();
 					await updateReadmeFeatures();
 				} catch (error) {
 					terminalColorLog(
