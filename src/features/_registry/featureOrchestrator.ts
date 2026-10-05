@@ -15,6 +15,24 @@ import type { FeatureRegistry } from "./featureRegistry";
 import { FeatureManagerBase } from "./featureManagerBase";
 import { resolveEnabled } from "./featureRegistryCore";
 
+type PhaseOneTransition = {
+	canEnable: boolean;
+	config: configuration[FeatureKeys];
+	feature: AnyFeatureBase;
+	/** False once lifecycle has run (Phase 2 or a concurrent full update). */
+	lifecyclePending: boolean;
+	prevEnabled: boolean;
+};
+
+type UpdateFeatureEnabledStateOptions = {
+	skipButtons?: boolean;
+	/**
+	 * Phase 1 of enableAll: resolve + place buttons only. Lifecycle is deferred to Phase 2
+	 * via the recorded transition so enable/disable hooks are not run twice.
+	 */
+	skipLifecycle?: boolean;
+};
+
 export class FeatureOrchestrator extends FeatureManagerBase {
 	private enableAllPromise: Nullable<Promise<void>> = null;
 	private featureEnabledState = new Map<FeatureKeys, boolean>();
@@ -26,6 +44,11 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		FeatureKeys,
 		{ config: configuration[FeatureKeys]; enabled: boolean }
 	>();
+	/**
+	 * Transitions recorded during enableAll Phase 1. Phase 2 runs only the lifecycle for these,
+	 * so a clean cold load no longer re-resolves every feature in a parallel no-op pass.
+	 */
+	private phaseOneTransitions = new Map<FeatureKeys, PhaseOneTransition>();
 	private sortedFeaturesCache: Nullable<AnyFeatureBase[]> = null;
 	private sortedFeaturesCacheDirty = true;
 	private updatingFeatures = new Set<FeatureKeys>();
@@ -59,12 +82,12 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 				const featuresByPriority = this.getFeaturesSortedByPriority();
 				this.cacheFeatureConfigs(featuresByPriority, options);
 
-				// Phase 1: Sequential — resolve enabled state and place buttons per feature.
-				// This ensures buttons from the same feature are adjacent in the DOM.
-				const featureStates = await this.phaseInitAndButtons(featuresByPriority, options);
+				// Phase 1: Sequential — init, resolve, place buttons per feature.
+				// Same-feature buttons stay adjacent in the DOM. Lifecycle is not run here.
+				const transitions = await this.phaseInitAndButtons(featuresByPriority, options);
 
-				// Phase 2: Parallel — run lifecycle hooks for all features concurrently.
-				await this.phaseLifecycleHooks(featureStates);
+				// Phase 2: Parallel — run lifecycle only for transitions Phase 1 recorded.
+				await this.phaseLifecycleHooks(transitions);
 
 				this.perf.logSummary("enableAll");
 			} finally {
@@ -135,7 +158,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		id: K,
 		enabled: boolean,
 		config: configuration[K],
-		options?: { skipButtons?: boolean }
+		options?: UpdateFeatureEnabledStateOptions
 	) {
 		const feature = this.registry.getFeature(id);
 		if (!feature) return;
@@ -159,6 +182,16 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			this.featureEnabledState.set(id, state.canEnable);
 			if (!options?.skipButtons) {
 				await this.applyButtonPlacement(feature, id, config, state.canEnable);
+			}
+			if (options?.skipLifecycle) {
+				this.phaseOneTransitions.set(id, {
+					canEnable: state.canEnable,
+					config,
+					feature,
+					lifecyclePending: true,
+					prevEnabled: state.prevEnabled
+				});
+				return;
 			}
 			await this.executeLifecycleTransition(
 				feature,
@@ -243,6 +276,8 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		canEnable: boolean,
 		prevEnabled: boolean
 	) {
+		const pending = this.phaseOneTransitions.get(id);
+		if (pending) pending.lifecyclePending = false;
 		if (canEnable && !prevEnabled) {
 			await this.safelyExecute(
 				id,
@@ -264,11 +299,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 	}
 
 	private async phaseInitAndButtons(features: AnyFeatureBase[], options: Partial<configuration>) {
-		const featureStates: {
-			config: configuration[FeatureKeys];
-			enabled: boolean;
-			feature: AnyFeatureBase;
-		}[] = [];
+		this.phaseOneTransitions.clear();
 		for (const feature of features) {
 			const { [feature.id]: featureConfig } = options;
 			if (!featureConfig) continue;
@@ -283,33 +314,46 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 				}
 			);
 			const enabled = enabledResult ?? false;
-			featureStates.push({ config: featureConfig, enabled, feature });
-			await this.updateFeatureEnabledState(feature.id, enabled, featureConfig);
+			// Resolve + place buttons only. Lifecycle runs in Phase 2 from the recorded transition.
+			// The sequential await keeps same-feature buttons adjacent in the DOM.
+			await this.updateFeatureEnabledState(feature.id, enabled, featureConfig, {
+				skipLifecycle: true
+			});
 		}
-		return featureStates;
+		return Array.from(this.phaseOneTransitions.values());
 	}
 
-	private async phaseLifecycleHooks(
-		featureStates: {
-			config: configuration[FeatureKeys];
-			enabled: boolean;
-			feature: AnyFeatureBase;
-		}[]
-	) {
+	private async phaseLifecycleHooks(transitions: PhaseOneTransition[]) {
 		const CONCURRENCY_GROUP = 0;
-		const lifecyclePromises = featureStates.map(({ config, enabled, feature }) =>
-			this.safelyExecute(
-				feature.id,
-				"init",
-				async () =>
-					await this.updateFeatureEnabledState(feature.id, enabled, config, { skipButtons: true }),
-				{
-					concurrencyGroup: CONCURRENCY_GROUP,
-					subPhase: "enable"
-				}
-			)
-		);
+		const lifecyclePromises = transitions
+			.filter((transition) => transition.lifecyclePending)
+			.map(({ canEnable, config, feature, prevEnabled }) =>
+				this.safelyExecute(
+					feature.id,
+					"enable",
+					async () => {
+						// A concurrent full update may have already run lifecycle for this feature.
+						const stillPending = this.phaseOneTransitions.get(feature.id)?.lifecyclePending;
+						if (stillPending === false) return;
+						await this.executeLifecycleTransition(
+							feature,
+							feature.id,
+							config,
+							canEnable,
+							prevEnabled
+						);
+						if (canEnable) {
+							this.schedulePlacementRecheck(feature, feature.id, config);
+						}
+					},
+					{
+						concurrencyGroup: CONCURRENCY_GROUP,
+						subPhase: "enable"
+					}
+				)
+			);
 		await Promise.allSettled(lifecyclePromises);
+		this.phaseOneTransitions.clear();
 	}
 
 	private resolveFeatureState<K extends FeatureKeys>(
