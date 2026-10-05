@@ -38,7 +38,6 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 ) {
 	const featureName = metadataRegistry.getButtonFeature(buttonName);
 	if (!featureName) return;
-	featuresInMenu.add(buttonName);
 	await waitForElement(menuId);
 	const featureMenu = getMenu();
 	if (!featureMenu) return;
@@ -57,6 +56,7 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 			() => featureMenuClickListener(buttonName, menuItem!, listener, isToggle),
 			featureName
 		);
+		featuresInMenu.add(buttonName);
 		return;
 	}
 	menuItem = document.createElement("div");
@@ -90,6 +90,7 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 		featureName
 	);
 	panel.appendChild(menuItem);
+	featuresInMenu.add(buttonName);
 	const featureMenuButton = document.querySelector<HTMLButtonElement>(menuButtonId);
 	if (featureMenuButton) {
 		featureMenuButton.style.display = "flex";

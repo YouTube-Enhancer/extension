@@ -16,6 +16,7 @@ import { createTooltip, removeTooltip } from "@/src/utils/dom/tooltip";
 
 import type { ListenerType } from "./types";
 
+import { getButtonConfig } from "./buttonConfig";
 import {
 	trackButton as trackButtonState,
 	trackedButtons,
@@ -36,6 +37,7 @@ import {
 import {
 	addFeatureItemToMenu,
 	enableFeatureMenuButton,
+	getFeatureButtonId,
 	getFeatureIds,
 	getFeatureMenuItem,
 	removeFeatureItemFromMenu
@@ -162,14 +164,14 @@ export function checkIfFeatureButtonExists(
 	if (!root) return false;
 	if (placement === "feature_menu")
 		return root.querySelector(`#${getFeatureIds(buttonName).featureMenuItemId}`) !== null;
-	return root.querySelectorAll(`#${getFeatureButtonIdForButton(buttonName)}`).length > 0;
+	return root.querySelectorAll(`#${getFeatureButtonId(buttonName)}`).length > 0;
 }
 
 /** Returns the button or menu item element. Prefer name-based APIs (e.g. `updateFeatureButtonIconByName`) when possible. */
 export function getFeatureButton(buttonName: AllButtonNames) {
 	return (
 		getFeatureMenuItem(buttonName) ??
-		document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`)
+		document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`)
 	);
 }
 
@@ -194,9 +196,7 @@ export function refreshAllLabels() {
 		const newLabel = info.labelResolver();
 		if (newLabel === info.label) continue;
 		info.label = newLabel;
-		const button = document.querySelector<HTMLButtonElement>(
-			`#${getFeatureButtonIdForButton(buttonName)}`
-		);
+		const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
 		if (button) {
 			button.dataset.title = newLabel;
 			const tooltip = document.getElementById(`yte-feature-${buttonName}-tooltip`);
@@ -223,14 +223,11 @@ export function removeButton<Name extends AllButtonNames>(
 		stopPlacementTracking();
 	}
 	if (placement === undefined) {
-		const featureConfig = featureConfigManager.getLast(featureName);
-		if (typeof featureConfig === "object" && featureConfig !== null) {
-			if ("buttons" in featureConfig) {
-				placement =
-					featureConfig.buttons?.[buttonName as keyof typeof featureConfig.buttons]?.placement;
-			} else if ("button" in featureConfig) {
-				placement = featureConfig.button?.placement;
-			}
+		try {
+			const featureConfig = featureConfigManager.getLast(featureName);
+			placement = getButtonConfig(featureConfig, buttonName)?.placement;
+		} catch {
+			placement = undefined;
 		}
 	}
 	switch (placement) {
@@ -238,7 +235,7 @@ export function removeButton<Name extends AllButtonNames>(
 		case "player_controls_left":
 		case "player_controls_right": {
 			const buttons = document.querySelectorAll<HTMLButtonElement>(
-				`#${getFeatureButtonIdForButton(buttonName)}`
+				`#${getFeatureButtonId(buttonName)}`
 			);
 			if (buttons.length === 0) return;
 			buttons.forEach((button) => button.remove());
@@ -263,9 +260,7 @@ export function updateButtonsIconColor() {
 }
 
 export function updateFeatureButtonChecked(buttonName: AllButtonNames, checked: boolean) {
-	const button = document.querySelector<HTMLButtonElement>(
-		`#${getFeatureButtonIdForButton(buttonName)}`
-	);
+	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
 	if (button) setChecked(button, checked);
 	const menuItem = getFeatureMenuItem(buttonName);
 	if (menuItem) {
@@ -281,16 +276,12 @@ export function updateFeatureButtonIcon(button: HTMLButtonElement, icon: SVGElem
 }
 
 export function updateFeatureButtonIconByName(buttonName: AllButtonNames, icon: SVGElement) {
-	const button = document.querySelector<HTMLButtonElement>(
-		`#${getFeatureButtonIdForButton(buttonName)}`
-	);
+	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
 	if (button) button.replaceChildren(icon);
 }
 
 export function updateFeatureButtonTitle(buttonName: AllButtonNames, title: string) {
-	const button = document.querySelector<HTMLButtonElement>(
-		`#${getFeatureButtonIdForButton(buttonName)}`
-	);
+	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
 	if (button) {
 		button.dataset.title = title;
 		updateTrackedButtonLabel(buttonName, title);
@@ -357,64 +348,72 @@ function getChecked(button: HTMLButtonElement) {
 	return button.getAttribute("aria-checked") === "true";
 }
 
-function getFeatureButtonIdForButton(buttonName: AllButtonNames) {
-	return `yte-feature-${buttonName}-button` as const;
-}
-
+/**
+ * Rebuilds buttons after a fullscreen/theater change. Groups by feature and places each
+ * feature's buttons sequentially so siblings stay adjacent after the reposition.
+ */
 async function handleFullscreenChange() {
 	const inFullscreen = isFullscreen();
-	const repositionPromises: Promise<void>[] = [];
-	for (const [buttonName, info] of trackedButtons) {
-		const effectivePlacement =
-			inFullscreen && info.fullscreenPlacement !== "same"
-				? info.fullscreenPlacement
-				: info.placement;
-		if (effectivePlacement === info.currentEffectivePlacement) continue;
+	const buttonsByFeature = new Map<string, AllButtonNames[]>();
+	for (const buttonName of trackedButtons.keys()) {
+		const featureId = metadataRegistry.getButtonFeature(buttonName) ?? buttonName;
+		const names = buttonsByFeature.get(featureId) ?? [];
+		names.push(buttonName);
+		buttonsByFeature.set(featureId, names);
+	}
 
-		if (info.currentEffectivePlacement !== "feature_menu") {
-			const oldButton = document.querySelector<HTMLButtonElement>(
-				`#${getFeatureButtonIdForButton(buttonName)}`
-			);
-			if (oldButton) {
-				oldButton.remove();
-				const tooltip = document.getElementById(`yte-feature-${buttonName}-tooltip`);
-				if (tooltip) tooltip.remove();
+	for (const [, buttonNames] of buttonsByFeature) {
+		for (const buttonName of buttonNames) {
+			const info = trackedButtons.get(buttonName);
+			if (!info) continue;
+			const effectivePlacement =
+				inFullscreen && info.fullscreenPlacement !== "same"
+					? info.fullscreenPlacement
+					: info.placement;
+			if (effectivePlacement === info.currentEffectivePlacement) continue;
+
+			if (info.currentEffectivePlacement !== "feature_menu") {
+				const oldButton = document.querySelector<HTMLButtonElement>(
+					`#${getFeatureButtonId(buttonName)}`
+				);
+				if (oldButton) {
+					oldButton.remove();
+					const tooltip = document.getElementById(`yte-feature-${buttonName}-tooltip`);
+					if (tooltip) tooltip.remove();
+				}
+			} else {
+				removeFeatureItemFromMenu(buttonName);
 			}
-		} else {
-			removeFeatureItemFromMenu(buttonName);
-		}
 
-		if (effectivePlacement !== "feature_menu") {
-			const placementIcon = getFeatureIcon(buttonName, effectivePlacement);
-			const button = makeFeatureButton(
-				buttonName,
-				effectivePlacement,
-				info.label,
-				placementIcon,
-				info.listener,
-				info.isToggle,
-				info.checked
-			);
-			repositionPromises.push(placeButton(button, effectivePlacement));
-		} else {
-			const menuIcon = getFeatureIcon(buttonName, "feature_menu");
-			if (menuIcon instanceof SVGSVGElement) {
-				repositionPromises.push(
-					addFeatureItemToMenu(
+			if (effectivePlacement !== "feature_menu") {
+				const placementIcon = getFeatureIcon(buttonName, effectivePlacement);
+				const button = makeFeatureButton(
+					buttonName,
+					effectivePlacement,
+					info.label,
+					placementIcon,
+					info.listener,
+					info.isToggle,
+					info.checked
+				);
+				await placeButton(button, effectivePlacement);
+			} else {
+				const menuIcon = getFeatureIcon(buttonName, "feature_menu");
+				if (menuIcon instanceof SVGSVGElement) {
+					await addFeatureItemToMenu(
 						buttonName,
 						info.label,
 						menuIcon,
 						info.listener,
 						info.isToggle,
 						info.checked
-					)
-				);
+					);
+				}
 			}
-		}
 
-		info.currentEffectivePlacement = effectivePlacement;
+			info.currentEffectivePlacement = effectivePlacement;
+		}
 	}
-	await Promise.all(repositionPromises);
 }
 
 function makeFeatureButton<
@@ -435,7 +434,7 @@ function makeFeatureButton<
 	const featureName = metadataRegistry.getButtonFeature(buttonName);
 	if (!featureName) throw new Error(`No feature found for button "${buttonName}"`);
 	const existingButtons = document.querySelectorAll<HTMLButtonElement>(
-		`#${getFeatureButtonIdForButton(buttonName)}`
+		`#${getFeatureButtonId(buttonName)}`
 	);
 	if (existingButtons.length > 0) {
 		existingButtons.forEach((btn) => btn.remove());
@@ -449,7 +448,7 @@ function makeFeatureButton<
 					? "yte-button-player-controls-right"
 					: "yte-button-player-controls-left"
 		],
-		elementId: getFeatureButtonIdForButton(buttonName),
+		elementId: getFeatureButtonId(buttonName),
 		elementType: "button"
 	});
 	button.dataset.title = label;
