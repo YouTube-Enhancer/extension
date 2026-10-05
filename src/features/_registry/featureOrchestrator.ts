@@ -370,6 +370,14 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		await Promise.allSettled(lifecyclePromises);
 		this.phaseOneTransitions.clear();
 	}
+	private async rebindButtonsAfterControlsRender() {
+		for (const feature of this.registry.getAll()) {
+			if (this.featureEnabledState.get(feature.id) !== true) continue;
+			if (!this.registry.hasButtons(feature, feature.id)) continue;
+			const config = featureConfigManager.getLast(feature.id) ?? feature.defaults;
+			await this.applyButtonPlacement(feature, feature.id, config, true);
+		}
+	}
 
 	private resolveFeatureState<K extends FeatureKeys>(
 		id: K,
@@ -409,11 +417,15 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 	private schedulePlacementRecheck<K extends FeatureKeys>(
 		feature: AnyFeatureBase,
 		id: K,
-		config: configuration[K]
+		_config: configuration[K]
 	) {
 		setTimeout(() => {
 			if (this.featureEnabledState.get(id) !== true) return;
 			if (!this.registry.getFeature(id)) return;
+			// Re-read the config instead of using the one captured when this recheck was scheduled: a
+			// config change in the meantime (a button placement move, for one) would otherwise be undone
+			// by the stale pass seconds later, and nothing would move the button back.
+			const config = featureConfigManager.getLast(id) ?? feature.defaults;
 			void this.applyButtonPlacement(feature, id, config, true);
 		}, 3000);
 	}
