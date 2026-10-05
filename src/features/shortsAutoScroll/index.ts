@@ -1,33 +1,52 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { setupAutoScroll } from "@/src/features/shortsAutoScroll/utils";
-import { waitForElement } from "@/src/utils/dom/wait";
+import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
 
 import { metadata } from "./index.metadata";
+import { setupAutoScroll } from "./utils";
+
+let boundVideo: Nullable<HTMLVideoElement> = null;
+let unsubscribePlayerBus: Nullable<() => void> = null;
 
 export default createFeature({
 	...metadata,
-	onDisable: () => eventManager.removeEventListeners("shortsAutoScroll"),
-	onEnable: async () => {
-		await setupShortsAutoScroll();
-	},
-	onNavigate: async () => {
+	onDisable: () => {
 		eventManager.removeEventListeners("shortsAutoScroll");
-		await setupShortsAutoScroll();
+		unsubscribePlayerBus?.();
+		unsubscribePlayerBus = null;
+		boundVideo = null;
+	},
+	onEnable: () => {
+		setupShortsAutoScroll();
+		armPlayerBus();
+	},
+	onNavigate: () => {
+		eventManager.removeEventListeners("shortsAutoScroll");
+		boundVideo = null;
+		setupShortsAutoScroll();
+		armPlayerBus();
 	}
 });
 
-async function setupShortsAutoScroll() {
-	// Get the shorts container
-	const shortsContainer = await waitForElement<YouTubePlayerDiv>("#shorts-player");
-	// If shorts container is not available, return
+/**
+ * The advance is an in-page navigation: the player can be replaced before or after the registry's navigate
+ * event, so binding only at that event risks attaching to the outgoing player and going deaf on the incoming
+ * one. Re-arm whenever a new #shorts-player shows up; the bind itself skips a video already bound.
+ */
+function armPlayerBus() {
+	unsubscribePlayerBus?.();
+	unsubscribePlayerBus = subscribe("#shorts-player", () => {
+		setupShortsAutoScroll();
+	});
+}
+
+function setupShortsAutoScroll() {
+	const shortsContainer = document.querySelector<YouTubePlayerDiv>("#shorts-player");
 	if (!shortsContainer) return;
-	// Get the video element
 	const video = shortsContainer.querySelector<HTMLVideoElement>("video");
-	// If video element is not available, return
-	if (!video) return;
-	// Setup auto scroll
+	if (!video || video === boundVideo) return;
+	boundVideo = video;
 	setupAutoScroll(shortsContainer, video);
 }
