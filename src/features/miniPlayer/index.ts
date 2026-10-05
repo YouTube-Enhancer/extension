@@ -141,7 +141,7 @@ function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController): void {
 		"miniPlayer",
 		[task],
 		["attach-comments-auto-mini-player"],
-		{ waitForLoaded: true }
+		{ maxAttempts: 90, overallTimeout: 45000, waitForLoaded: true }
 	);
 }
 function getEnabledController(): Nullable<MiniPlayerController> {
