@@ -22,6 +22,8 @@ let reverseButton: Nullable<HTMLButtonElement> = null;
 let reverseButtonContainer: Nullable<HTMLDivElement> = null;
 let headerContainerElement: Nullable<HTMLElement> = null;
 let tooltipUpdate: Nullable<() => void> = null;
+let tooltipHost: Nullable<HTMLElement> = null;
+let activeTooltip: Nullable<ReturnType<typeof createTooltip>> = null;
 
 // ─── Exported functions ───────────────────────────────────────────
 
@@ -40,6 +42,8 @@ export function refreshTooltip() {
 export function removeButton() {
 	reverseButton = null;
 	tooltipUpdate = null;
+	tooltipHost = null;
+	activeTooltip = null;
 	headerContainerElement = null;
 	if (reverseButtonContainer) {
 		reverseButtonContainer.remove();
@@ -48,6 +52,20 @@ export function removeButton() {
 }
 
 // ─── Private functions ────────────────────────────────────────────
+
+/** (Re)binds the tooltip to the button instance currently in the document. */
+function bindTooltipTo(button: HTMLElement) {
+	if (tooltipHost === button) return;
+	activeTooltip?.remove();
+	tooltipHost = button;
+	activeTooltip = createTooltip({
+		direction: "down",
+		element: button,
+		featureName: FEATURE_NAME,
+		id: `yte-feature-${FEATURE_NAME}-tooltip`
+	});
+	tooltipUpdate = activeTooltip.update;
+}
 
 /** Puts the button back when a re-render of its header took it away; an attached button is left alone. */
 async function ensureButton(stateAPI: StateAPI, container?: HTMLElement | string): Promise<void> {
@@ -77,6 +95,18 @@ async function ensureReversalSticks(
 	}
 }
 
+/**
+ * Module level so eventManager's dedupe keeps a single registration across re-injections. The capture phase
+ * catches mouseenter, which does not bubble; the playlist panel re-renders after injection and replaces the
+ * button, orphaning per-element listeners.
+ */
+function handleReverseButtonHover(event: Event) {
+	const hovered = (event.target as Nullable<Element>)?.closest?.(`#${REVERSE_BUTTON_ID}`);
+	if (!(hovered instanceof HTMLElement)) return;
+	bindTooltipTo(hovered);
+	activeTooltip?.listener();
+}
+
 async function injectButton(stateAPI: StateAPI, container?: HTMLElement | string) {
 	const resolvedContainer =
 		typeof container === "string" || container === undefined
@@ -103,18 +133,14 @@ async function injectButton(stateAPI: StateAPI, container?: HTMLElement | string
 
 	insertButtonInto(headerContainerElement);
 
-	const {
-		listener: tooltipListener,
-		remove: removeTooltipFn,
-		update: updateTooltip
-	} = createTooltip({
-		direction: "down",
-		element: reverseButton,
-		featureName: FEATURE_NAME,
-		id: `yte-feature-${FEATURE_NAME}-tooltip`
-	});
-	tooltipUpdate = updateTooltip;
-	eventManager.addEventListener(reverseButton, "mouseenter", tooltipListener, FEATURE_NAME);
+	bindTooltipTo(reverseButton);
+	eventManager.addEventListener(
+		document,
+		"mouseenter",
+		handleReverseButtonHover,
+		FEATURE_NAME,
+		true
+	);
 
 	eventManager.addEventListener(
 		reverseButton,
@@ -137,7 +163,7 @@ async function injectButton(stateAPI: StateAPI, container?: HTMLElement | string
 			);
 			reverseButton!.dataset.title = label;
 			tooltipUpdate?.();
-			removeTooltipFn();
+			activeTooltip?.remove();
 
 			requestAnimationFrame(() => {
 				if (
