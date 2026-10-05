@@ -4,12 +4,7 @@ import eventManager from "@/src/events/EventManager";
 import { registerAllFeatures } from "@/src/features/_registry/autoRegister";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { i18nService } from "@/src/i18n";
-import {
-	fetchOptions,
-	reconcileAfterPageLoaded,
-	reseedForNavigation,
-	seed
-} from "@/src/ui/configProvider";
+import { fetchOptions, reconcileAfterPageLoaded, seed } from "@/src/ui/configProvider";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
 import { disconnect as disconnectMutationBus } from "@/src/utils/dom/observers/domMutationBus";
@@ -55,10 +50,8 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 		attributes: true
 	});
 
-	await registry.initialize(async () => {
-		const navOptions = await reseedForNavigation();
-		await registry.enableAll(navOptions);
-	});
+	// Navigation work (config reseed + per-feature diff) runs inside registry.initialize.
+	registry.initialize();
 
 	await coreFeatures.register();
 	await registry.enableAll(options);
