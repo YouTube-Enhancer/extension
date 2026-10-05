@@ -5,7 +5,11 @@ import type {
 } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
-import { getCurrentPageType, invalidatePageTypeCache } from "@/src/utils/url";
+import {
+	getCurrentPageType,
+	invalidatePageTypeCache,
+	refinePageTypeFromPlayer
+} from "@/src/utils/url";
 
 import { FeatureManagerBase } from "./featureManagerBase";
 
@@ -21,6 +25,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	private currentNavigationSignature: Nullable<string> = null;
 	private currentPage: Nullable<string> = null;
 	private debounceTimer: Nullable<ReturnType<typeof setTimeout>> = null;
+	private liveRefinePromise: Nullable<Promise<void>> = null;
 	private navigating = false;
 	private navigationCallback?: (signature: string, eventType: NavigationEventType) => Promise<void>;
 	private navigationListeners: Record<string, () => void> = {};
@@ -80,31 +85,45 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		}, NAVIGATION_DEBOUNCE_MS);
 	}
 
-	async initialize(callback: (signature: string, eventType: NavigationEventType) => Promise<void>) {
+	initialize(callback: (signature: string, eventType: NavigationEventType) => Promise<void>) {
 		if (this._initialized) return;
-		const signature = await this.getNavigationSignature();
+		// Sync URL classification: do not wait on the player for live-vs-VOD.
+		const signature = this.getNavigationSignature();
 		if (!signature) return;
 		this.currentNavigationSignature = signature;
 		this.currentPage = getPageFromSignature(signature);
 		this.navigationCallback = callback;
 		this.setupNavigationListener();
 		this._initialized = true;
+		void this.refineLivePageType();
 	}
 
 	isInitialized(): boolean {
 		return this._initialized;
 	}
 
+	/** Player refine after init/navigation: update page type when a watch URL is actually live. */
+	refineLivePageType(): Promise<void> {
+		if (this.liveRefinePromise) return this.liveRefinePromise;
+		this.liveRefinePromise = this.runLiveRefine().finally(() => {
+			this.liveRefinePromise = null;
+		});
+		return this.liveRefinePromise;
+	}
+
 	protected getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
 		return "navigationManager" as FeatureKeys;
 	}
 
-	private async getNavigationSignature(): Promise<Nullable<NavigationSignature>> {
-		const pageType = await getCurrentPageType();
+	private getNavigationSignature(): Nullable<NavigationSignature> {
+		const pageType = getCurrentPageType();
 		if (!pageType) return null;
 
 		// Extract path parts once to avoid repetition
-		const pathParts = window.location.pathname.split("/").filter(Boolean);
+		const {
+			location: { pathname }
+		} = window;
+		const pathParts = pathname.split("/").filter(Boolean);
 
 		/**
 		 * Builds the extra-identifier suffix of a signature from what is not already in it. For the path-parts array,
@@ -246,7 +265,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		let retrySignature = false;
 		try {
 			invalidatePageTypeCache();
-			const signature = await this.getNavigationSignature();
+			const signature = this.getNavigationSignature();
 			if (!signature) {
 				// Page-type detection can miss its window on a heavily loaded page; a silently dropped
 				// navigation leaves every feature's onNavigate unrun. Retry through the debounce instead.
@@ -258,11 +277,26 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 			if (!this.updateNavigationSignature(signature)) return;
 			this.currentNavigationSignature = signature;
 			if (this.navigationCallback) await this.navigationCallback(signature, eventType);
+			void this.refineLivePageType();
 		} catch (error) {
 			this.logErrorToTracker("navigation handler", error);
 		} finally {
 			this.navigating = false;
 			if (retrySignature) this.handleNavigation(eventType);
+		}
+	}
+
+	private async runLiveRefine(): Promise<void> {
+		const { currentNavigationSignature: previousSignature, currentPage: previousPage } = this;
+		const refined = await refinePageTypeFromPlayer();
+		if (!refined || refined === previousPage) return;
+		if (!this._initialized) return;
+		const signature = this.getNavigationSignature();
+		if (!signature) return;
+		this.currentNavigationSignature = signature;
+		this.currentPage = getPageFromSignature(signature);
+		if (this.navigationCallback && signature !== previousSignature) {
+			await this.navigationCallback(signature, "updated");
 		}
 	}
 
