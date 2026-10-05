@@ -5,6 +5,7 @@ export {
 	addButton,
 	addButton as addFeatureButton,
 	addFeatureItemToMenu,
+	bindFeatureMenuEventListeners,
 	checkIfFeatureButtonExists,
 	enableFeatureMenu,
 	enableFeatureMenuButton,

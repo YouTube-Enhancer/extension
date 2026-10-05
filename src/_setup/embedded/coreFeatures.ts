@@ -3,13 +3,15 @@ import type { Nullable } from "@/src/types";
 
 import { registry } from "@/src/features/_registry/featureRegistry";
 import {
+	bindFeatureMenuEventListeners,
 	enableFeatureMenu,
+	getButtonConfig,
 	hasFeaturesInMenu,
 	refreshAllLabels,
-	setupFeatureMenuEventListeners,
 	updateFeatureMenuTitle
 } from "@/src/features/buttonController";
 import { i18nService } from "@/src/i18n";
+import { isWatchPage } from "@/src/utils/url";
 
 let cleanupListeners: Nullable<() => void> = null;
 
@@ -26,7 +28,11 @@ export const coreFeatures = {
 			cleanupListeners();
 			cleanupListeners = null;
 		}
-		cleanupListeners = setupFeatureMenuEventListeners(data.featureMenuOpenType);
+		cleanupListeners = bindFeatureMenuEventListeners(data.featureMenuOpenType);
+		// Menu items lost to a player re-render stay lost until some unrelated config change
+		// re-reconciles their feature; the openType switch is when the menu is being touched, so
+		// re-verify placement for every enabled feature whose buttons live in the menu.
+		reverifyMenuButtonPlacement();
 	},
 
 	async handleLanguageChange(language: AvailableLocales) {
@@ -45,3 +51,19 @@ export const coreFeatures = {
 		await enableFeatureMenu();
 	}
 };
+
+/** Re-runs button placement for enabled features with menu-placed buttons, so lost menu items return. */
+function reverifyMenuButtonPlacement() {
+	if (!isWatchPage()) return;
+	for (const feature of registry.getAll()) {
+		if (!registry.isFeatureEnabled(feature.id)) continue;
+		if (!registry.hasButtons(feature, feature.id)) continue;
+		const config = registry.getConfigOr(feature.id, feature.defaults);
+		const menuPlaced = feature.buttons.some(
+			(button) => getButtonConfig(config, button.name)?.placement === "feature_menu"
+		);
+		if (!menuPlaced) continue;
+		// Config is unchanged, so the reconcile is placement-only: the enabled state does not move.
+		void registry.reconcileFeature(feature.id, config, true);
+	}
+}

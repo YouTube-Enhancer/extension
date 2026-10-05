@@ -27,6 +27,8 @@ const featuresInMenu = new Set<AllButtonNames>();
 
 let cleanupFeatureMenuListeners: Nullable<() => void> = null;
 let featureMenuCssInjected = false;
+/** Superseded-bind counter; a newer bind (or a teardown) aborts an in-flight listener retry. */
+let featureMenuBindGeneration = 0;
 
 export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle extends boolean>(
 	buttonName: Name,
@@ -101,6 +103,37 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 
 // ─── DOM helpers ──────────────────────────────────────────────────
 
+/**
+ * Binds the feature menu listeners for `openType`, retrying through the player manager while the
+ * player chrome is still rendering. setupFeatureMenuEventListeners bails when any element it needs
+ * is missing; without a retry, an openType switch that lands during a re-render left the menu with
+ * no listeners at all - neither hover nor click did anything until the next full setup.
+ */
+export function bindFeatureMenuEventListeners(openType: FeatureMenuOpenType): () => void {
+	const generation = ++featureMenuBindGeneration;
+	let cleanup = setupFeatureMenuEventListeners(openType);
+	if (cleanup) return cleanup;
+	void featurePlayerManager.executeWithRetries(
+		"featureMenu",
+		[
+			() => {
+				// A newer bind or a teardown superseded this retry.
+				if (generation !== featureMenuBindGeneration) return true;
+				cleanup = setupFeatureMenuEventListeners(openType);
+				return cleanup !== null;
+			}
+		],
+		["bind-feature-menu-listeners"],
+		{ pageTypes: ["watch"], waitForLoaded: true }
+	);
+	return () => {
+		// Supersede any in-flight retry and tear down whatever ended up bound.
+		if (generation === featureMenuBindGeneration) featureMenuBindGeneration++;
+		cleanup?.();
+		cleanup = null;
+	};
+}
+
 export async function enableFeatureMenu() {
 	await enableFeatureMenuButton();
 }
@@ -146,16 +179,18 @@ export function getFeatureMenuItemIcon(buttonName: AllButtonNames): Nullable<HTM
 	return document.querySelector(selector);
 }
 
+// ─── ID helpers ───────────────────────────────────────────────────
+
 export function getFeatureMenuItemLabel(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
 	const selector = `#yte-${buttonName}-label` as const;
 	return document.querySelector(selector);
 }
 
-// ─── ID helpers ───────────────────────────────────────────────────
-
 export function hasFeaturesInMenu(): boolean {
 	return featuresInMenu.size > 0;
 }
+
+// ─── DOM queries ──────────────────────────────────────────────────
 
 export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
 	featuresInMenu.delete(buttonName);
@@ -176,11 +211,14 @@ export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
 	}
 }
 
-// ─── DOM queries ──────────────────────────────────────────────────
-
+/**
+ * Binds the open/close listeners for `openType`. Returns the teardown, or null when the player
+ * chrome is not rendered yet and none of the listeners could be attached; callers retry through
+ * {@link bindFeatureMenuEventListeners} instead of leaving the menu dead until the next reload.
+ */
 export function setupFeatureMenuEventListeners(
 	featureMenuOpenType: FeatureMenuOpenType
-): () => void {
+): Nullable<() => void> {
 	eventManager.removeEventListeners("featureMenu");
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	const playerContainer = document.querySelector<HTMLDivElement>("#movie_player");
@@ -188,7 +226,7 @@ export function setupFeatureMenuEventListeners(
 	const featureMenu = document.querySelector<HTMLDivElement>(menuId);
 	const featureMenuButton = document.querySelector<HTMLButtonElement>(menuButtonId);
 	if (!settingsButton || !playerContainer || !bottomControls || !featureMenu || !featureMenuButton)
-		return () => {};
+		return null;
 	const { listener: showFeatureMenuTooltip, remove: removeFeatureMenuTooltip } = createTooltip({
 		element: featureMenuButton,
 		featureName: "featureMenu",
@@ -384,7 +422,7 @@ async function createFeatureMenuButton(): Promise<boolean> {
 			window.removeEventListener("yte-feature-menu-resized", updateMenuPosition);
 			resizeObserver.disconnect();
 		};
-		const listenersCleanup = setupFeatureMenuEventListeners(openType);
+		const listenersCleanup = bindFeatureMenuEventListeners(openType);
 		const origCleanup = cleanupFeatureMenuListeners;
 		cleanupFeatureMenuListeners = () => {
 			window.removeEventListener("resize", updateMenuPosition);
