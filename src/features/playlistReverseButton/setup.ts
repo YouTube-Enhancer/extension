@@ -137,19 +137,30 @@ async function setupOnWatchPage(stateAPI: StateAPI) {
 function setupReversalMaintenance(stateAPI: StateAPI, generation: number) {
 	maintenanceRestores = [];
 	const restoreOrder = () => {
-		// A tick later, so the page has finished taking the data it was handed before the live order is read.
-		setTimeout(() => {
-			if (generation !== currentSetupGeneration()) return;
-			if (!isWatchPage() || !stateAPI.getState().isReversed || !isPlaylistDataCurrent()) return;
+		// The hand-over event fires before the page has finished taking the data it was handed: poll until
+		// the live order is both settled and clearly the wrong way round, and restore as soon as one tick
+		// sees all of that, instead of deciding on a single tick. The first restore flips the state the
+		// other hand-over event's poll reads, so the two announcements cannot double-restore.
+		void poll(
+			() => {
+				if (!isWatchPage() || !stateAPI.getState().isReversed) return false;
+				if (!isPlaylistDataCurrent()) return false;
+				return matchReversalToState(true);
+			},
+			Boolean,
+			100,
+			3000
+		).then((restored) => {
+			if (!restored || generation !== currentSetupGeneration()) return;
 			const now = Date.now();
 			maintenanceRestores = maintenanceRestores.filter(
 				(time) => now - time < MAINTENANCE_RESTORE_WINDOW
 			);
 			if (maintenanceRestores.length >= MAINTENANCE_RESTORE_LIMIT) return;
-			if (!matchReversalToState(true)) return;
 			maintenanceRestores.push(now);
 			void ensureButton(stateAPI);
-		}, 0);
+			return undefined;
+		});
 	};
 	eventManager.addEventListener(document, "yt-page-data-updated", restoreOrder, FEATURE_NAME);
 	eventManager.addEventListener(document, "yt-playlist-data-updated", restoreOrder, FEATURE_NAME);
