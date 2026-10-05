@@ -46,6 +46,15 @@ export function getTrackedButtonPlacement(buttonName: AllButtonNames): ButtonPla
 	return trackedButtons.get(buttonName)?.currentPlacement;
 }
 
+/**
+ * Landed = initialized + enabled in tracked state. Prefer {@link isButtonPresentInDom}
+ * (or the placement module's outcomes) when a live DOM check is required; this flag alone
+ * can go stale if the player re-renders between placements.
+ */
+export function isTrackedButtonLanded(buttonName: AllButtonNames): boolean {
+	return getTrackedButtonInitialized(buttonName) && getTrackedButtonEnabled(buttonName);
+}
+
 export function setTrackedButtonEnabled(buttonName: AllButtonNames, enabled: boolean) {
 	const info = trackedButtons.get(buttonName);
 	if (info) info.enabled = enabled;

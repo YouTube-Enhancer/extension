@@ -1,3 +1,6 @@
+export { getButtonConfig } from "./buttonConfig";
+export type { ButtonConfigSlice } from "./buttonConfig";
+
 export {
 	addButton,
 	addButton as addFeatureButton,
@@ -26,6 +29,9 @@ export {
 	updateFeatureMenuItemLabel,
 	updateFeatureMenuTitle
 } from "./ButtonController";
+
+export { buttonPlacement } from "./buttonPlacement";
+export type { PlacementOutcome, PlacementStateSnapshot } from "./buttonPlacement";
 
 export type { FeatureMenuOpenType, ListenerType } from "./types";
 
