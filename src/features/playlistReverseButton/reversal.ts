@@ -71,18 +71,22 @@ function applyReversal(): boolean {
 	const rendered: PlaylistData = { ...playlist, contents: [...playlist.contents] };
 	syncWatchPageData(watchFlexy, rendered, autoplay);
 	pushPlaylistData(manager, panel, rendered, autoplay);
-	// The page re-renders from the data it was just handed; a second push afterwards makes sure that render did not
-	// put YouTube's own copy back in front of the panel. Not after a cleanup or another setup in the meantime: the
-	// panel element outlives an in-page navigation, and the push would hand it the previous page's playlist.
+	// The page re-renders from the data it was just handed; repeated pushes afterwards make sure that render did
+	// not put YouTube's own copy back in front of the panel. The renders can land a second or two after the
+	// hand-over under load, so the pushes span that window rather than a single 100ms tick. Not after a cleanup
+	// or another setup in the meantime: the panel element outlives an in-page navigation, and a push would hand
+	// it the previous page's playlist.
 	const generation = currentSetupGeneration();
-	setTimeout(() => {
-		if (generation !== currentSetupGeneration()) return;
-		pushPlaylistData(manager, panel, rendered, autoplay);
-		const activeItem = document.querySelector<HTMLElement>(
-			"ytd-playlist-panel-video-renderer[selected], ytd-playlist-video-renderer[selected]"
-		);
-		activeItem?.scrollIntoView({ block: "nearest" });
-	}, 100);
+	for (const delay of [100, 600, 1500]) {
+		setTimeout(() => {
+			if (generation !== currentSetupGeneration()) return;
+			pushPlaylistData(manager, panel, rendered, autoplay);
+			const activeItem = document.querySelector<HTMLElement>(
+				"ytd-playlist-panel-video-renderer[selected], ytd-playlist-video-renderer[selected]"
+			);
+			activeItem?.scrollIntoView({ block: "nearest" });
+		}, delay);
+	}
 
 	return true;
 }
