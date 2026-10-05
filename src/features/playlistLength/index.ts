@@ -48,6 +48,6 @@ export default createFeature({
 	},
 	onNavigate: async () => {
 		cleanupPlaylistLength();
-		await setupPlaylistLength(registry.configManager.getLast("playlistLength"));
+		await setupPlaylistLength(registry.getConfig("playlistLength"));
 	}
 });

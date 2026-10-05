@@ -12,7 +12,7 @@ let captionsWhereEnabled = false;
 
 function enableCaptions() {
 	// A pre-roll ad can run for the better part of a minute; the attempts have to outlast it.
-	void registry.playerManager.executeWithRetries(
+	void registry.executeWithRetries(
 		"automaticallyEnableClosedCaptions",
 		[enableCaptionsTask],
 		["enableCaptions"],
@@ -53,7 +53,7 @@ export default createFeature({
 	...metadata,
 	onDisable: async () => {
 		// A run still waiting for captions must not turn them on after the feature is off
-		registry.playerManager.cleanup("automaticallyEnableClosedCaptions");
+		registry.cleanupPlayerRetry("automaticallyEnableClosedCaptions");
 		// Get the player element
 		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 		// If player element is not available, return

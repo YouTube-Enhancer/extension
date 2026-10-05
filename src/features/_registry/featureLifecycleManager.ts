@@ -1,7 +1,7 @@
 import type {
-    AnyFeatureBase,
-    FeatureKeys,
-    FeatureKeysWithState
+	AnyFeatureBase,
+	FeatureKeys,
+	FeatureKeysWithState
 } from "@/src/features/_registry/types";
 import type { configuration } from "@/src/types";
 

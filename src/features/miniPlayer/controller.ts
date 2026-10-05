@@ -19,7 +19,7 @@ import { createStyledElement } from "@/src/utils/dom/elements";
 import { clamp } from "@/src/utils/math";
 
 import "./index.css";
-const stateAPI = registry.stateManager.getStateAPI("miniPlayer");
+const stateAPI = registry.getStateAPI("miniPlayer");
 export type MiniPlayerCallbacks = {
 	/** Notified whenever the overlay activates or deactivates, including from paths the button never goes through, like close(). */
 	onStateChange?: (active: boolean) => void;
