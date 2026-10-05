@@ -167,6 +167,9 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 				state.canEnable,
 				state.prevEnabled
 			);
+			if (state.canEnable && !options?.skipButtons) {
+				this.schedulePlacementRecheck(feature, id, config);
+			}
 		} finally {
 			this.updatingFeatures.delete(id);
 			const pending = this.pendingUpdates.get(id);
@@ -338,5 +341,21 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 				}
 			) ?? false;
 		return { canEnable, hasChanged: hasEnabledChanged || hasConfigChanged, prevEnabled };
+	}
+	/**
+	 * Placement can lose to the player controls re-rendering right after the button is placed, and a deferred
+	 * placement can fire against a target that then vanishes again. Re-check once shortly after an enable and
+	 * re-place when the button is gone; the enabled-state check keeps a disabled feature from coming back.
+	 */
+	private schedulePlacementRecheck<K extends FeatureKeys>(
+		feature: AnyFeatureBase,
+		id: K,
+		config: configuration[K]
+	) {
+		setTimeout(() => {
+			if (this.featureEnabledState.get(id) !== true) return;
+			if (!this.registry.getFeature(id)) return;
+			void this.applyButtonPlacement(feature, id, config, true);
+		}, 3000);
 	}
 }
