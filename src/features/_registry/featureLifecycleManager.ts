@@ -48,6 +48,9 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 			runFeatureDisposers(feature.id);
 			return;
 		}
+		// Abort stale retries before onDisable runs; a restore retry that onDisable itself queues is
+		// deliberate post-disable work and must survive the teardown, so no cleanup runs after it.
+		featurePlayerManager.cleanup(feature.id);
 		await this.safelyExecute<void>(
 			feature.id,
 			"onDisable",
@@ -61,8 +64,6 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 			},
 			{ shouldRethrow: true }
 		);
-		// Abort in-flight retries and run disposers after onDisable (restore retries may start there).
-		featurePlayerManager.cleanup(feature.id);
 		runFeatureDisposers(feature.id);
 	}
 
