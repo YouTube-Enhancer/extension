@@ -14,16 +14,18 @@ export type NavigationEventType = "finish" | "popstate" | "start" | "updated";
 type NavigationSignature = `${string}${"" | `:${string}`}`;
 
 const NAVIGATION_DEBOUNCE_MS = 100;
+const NAVIGATION_SIGNATURE_RETRIES = 5;
 
 export class FeatureNavigationManager extends FeatureManagerBase {
+	private _initialized = false;
 	private currentNavigationSignature: Nullable<string> = null;
 	private currentPage: Nullable<string> = null;
 	private debounceTimer: Nullable<ReturnType<typeof setTimeout>> = null;
-	private _initialized = false;
 	private navigating = false;
 	private navigationCallback?: (signature: string, eventType: NavigationEventType) => Promise<void>;
 	private navigationListeners: Record<string, () => void> = {};
 	private navigationPatched = false;
+	private navigationSignatureRetries = 0;
 	// Store original history methods and their wrappers for proper cleanup
 	private pushStateWrapper?: { original: typeof history.pushState; wrapper: () => void };
 	private replaceStateWrapper?: { original: typeof history.replaceState; wrapper: () => void };
@@ -69,10 +71,6 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		this.replaceStateWrapper = undefined;
 	}
 
-	isInitialized(): boolean {
-		return this._initialized;
-	}
-
 	handleNavigation(eventType: NavigationEventType) {
 		if (this.navigating) return;
 		if (this.debounceTimer !== null) clearTimeout(this.debounceTimer);
@@ -91,6 +89,10 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		this.navigationCallback = callback;
 		this.setupNavigationListener();
 		this._initialized = true;
+	}
+
+	isInitialized(): boolean {
+		return this._initialized;
 	}
 
 	protected getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
@@ -241,10 +243,18 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	private async processNavigation(eventType: NavigationEventType) {
 		if (this.navigating) return;
 		this.navigating = true;
+		let retrySignature = false;
 		try {
 			invalidatePageTypeCache();
 			const signature = await this.getNavigationSignature();
-			if (!signature) return;
+			if (!signature) {
+				// Page-type detection can miss its window on a heavily loaded page; a silently dropped
+				// navigation leaves every feature's onNavigate unrun. Retry through the debounce instead.
+				retrySignature = this.navigationSignatureRetries < NAVIGATION_SIGNATURE_RETRIES;
+				this.navigationSignatureRetries = retrySignature ? this.navigationSignatureRetries + 1 : 0;
+				return;
+			}
+			this.navigationSignatureRetries = 0;
 			if (!this.updateNavigationSignature(signature)) return;
 			this.currentNavigationSignature = signature;
 			if (this.navigationCallback) await this.navigationCallback(signature, eventType);
@@ -252,6 +262,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 			this.logErrorToTracker("navigation handler", error);
 		} finally {
 			this.navigating = false;
+			if (retrySignature) this.handleNavigation(eventType);
 		}
 	}
 
