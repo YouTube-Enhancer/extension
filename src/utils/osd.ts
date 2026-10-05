@@ -1,7 +1,7 @@
 import type { configuration, Nullable, YouTubePlayerDiv } from "@/src/types";
 import type { OnScreenDisplayType, ValueType } from "@/src/ui/OnScreenDisplayManager/types";
 
-import { getOnScreenDisplayConfig } from "@/src/ui/coreConfigStore";
+import { getOnScreenDisplayConfig } from "@/src/ui/configProvider";
 import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
 
 type OSDConfig = configuration["onScreenDisplay"];

@@ -1,10 +1,15 @@
+import type { Nullable } from "@/src/types";
+
 import eventManager from "@/src/events/EventManager";
 import { registerAllFeatures } from "@/src/features/_registry/autoRegister";
-import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
 import { i18nService } from "@/src/i18n";
-import { setCoreConfigs } from "@/src/ui/coreConfigStore";
+import {
+	fetchOptions,
+	reconcileAfterPageLoaded,
+	reseedForNavigation,
+	seed
+} from "@/src/ui/configProvider";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
 import { disconnect as disconnectMutationBus } from "@/src/utils/dom/observers/domMutationBus";
@@ -26,28 +31,18 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	}
 	ensureTrustedTypesPolicy();
 
-	const [
-		{
-			data: { options }
-		},
-		{ data: state }
-	] = await Promise.all([
-		waitForSpecificMessage("options", "request_data", "content"),
+	const [options, { data: state }] = await Promise.all([
+		fetchOptions(),
 		waitForSpecificMessage("state", "request_data", "extension")
 	]);
+	seed(options);
 
 	window.i18nextInstance = await i18nService(options.language ?? "en-US");
-
-	setCoreConfigs({
-		deepDarkCSS: options.deepDarkCSS,
-		featureMenu: options.featureMenu,
-		onScreenDisplay: options.onScreenDisplay
-	});
 
 	await registerAllFeatures(state);
 
 	getButtonColor();
-	let colorDebounce: ReturnType<typeof setTimeout> | null = null;
+	let colorDebounce: Nullable<ReturnType<typeof setTimeout>> = null;
 	const colorObserver = new MutationObserver(() => {
 		if (colorDebounce) clearTimeout(colorDebounce);
 		colorDebounce = setTimeout(() => {
@@ -61,14 +56,7 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	});
 
 	await registry.initialize(async () => {
-		const {
-			data: { options: navOptions }
-		} = await waitForSpecificMessage("options", "request_data", "content");
-		setCoreConfigs({
-			deepDarkCSS: navOptions.deepDarkCSS,
-			featureMenu: navOptions.featureMenu,
-			onScreenDisplay: navOptions.onScreenDisplay
-		});
+		const navOptions = await reseedForNavigation();
 		await registry.enableAll(navOptions);
 	});
 
@@ -90,21 +78,10 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	 * such change. The baseline is the config the orchestrator last applied, not the options read above, so a change
 	 * the forwarding has already delivered counts as applied and is not applied twice.
 	 */
-	const {
-		data: { options: currentOptions }
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	setCoreConfigs({
-		deepDarkCSS: currentOptions.deepDarkCSS,
-		featureMenu: currentOptions.featureMenu,
-		onScreenDisplay: currentOptions.onScreenDisplay
+	await reconcileAfterPageLoaded({
+		getAll: () => registry.getAll(),
+		reconcile: (id, config, enabled) => registry.reconcileFeature(id, config, enabled)
 	});
-	for (const feature of registry.getAll()) {
-		const { id } = feature;
-		const { [id]: current } = currentOptions;
-		if (!current || !featureConfigManager.hasChanged(featureConfigManager.getLast(id), current))
-			continue;
-		await registry.reconcileFeature(id, current, resolveEnabled(current));
-	}
 
 	return {
 		async dispose(options?: { disableFeatures?: boolean }) {

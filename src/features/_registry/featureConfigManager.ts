@@ -12,6 +12,10 @@ class FeatureConfigManager {
 		return cfg as configuration[K];
 	}
 
+	getLastOr<K extends FeatureKeys>(id: K, fallback: configuration[K]): configuration[K] {
+		return (this.lastConfig.get(id) ?? fallback) as configuration[K];
+	}
+
 	hasChanged<K extends FeatureKeys>(
 		prev: configuration[K] | undefined,
 		next: configuration[K]
