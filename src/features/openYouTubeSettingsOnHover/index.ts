@@ -57,9 +57,6 @@ async function setupHoverListeners() {
 	 * pointer's position against the live menu and button rectangles decides instead.
 	 */
 	let pointer = { x: -1, y: -1 };
-	const trackPointer = (event: MouseEvent) => {
-		pointer = { x: event.clientX, y: event.clientY };
-	};
 	const pointerIsOver = (element: Element) => {
 		const rect = element.getBoundingClientRect();
 		return (
@@ -92,6 +89,14 @@ async function setupHoverListeners() {
 	const scheduleHide = () => {
 		cancelHide();
 		hideTimeout = setTimeout(hideSettings, 50);
+	};
+	const trackPointer = (event: MouseEvent) => {
+		pointer = { x: event.clientX, y: event.clientY };
+		// Moving out of both the menu and the button closes the menu even when the mouseleave that used to
+		// trigger the schedule never arrives: panel swaps and coalesced events under load drop it.
+		if (isSettingsOpen() && !pointerIsOver(settingsMenu) && !pointerIsOver(settingsButton)) {
+			scheduleHide();
+		}
 	};
 	eventManager.addEventListener(document, "mousemove", trackPointer, "openYouTubeSettingsOnHover");
 	eventManager.addEventListener(
