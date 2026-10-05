@@ -241,6 +241,17 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		}
 	}
 
+	/** Public placement entry for the navigation pipeline (one pass per feature). */
+	async verifyButtonPlacement<K extends FeatureKeys>(
+		id: K,
+		config: configuration[K],
+		canEnable: boolean
+	) {
+		const feature = this.registry.getFeature(id);
+		if (!feature) return;
+		await this.applyButtonPlacement(feature, id, config, canEnable);
+	}
+
 	protected override getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
 		return "featureOrchestrator" as FeatureKeys;
 	}

@@ -31,6 +31,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	private navigationListeners: Record<string, () => void> = {};
 	private navigationPatched = false;
 	private navigationSignatureRetries = 0;
+	private previousNavigationSignature: Nullable<string> = null;
 	// Store original history methods and their wrappers for proper cleanup
 	private pushStateWrapper?: { original: typeof history.pushState; wrapper: () => void };
 	private replaceStateWrapper?: { original: typeof history.replaceState; wrapper: () => void };
@@ -72,8 +73,21 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		this.navigationListeners = {};
 		this.navigationPatched = false;
 		this.currentNavigationSignature = null;
+		this.previousNavigationSignature = null;
 		this.pushStateWrapper = undefined;
 		this.replaceStateWrapper = undefined;
+	}
+
+	getCurrentPage(): Nullable<string> {
+		return this.currentPage;
+	}
+
+	getCurrentSignature(): Nullable<string> {
+		return this.currentNavigationSignature;
+	}
+
+	getPreviousSignature(): Nullable<string> {
+		return this.previousNavigationSignature;
 	}
 
 	handleNavigation(eventType: NavigationEventType) {
@@ -340,6 +354,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 
 	private updateNavigationSignature(signature: Nullable<NavigationSignature>) {
 		if (!signature || signature === this.currentNavigationSignature) return false;
+		this.previousNavigationSignature = this.currentNavigationSignature;
 		this.currentNavigationSignature = signature;
 		this.currentPage = getPageFromSignature(signature);
 		return true;

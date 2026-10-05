@@ -9,10 +9,8 @@ import type { configuration } from "@/src/types";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { FeatureLifecycleManager } from "@/src/features/_registry/featureLifecycleManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
-import {
-	featureNavigationManager,
-	type NavigationEventType
-} from "@/src/features/_registry/featureNavigationManager";
+import { featureNavigationManager } from "@/src/features/_registry/featureNavigationManager";
+import { runNavigationPipeline } from "@/src/features/_registry/featureNavigationPipeline";
 import { featurePlayerManager } from "@/src/features/_registry/featurePlayerManager";
 
 import type { FeatureButton } from "./types";
@@ -55,19 +53,23 @@ export class FeatureRegistry extends FeatureManagerBase {
 	): feature is AnyFeatureBase & { buttons: FeatureButton<K>[]; id: K } {
 		return feature.id === id && Array.isArray((feature as { buttons?: unknown }).buttons);
 	}
-	async initialize(cb: (navigationType: string, eventType: NavigationEventType) => Promise<void>) {
-		await this.navigationManager.initialize(async (navigationType, eventType) => {
+	/**
+	 * Wires SPA navigation to the config reseed + per-feature diff pipeline.
+	 * Callers do not pass a callback; all navigation work lives in the pipeline.
+	 */
+	initialize() {
+		this.navigationManager.initialize(async (navigationType) => {
 			this.playerManager.cleanup();
 			await this.safelyExecute<void>(
 				"navigationCallback",
 				"navigate",
-				() => cb(navigationType, eventType),
-				{ subPhase: "callback" }
+				() =>
+					runNavigationPipeline({
+						registry: this,
+						signature: navigationType
+					}),
+				{ subPhase: "pipeline" }
 			);
-			this.orchestrator.invalidateButtonCache();
-			for (const feature of this.orchestrator.getFeaturesSortedByPriority()) {
-				await this.orchestrator.updateFeatureOnNavigation(feature.id, navigationType);
-			}
 		});
 	}
 	async notifyConfigChange<K extends FeatureKeys>(id: K, config: configuration[K]) {
