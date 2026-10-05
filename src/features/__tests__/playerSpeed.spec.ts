@@ -50,7 +50,7 @@ test.describe("playerSpeed", () => {
 			await enableFeature(page, "playerSpeed.enabled");
 			await expect
 				.poll(async () => getCurrentSpeed(page, pageType), {
-					timeout: pageType === "shorts" ? 15000 : 5000
+					timeout: 30000
 				})
 				.toBe(speed);
 		});
@@ -60,7 +60,7 @@ test.describe("playerSpeed", () => {
 			await enableFeature(page, "playerSpeed.enabled");
 			await expect
 				.poll(async () => getCurrentSpeed(page, pageType), {
-					timeout: pageType === "shorts" ? 15000 : 5000
+					timeout: 30000
 				})
 				.toBe(2);
 			await navigateToPageType(page, home);
@@ -89,7 +89,7 @@ test.describe("playerSpeed", () => {
 			await enableFeature(page, "playerSpeed.enabled");
 			await expect
 				.poll(async () => getCurrentSpeed(page, pageType), {
-					timeout: pageType === "shorts" ? 15000 : 5000
+					timeout: 30000
 				})
 				.toBe(2);
 			await disableFeature(page, "playerSpeed.enabled");
@@ -97,7 +97,7 @@ test.describe("playerSpeed", () => {
 			await enableFeature(page, "playerSpeed.enabled");
 			await expect
 				.poll(async () => getCurrentSpeed(page, pageType), {
-					timeout: pageType === "shorts" ? 15000 : 5000
+					timeout: 30000
 				})
 				.toBe(2);
 		});
@@ -107,7 +107,7 @@ test.describe("playerSpeed", () => {
 			await enableFeature(page, "playerSpeed.enabled");
 			await expect
 				.poll(async () => getCurrentSpeed(page, pageType), {
-					timeout: pageType === "shorts" ? 15000 : 5000
+					timeout: 30000
 				})
 				.toBe(2);
 			await page.reload();

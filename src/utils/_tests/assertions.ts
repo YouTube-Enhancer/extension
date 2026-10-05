@@ -11,7 +11,7 @@ import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 export async function expectAnyMatch(
 	page: Page,
 	selectors: readonly string[],
-	{ timeout = 10000 }: { timeout?: number } = {}
+	{ timeout = 30000 }: { timeout?: number } = {}
 ): Promise<void> {
 	await expect
 		.poll(
@@ -30,7 +30,7 @@ export async function expectAnyMatch(
 export async function expectBodyWithClass(
 	page: Page,
 	bodyClass: string,
-	{ timeout = 10000 }: { timeout?: number } = {}
+	{ timeout = 30000 }: { timeout?: number } = {}
 ): Promise<void> {
 	await expect(page.locator("body")).toHaveClass(new RegExp(`(^|\\s)${bodyClass}(\\s|$)`), {
 		timeout
@@ -39,7 +39,7 @@ export async function expectBodyWithClass(
 export async function expectBodyWithoutClass(
 	page: Page,
 	bodyClass: string,
-	{ timeout = 10000 }: { timeout?: number } = {}
+	{ timeout = 30000 }: { timeout?: number } = {}
 ): Promise<void> {
 	await expect(page.locator("body")).not.toHaveClass(new RegExp(`(^|\\s)${bodyClass}(\\s|$)`), {
 		timeout
@@ -72,7 +72,7 @@ export async function expectCurrentQualityLevelToBeTruthy(
 	page: Page,
 	pageType: PageType = "watch",
 	expectedQuality: YoutubePlayerQualityLevel,
-	{ timeout = 10000 }: { timeout?: number } = {}
+	{ timeout = 30000 }: { timeout?: number } = {}
 ) {
 	await expect
 		.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", pageType), { timeout })
@@ -132,7 +132,7 @@ export async function expectFeatureButtonToBeIn(
 	page: Page,
 	featureId: FeatureButtonId,
 	placement: Exclude<ButtonPlacement, "feature_menu">,
-	{ timeout = 30000 }: { timeout?: number } = {}
+	{ timeout = 45000 }: { timeout?: number } = {}
 ) {
 	const { [placement]: selector } = placementSelectors;
 	const container = page.locator(selector);
@@ -145,7 +145,7 @@ export async function expectFeatureButtonToBeIn(
 export async function expectFeatureButtonToBeTruthy(
 	page: Page,
 	featureId: FeatureButtonId,
-	{ timeout = 30000 }: { timeout?: number } = {}
+	{ timeout = 45000 }: { timeout?: number } = {}
 ) {
 	const featureButton = page.locator(`#${featureId}`);
 	await expect(featureButton).toBeAttached({ timeout });

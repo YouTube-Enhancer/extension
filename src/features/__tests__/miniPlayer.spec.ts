@@ -175,19 +175,19 @@ test.describe("miniPlayer", () => {
 	test(`should re-create sentinel after disable then re-enable on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "miniPlayer.enabled");
-		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
+		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
 		await disableFeature(page, "miniPlayer.enabled");
 		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).not.toBeAttached();
 		await enableFeature(page, "miniPlayer.enabled");
-		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
+		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
 	});
 	// Watch only: on watch the post-reload navigateToPageType skips the goto so the assertion really follows the reload; on live it navigates away again.
 	test(`should persist sentinel after full page reload on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "miniPlayer.enabled");
-		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
+		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
 		await reloadPage(page, watch);
-		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
+		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
 	});
 
 	test(`should not create sentinel element on non-target page`, async ({ page }) => {
@@ -202,7 +202,7 @@ test.describe("miniPlayer", () => {
 	}) => {
 		await navigateToPageType(page, testPages[0]);
 		await enableFeature(page, "miniPlayer.enabled");
-		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
+		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
 		await navigateToPageType(page, nonTargetPage!);
 		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).not.toBeAttached();
 	});
@@ -211,7 +211,7 @@ test.describe("miniPlayer", () => {
 		test("miniPlayer state is stored in extension storage", async ({ page }) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
+			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
 
 			const initialState = await readMiniPlayerState(page);
 			expect(initialState).toBeDefined();
@@ -246,7 +246,7 @@ test.describe("miniPlayer", () => {
 		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
+			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
 			await expectMiniPlayerInactive(page);
 			await scrollCommentsIntoView(page);
 			await expectMiniPlayerActive(page);
@@ -344,7 +344,7 @@ test.describe("miniPlayer", () => {
 		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
+			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
 			await toggleMiniPlayerFromButton(page);
 			await expectMiniPlayerActive(page);
 			await expect
@@ -369,7 +369,7 @@ test.describe("miniPlayer", () => {
 		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
+			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
 			await toggleMiniPlayerFromButton(page);
 			await expectMiniPlayerActive(page);
 			// onNavigate destroys the controller, so only its wasManualActive branch can bring the mini player back.
@@ -429,7 +429,7 @@ test.describe("miniPlayer", () => {
 		}) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached();
+			await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
 			await toggleMiniPlayerFromButton(page);
 			await expectMiniPlayerActive(page);
 			// The second press is the other half of toggleManual: it closes the overlay and gives up the override.

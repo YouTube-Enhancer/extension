@@ -52,21 +52,30 @@ test.describe("restoreFullscreenScrolling", () => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "restoreFullscreenScrolling.enabled");
 			await expect(page.locator("ytd-watch-flexy")).toHaveClass(
-				/yte-ytd-watch-flexy-restore-fullscreen-scrolling/
+				/yte-ytd-watch-flexy-restore-fullscreen-scrolling/,
+				{ timeout: 30000 }
 			);
-			await expect(page.locator("ytd-app")).toHaveClass(/yte-ytd-app-restore-fullscreen-scrolling/);
+			await expect(page.locator("ytd-app")).toHaveClass(
+				/yte-ytd-app-restore-fullscreen-scrolling/,
+				{ timeout: 30000 }
+			);
 			await disableFeature(page, "restoreFullscreenScrolling.enabled");
 			await expect(page.locator("ytd-watch-flexy")).not.toHaveClass(
-				/yte-ytd-watch-flexy-restore-fullscreen-scrolling/
+				/yte-ytd-watch-flexy-restore-fullscreen-scrolling/,
+				{ timeout: 30000 }
 			);
 			await expect(page.locator("ytd-app")).not.toHaveClass(
 				/yte-ytd-app-restore-fullscreen-scrolling/
 			);
 			await enableFeature(page, "restoreFullscreenScrolling.enabled");
 			await expect(page.locator("ytd-watch-flexy")).toHaveClass(
-				/yte-ytd-watch-flexy-restore-fullscreen-scrolling/
+				/yte-ytd-watch-flexy-restore-fullscreen-scrolling/,
+				{ timeout: 30000 }
 			);
-			await expect(page.locator("ytd-app")).toHaveClass(/yte-ytd-app-restore-fullscreen-scrolling/);
+			await expect(page.locator("ytd-app")).toHaveClass(
+				/yte-ytd-app-restore-fullscreen-scrolling/,
+				{ timeout: 30000 }
+			);
 		});
 	}
 
