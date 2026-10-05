@@ -9,6 +9,11 @@ import { featureButtonManager } from "@/src/features/_registry/featureButtonMana
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featureNavigationManager } from "@/src/features/_registry/featureNavigationManager";
+import {
+	subscribe as onDomMutations,
+	type Unsubscribe
+} from "@/src/utils/dom/observers/domMutationBus";
+import { pageReadinessSelectors } from "@/src/utils/dom/pageReadiness";
 
 import type { FeatureLifecycleManager } from "./featureLifecycleManager";
 import type { FeatureRegistry } from "./featureRegistry";
@@ -35,6 +40,9 @@ type UpdateFeatureEnabledStateOptions = {
 };
 
 export class FeatureOrchestrator extends FeatureManagerBase {
+	/** Debounce handle for the placement rebind that follows a player-controls re-render. */
+	private controlsRebindTimer: Nullable<ReturnType<typeof setTimeout>> = null;
+	private controlsRebindUnsubscribe: Nullable<Unsubscribe> = null;
 	private enableAllPromise: Nullable<Promise<void>> = null;
 	private featureEnabledState = new Map<FeatureKeys, boolean>();
 	/**
@@ -83,6 +91,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 
 		this.enableAllPromise = (async () => {
 			try {
+				this.ensureControlsRebindWatcher();
 				const featuresByPriority = this.getFeaturesSortedByPriority();
 				this.cacheFeatureConfigs(featuresByPriority, options);
 
@@ -284,6 +293,30 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		}
 	}
 
+	/**
+	 * The player controls re-render on live streams and whenever YouTube rebuilds the player
+	 * chrome, destroying already-placed feature buttons. Config changes and the one-shot
+	 * post-enable recheck cannot see a re-render that happens later - by then nothing runs a
+	 * placement pass again and the button stays gone for the rest of the page session. Watch
+	 * the controls (re)appearances instead; the per-button DOM check in buttonPlacement turns
+	 * each pass into a re-add only for the buttons that are actually missing.
+	 */
+	private ensureControlsRebindWatcher() {
+		if (this.controlsRebindUnsubscribe) return;
+		this.controlsRebindUnsubscribe = onDomMutations(
+			`${pageReadinessSelectors.playerControlsLeft}, ${pageReadinessSelectors.playerControlsRight}`,
+			() => {
+				// Placement itself appends buttons inside the controls, so debounce to keep those
+				// additions - and bursts of re-render mutations - from re-triggering the pass.
+				if (this.controlsRebindTimer) clearTimeout(this.controlsRebindTimer);
+				this.controlsRebindTimer = setTimeout(() => {
+					this.controlsRebindTimer = null;
+					void this.rebindButtonsAfterControlsRender();
+				}, 300);
+			}
+		);
+	}
+
 	private async executeLifecycleTransition<K extends FeatureKeys>(
 		feature: AnyFeatureBase,
 		id: K,
@@ -409,6 +442,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			) ?? false;
 		return { canEnable, hasChanged: hasEnabledChanged || hasConfigChanged, prevEnabled };
 	}
+
 	/**
 	 * Placement can lose to the player controls re-rendering right after the button is placed, and a deferred
 	 * placement can fire against a target that then vanishes again. Re-check once shortly after an enable and
