@@ -30,6 +30,7 @@ import {
 	getEffectivePlacement,
 	getPlacementRoot,
 	getPlacementSelector,
+	invalidateContainerCache,
 	placeButton,
 	startPlacementTracking,
 	stopPlacementTracking
@@ -58,6 +59,7 @@ export {
 	removeFeatureItemFromMenu
 } from "./featureMenu";
 export {
+	bindFeatureMenuEventListeners,
 	enableFeatureMenu,
 	enableFeatureMenuButton,
 	getFeatureButtonId,
@@ -87,34 +89,43 @@ export async function addButton<
 	const effectivePlacement = getEffectivePlacement(placement, fullscreenPlacement);
 	const selector = getPlacementSelector(effectivePlacement);
 	await enableFeatureMenuButton();
-	if (selector && !getCachedContainer(effectivePlacement)) {
-		// Probe synchronously: when the placement target has not rendered, defer to
-		// the mutation bus below rather than waiting inline, so stripped pages cost
-		// nothing and live pages that render late are still placed when they appear.
-		const element = document.querySelector(selector);
-		if (!element) {
-			// The placement target has not rendered yet. This is common when the feature is
-			// enabled during page setup on live streams, whose player controls appear late.
-			// Place the button as soon as the target shows up instead of giving up until the
-			// next config change, which never comes when the stored config is already current.
-			onDomMutations(
-				selector,
-				() => {
-					void addButton(
-						buttonName,
-						placement,
-						label,
-						icon,
-						listener,
-						isToggle,
-						initialChecked,
-						fullscreenPlacement,
-						labelResolver
-					);
-				},
-				{ once: true }
-			);
-			return;
+	if (selector) {
+		const cachedContainer = getCachedContainer(effectivePlacement);
+		if (cachedContainer && !cachedContainer.isConnected) {
+			// YouTube re-rendered the player controls; the cached placement container is detached.
+			// Drop the cache so the probe below arms a deferral against the replacement instead of
+			// skipping it and letting placeButton silently place the button into nothing.
+			invalidateContainerCache();
+		}
+		if (!getCachedContainer(effectivePlacement)) {
+			// Probe synchronously: when the placement target has not rendered, defer to
+			// the mutation bus below rather than waiting inline, so stripped pages cost
+			// nothing and live pages that render late are still placed when they appear.
+			const element = document.querySelector(selector);
+			if (!element) {
+				// The placement target has not rendered yet. This is common when the feature is
+				// enabled during page setup on live streams, whose player controls appear late.
+				// Place the button as soon as the target shows up instead of giving up until the
+				// next config change, which never comes when the stored config is already current.
+				onDomMutations(
+					selector,
+					() => {
+						void addButton(
+							buttonName,
+							placement,
+							label,
+							icon,
+							listener,
+							isToggle,
+							initialChecked,
+							fullscreenPlacement,
+							labelResolver
+						);
+					},
+					{ once: true }
+				);
+				return;
+			}
 		}
 	}
 	switch (effectivePlacement) {

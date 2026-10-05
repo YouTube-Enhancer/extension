@@ -183,6 +183,12 @@ class ButtonPlacementManager extends FeatureManagerBase {
 				const moved = prevPlacement !== nextPlacement;
 				const prevFullscreenPlacement = getTrackedButtonFullscreenPlacement(btn.name) ?? "same";
 				const fullscreenChanged = prevFullscreenPlacement !== nextFullscreenPlacement;
+				// A player-controls re-render can destroy a placed button while the tracked state
+				// still says it is active. Presence at the expected placement - not the tracked flag
+				// alone - decides whether an add is needed, so a placement pass that runs after the
+				// re-render actually re-adds the button instead of skipping it as "already placed".
+				const expectedPlacement = nextPlacement ?? prevPlacement ?? "feature_menu";
+				const domPresent = checkIfFeatureButtonExists(btn.name, expectedPlacement);
 
 				if (wasActive && (!isActive || moved)) {
 					await this.safelyExecute(
@@ -201,7 +207,9 @@ class ButtonPlacementManager extends FeatureManagerBase {
 					);
 				}
 
-				if (isActive && (!wasActive || moved || fullscreenChanged)) {
+				// The add path also covers a re-render that destroyed the button while tracked
+				// state still said active: !domPresent re-adds it instead of skipping.
+				if (isActive && (!wasActive || moved || fullscreenChanged || !domPresent)) {
 					await this.safelyExecute(
 						featureId,
 						"buttons:add",
