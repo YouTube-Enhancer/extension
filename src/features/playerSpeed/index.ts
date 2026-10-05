@@ -99,14 +99,27 @@ function resolveEffectiveSpeed(
 	return Number.isFinite(entry) ? entry : speed;
 }
 function setupPlaybackSpeedChangeListener() {
-	subscribe(
-		settingsPanelMenuSelector,
-		(elements) => {
-			const menu = elements[0] as HTMLDivElement;
-			if (menu) setupMenuObserver(menu);
-		},
-		{ once: true }
-	);
+	// The settings menu can already exist when this runs (init on a page that opened settings, or a re-arm
+	// after navigation): the bus only answers added nodes, so probe first and only subscribe when the menu
+	// is genuinely absent.
+	const arm = (menu: HTMLDivElement) => {
+		if (observedSettingsMenu === menu) return;
+		observedSettingsMenu = menu;
+		setupMenuObserver(menu);
+	};
+	const existingMenu = document.querySelector<HTMLDivElement>(settingsPanelMenuSelector);
+	if (existingMenu) {
+		arm(existingMenu);
+	} else {
+		subscribe(
+			settingsPanelMenuSelector,
+			(elements) => {
+				const menu = elements[0] as HTMLDivElement;
+				if (menu) arm(menu);
+			},
+			{ once: true }
+		);
+	}
 	function setupMenuObserver(settingsPanelMenu: HTMLDivElement) {
 		let lastSpeed: Nullable<number> = null;
 		const updateStoredSpeed = (speed: number) => {
@@ -182,6 +195,7 @@ function setupPlaybackSpeedChangeListener() {
 let lastRecordedSpeed: Nullable<number> = null;
 /** The speed configuration in force while the feature is enabled, for putting the rate back after YouTube resets it. */
 let enforcedConfig: Nullable<{ channelSpeeds?: string; speed: number }> = null;
+let observedSettingsMenu: Nullable<Element> = null;
 /** YouTube resets the rate a few times per video at most; anything past this is a fight not worth having. */
 const MAX_AUTOMATIC_REAPPLIES = 5;
 let automaticReapplies: { count: number; videoId: Nullable<string> } = { count: 0, videoId: null };
@@ -339,6 +353,9 @@ export default createFeature({
 		);
 		enforcedConfig = { channelSpeeds, speed: effectiveSpeed };
 		void setupRateChangeListener();
+		// The once-subscription from init was consumed by the previous page's menu, which navigation took
+		// out of the document; re-arm so manual speed changes keep being recorded after in-page navigation.
+		setupPlaybackSpeedChangeListener();
 		clearManualOverride();
 		resetRecordedSpeed();
 		void registry.playerManager.executeWithRetries(
