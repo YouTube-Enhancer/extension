@@ -26,7 +26,6 @@ export class FeatureRegistry extends FeatureManagerBase {
 		featureStateManager,
 		featureConfigManager
 	);
-	navigationListener?: () => void;
 	public navigationManager = featureNavigationManager;
 	public orchestrator = new FeatureOrchestrator(this);
 	public playerManager = featurePlayerManager;

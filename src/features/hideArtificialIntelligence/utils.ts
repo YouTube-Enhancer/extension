@@ -1,7 +1,7 @@
 import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
-import { cleanupRegistry } from "@/src/features/_registry/cleanupRegistry";
+import { addFeatureDisposer } from "@/src/features/_registry/featureLifecycleManager";
 import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
 
 /** Debounced so the top level observer does not run a document query for every YouTube DOM mutation. */
@@ -84,7 +84,7 @@ function injectStyleIntoFrame(frame: HTMLIFrameElement): void {
 function registerCleanup(): void {
 	if (cleanupRegistered) return;
 	cleanupRegistered = true;
-	cleanupRegistry.add(FEATURE_NAME, () => {
+	addFeatureDisposer(FEATURE_NAME, () => {
 		cleanupRegistered = false;
 		removeChatFrameHide();
 	});

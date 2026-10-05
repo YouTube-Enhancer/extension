@@ -3,7 +3,6 @@ import type { MiniPlayerOptions, MiniPlayerSize } from "@/src/features/miniPlaye
 import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
-import { cleanupRegistry } from "@/src/features/_registry/cleanupRegistry";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import {
 	MINI_PLAYER_ACTIVE_CLASS,
@@ -53,7 +52,7 @@ export class MiniPlayerController {
 	}
 	destroy() {
 		eventManager.removeEventListeners("miniPlayer");
-		cleanupRegistry.run("miniPlayer");
+		// Disposers and player retries are torn down by FeatureLifecycleManager.disableFeature.
 		this.disable();
 		this.overlayElement?.remove();
 		this.overlayElement = null;

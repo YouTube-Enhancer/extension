@@ -1,7 +1,7 @@
 import type { Nullable } from "@/src/types";
 
-import { cleanupRegistry } from "@/src/features/_registry/cleanupRegistry";
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { addFeatureDisposer } from "@/src/features/_registry/featureLifecycleManager";
 import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
 import { browserColorLog } from "@/src/utils/logging";
 
@@ -27,7 +27,7 @@ export default createFeature({
 				unwrapRedirect(el);
 			}
 		});
-		cleanupRegistry.add("removeRedirect", () => {
+		addFeatureDisposer("removeRedirect", () => {
 			unsubscribeBus?.();
 			unsubscribeBus = null;
 		});
