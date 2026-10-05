@@ -60,7 +60,7 @@ async function setupSaveToWatchLaterButtons() {
 	}
 	if (!isCurrent()) return;
 
-	const pageType = await getCurrentPageType();
+	const pageType = getCurrentPageType();
 	if (!isCurrent()) return;
 
 	const onWatchPage = pageType === "watch";
