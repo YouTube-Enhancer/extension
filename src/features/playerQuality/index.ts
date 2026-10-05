@@ -284,7 +284,11 @@ function makeApplyQualityTasks(
 		}
 		enforcement.verifiedOnce = enforcement.verifiedOnce || verified;
 		if (verified && !enforcement.requestedQuality) {
-			enforcement.requestedQuality = readRequestedQuality(player) ?? enforcement.appliedQuality;
+			const requestedQuality = readRequestedQuality(player);
+			enforcement.requestedQuality =
+				requestedQuality && requestedQuality !== "auto"
+					? requestedQuality
+					: enforcement.appliedQuality;
 		}
 		return verified;
 	};
@@ -365,16 +369,11 @@ export default createFeature({
 		// change, which supersedes the restore run below before it has done anything, so it goes first.
 		registry.cleanupPlayerRetry(metadata.id);
 		detachQualityChangeListener();
-		void registry.executeWithRetries(
-			metadata.id,
-			[makeRestoreQualityTask()],
-			["restoreQuality"],
-			{
-				maxAttempts: 10,
-				pageTypes: ["watch", "live", "shorts"],
-				waitForLoaded: true
-			}
-		);
+		void registry.executeWithRetries(metadata.id, [makeRestoreQualityTask()], ["restoreQuality"], {
+			maxAttempts: 10,
+			pageTypes: ["watch", "live", "shorts"],
+			waitForLoaded: true
+		});
 	},
 	onEnable: async ({ fallbackStrategy, fpsPreference, preferPremium, quality }) => {
 		resetEnforcementState();
