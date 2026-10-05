@@ -95,7 +95,7 @@ test.describe("buttonController", () => {
 			await expect(featureMenuButton).toBeVisible();
 			await setOption(page, "featureMenu.openType", "hover");
 			const featureMenu = page.locator("#yte-feature-menu");
-			await featureMenuButton.hover();
+			await featureMenuButton.hover({ force: true });
 			await expect(featureMenu).toBeVisible();
 			// The hover branch schedules the hide 80 ms after the pointer leaves the button, the menu and the player.
 			await page.mouse.move(0, 0);
@@ -111,20 +111,20 @@ test.describe("buttonController", () => {
 			const featureMenu = page.locator("#yte-feature-menu");
 			await expect(featureMenuButton).toBeVisible();
 			// The default open type is "click", so hovering must leave the menu closed.
-			await featureMenuButton.hover();
+			await featureMenuButton.hover({ force: true });
 			await expectToStay(async () => await featureMenu.isVisible(), false, {
 				durationMs: 1500,
 				page
 			});
 			await page.mouse.move(0, 0);
 			await setOption(page, "featureMenu.openType", "hover");
-			await featureMenuButton.hover();
+			await featureMenuButton.hover({ force: true });
 			await expect(featureMenu).toBeVisible();
 			await page.mouse.move(0, 0);
 			await expect(featureMenu).not.toBeVisible();
 			// Back to click: the hover listeners have to be taken down again, or a hover would still open the menu.
 			await setOption(page, "featureMenu.openType", "click");
-			await featureMenuButton.hover();
+			await featureMenuButton.hover({ force: true });
 			await expectToStay(async () => await featureMenu.isVisible(), false, {
 				durationMs: 1500,
 				page
