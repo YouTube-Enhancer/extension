@@ -19,9 +19,8 @@ import type {
 	StorageChanges
 } from "@/src/types";
 
-import { invalidateDevToolsCache } from "@/src/components/devtools/hooks/useDevToolsQuery";
-import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { isFeatureKey, resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
+import { featureLightStateFeatureIds } from "@/src/features/_registry/generatedFeatureLightManifest";
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { deepMerge, parseStoredValue } from "@/src/utils/config/utils";
@@ -38,6 +37,7 @@ import {
 	sendExtensionOnlyMessage
 } from "@/src/utils/messaging";
 import {
+	invalidateDevToolsCache,
 	setupContentScriptBridge,
 	teardownContentScriptBridge
 } from "@/src/utils/messaging/devtools";
@@ -102,10 +102,7 @@ type StoredFeatureState = {
 let cachedState: Nullable<StoredFeatureState> = null;
 const getStoredState = async (): Promise<StoredFeatureState> => {
 	if (cachedState) return cachedState;
-	const stateKeys = metadataRegistry
-		.getAll()
-		.filter((feature) => "stateSchemaInput" in feature)
-		.map((feature) => `state:${feature.id}` as const);
+	const stateKeys = featureLightStateFeatureIds.map((id) => `state:${id}` as const);
 	const result = await storage.local.get(stateKeys);
 	const state = stateKeys.reduce(
 		(acc, key) => Object.assign(acc, { [key.replace("state:", "")]: result[key] }),
