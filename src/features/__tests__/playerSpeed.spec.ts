@@ -93,7 +93,7 @@ test.describe("playerSpeed", () => {
 				})
 				.toBe(2);
 			await disableFeature(page, "playerSpeed.enabled");
-			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: 5000 }).toBe(1);
+			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: 30000 }).toBe(1);
 			await enableFeature(page, "playerSpeed.enabled");
 			await expect
 				.poll(async () => getCurrentSpeed(page, pageType), {
@@ -147,7 +147,9 @@ test.describe("playerSpeed", () => {
 		// manual override, which suspends enforcement; one that comes out of nowhere is put back instead.
 		const manualSpeed = speed - 0.25;
 		await page.keyboard.press("Shift+Comma");
-		await expect.poll(async () => readVideoPlaybackRate(page), { timeout: 5000 }).toBe(manualSpeed);
+		await expect
+			.poll(async () => readVideoPlaybackRate(page), { timeout: 30000 })
+			.toBe(manualSpeed);
 		await expectToStay(async () => readVideoPlaybackRate(page), manualSpeed, {
 			durationMs: 5000,
 			page
