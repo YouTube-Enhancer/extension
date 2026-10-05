@@ -53,7 +53,7 @@ export default createFeature({
 			"skipContinueWatching",
 			[patchContinueWatching],
 			["patch-continue-watching"],
-			{ waitForLoaded: true }
+			{ pageTypes: ["watch"], waitForLoaded: true }
 		);
 	},
 	onNavigate: () => {
