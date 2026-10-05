@@ -10,7 +10,6 @@ import {
 	getCaptionsState,
 	waitForYoutubePlayerReady
 } from "@/src/utils/_tests/player";
-import { MESSAGE_ORIGIN } from "@/src/utils/messaging";
 
 export const fixtureCapabilities = [
 	"ambientMode",

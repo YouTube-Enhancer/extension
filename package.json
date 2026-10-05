@@ -31,6 +31,7 @@
     "update:deepdark": "concurrently \"node scripts/updateDeepDarkMaterialCSS.js\" \"node scripts/updateDeepDarkPresets.js\"",
     "update:deepdark-css": "node scripts/updateDeepDarkMaterialCSS.js",
     "update:deepdark-presets": "node scripts/updateDeepDarkPresets.js",
+    "prepare": "husky",
     "test": "playwright test",
     "test:auth": "node scripts/auth-setup.mjs"
   },
@@ -82,6 +83,8 @@
     "eslint-plugin-tailwindcss": "3.18.2",
     "fs-extra": "^11.4.0",
     "get-installed-browsers": "^0.1.7",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
     "oxfmt": "^0.64.0",
     "oxlint": "^1.83.0",
     "oxlint-tsgolint": "^7.0.2002",
