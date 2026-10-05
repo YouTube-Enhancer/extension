@@ -137,12 +137,11 @@ function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController): void {
 		);
 		return true;
 	};
-	void registry.executeWithRetries(
-		"miniPlayer",
-		[task],
-		["attach-comments-auto-mini-player"],
-		{ maxAttempts: 90, overallTimeout: 45000, waitForLoaded: true }
-	);
+	void registry.executeWithRetries("miniPlayer", [task], ["attach-comments-auto-mini-player"], {
+		maxAttempts: 90,
+		overallTimeout: 45000,
+		waitForLoaded: true
+	});
 }
 function getEnabledController(): Nullable<MiniPlayerController> {
 	const { defaultPosition, defaultSize } = featureConfigManager.getLast("miniPlayer");

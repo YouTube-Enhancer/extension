@@ -1,7 +1,7 @@
-import { cp, mkdir, readFile, readdir, rm } from "fs/promises";
 import { existsSync } from "fs";
+import { cp, readFile, rm } from "fs/promises";
 import { GetInstalledBrowsers } from "get-installed-browsers";
-import { dirname, join, resolve } from "path";
+import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
 import type { AvailableLocales } from "@/src/i18n/constants";
@@ -66,7 +66,7 @@ export const copyDirectorySync = copyDirectory;
  */
 export const emptyOutputFolder = async () => {
 	if (!existsSync(outDir)) return;
-	await rm(outDir, { recursive: true, force: true });
+	await rm(outDir, { force: true, recursive: true });
 };
 export function flattenLocaleValues(
 	localeFile: LocaleFile,

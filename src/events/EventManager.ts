@@ -31,16 +31,16 @@ export type EventManager = {
 
 export type FeatureName = ButtonNameEvents | CoreFeatureEvents | FeatureKeys;
 export type TargetedListeners = Map<AcceptedTarget, Map<string, EventListenerInfo[]>>;
-/** O(1) callback deduplication lookup, parallel to the EventListenerInfo arrays. */
-type CallbackIndex = WeakMap<EventListenerOrEventListenerObject, EventListenerInfo>;
 type AcceptedEventMap = DocumentEventMap & HTMLElementEventMap & WindowEventMap;
-
 type AcceptedTarget = Document | HTMLElement | Window;
 
 type ButtonNameEvents =
 	| "flipVideoHorizontalButton"
 	| "flipVideoVerticalButton"
 	| "volumeBoostButton";
+
+/** O(1) callback deduplication lookup, parallel to the EventListenerInfo arrays. */
+type CallbackIndex = WeakMap<EventListenerOrEventListenerObject, EventListenerInfo>;
 
 type CoreFeatureEvents = "featureMenu" | "scrollWheelController";
 
@@ -59,7 +59,7 @@ const eventManager: EventManager = {
 		// Get any existing listeners for the event, or create an empty array if it doesn't exist
 		const existingListeners = eventListeners.get(eventName) || [];
 		// O(1) deduplication via WeakMap instead of linear scan
-		const callbackIndex = callbackIndexes.get(featureName as FeatureName) ?? new WeakMap();
+		const callbackIndex = callbackIndexes.get(featureName) ?? new WeakMap();
 		const existingListener = callbackIndex.get(callback as EventListenerOrEventListenerObject);
 		// If the listener hasn't been added, add it
 		if (!existingListener) {
@@ -71,7 +71,7 @@ const eventManager: EventManager = {
 			};
 			existingListeners.push(listenerInfo);
 			callbackIndex.set(callback as EventListenerOrEventListenerObject, listenerInfo);
-			callbackIndexes.set(featureName as FeatureName, callbackIndex);
+			callbackIndexes.set(featureName, callbackIndex);
 			eventListeners.set(eventName, existingListeners);
 			targetListeners.set(target, eventListeners);
 			this.listeners.set(featureName, targetListeners);
@@ -118,7 +118,7 @@ const eventManager: EventManager = {
 				const listeners = eventListeners.get(eventName);
 				if (listeners) {
 					// Remove each callback from the WeakMap
-					const callbackIndex = callbackIndexes.get(featureName as FeatureName);
+					const callbackIndex = callbackIndexes.get(featureName);
 					if (callbackIndex) {
 						listeners.forEach(({ callback }) => {
 							callbackIndex.delete(callback);
@@ -136,7 +136,7 @@ const eventManager: EventManager = {
 						// If the target map is empty, we remove the feature
 						if (targetListeners.size === 0) {
 							this.listeners.delete(featureName);
-							callbackIndexes.delete(featureName as FeatureName);
+							callbackIndexes.delete(featureName);
 						}
 					}
 				}
@@ -162,7 +162,7 @@ const eventManager: EventManager = {
 			});
 			// Remove the target listeners from the map
 			this.listeners.delete(featureName);
-			callbackIndexes.delete(featureName as FeatureName);
+			callbackIndexes.delete(featureName);
 		}
 	},
 
@@ -175,7 +175,7 @@ const eventManager: EventManager = {
 		const eventListeners = targetListeners.get(target);
 		if (!eventListeners) return;
 		// Remove each callback from the WeakMap before removing from DOM
-		const callbackIndex = callbackIndexes.get(featureName as FeatureName);
+		const callbackIndex = callbackIndexes.get(featureName);
 		if (callbackIndex) {
 			eventListeners.forEach((listeners) => {
 				listeners.forEach(({ callback }) => {
@@ -196,7 +196,7 @@ const eventManager: EventManager = {
 		// If the feature has no targets left, remove it as well
 		if (targetListeners.size === 0) {
 			this.listeners.delete(featureName);
-			callbackIndexes.delete(featureName as FeatureName);
+			callbackIndexes.delete(featureName);
 		}
 	}
 };

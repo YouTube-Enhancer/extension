@@ -1,8 +1,8 @@
 import { createInstance } from "i18next";
 
 import { type AvailableLocales, availableLocales } from "@/src/i18n/constants";
-import { waitForSpecificMessage } from "@/src/utils/messaging";
 import { DEV_MODE } from "@/src/utils/config/env";
+import { waitForSpecificMessage } from "@/src/utils/messaging";
 export type i18nInstanceType = ReturnType<typeof createInstance>;
 type Translations = typeof import("../../public/locales/en-US.json");
 
