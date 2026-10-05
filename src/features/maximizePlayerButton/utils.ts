@@ -1,4 +1,4 @@
-import type { Nullable, YouTubeNavigateStart, YouTubePlayerDiv } from "@/src/types";
+import type { Nullable, YouTubeNavigateStart } from "@/src/types";
 import type { ModifyElementAction } from "@/src/utils/dom/classList";
 
 import eventManager from "@/src/events/EventManager";
@@ -10,7 +10,8 @@ import {
 	updateFeatureButtonTitle
 } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
-import { waitForElement, waitForPlayerLoaded } from "@/src/utils/dom/wait";
+import { waitForPagePlayerReady } from "@/src/utils/dom/pageReadiness";
+import { waitForElement } from "@/src/utils/dom/wait";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
 const maximizePlayerButtonStateAPI = registry.getStateAPI("maximizePlayerButton");
 export type PlayerControllerState = {
@@ -192,9 +193,8 @@ export async function maximizePlayer(timeout = 2500) {
 	const header = await waitForElement<HTMLElement>("#masthead-container", timeout);
 	if (!header) return;
 	// Wait for player to be fully loaded
-	const moviePlayer = await waitForElement<YouTubePlayerDiv>("div#movie_player", timeout);
+	const moviePlayer = await waitForPagePlayerReady({ timeout });
 	if (!moviePlayer) return;
-	await waitForPlayerLoaded(moviePlayer);
 	const inTheaterMode =
 		document
 			.querySelector<HTMLButtonElement>(

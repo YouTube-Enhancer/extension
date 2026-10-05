@@ -1,7 +1,5 @@
 import { Measure, seconds } from "safe-units";
 
-import type { YouTubePlayerDiv } from "@/src/types";
-
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
@@ -12,14 +10,14 @@ import {
 	updateFeatureButtonTitle
 } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
-import { waitForElement } from "@/src/utils/dom/wait";
+import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 
 import { metadata } from "./index.metadata";
 
 const speedButtonListener = async (direction: "backward" | "forward") => {
 	const { time } = featureConfigManager.getLast("forwardRewindButtons");
 	// Get the player element
-	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+	const playerContainer = await waitForPagePlayer();
 	// If player element is not available, return
 	if (!playerContainer) return;
 	if (!playerContainer.seekTo) return;
@@ -31,7 +29,7 @@ export default createFeature({
 	buttons: [
 		{
 			add: async ({ button: { fullscreenPlacement, placement }, time }) => {
-				const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+				const playerContainer = await waitForPagePlayer();
 				if (!playerContainer) return;
 				const playerVideoData = await playerContainer.getVideoData();
 				if (playerVideoData.isLive) return;
@@ -74,7 +72,7 @@ export default createFeature({
 		{
 			add: async ({ button: { fullscreenPlacement, placement }, time }) => {
 				// Get the player element
-				const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+				const playerContainer = await waitForPagePlayer();
 				// If player element is not available, return
 				if (!playerContainer) return;
 				const playerVideoData = await playerContainer.getVideoData();
