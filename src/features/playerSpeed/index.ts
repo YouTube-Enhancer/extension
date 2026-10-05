@@ -308,17 +308,12 @@ export default createFeature({
 		resetRecordedSpeed();
 		const speed = registry.getStateAPI(metadata.id).getState()?.playbackSpeed ?? 1;
 		browserColorLog(`Restoring player speed to ${speed}`, "FgMagenta");
-		void registry.executeWithRetries(
-			metadata.id,
-			[makePlayerSpeedTask(speed)],
-			["restoreSpeed"],
-			{
-				maxAttempts: 30,
-				overallTimeout: 30000,
-				pageTypes: ["watch", "shorts"],
-				waitForLoaded: true
-			}
-		);
+		void registry.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed)], ["restoreSpeed"], {
+			maxAttempts: 30,
+			overallTimeout: 30000,
+			pageTypes: ["watch", "shorts"],
+			waitForLoaded: true
+		});
 		void updatePlaybackSpeedButtons(speed);
 	},
 	onEnable: ({ channelSpeeds, speed }) => {

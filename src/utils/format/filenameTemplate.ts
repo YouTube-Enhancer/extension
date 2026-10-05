@@ -136,10 +136,11 @@ export function resolveFilenameTemplate(
  * timestamp separator the user picked survives on platforms that allow it).
  */
 export function sanitizeFilename(name: string): string {
-	// eslint-disable-next-line no-control-regex
+	/* oxlint-disable no-control-regex -- C0 control chars are forbidden in filenames on purpose */
 	const forbidden = isWindowsPlatform()
 		? /[\\/:*?"<>|\u0000-\u001f]/g
 		: /[\\/*?"<>|\u0000-\u001f]/g;
+	/* oxlint-enable no-control-regex */
 	return name.replace(forbidden, "_");
 }
 
