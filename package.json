@@ -54,7 +54,7 @@
     "youtubei.js": "^18.0.0"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/changelog": "^7.0.0",
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^11.0.1",
     "@thedutchcoder/postcss-rem-to-px": "^0.0.2",
