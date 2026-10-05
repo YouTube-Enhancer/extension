@@ -1,10 +1,10 @@
-import type { ButtonPlacement, YouTubePlayerDiv } from "@/src/types";
+import type { ButtonPlacement } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { addFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
-import { waitForElement } from "@/src/utils/dom/wait";
+import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 
 import { metadata } from "./index.metadata";
 import { getEndScreenCardsButtonTitle, toCheckedStateIcons } from "./utils";
@@ -15,7 +15,7 @@ export default createFeature({
 		{
 			add: async ({ button: { fullscreenPlacement, placement } }) => {
 				// Get the player container element
-				const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+				const playerContainer = await waitForPagePlayer();
 				if (!playerContainer) return;
 				const videoData = await playerContainer.getVideoData();
 				if (videoData.isLive) return;
