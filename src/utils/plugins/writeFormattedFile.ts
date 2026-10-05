@@ -7,8 +7,7 @@ import { rootDir } from "@/src/utils/plugins/utils";
 
 /**
  * Formats generated TypeScript with the project's oxfmt config before writing it, and writes only when the result
- * differs from what is on disk. The build used to spawn `oxlint --fix` and `prettier --write` on the generated locale
- * constants after every build instead, which cost about five seconds.
+ * differs from what is on disk.
  *
  * @returns true when the file was written.
  */

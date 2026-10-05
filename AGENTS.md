@@ -170,13 +170,14 @@ Features access configuration through three mechanisms, in order of preference:
 - `pnpm run build:pre` / `pnpm run build:bundle` / `pnpm run build:post` - The three pipeline stages on their own
 - `pnpm run build:main` - Vite build for the extension pages only
 - `pnpm run build:client` - Content and embedded script bundles only (`tsx src/pipeline/steps/buildContentScripts.ts`)
-- `pnpm run build:locales` - Generate locale type definitions (`node node_modules/ts-json-as-const/index.js public/locales/en-US.json`). The output, `public/locales/en-US.json.d.ts`, is a generated file: it is gitignored and excluded from oxlint and prettier, so never edit or lint it by hand. The build regenerates it only when `en-US.json` is newer
+- `pnpm run build:locales` - Generate locale type definitions (`node node_modules/ts-json-as-const/index.js public/locales/en-US.json`). The output, `public/locales/en-US.json.d.ts`, is a generated file: it is gitignored and excluded from oxlint and oxfmt, so never edit or lint it by hand. The build regenerates it only when `en-US.json` is newer
 - `pnpm run lint:readme` - Fails when README.md's feature list is stale; `pnpm run lint` runs it too. Every build regenerates the list, so commit README.md with a feature
-- `pnpm run lint` - Run linter (oxlint, then a prettier check of the code files)
-- `pnpm run lint:fix` - Run linter with auto-fix
+- `pnpm run lint:manifest` - Fails when the generated feature-light manifest is stale; `pnpm run lint` and `pnpm run typecheck` run it too
+- `pnpm run lint` - Run oxlint, then oxfmt `--check` on the code files, then the manifest and README feature-list checks
+- `pnpm run lint:fix` - Run oxlint with `--fix` and oxfmt with `--write` on the code files
 - `pnpm run lint:i18n` - Lint i18n constants
 - `pnpm run typecheck` - Regenerate the locale type definitions, then TypeScript type check (`tsc --noEmit -p tsconfig.json`)
-- `pnpm run format` - Format code with prettier
+- `pnpm run format` - Format code with oxfmt
 - `pnpm run test` - Run tests
 
 **Note:** Always use `pnpm run typecheck` instead of calling `tsc` directly. Use `pnpm run lint` and `pnpm run lint:fix` for linting.
