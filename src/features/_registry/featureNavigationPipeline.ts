@@ -16,8 +16,6 @@ type NavigationPipelineDeps = {
 		config: configuration[FeatureKeys],
 		signature: string
 	) => Promise<void>;
-	/** Deferred placement recheck; only needed when outcomes include deferred / missing buttons. */
-	requestPlacementRecheck: (id: FeatureKeys, config: configuration[FeatureKeys]) => void;
 	signature: string;
 	updateFeatureEnabledState: (
 		id: FeatureKeys,
@@ -25,6 +23,10 @@ type NavigationPipelineDeps = {
 		config: configuration[FeatureKeys],
 		options?: { skipButtons?: boolean }
 	) => Promise<void>;
+	/**
+	 * Places buttons and returns outcomes. Placement schedules the deferred 3s recheck
+	 * only when an outcome is deferred or not landed.
+	 */
 	verifyButtonPlacement: (
 		id: FeatureKeys,
 		config: configuration[FeatureKeys],
@@ -84,11 +86,9 @@ async function applyNavigationForFeature(
 
 	await deps.navigateFeature(feature, config, deps.signature);
 	// One placement pass per feature per navigation. handleButtonPlacement keeps same-feature
-	// buttons sequential so they stay adjacent. Outcomes drive whether a 3s recheck is needed.
-	const outcomes = await deps.verifyButtonPlacement(id, config, true);
-	if (needsPlacementRecheck(outcomes)) {
-		deps.requestPlacementRecheck(id, config);
-	}
+	// buttons sequential so they stay adjacent. Outcomes are returned; applyButtonPlacement
+	// schedules the deferred 3s recheck only when a button is deferred or missing.
+	await deps.verifyButtonPlacement(id, config, true);
 }
 
 function capturePreviousConfigs(features: AnyFeatureBase[]): PreviousConfigs {
@@ -97,12 +97,6 @@ function capturePreviousConfigs(features: AnyFeatureBase[]): PreviousConfigs {
 		previousConfigs.set(feature.id, featureConfigManager.getLastOr(feature.id, feature.defaults));
 	}
 	return previousConfigs;
-}
-
-/** Recheck only when a button was deferred or did not land in the DOM. */
-function needsPlacementRecheck(outcomes: PlacementOutcome[]): boolean {
-	if (!outcomes.length) return false;
-	return outcomes.some((outcome) => outcome.detail === "deferred" || !outcome.landed);
 }
 
 export type { NavigationPipelineDeps, PreviousConfigs };

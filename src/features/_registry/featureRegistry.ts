@@ -123,6 +123,7 @@ export class FeatureRegistry extends FeatureManagerBase {
 	initialize() {
 		this.navigationManager.initialize(async (navigationType) => {
 			this.playerManager.cleanup();
+			this.orchestrator.cancelAllPlacementRechecks();
 			await this.safelyExecute<void>(
 				"navigationCallback",
 				"navigate",
@@ -134,8 +135,6 @@ export class FeatureRegistry extends FeatureManagerBase {
 						isFeatureEnabled: (id) => this.orchestrator.isFeatureEnabled(id),
 						navigateFeature: (feature, config, signature) =>
 							this.lifecycleManager.navigateFeature(feature, config, signature),
-						requestPlacementRecheck: (id, config) =>
-							this.orchestrator.requestPlacementRecheck(id, config),
 						signature: navigationType,
 						updateFeatureEnabledState: (id, enabled, config, options) =>
 							this.orchestrator.updateFeatureEnabledState(id, enabled, config, options),
