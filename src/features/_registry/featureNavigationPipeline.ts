@@ -1,4 +1,5 @@
 import type { AnyFeatureBase, FeatureKeys } from "@/src/features/_registry/types";
+import type { PlacementOutcome } from "@/src/features/buttonController/buttonPlacement";
 import type { configuration } from "@/src/types";
 
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
@@ -15,6 +16,8 @@ type NavigationPipelineDeps = {
 		config: configuration[FeatureKeys],
 		signature: string
 	) => Promise<void>;
+	/** Deferred placement recheck; only needed when outcomes include deferred / missing buttons. */
+	requestPlacementRecheck: (id: FeatureKeys, config: configuration[FeatureKeys]) => void;
 	signature: string;
 	updateFeatureEnabledState: (
 		id: FeatureKeys,
@@ -26,7 +29,7 @@ type NavigationPipelineDeps = {
 		id: FeatureKeys,
 		config: configuration[FeatureKeys],
 		canEnable: boolean
-	) => Promise<void>;
+	) => Promise<PlacementOutcome[]>;
 };
 
 type PreviousConfigs = Map<FeatureKeys, configuration[FeatureKeys]>;
@@ -36,6 +39,7 @@ type PreviousConfigs = Map<FeatureKeys, configuration[FeatureKeys]>;
  * through updateFeatureOnNavigation (which could place buttons a second time). This module diffs
  * page + config and only runs the work that actually changed.
  *
+ * Placement outcomes decide recheck work: unchanged + landed buttons do not schedule a 3s re-pass.
  * Same-feature buttons stay sequential: each feature is fully processed before the next starts.
  */
 export async function runNavigationPipeline(deps: NavigationPipelineDeps): Promise<void> {
@@ -80,8 +84,11 @@ async function applyNavigationForFeature(
 
 	await deps.navigateFeature(feature, config, deps.signature);
 	// One placement pass per feature per navigation. handleButtonPlacement keeps same-feature
-	// buttons sequential so they stay adjacent.
-	await deps.verifyButtonPlacement(id, config, true);
+	// buttons sequential so they stay adjacent. Outcomes drive whether a 3s recheck is needed.
+	const outcomes = await deps.verifyButtonPlacement(id, config, true);
+	if (needsPlacementRecheck(outcomes)) {
+		deps.requestPlacementRecheck(id, config);
+	}
 }
 
 function capturePreviousConfigs(features: AnyFeatureBase[]): PreviousConfigs {
@@ -90,6 +97,12 @@ function capturePreviousConfigs(features: AnyFeatureBase[]): PreviousConfigs {
 		previousConfigs.set(feature.id, featureConfigManager.getLastOr(feature.id, feature.defaults));
 	}
 	return previousConfigs;
+}
+
+/** Recheck only when a button was deferred or did not land in the DOM. */
+function needsPlacementRecheck(outcomes: PlacementOutcome[]): boolean {
+	if (!outcomes.length) return false;
+	return outcomes.some((outcome) => outcome.detail === "deferred" || !outcome.landed);
 }
 
 export type { NavigationPipelineDeps, PreviousConfigs };

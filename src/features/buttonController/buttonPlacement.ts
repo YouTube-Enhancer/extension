@@ -85,6 +85,8 @@ class ButtonPlacementManager extends FeatureManagerBase {
 	/**
 	 * Places every button of one feature, sequentially. Same-feature buttons stay adjacent
 	 * because the next `add` does not start until the previous one has finished.
+	 *
+	 * Returns outcomes so callers can skip recheck work when every button is already landed.
 	 */
 	async placeFeatureButtons<K extends FeatureKeys>(input: {
 		buttons: FeatureButton<K>[];
@@ -94,6 +96,9 @@ class ButtonPlacementManager extends FeatureManagerBase {
 	}): Promise<PlacementOutcome[]> {
 		const { buttons, canEnable, config, featureId } = input;
 		if (!buttons.length) return [];
+		if (canEnable && this.allButtonsUnchanged(buttons, config)) {
+			return buttons.map((btn) => ({ detail: "unchanged", landed: true, name: btn.name }));
+		}
 		await this.ensureReadiness();
 		const outcomes: PlacementOutcome[] = [];
 		for (const btn of buttons) {
@@ -104,6 +109,26 @@ class ButtonPlacementManager extends FeatureManagerBase {
 
 	protected override getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
 		return "buttonPlacement" as FeatureKeys;
+	}
+
+	private allButtonsUnchanged<K extends FeatureKeys>(
+		buttons: FeatureButton<K>[],
+		config: configuration[K]
+	): boolean {
+		for (const btn of buttons) {
+			const nextBtnCfg = getButtonConfig(config, btn.name);
+			if (nextBtnCfg?.enabled === false) return false;
+			const nextPlacement = nextBtnCfg?.placement;
+			const nextFullscreenPlacement = nextBtnCfg?.fullscreenPlacement ?? "same";
+			if (!isTrackedButtonLanded(btn.name)) return false;
+			if (getTrackedButtonPlacement(btn.name) !== nextPlacement) return false;
+			if ((getTrackedButtonFullscreenPlacement(btn.name) ?? "same") !== nextFullscreenPlacement)
+				return false;
+			const expectedPlacement = nextPlacement ?? "feature_menu";
+			if (!checkIfFeatureButtonExists(btn.name, expectedPlacement)) return false;
+			if (!getFeatureButton(btn.name)) return false;
+		}
+		return true;
 	}
 
 	private computeButtonActive<K extends FeatureKeys>(

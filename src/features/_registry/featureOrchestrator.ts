@@ -3,6 +3,7 @@ import type {
 	FeatureKeys,
 	FeatureKeysWithState
 } from "@/src/features/_registry/types";
+import type { PlacementOutcome } from "@/src/features/buttonController/buttonPlacement";
 import type { configuration, Nullable } from "@/src/types";
 
 import { featureButtonManager } from "@/src/features/_registry/featureButtonManager";
@@ -162,6 +163,13 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		await this.updateFeatureEnabledState(id, enabled, config);
 	}
 
+	/** Schedule the deferred 3s placement recheck for a feature (navigation outcomes). */
+	requestPlacementRecheck<K extends FeatureKeys>(id: K, config: configuration[K]): void {
+		const feature = this.registry.getFeature(id);
+		if (!feature) return;
+		this.schedulePlacementRecheck(feature, id, config);
+	}
+
 	setFeatureEnabled(id: FeatureKeys, enabled: boolean): void {
 		this.sortedFeaturesCacheDirty = true;
 		this.featureEnabledState.set(id, enabled);
@@ -259,10 +267,10 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		id: K,
 		config: configuration[K],
 		canEnable: boolean
-	) {
+	): Promise<PlacementOutcome[]> {
 		const feature = this.registry.getFeature(id);
-		if (!feature) return;
-		await this.applyButtonPlacement(feature, id, config, canEnable);
+		if (!feature) return [];
+		return this.applyButtonPlacement(feature, id, config, canEnable);
 	}
 
 	protected override getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
@@ -274,16 +282,17 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		id: K,
 		config: configuration[K],
 		canEnable: boolean
-	) {
-		if (!this.registry.hasButtons(feature, id)) return;
-		return this.safelyExecute(
+	): Promise<PlacementOutcome[]> {
+		if (!this.registry.hasButtons(feature, id)) return Promise.resolve([]);
+		return this.safelyExecute<PlacementOutcome[]>(
 			id,
 			"enable",
 			async () => featureButtonManager.handleButtonPlacement(feature, config, canEnable),
 			{
+				fallback: [],
 				subPhase: "buttons"
 			}
-		);
+		).then((outcomes) => outcomes ?? []);
 	}
 
 	private cacheFeatureConfigs(features: AnyFeatureBase[], options: Partial<configuration>) {
