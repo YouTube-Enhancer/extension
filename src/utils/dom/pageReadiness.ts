@@ -24,6 +24,15 @@ export type PageReadinessOptions = {
 	timeout?: number;
 };
 
+type ReadinessMemo = {
+	generation: number;
+	pagePlayer: Nullable<Promise<Nullable<YouTubePlayerDiv>>>;
+	pagePlayerReady: Nullable<Promise<Nullable<YouTubePlayerDiv>>>;
+};
+
+let readinessGeneration = 0;
+let readinessMemo: Nullable<ReadinessMemo> = null;
+
 /** Player element for the current page type (shorts vs movie player). */
 export function currentPlayerSelector(): string {
 	return isShortsPath() ? pageReadinessSelectors.shortsPlayer : pageReadinessSelectors.moviePlayer;
@@ -37,6 +46,15 @@ export function getMoviePlayerElement(): Nullable<YouTubePlayerDiv> {
 /** Sync probe for the page player element. */
 export function getPagePlayerElement(): Nullable<YouTubePlayerDiv> {
 	return document.querySelector<YouTubePlayerDiv>(currentPlayerSelector());
+}
+
+/**
+ * Drop memoized player waits (navigation, full player cleanup). The next wait starts fresh
+ * against the new page's player.
+ */
+export function invalidatePageReadiness(): void {
+	readinessGeneration += 1;
+	readinessMemo = null;
 }
 
 /** Wait for the `#player` node used as the below-player button container anchor. */
@@ -73,33 +91,38 @@ export async function waitForMoviePlayer(
 /**
  * Wait for the page player element. Does not wait for media readiness.
  * Prefer {@link waitForPagePlayerReady} when the caller needs a loaded player.
+ *
+ * Shared per navigation generation: N features awaiting the same page share one element wait.
+ * Caller `isCancelled` is checked after the shared promise resolves; it does not abort the share.
  */
 export async function waitForPagePlayer(
 	options?: PageReadinessOptions
 ): Promise<Nullable<YouTubePlayerDiv>> {
 	const timeout = options?.timeout ?? 2500;
-	const player = await waitForElement<YouTubePlayerDiv>(
-		currentPlayerSelector(),
-		timeout,
-		"optional"
-	);
+	const memo = getReadinessMemo();
+	if (!memo.pagePlayer) {
+		memo.pagePlayer = loadPagePlayerOnce(timeout);
+	}
+	const player = await memo.pagePlayer;
 	if (options?.isCancelled?.()) return null;
 	return player;
 }
 
-/** Wait until the page player exists and has left the unstarted state (or times out). */
+/**
+ * Wait until the page player exists and has left the unstarted state (or times out).
+ * Shared per navigation generation so cold-load features do not each poll the player.
+ */
 export async function waitForPagePlayerReady(
 	options?: PageReadinessOptions
 ): Promise<Nullable<YouTubePlayerDiv>> {
 	const timeout = options?.timeout ?? 10000;
-	const player = await waitForPagePlayer({ ...options, timeout });
-	if (!player) return null;
-	try {
-		await waitForPlayerLoaded(player, timeout, { isCancelled: options?.isCancelled });
-		return player;
-	} catch {
-		return null;
+	const memo = getReadinessMemo();
+	if (!memo.pagePlayerReady) {
+		memo.pagePlayerReady = loadPagePlayerReadyOnce(timeout);
 	}
+	const player = await memo.pagePlayerReady;
+	if (options?.isCancelled?.()) return null;
+	return player;
 }
 
 /** Wait for YouTube's right player-controls strip (feature menu + control buttons live here). */
@@ -133,6 +156,36 @@ export async function waitForPlayerShell(
 	return player;
 }
 
+function getReadinessMemo(): ReadinessMemo {
+	if (!readinessMemo || readinessMemo.generation !== readinessGeneration) {
+		readinessMemo = {
+			generation: readinessGeneration,
+			pagePlayer: null,
+			pagePlayerReady: null
+		};
+	}
+	return readinessMemo;
+}
+
 function isShortsPath(): boolean {
 	return window.location.pathname.startsWith("/shorts");
+}
+
+async function loadPagePlayerOnce(timeout: number): Promise<Nullable<YouTubePlayerDiv>> {
+	return waitForElement<YouTubePlayerDiv>(currentPlayerSelector(), timeout, "optional");
+}
+
+async function loadPagePlayerReadyOnce(timeout: number): Promise<Nullable<YouTubePlayerDiv>> {
+	const player = await waitForElement<YouTubePlayerDiv>(
+		currentPlayerSelector(),
+		timeout,
+		"optional"
+	);
+	if (!player) return null;
+	try {
+		await waitForPlayerLoaded(player, timeout);
+		return player;
+	} catch {
+		return null;
+	}
 }

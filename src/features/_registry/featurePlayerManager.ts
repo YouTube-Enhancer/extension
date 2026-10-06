@@ -9,6 +9,7 @@ import type { Nullable } from "@/src/types";
 import { FeatureManagerBase } from "@/src/features/_registry/featureManagerBase";
 import {
 	getPagePlayerElement,
+	invalidatePageReadiness,
 	waitForPagePlayer,
 	waitForPagePlayerReady
 } from "@/src/utils/dom/pageReadiness";
@@ -67,6 +68,8 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 			this.abortRetry(featureId);
 			this.removeStateHook(featureId);
 		} else {
+			// Full cleanup (navigation / page teardown): drop memoized player readiness.
+			invalidatePageReadiness();
 			for (const id of new Set([...this.activeRetries.keys(), ...this.runGenerations.keys()])) {
 				this.abortRetry(id);
 			}
