@@ -59,6 +59,8 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 	 * so a clean cold load no longer re-resolves every feature in a parallel no-op pass.
 	 */
 	private phaseOneTransitions = new Map<FeatureKeys, PhaseOneTransition>();
+	/** One deferred placement recheck timer per feature; replaced on re-schedule, cleared on disable/nav. */
+	private placementRechecks = new Map<FeatureKeys, ReturnType<typeof setTimeout>>();
 	private sortedFeaturesCache: Nullable<AnyFeatureBase[]> = null;
 	private sortedFeaturesCacheDirty = true;
 	private updatingFeatures = new Set<FeatureKeys>();
@@ -70,8 +72,17 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		super();
 	}
 
+	/** Clear every deferred placement recheck (navigation, page teardown). */
+	cancelAllPlacementRechecks(): void {
+		for (const timer of this.placementRechecks.values()) {
+			clearTimeout(timer);
+		}
+		this.placementRechecks.clear();
+	}
+
 	async disableAll() {
 		try {
+			this.cancelAllPlacementRechecks();
 			for (const feature of this.getFeaturesSortedByPriority()) {
 				const currentEnabled = this.featureEnabledState.get(feature.id) ?? false;
 				const config = featureConfigManager.getLast(feature.id) ?? feature.defaults;
@@ -163,7 +174,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		await this.updateFeatureEnabledState(id, enabled, config);
 	}
 
-	/** Schedule the deferred 3s placement recheck for a feature (navigation outcomes). */
+	/** Schedule the deferred 3s placement recheck for a feature (explicit callers). */
 	requestPlacementRecheck<K extends FeatureKeys>(id: K, config: configuration[K]): void {
 		const feature = this.registry.getFeature(id);
 		if (!feature) return;
@@ -197,10 +208,15 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 				// config change.
 				if (state.canEnable && !options?.skipButtons) {
 					await this.applyButtonPlacement(feature, id, config, state.canEnable);
+				} else if (!state.canEnable) {
+					this.cancelPlacementRecheck(id);
 				}
 				return;
 			}
 			this.featureEnabledState.set(id, state.canEnable);
+			if (!state.canEnable) {
+				this.cancelPlacementRecheck(id);
+			}
 			if (!options?.skipButtons) {
 				await this.applyButtonPlacement(feature, id, config, state.canEnable);
 			}
@@ -221,9 +237,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 				state.canEnable,
 				state.prevEnabled
 			);
-			if (state.canEnable && !options?.skipButtons) {
-				this.schedulePlacementRecheck(feature, id, config);
-			}
+			// Recheck is outcome-driven in applyButtonPlacement; do not schedule unconditionally here.
 		} finally {
 			this.updatingFeatures.delete(id);
 			const pending = this.pendingUpdates.get(id);
@@ -283,7 +297,10 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		config: configuration[K],
 		canEnable: boolean
 	): Promise<PlacementOutcome[]> {
-		if (!this.registry.hasButtons(feature, id)) return Promise.resolve([]);
+		if (!this.registry.hasButtons(feature, id)) {
+			this.cancelPlacementRecheck(id);
+			return Promise.resolve([]);
+		}
 		return this.safelyExecute<PlacementOutcome[]>(
 			id,
 			"enable",
@@ -292,13 +309,31 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 				fallback: [],
 				subPhase: "buttons"
 			}
-		).then((outcomes) => outcomes ?? []);
+		)
+			.then((outcomes) => outcomes ?? [])
+			.then((outcomes) => {
+				// Outcome-driven recheck: only deferred / missing buttons get a 3s pass.
+				if (!canEnable || !this.needsPlacementRecheck(outcomes)) {
+					this.cancelPlacementRecheck(id);
+				} else {
+					this.schedulePlacementRecheck(feature, id, config);
+				}
+				return outcomes;
+			});
 	}
 
 	private cacheFeatureConfigs(features: AnyFeatureBase[], options: Partial<configuration>) {
 		for (const feature of features) {
 			const featureConfig = options[feature.id] ?? feature.defaults;
 			featureConfigManager.setLast(feature.id, featureConfig);
+		}
+	}
+
+	private cancelPlacementRecheck(id: FeatureKeys): void {
+		const timer = this.placementRechecks.get(id);
+		if (timer !== undefined) {
+			clearTimeout(timer);
+			this.placementRechecks.delete(id);
 		}
 	}
 
@@ -355,6 +390,11 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		}
 	}
 
+	private needsPlacementRecheck(outcomes: PlacementOutcome[]): boolean {
+		if (!outcomes.length) return false;
+		return outcomes.some((outcome) => outcome.detail === "deferred" || !outcome.landed);
+	}
+
 	private async phaseInitAndButtons(features: AnyFeatureBase[], options: Partial<configuration>) {
 		this.phaseOneTransitions.clear();
 		for (const feature of features) {
@@ -399,9 +439,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 							canEnable,
 							prevEnabled
 						);
-						if (canEnable) {
-							this.schedulePlacementRecheck(feature, feature.id, config);
-						}
+						// Recheck is scheduled by Phase 1 applyButtonPlacement when outcomes need it.
 					},
 					{
 						concurrencyGroup: CONCURRENCY_GROUP,
@@ -454,15 +492,17 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 
 	/**
 	 * Placement can lose to the player controls re-rendering right after the button is placed, and a deferred
-	 * placement can fire against a target that then vanishes again. Re-check once shortly after an enable and
-	 * re-place when the button is gone; the enabled-state check keeps a disabled feature from coming back.
+	 * placement can fire against a target that then vanishes again. One shared timer per feature; only
+	 * scheduled when placement outcomes include deferred or missing buttons.
 	 */
 	private schedulePlacementRecheck<K extends FeatureKeys>(
 		feature: AnyFeatureBase,
 		id: K,
 		_config: configuration[K]
 	) {
-		setTimeout(() => {
+		this.cancelPlacementRecheck(id);
+		const timer = setTimeout(() => {
+			this.placementRechecks.delete(id);
 			if (this.featureEnabledState.get(id) !== true) return;
 			if (!this.registry.getFeature(id)) return;
 			// Re-read the config instead of using the one captured when this recheck was scheduled: a
@@ -471,5 +511,6 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			const config = featureConfigManager.getLast(id) ?? feature.defaults;
 			void this.applyButtonPlacement(feature, id, config, true);
 		}, 3000);
+		this.placementRechecks.set(id, timer);
 	}
 }
