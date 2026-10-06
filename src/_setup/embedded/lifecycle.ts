@@ -34,6 +34,10 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 
 	window.i18nextInstance = await i18nService(options.language ?? "en-US");
 
+	// Classify the page from the URL first so feature registration can enable the
+	// page-relevant wave as chunks land, instead of waiting for every load phase.
+	registry.initialize();
+
 	await registerAllFeatures(state);
 
 	getButtonColor();
@@ -50,11 +54,10 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 		attributes: true
 	});
 
-	// Navigation work (config reseed + per-feature diff) runs inside registry.initialize.
-	registry.initialize();
-
 	await coreFeatures.register();
-	await registry.enableAll(options);
+	// Enable any registered page-matching features that did not late-enable during import.
+	// Off-page features stay disabled until navigation re-evaluates them.
+	await registry.enableRegisteredForCurrentPage();
 
 	if (DEV_MODE) {
 		setupDevToolsListener();

@@ -61,11 +61,14 @@ export async function registerAllFeatures(
 		await Promise.all(phase1.map((id) => importFeature(id, moduleById, state)));
 	}
 
-	// Phase 2: Import when idle
+	// Phase 2: import in the background so page-matching features can enable without
+	// waiting for every idle-phase chunk. register() late-enables when the registry is initialized.
 	const phase2 = phases.get(2) ?? [];
 	if (phase2.length > 0) {
-		await waitForIdle(500);
-		await Promise.all(phase2.map((id) => importFeature(id, moduleById, state)));
+		void (async () => {
+			await waitForIdle(500);
+			await Promise.all(phase2.map((id) => importFeature(id, moduleById, state)));
+		})();
 	}
 }
 

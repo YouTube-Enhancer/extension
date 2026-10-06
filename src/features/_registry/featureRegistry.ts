@@ -73,6 +73,11 @@ export class FeatureRegistry extends FeatureManagerBase {
 		await this.orchestrator.enableAll(options);
 	}
 
+	/** Enable registered features that match the current page and are not enabled yet. */
+	async enableRegisteredForCurrentPage(): Promise<void> {
+		await this.orchestrator.enableRegisteredForCurrentPage();
+	}
+
 	executeWithRetries(
 		featureId: PlayerRetryKey,
 		tasks: PlayerTask[],
