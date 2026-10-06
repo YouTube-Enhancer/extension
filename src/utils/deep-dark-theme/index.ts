@@ -1,4 +1,4 @@
-import { deepDarkCSSExists } from "@/src/features/deepDarkCSS/utils";
+import { deepDarkCSSExists } from "@/src/features/deepDarkCSS/theme";
 import { resolveContrastColor } from "@/src/utils/color";
 import { getDeepDarkData } from "@/src/utils/deep-dark-theme/dom";
 import { fallback, resolveDeepDarkColors, resolveFromCSS } from "@/src/utils/deep-dark-theme/utils";

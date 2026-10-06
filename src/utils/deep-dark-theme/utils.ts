@@ -1,7 +1,7 @@
 import type { getDeepDarkData } from "@/src/utils/deep-dark-theme/dom";
 
 import { deepDarkPresets } from "@/src/deepDarkPresets";
-import { getDeepDarkCustomThemeStyle } from "@/src/features/deepDarkCSS/utils";
+import { getDeepDarkCustomThemeStyle } from "@/src/features/deepDarkCSS/theme";
 import { getDeepDarkCSSConfig } from "@/src/ui/configProvider";
 import { resolveContrastColor } from "@/src/utils/color";
 

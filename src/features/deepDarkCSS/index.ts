@@ -8,12 +8,8 @@ import { buttonColorCache } from "@/src/utils/deep-dark-theme";
 import { clearDeepDarkData, setDeepDarkData } from "@/src/utils/deep-dark-theme/dom";
 
 import { metadata } from "./index.metadata";
-import {
-	createDeepDarkCSSElement,
-	deepDarkCSSExists,
-	getDeepDarkCustomThemeStyle,
-	updateDeepDarkCSS
-} from "./utils";
+import { deepDarkCSSExists, getDeepDarkCustomThemeStyle } from "./theme";
+import { createDeepDarkCSSElement, updateDeepDarkCSS } from "./utils";
 
 export default createFeature({
 	...metadata,
