@@ -123,6 +123,23 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		await this.enableAllPromise;
 	}
 
+	/**
+	 * Enable registered features that match the current page gate and are not enabled yet.
+	 * Sequential per feature so same-feature buttons stay adjacent. Off-page features stay
+	 * disabled until navigation re-evaluates them.
+	 */
+	async enableRegisteredForCurrentPage(): Promise<void> {
+		this.ensureControlsRebindWatcher();
+		for (const feature of this.getFeaturesSortedByPriority()) {
+			if (this.featureEnabledState.get(feature.id) === true) continue;
+			const config = featureConfigManager.getLastOr(feature.id, feature.defaults);
+			const enabled = resolveEnabled(config);
+			const depsMet = featureNavigationManager.areDependenciesMet(feature);
+			if (!enabled || !depsMet) continue;
+			await this.updateFeatureEnabledState(feature.id, true, config);
+		}
+	}
+
 	getFeaturesSortedByPriority(): AnyFeatureBase[] {
 		if (!this.sortedFeaturesCache || this.sortedFeaturesCacheDirty) {
 			this.sortedFeaturesCache = this.registry.getAll().sort((a, b) => {
