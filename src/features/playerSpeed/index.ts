@@ -232,7 +232,7 @@ function reapplyEnforcedSpeed(urlVideoId: Nullable<string>) {
 	if (automaticReapplies.count >= MAX_AUTOMATIC_REAPPLIES) return;
 	automaticReapplies.count++;
 	const { channelSpeeds, speed } = enforcedConfig;
-	void registry.executeWithRetries(
+	void registry.playerRetry(
 		metadata.id,
 		[makePlayerSpeedTask(speed, channelSpeeds)],
 		["reapplySpeed"],
@@ -285,7 +285,7 @@ export default createFeature({
 		if (!enabled) return;
 		enforcedConfig = { channelSpeeds, speed };
 		clearSessionSpeed();
-		void registry.executeWithRetries(
+		void registry.playerRetry(
 			metadata.id,
 			[makePlayerSpeedTask(speed, channelSpeeds)],
 			["setSpeed"],
@@ -301,14 +301,14 @@ export default createFeature({
 	},
 	onDisable: () => {
 		enforcedConfig = null;
-		registry.cleanupPlayerRetry(metadata.id);
+		// Lifecycle already aborted this feature's player retries before onDisable runs
 		detachRateChangeListener();
 		clearManualOverride();
 		clearSessionSpeed();
 		resetRecordedSpeed();
 		const speed = registry.getStateAPI(metadata.id).getState()?.playbackSpeed ?? 1;
 		browserColorLog(`Restoring player speed to ${speed}`, "FgMagenta");
-		void registry.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed)], ["restoreSpeed"], {
+		void registry.playerRetry(metadata.id, [makePlayerSpeedTask(speed)], ["restoreSpeed"], {
 			maxAttempts: 30,
 			overallTimeout: 30000,
 			pageTypes: ["watch", "shorts"],
@@ -324,7 +324,7 @@ export default createFeature({
 		clearManualOverride();
 		clearSessionSpeed();
 		resetRecordedSpeed();
-		void registry.executeWithRetries(
+		void registry.playerRetry(
 			metadata.id,
 			[makePlayerSpeedTask(speed, channelSpeeds)],
 			["setSpeed"],
@@ -353,7 +353,7 @@ export default createFeature({
 		setupPlaybackSpeedChangeListener();
 		clearManualOverride();
 		resetRecordedSpeed();
-		void registry.executeWithRetries(
+		void registry.playerRetry(
 			metadata.id,
 			[makePlayerSpeedTask(effectiveSpeed, channelSpeeds)],
 			["setSpeed"],

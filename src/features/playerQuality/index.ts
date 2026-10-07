@@ -365,11 +365,9 @@ function resetEnforcementState(): void {
 export default createFeature({
 	...metadata,
 	onDisable: () => {
-		// The enable run leaves a player state hook behind. Left alone it re-runs enforcement on the next state
-		// change, which supersedes the restore run below before it has done anything, so it goes first.
-		registry.cleanupPlayerRetry(metadata.id);
+		// Lifecycle already aborted this feature's player retries and state hook before onDisable runs
 		detachQualityChangeListener();
-		void registry.executeWithRetries(metadata.id, [makeRestoreQualityTask()], ["restoreQuality"], {
+		void registry.playerRetry(metadata.id, [makeRestoreQualityTask()], ["restoreQuality"], {
 			maxAttempts: 10,
 			pageTypes: ["watch", "live", "shorts"],
 			waitForLoaded: true
@@ -387,7 +385,7 @@ export default createFeature({
 			preferPremium ?? false,
 			fpsPreference ?? "default"
 		);
-		void registry.executeWithRetries(
+		void registry.playerRetry(
 			metadata.id,
 			[applyTask, verifyTask],
 			["applyQuality", "verifyQuality"],
@@ -407,7 +405,7 @@ export default createFeature({
 			preferPremium ?? false,
 			fpsPreference ?? "default"
 		);
-		void registry.executeWithRetries(
+		void registry.playerRetry(
 			metadata.id,
 			[applyTask, verifyTask],
 			["applyQuality", "verifyQuality"],

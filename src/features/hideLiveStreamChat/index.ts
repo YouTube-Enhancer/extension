@@ -17,7 +17,6 @@ export default createFeature({
 	 * isLive guard here returned early and left the class on the body.
 	 */
 	onDisable: () => {
-		registry.cleanupPlayerRetry("hideLiveStreamChat");
 		removeLiveChatHide();
 	},
 	onEnable: () => {
@@ -34,7 +33,7 @@ export default createFeature({
  * hide for good on a stream that is live; the task keeps asking until the data belongs to the page's video.
  */
 function applyLiveChatVisibility() {
-	void registry.executeWithRetries(
+	void registry.playerRetry(
 		"hideLiveStreamChat",
 		[applyLiveChatVisibilityTask],
 		["applyLiveChatVisibility"],

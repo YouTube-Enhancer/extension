@@ -1,5 +1,6 @@
 import type {
 	AnyFeatureBase,
+	CoreFeatureKeys,
 	FeatureKeys,
 	FeatureKeysWithState
 } from "@/src/features/_registry/types";
@@ -13,8 +14,14 @@ import type { featureStateManager } from "./featureStateManager";
 
 import { FeatureManagerBase } from "./featureManagerBase";
 
-/** Per-feature disposers run after onDisable (and when disable runs with no onDisable hook). */
-const featureDisposers = new Map<FeatureKeys, Array<() => void>>();
+/** Feature id accepted by the Disposer API (registry features plus core features). */
+export type DisposerKey = CoreFeatureKeys | FeatureKeys;
+
+/** Stable name for a named disposer; registering the same name replaces the previous fn. */
+export type DisposerName = string;
+
+/** Named disposers per feature. A map keeps same-name registrations idempotent across re-enables. */
+const featureDisposers = new Map<DisposerKey, Map<DisposerName, () => void>>();
 
 export class FeatureLifecycleManager extends FeatureManagerBase {
 	constructor(
@@ -42,29 +49,30 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 	}
 
 	async disableFeature<K extends FeatureKeys>(feature: AnyFeatureBase, config: configuration[K]) {
-		if (!hasOnDisable(feature)) {
-			// Features that start player retries in onEnable often have no onDisable; still tear down.
-			featurePlayerManager.cleanup(feature.id);
-			runFeatureDisposers(feature.id);
-			return;
-		}
-		// Abort stale retries before onDisable runs; a restore retry that onDisable itself queues is
-		// deliberate post-disable work and must survive the teardown, so no cleanup runs after it.
+		/**
+		 * Abort stale retries before onDisable runs; a restore retry that onDisable itself queues is
+		 * deliberate post-disable work and must survive the teardown, so no cleanup runs after it.
+		 * Disposers always run after onDisable (or when there is no onDisable), even if onDisable throws.
+		 */
 		featurePlayerManager.cleanup(feature.id);
-		await this.safelyExecute<void>(
-			feature.id,
-			"onDisable",
-			async () => {
-				if (hasState(feature))
-					return await feature.onDisable(
-						this.configManager.getLast(feature.id),
-						this.stateManager.getStateAPI(feature.id)
-					);
-				await feature.onDisable(config);
-			},
-			{ shouldRethrow: true }
-		);
-		runFeatureDisposers(feature.id);
+		try {
+			if (!hasOnDisable(feature)) return;
+			await this.safelyExecute<void>(
+				feature.id,
+				"onDisable",
+				async () => {
+					if (hasState(feature))
+						return await feature.onDisable(
+							this.configManager.getLast(feature.id),
+							this.stateManager.getStateAPI(feature.id)
+						);
+					await feature.onDisable(config);
+				},
+				{ shouldRethrow: true }
+			);
+		} finally {
+			runFeatureDisposers(feature.id);
+		}
 	}
 
 	async enableFeature<K extends FeatureKeys>(feature: AnyFeatureBase, config: configuration[K]) {
@@ -143,23 +151,45 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 }
 
 /**
- * Register a teardown to run when the feature is disabled.
- * Prefer this over calling playerManager.cleanup / eventManager remove by hand in onDisable.
+ * Abort player retries and run every feature disposer without calling onDisable.
+ * Used for page teardown when features are not disabled through the lifecycle path.
+ * SPA navigation must not call this: features stay enabled and their disposers must survive.
  */
-export function addFeatureDisposer(featureId: FeatureKeys, fn: () => void): void {
-	const list = featureDisposers.get(featureId) ?? [];
-	list.push(fn);
-	featureDisposers.set(featureId, list);
+export function disposeAllFeatureSessions(): void {
+	featurePlayerManager.cleanup();
+	for (const featureId of [...featureDisposers.keys()]) {
+		runFeatureDisposers(featureId);
+	}
 }
 
-function runFeatureDisposers(featureId: FeatureKeys): void {
-	const list = featureDisposers.get(featureId);
-	if (!list) return;
-	for (const fn of list) {
+/**
+ * Register a named teardown that runs when the feature is disabled.
+ * Registering the same name again replaces the previous fn, so re-enabling does not stack listeners.
+ * Prefer this over calling playerManager.cleanup / eventManager remove by hand in onDisable.
+ */
+export function registerFeatureDisposer(
+	featureId: DisposerKey,
+	name: DisposerName,
+	fn: () => void
+): void {
+	const map = featureDisposers.get(featureId) ?? new Map<DisposerName, () => void>();
+	map.set(name, fn);
+	featureDisposers.set(featureId, map);
+}
+
+/** Remove a named disposer without running it. */
+export function removeFeatureDisposer(featureId: DisposerKey, name: DisposerName): void {
+	featureDisposers.get(featureId)?.delete(name);
+}
+
+function runFeatureDisposers(featureId: DisposerKey): void {
+	const map = featureDisposers.get(featureId);
+	if (!map) return;
+	for (const [name, fn] of map) {
 		try {
 			fn();
 		} catch (error) {
-			console.error(`[featureDisposers] Cleanup failed for ${featureId}:`, error);
+			console.error(`[featureDisposers] Cleanup "${name}" failed for ${featureId}:`, error);
 		}
 	}
 	featureDisposers.delete(featureId);

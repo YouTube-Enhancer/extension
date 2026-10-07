@@ -358,7 +358,7 @@ function queueVideoChange(resumeType: VideoHistoryResumeType): void {
 		}
 		return true;
 	};
-	void registry.executeWithRetries("videoHistory", [task], ["video-change"], {
+	void registry.playerRetry("videoHistory", [task], ["video-change"], {
 		waitForLoaded: true
 	});
 }

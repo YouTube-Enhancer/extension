@@ -15,8 +15,6 @@ export default createFeature({
 	...metadata,
 	onDisable: () => {
 		browserColorLog(`Disabling removeRedirect`, "FgMagenta");
-		unsubscribeBus?.();
-		unsubscribeBus = null;
 	},
 	onEnable: () => {
 		browserColorLog(`Enabling removeRedirect`, "FgMagenta");
@@ -27,7 +25,7 @@ export default createFeature({
 				unwrapRedirect(el);
 			}
 		});
-		registry.addDisposer("removeRedirect", () => {
+		registry.on("removeRedirect", "bus", () => {
 			unsubscribeBus?.();
 			unsubscribeBus = null;
 		});

@@ -144,7 +144,7 @@ export default createFeature({
 	...metadata,
 	onDisable: () => {
 		if (!ambientModeWasEnabled) return;
-		void registry.executeWithRetries(
+		void registry.playerRetry(
 			"automaticallyDisableAmbientMode",
 			[makeAmbientToggleTask(true)],
 			["restoreAmbient"],
@@ -158,7 +158,7 @@ export default createFeature({
 	},
 	onEnable: () => {
 		// onEnable also runs at page start-up, where a shorts sheet can fill before it carries the ambient row.
-		void registry.executeWithRetries(
+		void registry.playerRetry(
 			"automaticallyDisableAmbientMode",
 			[makeAmbientToggleTask(false, { rowMayComeLate: true })],
 			["disableAmbient"],
@@ -171,7 +171,7 @@ export default createFeature({
 		);
 	},
 	onNavigate: () => {
-		void registry.executeWithRetries(
+		void registry.playerRetry(
 			"automaticallyDisableAmbientMode",
 			[makeAmbientToggleTask(false)],
 			["disableAmbient"],

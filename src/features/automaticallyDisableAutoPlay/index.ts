@@ -207,14 +207,14 @@ export default createFeature({
 	},
 	onDisable: () => {
 		unwatchToggle();
-		void registry.executeWithRetries(metadata.id, [makeDisableTask()], ["disableAutoPlay"], {
+		void registry.playerRetry(metadata.id, [makeDisableTask()], ["disableAutoPlay"], {
 			interval: 300,
 			maxAttempts: 24,
 			waitForLoaded: true
 		});
 	},
 	onEnable: () => {
-		void registry.executeWithRetries(metadata.id, [makeEnableTask()], ["enableAutoPlay"], {
+		void registry.playerRetry(metadata.id, [makeEnableTask()], ["enableAutoPlay"], {
 			interval: 300,
 			maxAttempts: 30,
 			waitForLoaded: true
@@ -224,7 +224,7 @@ export default createFeature({
 		// Each video gets its own click budget and stability count; both otherwise reset only on disable.
 		toggleClickAttempts = 0;
 		stableOffReads = 0;
-		void registry.executeWithRetries(metadata.id, [makeNavigateTask()], ["navigateAutoPlay"], {
+		void registry.playerRetry(metadata.id, [makeNavigateTask()], ["navigateAutoPlay"], {
 			interval: 300,
 			maxAttempts: 30,
 			waitForLoaded: true
