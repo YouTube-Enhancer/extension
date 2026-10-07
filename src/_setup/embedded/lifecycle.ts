@@ -9,7 +9,6 @@ import { DEV_MODE } from "@/src/utils/config/env";
 import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
 import { disconnectFromDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
-import { setupDevToolsListener } from "@/src/utils/messaging/devtools.embedded";
 import { ensureTrustedTypesPolicy } from "@/src/utils/security/trustedTypes";
 import { isSupportedYouTubeHostname } from "@/src/utils/url/constants";
 
@@ -60,7 +59,16 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	await registry.enableRegisteredForCurrentPage();
 
 	if (DEV_MODE) {
-		setupDevToolsListener();
+		/**
+		 * Dynamic import so production embedded bundles never pull the devtools listener.
+		 * Rolldown drops the import when DEV_MODE is compile-time false.
+		 */
+		void import("@/src/utils/messaging/devtools.embedded")
+			.then(({ setupDevToolsListener }) => {
+				setupDevToolsListener();
+				return undefined;
+			})
+			.catch(() => undefined);
 	}
 
 	const removeMessageListener = setupMessageListener();
@@ -81,6 +89,10 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 
 	return {
 		async dispose(options?: { disableFeatures?: boolean }) {
+			/**
+			 * Each teardown step runs even if an earlier one throws. A failed disableAll used to
+			 * skip listener/history cleanup and left the next hot-reload instance stacked on top.
+			 */
 			if (options?.disableFeatures) {
 				try {
 					await registry.disableAll();
@@ -92,14 +104,42 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 				 * Page teardown without disableAll still has to abort player retries and run feature
 				 * disposers. Disabling first would call onDisable; disposeSessions is the lighter path.
 				 */
-				registry.disposeSessions();
+				try {
+					registry.disposeSessions();
+				} catch (error) {
+					console.error("Teardown: disposeSessions failed:", error);
+				}
 			}
-			registry.destroyNavigationListener();
-			eventManager.removeAllEventListeners();
-			coreFeatures.destroy();
-			colorObserver.disconnect();
-			disconnectFromDomMutations();
-			removeMessageListener();
+			try {
+				registry.destroyNavigationListener();
+			} catch (error) {
+				console.error("Teardown: destroyNavigationListener failed:", error);
+			}
+			try {
+				eventManager.removeAllEventListeners();
+			} catch (error) {
+				console.error("Teardown: removeAllEventListeners failed:", error);
+			}
+			try {
+				coreFeatures.destroy();
+			} catch (error) {
+				console.error("Teardown: coreFeatures.destroy failed:", error);
+			}
+			try {
+				colorObserver.disconnect();
+			} catch (error) {
+				console.error("Teardown: colorObserver.disconnect failed:", error);
+			}
+			try {
+				disconnectFromDomMutations();
+			} catch (error) {
+				console.error("Teardown: disconnectFromDomMutations failed:", error);
+			}
+			try {
+				removeMessageListener();
+			} catch (error) {
+				console.error("Teardown: removeMessageListener failed:", error);
+			}
 		}
 	};
 }

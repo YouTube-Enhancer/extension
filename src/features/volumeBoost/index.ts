@@ -167,7 +167,8 @@ export default createFeature({
 		if (mode === "global") applyVolumeBoostDb(amount);
 	},
 	onNavigate: ({ amount, mode }) => {
-		setupVolumeBoost();
+		// Engine is already up from onEnable; do not re-log on every SPA navigation.
+		setupVolumeBoost({ quiet: true });
 		if (mode === "global") applyVolumeBoostDb(amount);
 		else if (isVolumeBoostEnabled) applyVolumeBoostDb(amount);
 	}

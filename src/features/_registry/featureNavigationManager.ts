@@ -19,6 +19,12 @@ type NavigationSignature = `${string}${"" | `:${string}`}`;
 
 const NAVIGATION_DEBOUNCE_MS = 100;
 const NAVIGATION_SIGNATURE_RETRIES = 5;
+/**
+ * URL params that change without a feature-relevant navigation. Watch position, share
+ * tracking, and similar query noise used to produce a new signature on every replaceState,
+ * which re-ran the full navigation pipeline for the same video.
+ */
+const VOLATILE_URL_PARAMS = ["v", "t", "start", "si", "pp", "feature", "ab_channel"] as const;
 
 export class FeatureNavigationManager extends FeatureManagerBase {
 	private _initialized = false;
@@ -52,23 +58,31 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 
 	destroyListener() {
 		const { navigationListeners, pushStateWrapper, replaceStateWrapper } = this;
-		if (!navigationListeners.popstate) return;
 		if (this.debounceTimer !== null) {
 			clearTimeout(this.debounceTimer);
 			this.debounceTimer = null;
 		}
-		window.removeEventListener("popstate", navigationListeners.popstate);
-		window.removeEventListener("yt-navigate-start", navigationListeners.start);
-		window.removeEventListener("yt-navigate-finish", navigationListeners.finish);
-		window.removeEventListener("yt-page-data-updated", navigationListeners.updated);
-		// Restore original history methods
-		if (pushStateWrapper) {
-			const { original: pushStateOriginal } = pushStateWrapper;
-			history.pushState = pushStateOriginal;
+		if (navigationListeners.popstate) {
+			window.removeEventListener("popstate", navigationListeners.popstate);
 		}
-		if (replaceStateWrapper) {
-			const { original: replaceStateOriginal } = replaceStateWrapper;
-			history.replaceState = replaceStateOriginal;
+		if (navigationListeners.start) {
+			window.removeEventListener("yt-navigate-start", navigationListeners.start);
+		}
+		if (navigationListeners.finish) {
+			window.removeEventListener("yt-navigate-finish", navigationListeners.finish);
+		}
+		if (navigationListeners.updated) {
+			window.removeEventListener("yt-page-data-updated", navigationListeners.updated);
+		}
+		/**
+		 * Restore history only when our wrapper is still the installed method. If a newer
+		 * instance wrapped on top, leave theirs alone; they restore on their own teardown.
+		 */
+		if (pushStateWrapper && history.pushState === pushStateWrapper.wrapper) {
+			history.pushState = pushStateWrapper.original;
+		}
+		if (replaceStateWrapper && history.replaceState === replaceStateWrapper.wrapper) {
+			history.replaceState = replaceStateWrapper.original;
 		}
 		this.navigationListeners = {};
 		this.navigationPatched = false;
@@ -76,6 +90,11 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		this.previousNavigationSignature = null;
 		this.pushStateWrapper = undefined;
 		this.replaceStateWrapper = undefined;
+		this.navigationCallback = undefined;
+		this.navigating = false;
+		this.navigationSignatureRetries = 0;
+		// Allow initialize() after teardown (bfcache restore, hot reload re-init).
+		this._initialized = false;
 	}
 
 	getCurrentPage(): Nullable<string> {
@@ -229,7 +248,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 				// Live streams share the watch URL structure, so the video id comes from the same v parameter.
 				const urlParams = new URLSearchParams(window.location.search);
 				const videoId = urlParams.get("v");
-				const paramsString = processExclusions(urlParams, ["v"]);
+				const paramsString = processExclusions(urlParams, [...VOLATILE_URL_PARAMS]);
 				return videoId ? `live:${videoId}${paramsString}` : "live:unknown";
 			}
 			case "playlist": {
@@ -265,7 +284,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 			case "watch": {
 				const urlParams = new URLSearchParams(window.location.search);
 				const videoId = urlParams.get("v");
-				const paramsString = processExclusions(urlParams, ["v"]);
+				const paramsString = processExclusions(urlParams, [...VOLATILE_URL_PARAMS]);
 				return videoId ? `watch:${videoId}${paramsString}` : "watch:unknown";
 			}
 			default:
@@ -301,10 +320,14 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	}
 
 	private async runLiveRefine(): Promise<void> {
+		// A refine that lands mid-pipeline would start a second full navigation pass.
+		if (this.navigating) return;
 		const { currentNavigationSignature: previousSignature, currentPage: previousPage } = this;
 		const refined = await refinePageTypeFromPlayer();
 		if (!refined || refined === previousPage) return;
 		if (!this._initialized) return;
+		// Re-check after the player await; a navigation may have started while we waited.
+		if (this.navigating) return;
 		const signature = this.getNavigationSignature();
 		if (!signature) return;
 		this.currentNavigationSignature = signature;
