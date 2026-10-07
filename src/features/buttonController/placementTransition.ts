@@ -12,7 +12,8 @@ import { buttonContainerId } from "./buttonPlacementState";
 
 // ─── PlacementTransition ──────────────────────────────────────────
 // Owns all placement observers (fullscreen, theater, geometry) as
-// instance state. Provides a single activate/deactivate lifecycle.
+// instance state. Activation splits into container tracking (theater and
+// geometry) and fullscreen tracking so the two start independently.
 // Chrome signals ride the shared DOM Mutation Bus; geometry keeps a
 // ResizeObserver for player size.
 
