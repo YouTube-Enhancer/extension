@@ -122,13 +122,20 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		if (this._initialized) return;
 		// Sync URL classification: do not wait on the player for live-vs-VOD.
 		const signature = this.getNavigationSignature();
-		if (!signature) return;
-		this.currentNavigationSignature = signature;
-		this.currentPage = getPageFromSignature(signature);
 		this.navigationCallback = callback;
+		/**
+		 * Attach the listeners even when the current URL classifies to nothing (legacy
+		 * /channel/<id> URLs, for one). Bailing here left the manager deaf for the whole
+		 * document lifetime: the first in-page navigation never reached processNavigation,
+		 * currentPage stayed null, and every page-gated feature stayed disabled.
+		 * processNavigation classifies from the URL at event time, so the first navigation
+		 * off an unclassifiable page recovers everything.
+		 */
+		this.currentNavigationSignature = signature;
+		this.currentPage = signature ? getPageFromSignature(signature) : null;
 		this.setupNavigationListener();
 		this._initialized = true;
-		void this.refineLivePageType();
+		if (signature) void this.refineLivePageType();
 	}
 
 	isInitialized(): boolean {
@@ -310,12 +317,24 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 			if (!this.updateNavigationSignature(signature)) return;
 			this.currentNavigationSignature = signature;
 			if (this.navigationCallback) await this.navigationCallback(signature, eventType);
-			void this.refineLivePageType();
 		} catch (error) {
 			this.logErrorToTracker("navigation handler", error);
 		} finally {
 			this.navigating = false;
-			if (retrySignature) this.handleNavigation(eventType);
+			if (retrySignature) {
+				this.handleNavigation(eventType);
+			} else if (this.currentPage === "watch") {
+				/**
+				 * Every settled navigation on a watch URL re-arms the live refine. Live streams
+				 * boot with a burst of URL-param noise that the volatile-param filter suppresses,
+				 * so those events produce no signature change; without this re-arm the player is
+				 * never asked and an SPA navigation (or reload) onto a live stream stays
+				 * classified as watch with every live-gated feature disabled. The top gate in
+				 * runLiveRefine no-ops an attempt that lands mid-pipeline, and liveRefinePromise
+				 * dedups concurrent calls, so event bursts cost one shared attempt instead of N.
+				 */
+				void this.refineLivePageType();
+			}
 		}
 	}
 

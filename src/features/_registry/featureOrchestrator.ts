@@ -229,6 +229,15 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 	}
 
 	async reconcileFeature<K extends FeatureKeys>(id: K, config: configuration[K], enabled: boolean) {
+		if (!this.registry.getFeature(id)) {
+			/**
+			 * A lazy chunk may still be importing. Keep the fresh config so the late-enable at
+			 * registration applies this change instead of a stale pre-write snapshot; the
+			 * feature enables as soon as its chunk lands.
+			 */
+			featureConfigManager.setLast(id, config);
+			return;
+		}
 		await this.notifyConfigChange(id, config);
 		await this.updateFeatureEnabledState(id, enabled, config);
 	}
