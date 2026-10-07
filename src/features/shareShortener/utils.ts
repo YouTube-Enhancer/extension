@@ -1,6 +1,6 @@
 import type { Nullable } from "@/src/types";
 
-import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
+import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 
 const regexp: RegExp = new RegExp("(\\?|&)(si|feature|pp)=[^&]*", "g");
 let intervalId: Nullable<NodeJS.Timeout> = null;
@@ -17,7 +17,7 @@ export function cleanSearchPage(url: string) {
 }
 
 export function observeShareURLInput() {
-	unsubscribeBus = subscribe(
+	unsubscribeBus = subscribeToDomMutations(
 		"#share-url",
 		(elements) => {
 			const shareInput = elements[0] as HTMLInputElement;

@@ -5,7 +5,7 @@ import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegist
 import { featurePlayerManager } from "@/src/features/_registry/featurePlayerManager";
 import { getFeatureMenuConfig } from "@/src/ui/configProvider";
 import { createStyledElement, createSVGElement } from "@/src/utils/dom/elements";
-import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
+import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 import { pageReadinessSelectors, waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
@@ -324,7 +324,7 @@ export function setupFeatureMenuEventListeners(
 	}
 
 	// Ad modules inside player chrome ride the shared mutation bus
-	const unsubscribeAdsBus = subscribe(".video-ads.ytp-ad-module", () => {
+	const unsubscribeAdsBus = subscribeToDomMutations(".video-ads.ytp-ad-module", () => {
 		adjustAdsContainerStyles(menuVisible);
 	});
 

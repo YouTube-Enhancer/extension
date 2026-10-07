@@ -1,6 +1,9 @@
 import type { Nullable } from "@/src/types";
 
-import { subscribe, type Unsubscribe } from "@/src/utils/dom/observers/domMutationBus";
+import {
+	subscribeToDomMutations,
+	type UnsubscribeFromDomMutations
+} from "@/src/utils/dom/observers/domMutationBus";
 import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
@@ -20,17 +23,17 @@ class PlacementTransition {
 	private containerGeometryResizeHandler: Nullable<() => void> = null;
 	// Container geometry
 	private containerGeometryResizeObserver: Nullable<ResizeObserver> = null;
-	private containerGeometryUnsubscribe: Nullable<Unsubscribe> = null;
+	private containerGeometryUnsubscribe: Nullable<UnsubscribeFromDomMutations> = null;
 	private containerTrackingActive = false;
 
 	// Fullscreen
 	private fullscreenDomHandler: Nullable<() => void> = null;
 	private fullscreenObserverActive = false;
-	private fullscreenUnsubscribe: Nullable<Unsubscribe> = null;
+	private fullscreenUnsubscribe: Nullable<UnsubscribeFromDomMutations> = null;
 
 	// Theater mode
 	private observedPlayerElement: Nullable<HTMLDivElement> = null;
-	private theaterModeUnsubscribes: Unsubscribe[] = [];
+	private theaterModeUnsubscribes: UnsubscribeFromDomMutations[] = [];
 	private theaterNavigationHandler: Nullable<() => void> = null;
 
 	// ─── Public lifecycle ───────────────────────────────────────────
@@ -134,7 +137,7 @@ class PlacementTransition {
 		this.containerGeometryResizeObserver.observe(player);
 		this.observedPlayerElement = player;
 		// Watch-page layout attribute changes (theater, columns) via the shared bus
-		this.containerGeometryUnsubscribe = subscribe(
+		this.containerGeometryUnsubscribe = subscribeToDomMutations(
 			"ytd-watch-flexy, ytd-watch-grid",
 			() => {
 				requestAnimationFrame(() => this.syncContainerGeometry());
@@ -151,7 +154,7 @@ class PlacementTransition {
 		this.fullscreenObserverActive = true;
 		this.fullscreenDomHandler = callback;
 		// ytd-app[fullscreen] attribute via the shared bus
-		this.fullscreenUnsubscribe = subscribe(
+		this.fullscreenUnsubscribe = subscribeToDomMutations(
 			"ytd-app",
 			() => {
 				callback();
@@ -171,12 +174,12 @@ class PlacementTransition {
 		// Player chrome + watch element theater signals via the shared bus
 		await waitForElement<HTMLButtonElement>("button.ytp-size-button");
 		this.theaterModeUnsubscribes.push(
-			subscribe("button.ytp-size-button", scheduleReposition, {
+			subscribeToDomMutations("button.ytp-size-button", scheduleReposition, {
 				attributeFilter: ["class"]
 			})
 		);
 		this.theaterModeUnsubscribes.push(
-			subscribe("ytd-watch-flexy, ytd-watch-grid", scheduleReposition, {
+			subscribeToDomMutations("ytd-watch-flexy, ytd-watch-grid", scheduleReposition, {
 				attributeFilter: ["theater"]
 			})
 		);

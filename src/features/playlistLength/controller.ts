@@ -1,7 +1,7 @@
 import type { Nullable, VideoDetails } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
-import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
+import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 import { playlistItemsSelector, selectFirstWithWidth } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
 
@@ -233,7 +233,7 @@ export class PlaylistLengthController {
 	): void {
 		this.disconnectObservers();
 
-		this.unsubscribeBus = subscribe("*", () => {
+		this.unsubscribeBus = subscribeToDomMutations("*", () => {
 			this.debouncedUpdate(methodConfig);
 		});
 

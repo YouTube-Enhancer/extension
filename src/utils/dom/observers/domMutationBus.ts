@@ -15,27 +15,30 @@
  * @example
  * ```ts
  * import {
- *   disconnect,
- *   subscribe,
- *   type Unsubscribe
+ *   disconnectFromDomMutations,
+ *   subscribeToDomMutations,
+ *   type UnsubscribeFromDomMutations
  * } from "@/src/utils/dom/observers/domMutationBus";
  *
  * // Wait for an element (transient — auto-unsubscribes after first match)
- * const off = subscribe("#movie_player", ([el]) => {
+ * const off = subscribeToDomMutations("#movie_player", ([el]) => {
  *   console.log("Player found:", el);
  * }, { once: true });
  *
  * // Persistent subscription (unsubscribe on feature disable)
- * const unsub: Unsubscribe = subscribe("[href]", (elements) => {
+ * const unsub: UnsubscribeFromDomMutations = subscribeToDomMutations("[href]", (elements) => {
  *   for (const el of elements) processLink(el);
  * });
  * // later: unsub();
  *
  * // Attribute mutations on player chrome (fullscreen / theater / layout)
- * const offFs = subscribe("ytd-app", () => onFullscreenChange(), {
+ * const offFs = subscribeToDomMutations("ytd-app", () => onFullscreenChange(), {
  *   attributeFilter: ["fullscreen"]
  * });
  * ```
+ *
+ * Exports are named for the bus so call sites stay clear and never collide with
+ * local helpers or DOM API methods (`subscribe`, `disconnect`, `Unsubscribe`).
  *
  * @module domMutationBus
  */
@@ -44,8 +47,17 @@ import type { Nullable } from "@/src/types";
 
 // ─── Types ──────────────────────────────────────────────────────
 
-/** Options for {@link subscribe}. */
-type SubscribeOptions = {
+/** Internal subscriber record. */
+type Subscriber = {
+	attributeFilter?: readonly string[];
+	callback: (elements: Element[]) => void;
+	once?: boolean;
+	parent?: ParentNode;
+	selector: string;
+};
+
+/** Options for {@link subscribeToDomMutations}. */
+type SubscribeToDomMutationsOptions = {
 	/**
 	 * When set, the subscriber receives attribute mutations on matching elements
 	 * instead of added-node deliveries. The shared observer re-observes `document.body`
@@ -58,24 +70,15 @@ type SubscribeOptions = {
 	parent?: ParentNode;
 };
 
-/** Internal subscriber record. */
-type Subscriber = {
-	attributeFilter?: readonly string[];
-	callback: (elements: Element[]) => void;
-	once?: boolean;
-	parent?: ParentNode;
-	selector: string;
-};
-
 /** Function that removes a subscription. */
-type Unsubscribe = () => void;
+type UnsubscribeFromDomMutations = () => void;
 
 // ─── State ──────────────────────────────────────────────────────
 
 /** Map from CSS selector to the set of subscribers interested in that selector. */
 const subscriberMap = new Map<string, Set<Subscriber>>();
 
-/** The single shared observer, or null after {@link disconnect}. */
+/** The single shared observer, or null after {@link disconnectFromDomMutations}. */
 let observer: Nullable<MutationObserver> = null;
 
 /** Last attributeFilter the observer was configured with; avoids needless re-observes. */
@@ -110,7 +113,7 @@ function deliverToSubscriber(subscriber: Subscriber, matches: Element[], selecto
  * Disconnect the observer and clear all subscriptions.
  * Called during embedded-script teardown.
  */
-function disconnect(): void {
+function disconnectFromDomMutations(): void {
 	if (observer) {
 		observer.disconnect();
 		observer = null;
@@ -228,13 +231,13 @@ function removeSubscriber(subscriber: Subscriber): void {
  * @param options  - `{ once: true }` to auto-unsubscribe after first delivery;
  *                   `{ parent: el }` to only deliver descendants of `el`;
  *                   `{ attributeFilter: ["theater"] }` for attribute mutations.
- * @returns An {@link Unsubscribe} function. Call it to remove the subscription.
+ * @returns An {@link UnsubscribeFromDomMutations} function. Call it to remove the subscription.
  */
-function subscribe(
+function subscribeToDomMutations(
 	selector: string,
 	callback: (elements: Element[]) => void,
-	options?: SubscribeOptions
-): Unsubscribe {
+	options?: SubscribeToDomMutationsOptions
+): UnsubscribeFromDomMutations {
 	const subscriber: Subscriber = {
 		attributeFilter: options?.attributeFilter,
 		callback,
@@ -261,5 +264,5 @@ ensureObserverOptions();
 
 // ─── Exports ────────────────────────────────────────────────────
 
-export { disconnect, subscribe };
-export type { SubscribeOptions, Unsubscribe };
+export { disconnectFromDomMutations, subscribeToDomMutations };
+export type { SubscribeToDomMutationsOptions, UnsubscribeFromDomMutations };

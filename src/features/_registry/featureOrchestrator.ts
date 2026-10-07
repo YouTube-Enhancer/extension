@@ -11,7 +11,10 @@ import { featureButtonManager } from "@/src/features/_registry/featureButtonMana
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featureNavigationManager } from "@/src/features/_registry/featureNavigationManager";
-import { subscribe, type Unsubscribe } from "@/src/utils/dom/observers/domMutationBus";
+import {
+	subscribeToDomMutations,
+	type UnsubscribeFromDomMutations
+} from "@/src/utils/dom/observers/domMutationBus";
 import { pageReadinessSelectors } from "@/src/utils/dom/pageReadiness";
 
 import type { FeatureLifecycleManager } from "./featureLifecycleManager";
@@ -48,7 +51,7 @@ type UpdateFeatureEnabledStateOptions = {
 export class FeatureOrchestrator extends FeatureManagerBase {
 	/** Debounce handle for the placement rebind that follows a player-controls re-render. */
 	private controlsRebindTimer: Nullable<ReturnType<typeof setTimeout>> = null;
-	private controlsRebindUnsubscribe: Nullable<Unsubscribe> = null;
+	private controlsRebindUnsubscribe: Nullable<UnsubscribeFromDomMutations> = null;
 	private enableAllPromise: Nullable<Promise<void>> = null;
 	private featureEnabledState = new Map<FeatureKeys, boolean>();
 	/**
@@ -403,7 +406,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 	 */
 	private ensureControlsRebindWatcher() {
 		if (this.controlsRebindUnsubscribe) return;
-		this.controlsRebindUnsubscribe = subscribe(
+		this.controlsRebindUnsubscribe = subscribeToDomMutations(
 			`${pageReadinessSelectors.playerControlsLeft}, ${pageReadinessSelectors.playerControlsRight}`,
 			() => {
 				// Placement itself appends buttons inside the controls, so debounce to keep those
