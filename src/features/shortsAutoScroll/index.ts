@@ -2,7 +2,7 @@ import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
+import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 
 import { metadata } from "./index.metadata";
 import { setupAutoScroll } from "./utils";
@@ -37,7 +37,7 @@ export default createFeature({
  */
 function armPlayerBus() {
 	unsubscribePlayerBus?.();
-	unsubscribePlayerBus = subscribe("#shorts-player", () => {
+	unsubscribePlayerBus = subscribeToDomMutations("#shorts-player", () => {
 		setupShortsAutoScroll();
 	});
 }

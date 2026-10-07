@@ -2,7 +2,7 @@ import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
+import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 
 /** Debounced so the top level observer does not run a document query for every YouTube DOM mutation. */
 const ATTACH_DEBOUNCE_MS = 100;
@@ -106,7 +106,7 @@ function scheduleAttach(): void {
 
 function startChatFrameObserver(): void {
 	if (unsubscribeBus) return;
-	unsubscribeBus = subscribe(CHAT_FRAME_SELECTOR, () => {
+	unsubscribeBus = subscribeToDomMutations(CHAT_FRAME_SELECTOR, () => {
 		scheduleAttach();
 	});
 }

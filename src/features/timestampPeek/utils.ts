@@ -3,7 +3,7 @@ import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/src/events/EventManager";
 import { suspendMiniPlayerOverlay } from "@/src/features/miniPlayer";
 import { createStyledElement } from "@/src/utils/dom/elements";
-import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
+import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 import { timestampElementSelector } from "@/src/utils/dom/selectors";
 
 const timestampsWithListeners = new Set<HTMLElement>();
@@ -193,7 +193,7 @@ export async function observeTimestampElements(): Promise<Nullable<() => void>> 
 	if (!playerContainer) return null;
 	const videoLength = await playerContainer.getDuration();
 	const selector = `${timestampElementSelector}[href^='${href}']`;
-	const unsubscribe = subscribe(selector, (elements) => {
+	const unsubscribe = subscribeToDomMutations(selector, (elements) => {
 		for (const el of elements) {
 			processNode(el as HTMLElement, href, videoLength);
 		}

@@ -2,7 +2,7 @@ import type { Nullable } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
+import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 import { browserColorLog } from "@/src/utils/logging";
 
 import { metadata } from "./index.metadata";
@@ -20,7 +20,7 @@ export default createFeature({
 		browserColorLog(`Enabling removeRedirect`, "FgMagenta");
 		unsubscribeBus?.();
 		processDocument();
-		unsubscribeBus = subscribe("[href]", (elements) => {
+		unsubscribeBus = subscribeToDomMutations("[href]", (elements) => {
 			for (const el of elements) {
 				unwrapRedirect(el);
 			}
