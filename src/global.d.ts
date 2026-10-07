@@ -155,6 +155,8 @@ declare global {
 		keys<T>(o: T): (keyof T)[];
 	}
 	interface Window {
+		/** Id of the live embedded-script instance. Prevents stacked reinjections on a long-lived tab. */
+		__yteEmbeddedActiveId?: string;
 		engine: Nullable<AudioEngine>;
 		i18nextInstance: i18nInstanceType;
 		trustedTypes?: {

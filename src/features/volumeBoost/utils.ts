@@ -9,10 +9,14 @@ export function applyVolumeBoostDb(db: number): void {
 	engine.volumeGain.gain.value = dbToLinear(clampDb(db));
 }
 
-export function setupVolumeBoost(): void {
+/**
+ * Ensures the audio engine exists. Logs once per enable so SPA navigation does not
+ * spam the console on every onNavigate.
+ */
+export function setupVolumeBoost(options?: { quiet?: boolean }): void {
 	try {
 		getAudioEngine();
-		browserColorLog("Volume boost enabled", "FgMagenta");
+		if (!options?.quiet) browserColorLog("Volume boost enabled", "FgMagenta");
 	} catch (error) {
 		browserColorLog(`Volume boost failed: ${formatError(error)}`, "FgRed");
 	}

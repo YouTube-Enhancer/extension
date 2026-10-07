@@ -12,6 +12,12 @@ import { version } from "../../../package.json";
 
 const sentRequestIds = new Set<string>();
 
+/**
+ * Static import on purpose. A dynamic import here made the pages build emit
+ * `__vitePreload` into the service worker graph, and Rolldown hosted that helper
+ * in the Monaco vendor chunk (`window` is not defined in a service worker).
+ * Production tree-shakes this call; Monaco never belongs on the SW import path.
+ */
 if (DEV_MODE) {
 	startHotReloadClient();
 	void reinjectContentScriptsAfterReload();

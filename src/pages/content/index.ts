@@ -21,26 +21,16 @@ import type {
 
 import { isFeatureKey, resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
 import { featureLightStateFeatureIds } from "@/src/features/_registry/generatedFeatureLightManifest";
+import { startDevelopmentMode } from "@/src/pages/content/development";
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { deepMerge, parseStoredValue } from "@/src/utils/config/utils";
 import { deepEqual } from "@/src/utils/deepEqual";
 import {
-	DEV_RELOAD_SOURCE,
-	type DevWindowMessage,
-	isDevRuntimeMessage,
-	isDevWindowMessage
-} from "@/src/utils/dev/hotReload";
-import {
 	MESSAGE_ORIGIN,
 	sendExtensionMessage,
 	sendExtensionOnlyMessage
 } from "@/src/utils/messaging";
-import {
-	invalidateDevToolsCache,
-	setupContentScriptBridge,
-	teardownContentScriptBridge
-} from "@/src/utils/messaging/devtools";
 
 // Polyfill may return Chrome's native (partial) browser API which can lack storage.
 const storage = browser.storage ?? chrome.storage;
@@ -71,11 +61,6 @@ const scheduleEmbeddedScript = () => {
 		appendEmbeddedScript();
 	}
 };
-if (DEV_MODE) {
-	startDevelopmentMode();
-} else {
-	scheduleEmbeddedScript();
-}
 const getStoredSettings = async (): Promise<configuration> => {
 	const settings = await storage.local.get(defaultConfigKeys);
 	const storedSettings = Object.keys(settings)
@@ -246,99 +231,6 @@ const onWindowMessage = (event: MessageEvent) => {
 	})();
 };
 window.addEventListener("message", onWindowMessage);
-/**
- * Development only. Everything hot reload needs lives in this one function so that a production build, where the
- * call above is dead, drops it and its imports entirely. It wires the devtools bridge, then the takeover protocol:
- * when the background worker re-injects this script it first sets `__yteDevReinject`, so the new instance retires
- * the older instances on the page (they hear the takeover on `window`, which works even after an extension reload
- * has invalidated their `chrome.*` handles), asks the running embedded script to disable everything, and injects the
- * rebuilt one under a fresh URL. A rebuilt embedded script alone arrives as a runtime message and is swapped the same
- * way. The video keeps playing throughout.
- */
-function startDevelopmentMode(): void {
-	const isReinjection = (globalThis as { __yteDevReinject?: boolean }).__yteDevReinject === true;
-	delete (globalThis as { __yteDevReinject?: boolean }).__yteDevReinject;
-	const instanceId = crypto.randomUUID();
-
-	const requestEmbeddedDispose = () =>
-		new Promise<void>((resolve) => {
-			const finish = () => {
-				clearTimeout(timeout);
-				window.removeEventListener("message", onDisposed);
-				resolve();
-			};
-			const onDisposed = (event: MessageEvent) => {
-				if (
-					event.source === window &&
-					isDevWindowMessage(event.data) &&
-					event.data.type === "disposed"
-				)
-					finish();
-			};
-			const timeout = setTimeout(finish, 2000);
-			window.addEventListener("message", onDisposed);
-			window.postMessage(
-				{ source: DEV_RELOAD_SOURCE, type: "dispose" } satisfies DevWindowMessage,
-				"*"
-			);
-		});
-	const swapEmbeddedScript = async (buildId: string) => {
-		await requestEmbeddedDispose();
-		for (const oldScript of document.querySelectorAll('script[src*="src/pages/embedded/index.js"]'))
-			oldScript.remove();
-		injectEmbeddedScript(buildId);
-	};
-	const devInvalidateListener = (changes: Record<string, unknown>, areaName: string) => {
-		if (areaName !== "local") return;
-		const keys = Object.keys(changes).filter((key) => key in defaultConfiguration);
-		if (!keys.length) return;
-		void invalidateDevToolsCache(keys);
-	};
-	const onDevRuntimeMessage = (message: unknown) => {
-		if (!isDevRuntimeMessage(message)) return false;
-		void swapEmbeddedScript(message.buildId);
-		return false;
-	};
-	const dispose = () => {
-		window.removeEventListener("message", onWindowMessage);
-		window.removeEventListener("message", onTakeoverMessage);
-		window.removeEventListener("pagehide", onPageHide);
-		try {
-			storage.onChanged.removeListener(storageListeners);
-			storage.onChanged.removeListener(devInvalidateListener);
-			chrome.runtime.onMessage.removeListener(onDevRuntimeMessage);
-			teardownContentScriptBridge();
-		} catch {
-			// Extension context invalidated: the listeners died with it.
-		}
-	};
-	const onTakeoverMessage = (event: MessageEvent) => {
-		if (
-			event.source !== window ||
-			!isDevWindowMessage(event.data) ||
-			event.data.type !== "takeover"
-		)
-			return;
-		if (event.data.instanceId === instanceId) return;
-		dispose();
-	};
-
-	setupContentScriptBridge();
-	storage.onChanged.addListener(devInvalidateListener);
-	window.addEventListener("message", onTakeoverMessage);
-	chrome.runtime.onMessage.addListener(onDevRuntimeMessage);
-
-	if (isReinjection) {
-		embeddedScriptAppended = true;
-		window.postMessage(
-			{ instanceId, source: DEV_RELOAD_SOURCE, type: "takeover" } satisfies DevWindowMessage,
-			"*"
-		);
-		void swapEmbeddedScript(Date.now().toString(36));
-	} else {
-		scheduleEmbeddedScript();
-	}
-}
 const storageListeners = (changes: StorageChanges<configuration>, areaName: string) => {
 	if (areaName !== "local") return;
 	const changeKeys = Object.keys(changes).filter(
@@ -347,6 +239,24 @@ const storageListeners = (changes: StorageChanges<configuration>, areaName: stri
 	if (!changeKeys.length) return;
 	void storageChangeHandler(changes, areaName);
 };
+/**
+ * Content scripts are classic scripts (manifest), not ES modules. A dynamic import here
+ * made Rolldown emit __vitePreload with `import.meta`, which throws in a classic script.
+ * Start development mode with a static import instead; production tree-shakes the call.
+ */
+if (DEV_MODE) {
+	startDevelopmentMode({
+		defaultConfiguration,
+		injectEmbeddedScript,
+		onPageHide,
+		onWindowMessage,
+		scheduleEmbeddedScript,
+		storage,
+		storageListeners
+	});
+} else {
+	scheduleEmbeddedScript();
+}
 const castStorageChanges = (changes: StorageChanges<configuration>) => {
 	const result: Partial<{
 		[K in keyof configuration]: { newValue?: unknown; oldValue?: unknown };
