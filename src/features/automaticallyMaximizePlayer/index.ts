@@ -15,27 +15,17 @@ export default createFeature({
 	...metadata,
 	onDisable: () => minimizePlayer(),
 	onEnable: () => {
-		void registry.executeWithRetries(
-			"automaticallyMaximizePlayer",
-			[makeMaximizeTask()],
-			["maximize"],
-			{
-				maxAttempts: 60,
-				overallTimeout: 45000,
-				waitForLoaded: true
-			}
-		);
+		void registry.playerRetry("automaticallyMaximizePlayer", [makeMaximizeTask()], ["maximize"], {
+			maxAttempts: 60,
+			overallTimeout: 45000,
+			waitForLoaded: true
+		});
 	},
 	onNavigate: () => {
-		void registry.executeWithRetries(
-			"automaticallyMaximizePlayer",
-			[makeMaximizeTask()],
-			["maximize"],
-			{
-				maxAttempts: 60,
-				overallTimeout: 45000,
-				waitForLoaded: true
-			}
-		);
+		void registry.playerRetry("automaticallyMaximizePlayer", [makeMaximizeTask()], ["maximize"], {
+			maxAttempts: 60,
+			overallTimeout: 45000,
+			waitForLoaded: true
+		});
 	}
 });

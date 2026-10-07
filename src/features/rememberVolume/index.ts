@@ -37,7 +37,7 @@ function queueVolumeReapply(stateAPI: FeatureStateAPI<"rememberVolume">): void {
 			typeof playerContainer.getVolume === "function" ? await playerContainer.getVolume() : target;
 		return applied === target;
 	};
-	void registry.executeWithRetries("rememberVolume", [task], ["reapplyVolume"], {
+	void registry.playerRetry("rememberVolume", [task], ["reapplyVolume"], {
 		waitForLoaded: true
 	});
 }

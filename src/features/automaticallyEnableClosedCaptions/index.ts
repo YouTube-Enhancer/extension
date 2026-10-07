@@ -12,7 +12,7 @@ let captionsWhereEnabled = false;
 
 function enableCaptions() {
 	// A pre-roll ad can run for the better part of a minute; the attempts have to outlast it.
-	void registry.executeWithRetries(
+	void registry.playerRetry(
 		"automaticallyEnableClosedCaptions",
 		[enableCaptionsTask],
 		["enableCaptions"],
@@ -52,9 +52,7 @@ async function enableCaptionsTask(): Promise<boolean> {
 export default createFeature({
 	...metadata,
 	onDisable: async () => {
-		// A run still waiting for captions must not turn them on after the feature is off
-		registry.cleanupPlayerRetry("automaticallyEnableClosedCaptions");
-		// Get the player element
+		// Lifecycle already aborted this feature's player retries before onDisable runs
 		const playerContainer = await waitForPagePlayer();
 		// If player element is not available, return
 		if (!playerContainer) return;

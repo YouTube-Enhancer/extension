@@ -38,7 +38,6 @@ export default createFeature({
 	...metadata,
 	onDisable: () => {
 		browserColorLog("Disabling skipContinueWatching", "FgMagenta");
-		registry.cleanupPlayerRetry("skipContinueWatching");
 		const ytdWatchElement = getWatchElement();
 		if (ytdWatchElement && youthereDataChanged_) {
 			ytdWatchElement.youthereDataChanged_ = youthereDataChanged_;
@@ -49,7 +48,7 @@ export default createFeature({
 		// Apply the patch through the player manager's retry task: by the time the
 		// player has loaded, the element upgrade has run, the capture sees the real
 		// handler, and the patch sticks instead of being clobbered.
-		void registry.executeWithRetries(
+		void registry.playerRetry(
 			"skipContinueWatching",
 			[patchContinueWatching],
 			["patch-continue-watching"],

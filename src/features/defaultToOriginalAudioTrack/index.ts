@@ -118,7 +118,7 @@ function resolvePlayerVideoId(playerVideoId: Nullable<string>): Nullable<string>
 export default createFeature({
 	...metadata,
 	onDisable: () => {
-		void registry.executeWithRetries(
+		void registry.playerRetry(
 			"defaultToOriginalAudioTrack",
 			[makeRestoreAudioTrackTask()],
 			["restoreAudio"],
@@ -130,7 +130,7 @@ export default createFeature({
 		);
 	},
 	onEnable: () => {
-		void registry.executeWithRetries(
+		void registry.playerRetry(
 			"defaultToOriginalAudioTrack",
 			[makeSaveTrackTask(), makeSetDefaultAudioTrackTask()],
 			["saveTrack", "setDefault"],
@@ -139,7 +139,7 @@ export default createFeature({
 	},
 	onNavigate: () => {
 		// Save first: the video changed without onEnable running again, so the track to restore is this video's.
-		void registry.executeWithRetries(
+		void registry.playerRetry(
 			"defaultToOriginalAudioTrack",
 			[makeSaveTrackTask(), makeSetDefaultAudioTrackTask()],
 			["saveTrack", "setDefault"],

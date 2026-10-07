@@ -84,7 +84,7 @@ function injectStyleIntoFrame(frame: HTMLIFrameElement): void {
 function registerCleanup(): void {
 	if (cleanupRegistered) return;
 	cleanupRegistered = true;
-	registry.addDisposer(FEATURE_NAME, () => {
+	registry.on(FEATURE_NAME, "chat-frames", () => {
 		cleanupRegistered = false;
 		removeChatFrameHide();
 	});

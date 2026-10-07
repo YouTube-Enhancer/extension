@@ -13,18 +13,13 @@ import { restorePlayerVolume, setPlayerVolume } from "./utils";
  * initialization, which reads YouTube's stored volume back.
  */
 function applyVolume(volume: number) {
-	void registry.executeWithRetries(
-		"globalVolume",
-		[() => applyVolumeTask(volume)],
-		["applyVolume"],
-		{
-			interval: 500,
-			maxAttempts: 6,
-			overallTimeout: 15_000,
-			pageTypes: ["live", "shorts", "watch"],
-			waitForLoaded: true
-		}
-	);
+	void registry.playerRetry("globalVolume", [() => applyVolumeTask(volume)], ["applyVolume"], {
+		interval: 500,
+		maxAttempts: 6,
+		overallTimeout: 15_000,
+		pageTypes: ["live", "shorts", "watch"],
+		waitForLoaded: true
+	});
 }
 async function applyVolumeTask(volume: number): Promise<boolean> {
 	const playerContainer = getPlayerContainer();
@@ -50,7 +45,7 @@ export default createFeature({
 		applyVolume(volume);
 	},
 	onDisable: async () => {
-		registry.cleanupPlayerRetry("globalVolume");
+		// Lifecycle already aborted this feature's player retries before onDisable runs
 		const playerContainer = getPlayerContainer();
 		if (!playerContainer) return;
 		await restorePlayerVolume(playerContainer);

@@ -59,7 +59,7 @@ function makeTheaterTask(desired: boolean) {
 export default createFeature({
 	...metadata,
 	onDisable: () => {
-		void registry.executeWithRetries(metadata.id, [makeTheaterTask(false)], ["disableTheater"], {
+		void registry.playerRetry(metadata.id, [makeTheaterTask(false)], ["disableTheater"], {
 			interval: 300,
 			maxAttempts: 20,
 			waitForLoaded: false
@@ -67,14 +67,14 @@ export default createFeature({
 	},
 	onEnable: async () => {
 		await disableMaximizeIfEnabled();
-		void registry.executeWithRetries(metadata.id, [makeTheaterTask(true)], ["enableTheater"], {
+		void registry.playerRetry(metadata.id, [makeTheaterTask(true)], ["enableTheater"], {
 			interval: 300,
 			maxAttempts: 20,
 			waitForLoaded: false
 		});
 	},
 	onNavigate: () => {
-		void registry.executeWithRetries(metadata.id, [makeTheaterTask(true)], ["enableTheater"], {
+		void registry.playerRetry(metadata.id, [makeTheaterTask(true)], ["enableTheater"], {
 			interval: 300,
 			maxAttempts: 20,
 			waitForLoaded: false
