@@ -1,5 +1,6 @@
 import type {
 	AnyFeatureBase,
+	FeatureButton,
 	FeatureKeys,
 	FeatureKeysWithState
 } from "@/src/features/_registry/types";
@@ -21,6 +22,13 @@ import type { FeatureRegistry } from "./featureRegistry";
 
 import { FeatureManagerBase } from "./featureManagerBase";
 import { resolveEnabled } from "./featureRegistryCore";
+
+type PageEnableCandidate = {
+	config: configuration[FeatureKeys];
+	feature: AnyFeatureBase;
+	hasButtons: boolean;
+	priority: number;
+};
 
 type PhaseOneTransition = {
 	canEnable: boolean;
@@ -125,18 +133,52 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 
 	/**
 	 * Enable registered features that match the current page gate and are not enabled yet.
-	 * Sequential per feature so same-feature buttons stay adjacent. Off-page features stay
-	 * disabled until navigation re-evaluates them.
+	 * Button features are placed first in one priority-ordered batch (readiness once, then
+	 * feature by feature so same-feature buttons stay adjacent). Lifecycle runs after placement.
+	 * Off-page features stay disabled until navigation re-evaluates them.
 	 */
 	async enableRegisteredForCurrentPage(): Promise<void> {
 		this.ensureControlsRebindWatcher();
+		const toEnable: PageEnableCandidate[] = [];
+
 		for (const feature of this.getFeaturesSortedByPriority()) {
 			if (this.featureEnabledState.get(feature.id) === true) continue;
 			const config = featureConfigManager.getLastOr(feature.id, feature.defaults);
 			const enabled = resolveEnabled(config);
 			const depsMet = featureNavigationManager.areDependenciesMet(feature);
 			if (!enabled || !depsMet) continue;
-			await this.updateFeatureEnabledState(feature.id, true, config);
+			toEnable.push({
+				config,
+				feature,
+				hasButtons: this.registry.hasButtons(feature, feature.id),
+				priority: metadataRegistry.get(feature.id)?.priority ?? 0
+			});
+		}
+		if (!toEnable.length) return;
+
+		const buttonItems = toEnable
+			.filter((item) => item.hasButtons)
+			.map((item) => {
+				const feature = item.feature as AnyFeatureBase & {
+					buttons?: FeatureButton<FeatureKeys>[];
+					id: FeatureKeys;
+				};
+				return {
+					buttons: feature.buttons ?? [],
+					canEnable: true,
+					config: item.config,
+					featureId: feature.id,
+					priority: item.priority
+				};
+			});
+		await featureButtonManager.placeFeaturesByPriority(buttonItems);
+
+		for (const { config, feature, hasButtons } of toEnable) {
+			await this.lifecycle.initFeature(feature, config);
+			// Buttons already placed in the priority batch; lifecycle only here.
+			await this.updateFeatureEnabledState(feature.id, true, config, {
+				skipButtons: hasButtons
+			});
 		}
 	}
 

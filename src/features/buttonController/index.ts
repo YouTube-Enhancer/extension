@@ -32,7 +32,11 @@ export {
 } from "./ButtonController";
 
 export { buttonPlacement } from "./buttonPlacement";
-export type { PlacementOutcome, PlacementStateSnapshot } from "./buttonPlacement";
+export type {
+	PlacementOutcome,
+	PlacementStateSnapshot,
+	PriorityPlacementItem
+} from "./buttonPlacement";
 
 export type { FeatureMenuOpenType, ListenerType } from "./types";
 

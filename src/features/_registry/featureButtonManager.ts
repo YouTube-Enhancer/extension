@@ -4,7 +4,10 @@ import type {
 	FeatureKeys,
 	FeatureKeysWithState
 } from "@/src/features/_registry/types";
-import type { PlacementOutcome } from "@/src/features/buttonController/buttonPlacement";
+import type {
+	PlacementOutcome,
+	PriorityPlacementItem
+} from "@/src/features/buttonController/buttonPlacement";
 import type { configuration } from "@/src/types";
 
 import { buttonPlacement } from "@/src/features/buttonController/buttonPlacement";
@@ -37,6 +40,16 @@ class FeatureButtonManager extends FeatureManagerBase {
 
 	invalidateCache() {
 		buttonPlacement.invalidateCache();
+	}
+
+	/**
+	 * Priority-ordered batch: sort features by priority, ensure readiness once, then
+	 * place feature by feature. Same-feature buttons stay sequential (adjacent in the DOM).
+	 */
+	public placeFeaturesByPriority(
+		items: PriorityPlacementItem[]
+	): Promise<Map<FeatureKeys, PlacementOutcome[]>> {
+		return buttonPlacement.placeFeaturesByPriority(items);
 	}
 
 	protected getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
