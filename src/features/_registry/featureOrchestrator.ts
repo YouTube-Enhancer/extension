@@ -11,10 +11,7 @@ import { featureButtonManager } from "@/src/features/_registry/featureButtonMana
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featureNavigationManager } from "@/src/features/_registry/featureNavigationManager";
-import {
-	subscribe as onDomMutations,
-	type Unsubscribe
-} from "@/src/utils/dom/observers/domMutationBus";
+import { subscribe, type Unsubscribe } from "@/src/utils/dom/observers/domMutationBus";
 import { pageReadinessSelectors } from "@/src/utils/dom/pageReadiness";
 
 import type { FeatureLifecycleManager } from "./featureLifecycleManager";
@@ -406,7 +403,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 	 */
 	private ensureControlsRebindWatcher() {
 		if (this.controlsRebindUnsubscribe) return;
-		this.controlsRebindUnsubscribe = onDomMutations(
+		this.controlsRebindUnsubscribe = subscribe(
 			`${pageReadinessSelectors.playerControlsLeft}, ${pageReadinessSelectors.playerControlsRight}`,
 			() => {
 				// Placement itself appends buttons inside the controls, so debounce to keep those
