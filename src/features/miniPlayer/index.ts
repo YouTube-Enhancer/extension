@@ -4,7 +4,7 @@ import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { createStyledElement } from "@/src/utils/dom/elements";
-import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
+import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 
 import type { MiniPlayerRect } from "./controller";
 import type { MiniPlayerOptions } from "./types";
@@ -125,7 +125,7 @@ function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController): void {
 			attachObserver(commentsElement);
 			return true;
 		}
-		unsubscribeCommentsBus = subscribe(
+		unsubscribeCommentsBus = subscribeToDomMutations(
 			"ytd-comments, #comments",
 			([foundComments]) => {
 				if (!foundComments) return;

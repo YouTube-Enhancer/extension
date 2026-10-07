@@ -2,7 +2,10 @@ import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import type { Nullable, Selector } from "@/src/types";
 
-import { subscribe, type Unsubscribe } from "@/src/utils/dom/observers/domMutationBus";
+import {
+	subscribeToDomMutations,
+	type UnsubscribeFromDomMutations
+} from "@/src/utils/dom/observers/domMutationBus";
 import { browserColorLog } from "@/src/utils/logging";
 type WaitMode = "optional" | "required";
 /**
@@ -26,7 +29,7 @@ export async function waitForAllElements(
 	browserColorLog(`Waiting for ${selectors.join(", ")}`, "FgMagenta");
 	return new Promise((resolve) => {
 		const foundElements: Element[] = [];
-		const unsubscribes: Unsubscribe[] = [];
+		const unsubscribes: UnsubscribeFromDomMutations[] = [];
 		const subscribed = selectors.map(() => false);
 		let resolved = false;
 
@@ -64,7 +67,7 @@ export async function waitForAllElements(
 				if (foundElements[index] || subscribed[index]) continue;
 				subscribed[index] = true;
 				unsubscribes.push(
-					subscribe(
+					subscribeToDomMutations(
 						selector,
 						(elements) => {
 							if (foundElements[index]) return;
@@ -181,7 +184,7 @@ export function waitForElement<T extends Element>(
 			resolve(el);
 		};
 
-		const unsubscribe = subscribe(
+		const unsubscribe = subscribeToDomMutations(
 			selector,
 			(elements) => {
 				const match = elements.find((el) => parent.contains(el)) as T | undefined;
