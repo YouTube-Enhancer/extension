@@ -34,8 +34,8 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 
 	window.i18nextInstance = await i18nService(options.language ?? "en-US");
 
-	// Classify the page from the URL first so feature registration can enable the
-	// page-relevant wave as chunks land, instead of waiting for every load phase.
+	// Classify the page from the URL first so feature registration can enable
+	// page-relevant features as chunks land, instead of waiting for every load phase.
 	registry.initialize();
 
 	await registerAllFeatures(state);

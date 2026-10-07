@@ -52,6 +52,16 @@ export type PlacementStateSnapshot = {
 	}[];
 };
 
+/** One feature's buttons to place in a priority-ordered batch. */
+export type PriorityPlacementItem<K extends FeatureKeys = FeatureKeys> = {
+	buttons: FeatureButton<K>[];
+	canEnable: boolean;
+	config: configuration[K];
+	featureId: K;
+	/** Lower numbers place first in shared containers (metadata.priority). */
+	priority?: number;
+};
+
 /**
  * Owns feature-button placement: readiness (menu button + targets), per-button add/remove,
  * tracked state, and the sequential same-feature order that keeps sibling buttons adjacent.
@@ -105,6 +115,46 @@ class ButtonPlacementManager extends FeatureManagerBase {
 			outcomes.push(await this.placeOneButton(featureId, btn, config, canEnable));
 		}
 		return outcomes;
+	}
+
+	/**
+	 * Places buttons for several features in one pass: sort by priority, ensure readiness once,
+	 * then place feature by feature. Within a feature, buttons stay sequential so siblings
+	 * remain adjacent. Use this for cold-load / page-relevant enable instead of calling
+	 * placeFeatureButtons once per feature.
+	 */
+	async placeFeaturesByPriority(
+		items: PriorityPlacementItem[]
+	): Promise<Map<FeatureKeys, PlacementOutcome[]>> {
+		const results = new Map<FeatureKeys, PlacementOutcome[]>();
+		if (!items.length) return results;
+		const ordered = [...items].sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
+		const needsWork = ordered.some(
+			(item) => item.canEnable && !this.allButtonsUnchanged(item.buttons, item.config)
+		);
+		if (needsWork) {
+			await this.ensureReadiness();
+		}
+		for (const item of ordered) {
+			const { buttons, canEnable, config, featureId } = item;
+			if (!buttons.length) {
+				results.set(featureId, []);
+				continue;
+			}
+			if (canEnable && this.allButtonsUnchanged(buttons, config)) {
+				results.set(
+					featureId,
+					buttons.map((btn) => ({ detail: "unchanged", landed: true, name: btn.name }))
+				);
+				continue;
+			}
+			const outcomes: PlacementOutcome[] = [];
+			for (const btn of buttons) {
+				outcomes.push(await this.placeOneButton(featureId, btn, config, canEnable));
+			}
+			results.set(featureId, outcomes);
+		}
+		return results;
 	}
 
 	protected override getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
