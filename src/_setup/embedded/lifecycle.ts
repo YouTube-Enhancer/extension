@@ -87,6 +87,12 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 				} catch (error) {
 					console.error("Teardown: disableAll failed:", error);
 				}
+			} else {
+				/**
+				 * Page teardown without disableAll still has to abort player retries and run feature
+				 * disposers. Disabling first would call onDisable; disposeSessions is the lighter path.
+				 */
+				registry.disposeSessions();
 			}
 			registry.destroyNavigationListener();
 			eventManager.removeAllEventListeners();

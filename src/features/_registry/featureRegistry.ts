@@ -14,8 +14,12 @@ import type { configuration } from "@/src/types";
 
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import {
-	addFeatureDisposer,
-	FeatureLifecycleManager
+	disposeAllFeatureSessions,
+	type DisposerKey,
+	type DisposerName,
+	FeatureLifecycleManager,
+	registerFeatureDisposer,
+	removeFeatureDisposer
 } from "@/src/features/_registry/featureLifecycleManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featureNavigationManager } from "@/src/features/_registry/featureNavigationManager";
@@ -51,14 +55,6 @@ export class FeatureRegistry extends FeatureManagerBase {
 		this.orchestrator = new FeatureOrchestrator(this, this.lifecycleManager);
 	}
 
-	/**
-	 * Register a teardown that runs when this feature is disabled.
-	 * Prefer this over calling playerManager.cleanup or removing listeners by hand in onDisable.
-	 */
-	addDisposer(featureId: FeatureKeys, fn: () => void): void {
-		addFeatureDisposer(featureId, fn);
-	}
-
 	cleanupPlayerRetry(featureId?: PlayerRetryKey): void {
 		this.playerManager.cleanup(featureId);
 	}
@@ -69,6 +65,16 @@ export class FeatureRegistry extends FeatureManagerBase {
 	async disableAll() {
 		await this.orchestrator.disableAll();
 	}
+
+	/**
+	 * Abort player retries and run every feature disposer without calling onDisable.
+	 * Page teardown uses this when features are not disabled through the lifecycle.
+	 * SPA navigation must not: features stay enabled and disposers must survive.
+	 */
+	disposeSessions(): void {
+		disposeAllFeatureSessions();
+	}
+
 	async enableAll(options: Partial<configuration>) {
 		await this.orchestrator.enableAll(options);
 	}
@@ -76,15 +82,6 @@ export class FeatureRegistry extends FeatureManagerBase {
 	/** Enable registered features that match the current page and are not enabled yet. */
 	async enableRegisteredForCurrentPage(): Promise<void> {
 		await this.orchestrator.enableRegisteredForCurrentPage();
-	}
-
-	executeWithRetries(
-		featureId: PlayerRetryKey,
-		tasks: PlayerTask[],
-		taskNames: string[],
-		config?: PlayerRetryConfig
-	): Promise<boolean[]> {
-		return this.playerManager.executeWithRetries(featureId, tasks, taskNames, config);
 	}
 
 	getAll() {
@@ -127,6 +124,10 @@ export class FeatureRegistry extends FeatureManagerBase {
 	 */
 	initialize() {
 		this.navigationManager.initialize(async (navigationType) => {
+			/**
+			 * Navigation aborts player retries but must not run feature disposers: features stay
+			 * enabled and keep their bus subscriptions / listeners across in-page navigations.
+			 */
 			this.playerManager.cleanup();
 			this.orchestrator.cancelAllPlacementRechecks();
 			await this.safelyExecute<void>(
@@ -167,6 +168,33 @@ export class FeatureRegistry extends FeatureManagerBase {
 		for (const feature of this.getAll()) {
 			await this.lifecycleManager.languageChange(feature);
 		}
+	}
+
+	/** Remove a named disposer without running it. */
+	off(featureId: DisposerKey, name: DisposerName): void {
+		removeFeatureDisposer(featureId, name);
+	}
+
+	/**
+	 * Register a named teardown that runs when the feature is disabled.
+	 * Registering the same name again replaces the previous fn.
+	 * Prefer this over calling playerManager.cleanup or removing listeners by hand in onDisable.
+	 */
+	on(featureId: DisposerKey, name: DisposerName, fn: () => void): void {
+		registerFeatureDisposer(featureId, name, fn);
+	}
+
+	/**
+	 * Start a player retry session for this feature. The session is aborted on disable,
+	 * navigation, a newer playerRetry for the same feature, or disposeSessions.
+	 */
+	playerRetry(
+		featureId: PlayerRetryKey,
+		tasks: PlayerTask[],
+		taskNames: string[],
+		config?: PlayerRetryConfig
+	): Promise<boolean[]> {
+		return this.playerManager.executeWithRetries(featureId, tasks, taskNames, config);
 	}
 
 	async reconcileFeature<K extends FeatureKeys>(id: K, config: configuration[K], enabled: boolean) {

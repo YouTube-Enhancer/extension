@@ -203,7 +203,7 @@ async function findPlayerContainer(
 		if (element) playerContainer = element;
 		return playerContainer !== null;
 	};
-	await registry.executeWithRetries(controlFeatureIds[type], [findPlayerTask], ["find player"], {
+	await registry.playerRetry(controlFeatureIds[type], [findPlayerTask], ["find player"], {
 		maxAttempts: 15,
 		pageTypes: type === "volume" ? ["watch", "live", "shorts"] : ["watch", "shorts"],
 		waitForLoaded: false
