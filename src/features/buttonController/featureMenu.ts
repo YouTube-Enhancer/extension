@@ -5,6 +5,7 @@ import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegist
 import { featurePlayerManager } from "@/src/features/_registry/featurePlayerManager";
 import { getFeatureMenuConfig } from "@/src/ui/configProvider";
 import { createStyledElement, createSVGElement } from "@/src/utils/dom/elements";
+import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
 import { pageReadinessSelectors, waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
@@ -234,7 +235,6 @@ export function setupFeatureMenuEventListeners(
 	});
 
 	let menuVisible = false;
-	let observer: Nullable<MutationObserver> = null;
 
 	const hideYouTubeSettings = () => {
 		const settingsMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu");
@@ -323,26 +323,14 @@ export function setupFeatureMenuEventListeners(
 		}
 	}
 
-	observer = new MutationObserver((mutations) => {
-		for (const mutation of mutations) {
-			if (mutation.type !== "childList") continue;
-			for (const node of Array.from(mutation.addedNodes)) {
-				if (!(node instanceof HTMLElement)) continue;
-				if (node.classList.contains("video-ads") && node.classList.contains("ytp-ad-module")) {
-					adjustAdsContainerStyles(menuVisible);
-				}
-			}
-		}
+	// Ad modules inside player chrome ride the shared mutation bus
+	const unsubscribeAdsBus = subscribe(".video-ads.ytp-ad-module", () => {
+		adjustAdsContainerStyles(menuVisible);
 	});
-
-	observer.observe(playerContainer, { childList: true, subtree: true });
 
 	return () => {
 		eventManager.removeEventListeners("featureMenu");
-		if (observer) {
-			observer.disconnect();
-			observer = null;
-		}
+		unsubscribeAdsBus();
 	};
 }
 

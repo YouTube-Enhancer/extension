@@ -1,5 +1,6 @@
 import type { Nullable } from "@/src/types";
 
+import { subscribe, type Unsubscribe } from "@/src/utils/dom/observers/domMutationBus";
 import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
@@ -9,21 +10,26 @@ import { buttonContainerId } from "./constants";
 // ─── PlacementTransition ──────────────────────────────────────────
 // Owns all placement observers (fullscreen, theater, geometry) as
 // instance state. Provides a single activate/deactivate lifecycle.
+// Chrome signals ride the shared DOM Mutation Bus; geometry keeps a
+// ResizeObserver for player size.
+
+/** Watch-page layout attributes that can move the button container. */
+const WATCH_LAYOUT_ATTRIBUTE_FILTER = ["theater", "is-collapsed", "is-two-columns"] as const;
 
 class PlacementTransition {
-	// Container geometry
-	private containerGeometryMutationObserver: Nullable<MutationObserver> = null;
-	private containerGeometryObserver: Nullable<ResizeObserver> = null;
 	private containerGeometryResizeHandler: Nullable<() => void> = null;
+	// Container geometry
+	private containerGeometryResizeObserver: Nullable<ResizeObserver> = null;
+	private containerGeometryUnsubscribe: Nullable<Unsubscribe> = null;
 
 	// Fullscreen
 	private fullscreenDomHandler: Nullable<() => void> = null;
-	private fullscreenObserver: Nullable<MutationObserver> = null;
 	private fullscreenObserverActive = false;
+	private fullscreenUnsubscribe: Nullable<Unsubscribe> = null;
 
 	// Theater mode
 	private observedPlayerElement: Nullable<HTMLDivElement> = null;
-	private theaterModeObserver: Nullable<MutationObserver> = null;
+	private theaterModeUnsubscribes: Unsubscribe[] = [];
 	private theaterNavigationHandler: Nullable<() => void> = null;
 
 	// ─── Public lifecycle ───────────────────────────────────────────
@@ -84,9 +90,9 @@ class PlacementTransition {
 		if (isFullscreen()) return;
 		const player = document.querySelector<HTMLDivElement>("#movie_player");
 		if (!player) return;
-		if (this.observedPlayerElement !== player && this.containerGeometryObserver) {
-			this.containerGeometryObserver.disconnect();
-			this.containerGeometryObserver.observe(player);
+		if (this.observedPlayerElement !== player && this.containerGeometryResizeObserver) {
+			this.containerGeometryResizeObserver.disconnect();
+			this.containerGeometryResizeObserver.observe(player);
 			this.observedPlayerElement = player;
 		}
 		const playerRect = player.getBoundingClientRect();
@@ -112,21 +118,22 @@ class PlacementTransition {
 	// ─── Container geometry observer ────────────────────────────────
 
 	private async startContainerGeometryObserver() {
-		if (this.containerGeometryObserver) return;
+		if (this.containerGeometryResizeObserver) return;
 		const player = await waitForPagePlayer({ timeout: 15000 });
-		if (!player || this.containerGeometryObserver) return;
-		this.containerGeometryObserver = new ResizeObserver(() => {
+		if (!player || this.containerGeometryResizeObserver) return;
+		this.containerGeometryResizeObserver = new ResizeObserver(() => {
 			requestAnimationFrame(() => this.syncContainerGeometry());
 		});
-		this.containerGeometryObserver.observe(player);
+		this.containerGeometryResizeObserver.observe(player);
 		this.observedPlayerElement = player;
-		const watchElement = document.querySelector("ytd-watch-flexy, ytd-watch-grid");
-		if (watchElement) {
-			this.containerGeometryMutationObserver = new MutationObserver(() => {
+		// Watch-page layout attribute changes (theater, columns) via the shared bus
+		this.containerGeometryUnsubscribe = subscribe(
+			"ytd-watch-flexy, ytd-watch-grid",
+			() => {
 				requestAnimationFrame(() => this.syncContainerGeometry());
-			});
-			this.containerGeometryMutationObserver.observe(watchElement, { attributes: true });
-		}
+			},
+			{ attributeFilter: [...WATCH_LAYOUT_ATTRIBUTE_FILTER] }
+		);
 		this.containerGeometryResizeHandler = () => this.syncContainerGeometry();
 		window.addEventListener("resize", this.containerGeometryResizeHandler);
 		this.syncContainerGeometry();
@@ -136,54 +143,44 @@ class PlacementTransition {
 		if (this.fullscreenObserverActive) return;
 		this.fullscreenObserverActive = true;
 		this.fullscreenDomHandler = callback;
-		const target = document.querySelector("ytd-app");
-		if (target) {
-			this.fullscreenObserver = new MutationObserver((mutations) => {
-				for (const mutation of mutations) {
-					if (mutation.type === "attributes" && mutation.attributeName === "fullscreen") {
-						callback();
-					}
-				}
-			});
-			this.fullscreenObserver.observe(target, {
-				attributeFilter: ["fullscreen"],
-				attributes: true
-			});
-		}
+		// ytd-app[fullscreen] attribute via the shared bus
+		this.fullscreenUnsubscribe = subscribe(
+			"ytd-app",
+			() => {
+				callback();
+			},
+			{ attributeFilter: ["fullscreen"] }
+		);
 		document.addEventListener("fullscreenchange", this.onFullscreenChange, { passive: true });
 	}
 
 	private async startTheaterModeObserver() {
-		if (this.theaterModeObserver) return;
-		const sizeButton = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
-		if (!sizeButton) return;
+		if (this.theaterModeUnsubscribes.length > 0) return;
 		const scheduleReposition = () => {
 			requestAnimationFrame(() => {
 				this.ensureContainerPosition();
 			});
 		};
-		this.theaterModeObserver = new MutationObserver(scheduleReposition);
-		this.theaterModeObserver.observe(sizeButton, {
-			attributeFilter: ["class"],
-			attributes: true,
-			childList: true,
-			subtree: true
-		});
-		const watchElement = document.querySelector<HTMLElement>("ytd-watch-flexy, ytd-watch-grid");
-		if (watchElement) {
-			this.theaterModeObserver.observe(watchElement, {
-				attributeFilter: ["theater"],
-				attributes: true
-			});
-		}
+		// Player chrome + watch element theater signals via the shared bus
+		await waitForElement<HTMLButtonElement>("button.ytp-size-button");
+		this.theaterModeUnsubscribes.push(
+			subscribe("button.ytp-size-button", scheduleReposition, {
+				attributeFilter: ["class"]
+			})
+		);
+		this.theaterModeUnsubscribes.push(
+			subscribe("ytd-watch-flexy, ytd-watch-grid", scheduleReposition, {
+				attributeFilter: ["theater"]
+			})
+		);
 		document.addEventListener("yt-navigate-start", this.onNavigationStart);
 	}
 
 	private stopContainerGeometryObserver() {
-		this.containerGeometryObserver?.disconnect();
-		this.containerGeometryObserver = null;
-		this.containerGeometryMutationObserver?.disconnect();
-		this.containerGeometryMutationObserver = null;
+		this.containerGeometryResizeObserver?.disconnect();
+		this.containerGeometryResizeObserver = null;
+		this.containerGeometryUnsubscribe?.();
+		this.containerGeometryUnsubscribe = null;
 		this.observedPlayerElement = null;
 		if (this.containerGeometryResizeHandler) {
 			window.removeEventListener("resize", this.containerGeometryResizeHandler);
@@ -194,8 +191,8 @@ class PlacementTransition {
 	private stopFullscreenObserver() {
 		if (!this.fullscreenObserverActive) return;
 		this.fullscreenObserverActive = false;
-		this.fullscreenObserver?.disconnect();
-		this.fullscreenObserver = null;
+		this.fullscreenUnsubscribe?.();
+		this.fullscreenUnsubscribe = null;
 		document.removeEventListener("fullscreenchange", this.onFullscreenChange);
 		this.fullscreenDomHandler = null;
 	}
@@ -205,8 +202,8 @@ class PlacementTransition {
 			document.removeEventListener("yt-navigate-start", this.theaterNavigationHandler);
 			this.theaterNavigationHandler = null;
 		}
-		this.theaterModeObserver?.disconnect();
-		this.theaterModeObserver = null;
+		for (const unsubscribe of this.theaterModeUnsubscribes) unsubscribe();
+		this.theaterModeUnsubscribes = [];
 	}
 }
 

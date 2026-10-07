@@ -11,7 +11,7 @@ import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegist
 import { getFeatureIcon, type GetIconType, isToggleIcon, type ToggleIcon } from "@/src/icons";
 import { getButtonColor } from "@/src/utils/deep-dark-theme";
 import { createStyledElement } from "@/src/utils/dom/elements";
-import { subscribe as onDomMutations } from "@/src/utils/dom/observers/domMutationBus";
+import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
 import { createTooltip, removeTooltip } from "@/src/utils/dom/tooltip";
 
 import type { ListenerType } from "./types";
@@ -107,7 +107,7 @@ export async function addButton<
 				// enabled during page setup on live streams, whose player controls appear late.
 				// Place the button as soon as the target shows up instead of giving up until the
 				// next config change, which never comes when the stored config is already current.
-				onDomMutations(
+				subscribe(
 					selector,
 					() => {
 						void addButton(

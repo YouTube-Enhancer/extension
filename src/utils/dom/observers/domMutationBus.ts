@@ -2,8 +2,9 @@
  * DOM Mutation Bus
  *
  * A single {@link MutationObserver} on `document.body` that dispatches added-node
- * mutations to subscribers by CSS selector. Deduplicates identical selectors
- * and supports per-subscriber parent scoping.
+ * mutations to subscribers by CSS selector, and attribute mutations to subscribers
+ * that opt in via `attributeFilter`. Deduplicates identical selectors and supports
+ * per-subscriber parent scoping.
  *
  * The bus is always-alive: created on module import, disconnected in the
  * embedded script's teardown. Features subscribe/unsubscribe as they enable/disable.
@@ -13,18 +14,27 @@
  *
  * @example
  * ```ts
- * import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
+ * import {
+ *   disconnect,
+ *   subscribe,
+ *   type Unsubscribe
+ * } from "@/src/utils/dom/observers/domMutationBus";
  *
  * // Wait for an element (transient — auto-unsubscribes after first match)
- * const unsubscribe = subscribe("#movie_player", ([el]) => {
+ * const off = subscribe("#movie_player", ([el]) => {
  *   console.log("Player found:", el);
  * }, { once: true });
  *
  * // Persistent subscription (unsubscribe on feature disable)
- * const unsub = subscribe("[href]", (elements) => {
+ * const unsub: Unsubscribe = subscribe("[href]", (elements) => {
  *   for (const el of elements) processLink(el);
  * });
  * // later: unsub();
+ *
+ * // Attribute mutations on player chrome (fullscreen / theater / layout)
+ * const offFs = subscribe("ytd-app", () => onFullscreenChange(), {
+ *   attributeFilter: ["fullscreen"]
+ * });
  * ```
  *
  * @module domMutationBus
@@ -36,6 +46,12 @@ import type { Nullable } from "@/src/types";
 
 /** Options for {@link subscribe}. */
 type SubscribeOptions = {
+	/**
+	 * When set, the subscriber receives attribute mutations on matching elements
+	 * instead of added-node deliveries. The shared observer re-observes `document.body`
+	 * with a union of every live attributeFilter.
+	 */
+	attributeFilter?: readonly string[];
 	/** If true, automatically unsubscribe after the first delivery. */
 	once?: boolean;
 	/** If provided, only deliver matches that are descendants of this element. */
@@ -44,6 +60,7 @@ type SubscribeOptions = {
 
 /** Internal subscriber record. */
 type Subscriber = {
+	attributeFilter?: readonly string[];
 	callback: (elements: Element[]) => void;
 	once?: boolean;
 	parent?: ParentNode;
@@ -61,7 +78,33 @@ const subscriberMap = new Map<string, Set<Subscriber>>();
 /** The single shared observer, or null after {@link disconnect}. */
 let observer: Nullable<MutationObserver> = null;
 
+/** Last attributeFilter the observer was configured with; avoids needless re-observes. */
+let observedAttributeFilter: readonly string[] = [];
+
 // ─── Core Logic ─────────────────────────────────────────────────
+
+function collectAttributeFilters(): string[] {
+	const filters = new Set<string>();
+	for (const subscribers of subscriberMap.values()) {
+		for (const subscriber of subscribers) {
+			if (!subscriber.attributeFilter) continue;
+			for (const name of subscriber.attributeFilter) filters.add(name);
+		}
+	}
+	return [...filters].sort();
+}
+
+function deliverToSubscriber(subscriber: Subscriber, matches: Element[], selector: string): void {
+	const filteredMatches = subscriber.parent
+		? matches.filter((el) => subscriber.parent!.contains(el))
+		: matches;
+	if (filteredMatches.length === 0) return;
+	try {
+		subscriber.callback(filteredMatches);
+	} catch (error) {
+		console.error(`[domMutationBus] Subscriber callback error for selector "${selector}":`, error);
+	}
+}
 
 /**
  * Disconnect the observer and clear all subscriptions.
@@ -73,96 +116,118 @@ function disconnect(): void {
 		observer = null;
 	}
 	subscriberMap.clear();
+	observedAttributeFilter = [];
 }
 
 /**
- * MutationObserver callback. Collects added Element nodes, runs
- * `querySelectorAll` per unique selector per added node (per-addedNode
- * precision), then delivers matches to subscribers. Subscribers with a
- * `parent` option are filtered by `parent.contains(el)`. Subscribers
- * with `once: true` are removed after delivery.
+ * Re-observe `document.body` when the live attributeFilter set changes.
+ * MutationObserver cannot add or remove attributeFilter without re-observing.
+ */
+function ensureObserverOptions(): void {
+	if (typeof document === "undefined" || !document.body) return;
+	const attributeFilter = collectAttributeFilters();
+	const filterChanged =
+		attributeFilter.length !== observedAttributeFilter.length ||
+		attributeFilter.some((name, i) => name !== observedAttributeFilter[i]);
+	if (observer && !filterChanged) return;
+	observer?.disconnect();
+	observer = new MutationObserver(onMutations);
+	observer.observe(document.body, {
+		attributes: attributeFilter.length > 0,
+		...(attributeFilter.length > 0 ? { attributeFilter } : {}),
+		childList: true,
+		subtree: true
+	});
+	observedAttributeFilter = attributeFilter;
+}
+
+/**
+ * MutationObserver callback. Attribute records deliver to attributeFilter subscribers
+ * whose selector matches the mutation target. Child-list records collect added Element
+ * nodes, run `querySelectorAll` per unique selector per added node, then deliver to
+ * child-list subscribers. Subscribers with `once: true` are removed after delivery.
  */
 function onMutations(records: MutationRecord[]): void {
 	if (subscriberMap.size === 0) return;
 
-	// Collect all added Element nodes
-	const addedNodes: Element[] = [];
-	for (const record of records) {
-		for (const node of record.addedNodes) {
-			if (node instanceof Element) {
-				addedNodes.push(node);
-			}
-		}
-	}
-
-	if (addedNodes.length === 0) return;
-
-	// For each unique selector, find matches across all addedNodes
-	const selectorResults = new Map<string, Element[]>();
-
-	for (const selector of subscriberMap.keys()) {
-		const matches = new Set<Element>();
-
-		for (const node of addedNodes) {
-			if (node.matches(selector)) {
-				matches.add(node);
-			}
-			const descendants = node.querySelectorAll(selector);
-			for (let i = 0; i < descendants.length; i++) {
-				matches.add(descendants[i]);
-			}
-		}
-
-		if (matches.size > 0) {
-			selectorResults.set(selector, Array.from(matches));
-		}
-	}
-
-	// Deliver to subscribers
 	const toRemove: Subscriber[] = [];
 
-	for (const [selector, subscribers] of subscriberMap) {
-		const matches = selectorResults.get(selector);
-		if (!matches || matches.length === 0) continue;
-
-		for (const subscriber of subscribers) {
-			const filteredMatches = subscriber.parent
-				? matches.filter((el) => subscriber.parent!.contains(el))
-				: matches;
-
-			if (filteredMatches.length === 0) continue;
-
-			try {
-				subscriber.callback(filteredMatches);
-			} catch (error) {
-				console.error(
-					`[domMutationBus] Subscriber callback error for selector "${selector}":`,
-					error
-				);
+	for (const record of records) {
+		if (record.type === "attributes" && record.target instanceof Element) {
+			const { target } = record;
+			const { attributeName } = record;
+			if (!attributeName) continue;
+			for (const [selector, subscribers] of subscriberMap) {
+				for (const subscriber of subscribers) {
+					if (!subscriber.attributeFilter?.includes(attributeName)) continue;
+					if (!target.matches(selector)) continue;
+					deliverToSubscriber(subscriber, [target], selector);
+					if (subscriber.once) toRemove.push(subscriber);
+				}
 			}
+			continue;
+		}
 
-			if (subscriber.once) {
-				toRemove.push(subscriber);
+		if (record.type !== "childList") continue;
+
+		const addedNodes: Element[] = [];
+		for (const node of record.addedNodes) {
+			if (node instanceof Element) addedNodes.push(node);
+		}
+		if (addedNodes.length === 0) continue;
+
+		for (const [selector, subscribers] of subscriberMap) {
+			const hasChildListSubscribers = [...subscribers].some((s) => !s.attributeFilter);
+			if (!hasChildListSubscribers) continue;
+
+			const matches = new Set<Element>();
+			for (const node of addedNodes) {
+				if (node.matches(selector)) matches.add(node);
+				const descendants = node.querySelectorAll(selector);
+				for (let i = 0; i < descendants.length; i++) matches.add(descendants[i]);
+			}
+			if (matches.size === 0) continue;
+			const matchList = Array.from(matches);
+
+			for (const subscriber of subscribers) {
+				// Attribute subscribers are driven by attribute records, not added nodes.
+				if (subscriber.attributeFilter) continue;
+				deliverToSubscriber(subscriber, matchList, selector);
+				if (subscriber.once) toRemove.push(subscriber);
 			}
 		}
 	}
 
 	for (const subscriber of toRemove) {
-		unsubscribe(subscriber);
+		removeSubscriber(subscriber);
 	}
+}
+
+/** Remove a subscriber from the map. Cleans up the selector entry when empty. */
+function removeSubscriber(subscriber: Subscriber): void {
+	const subscribers = subscriberMap.get(subscriber.selector);
+	if (subscribers) {
+		subscribers.delete(subscriber);
+		if (subscribers.size === 0) {
+			subscriberMap.delete(subscriber.selector);
+		}
+	}
+	if (subscriber.attributeFilter) ensureObserverOptions();
 }
 
 /**
  * Subscribe to DOM mutations matching a CSS selector.
  *
- * The bus runs `addedNode.querySelectorAll(selector)` on every added Element
- * per mutation batch. If multiple subscribers register the same selector,
- * `querySelectorAll` runs once and results are shared (deduplication).
+ * By default this receives added Element nodes under `document.body`. When
+ * `attributeFilter` is provided the subscriber receives attribute mutations on
+ * elements that match the selector instead (shared observer re-observes with the
+ * union of live filters).
  *
- * @param selector - CSS selector to match against added nodes.
+ * @param selector - CSS selector to match against added nodes or attribute targets.
  * @param callback - Receives an array of matching elements from the mutation batch.
  * @param options  - `{ once: true }` to auto-unsubscribe after first delivery;
- *                   `{ parent: el }` to only deliver descendants of `el`.
+ *                   `{ parent: el }` to only deliver descendants of `el`;
+ *                   `{ attributeFilter: ["theater"] }` for attribute mutations.
  * @returns An {@link Unsubscribe} function. Call it to remove the subscription.
  */
 function subscribe(
@@ -171,6 +236,7 @@ function subscribe(
 	options?: SubscribeOptions
 ): Unsubscribe {
 	const subscriber: Subscriber = {
+		attributeFilter: options?.attributeFilter,
 		callback,
 		once: options?.once,
 		parent: options?.parent,
@@ -184,26 +250,14 @@ function subscribe(
 	}
 	subscribers.add(subscriber);
 
-	return () => unsubscribe(subscriber);
-}
+	if (options?.attributeFilter) ensureObserverOptions();
 
-/** Remove a subscriber from the map. Cleans up the selector entry when empty. */
-function unsubscribe(subscriber: Subscriber): void {
-	const subscribers = subscriberMap.get(subscriber.selector);
-	if (subscribers) {
-		subscribers.delete(subscriber);
-		if (subscribers.size === 0) {
-			subscriberMap.delete(subscriber.selector);
-		}
-	}
+	return () => removeSubscriber(subscriber);
 }
 
 // ─── Initialization ─────────────────────────────────────────────
 
-if (typeof document !== "undefined" && document.body) {
-	observer = new MutationObserver(onMutations);
-	observer.observe(document.body, { childList: true, subtree: true });
-}
+ensureObserverOptions();
 
 // ─── Exports ────────────────────────────────────────────────────
 
