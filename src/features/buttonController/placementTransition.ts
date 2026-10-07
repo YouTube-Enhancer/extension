@@ -12,7 +12,8 @@ import { buttonContainerId } from "./constants";
 
 // ─── PlacementTransition ──────────────────────────────────────────
 // Owns all placement observers (fullscreen, theater, geometry) as
-// instance state. Provides a single activate/deactivate lifecycle.
+// instance state. Activation splits into container tracking (theater and
+// geometry) and fullscreen tracking so the two start independently.
 // Chrome signals ride the shared DOM Mutation Bus; geometry keeps a
 // ResizeObserver for player size.
 
@@ -24,6 +25,7 @@ class PlacementTransition {
 	// Container geometry
 	private containerGeometryResizeObserver: Nullable<ResizeObserver> = null;
 	private containerGeometryUnsubscribe: Nullable<UnsubscribeFromDomMutations> = null;
+	private containerTrackingActive = false;
 
 	// Fullscreen
 	private fullscreenDomHandler: Nullable<() => void> = null;
@@ -37,16 +39,22 @@ class PlacementTransition {
 
 	// ─── Public lifecycle ───────────────────────────────────────────
 
-	activate(_containerElement: HTMLDivElement, onFullscreenChange: () => void) {
-		this.startFullscreenObserver(onFullscreenChange);
+	activateContainerTracking() {
+		if (this.containerTrackingActive) return;
+		this.containerTrackingActive = true;
 		void this.startTheaterModeObserver();
 		void this.startContainerGeometryObserver();
+	}
+
+	activateFullscreenTracking(onFullscreenChange: () => void) {
+		this.startFullscreenObserver(onFullscreenChange);
 	}
 
 	deactivate() {
 		this.stopTheaterModeObserver();
 		this.stopContainerGeometryObserver();
 		this.stopFullscreenObserver();
+		this.containerTrackingActive = false;
 	}
 
 	ensureContainerPosition() {
@@ -83,7 +91,7 @@ class PlacementTransition {
 		this.syncContainerGeometry();
 	}
 
-	isActive(): boolean {
+	isFullscreenTrackingActive(): boolean {
 		return this.fullscreenObserverActive;
 	}
 
