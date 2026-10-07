@@ -50,6 +50,16 @@ export default defineConfig({
 				chunkFileNames: (chunk) => `src/chunks/${chunk.name}.js`,
 				codeSplitting: {
 					groups: [
+						/**
+						 * Shared Vite/Rolldown runtime (including __vitePreload). Must stay out of
+						 * vendor packages: a service worker entry that dynamic-imports anything
+						 * would otherwise import this helper from vendor/monaco-editor.js and
+						 * crash on `window` at SW startup.
+						 */
+						{
+							name: "rolldown-preload-helper",
+							test: /[\\/]rolldown[\\/].*runtime|[\\/]vite[\\/].*preload|preload-helper/
+						},
 						{ name: "featureMetadataRegistry", test: /featureMetadataRegistry/ },
 						{
 							name: (id) => {
