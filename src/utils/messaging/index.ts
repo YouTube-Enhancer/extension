@@ -134,7 +134,7 @@ export function sendExtensionOnlyMessage<T extends keyof ExtensionSendOnlyMessag
  *
  * **When to use:** Only for infrastructure that needs the full options/state object before the feature
  * registry exists — bootstrap, navigation re-reads, locale changes, and devtools. Feature-internal
- * config access should use `featureConfigManager.getLast(id)` (synchronous) or `configProvider` /
+ * config access should use `featureConfigManager.getLastOr(id, defaults)` (synchronous) or `configProvider` /
  * `getOnScreenDisplayConfig()`, never this function.
  *
  * @param type - The type of the message to wait for.

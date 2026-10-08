@@ -25,7 +25,7 @@ export default createFeature({
 		updateButtonsIconColor();
 	},
 	onDisable: () => {
-		const config = featureConfigManager.getLast("deepDarkCSS");
+		const config = featureConfigManager.getLastOr("deepDarkCSS", metadata.defaults);
 		setDeepDarkCSSConfig({ ...config, enabled: false });
 		const deepDarkThemeStyleElement = document.querySelector<HTMLStyleElement>(`#${deepDarkCssID}`);
 		if (!deepDarkThemeStyleElement) return;

@@ -11,6 +11,7 @@ import { featureButtonManager } from "@/src/features/_registry/featureButtonMana
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featureNavigationManager } from "@/src/features/_registry/featureNavigationManager";
+import { applyFeatureConfig } from "@/src/ui/configProvider";
 import {
 	subscribeToDomMutations,
 	type UnsubscribeFromDomMutations
@@ -206,7 +207,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		const feature = this.registry.getFeature(id);
 		if (!feature) return;
 		const prevConfig = featureConfigManager.getLast(id);
-		featureConfigManager.setLast(id, config);
+		applyFeatureConfig(id, config);
 		if (!featureConfigManager.hasChanged(prevConfig, config)) return;
 		await this.safelyExecute<void>(id, "config:lifecycle", async () => {
 			await this.lifecycle.configChange(feature, config);
@@ -235,7 +236,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			 * registration applies this change instead of a stale pre-write snapshot; the
 			 * feature enables as soon as its chunk lands.
 			 */
-			featureConfigManager.setLast(id, config);
+			applyFeatureConfig(id, config);
 			return;
 		}
 		await this.notifyConfigChange(id, config);
@@ -324,7 +325,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 	async updateFeatureOnNavigation<K extends FeatureKeys>(id: K, navigationType: string) {
 		const feature = this.registry.getFeature(id);
 		if (!feature) return;
-		const config = featureConfigManager.getLast(id) ?? feature.defaults;
+		const config = featureConfigManager.getLast(id) ?? (feature.defaults as configuration[K]);
 		const isEnabled =
 			this.safelyExecuteSync<boolean>(id, "navigate", () => resolveEnabled(config), {
 				subPhase: "dependencies"
@@ -393,7 +394,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 	private cacheFeatureConfigs(features: AnyFeatureBase[], options: Partial<configuration>) {
 		for (const feature of features) {
 			const featureConfig = options[feature.id] ?? feature.defaults;
-			featureConfigManager.setLast(feature.id, featureConfig);
+			applyFeatureConfig(feature.id, featureConfig);
 		}
 	}
 
@@ -576,7 +577,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			// Re-read the config instead of using the one captured when this recheck was scheduled: a
 			// config change in the meantime (a button placement move, for one) would otherwise be undone
 			// by the stale pass seconds later, and nothing would move the button back.
-			const config = featureConfigManager.getLast(id) ?? feature.defaults;
+			const config = featureConfigManager.getLast(id) ?? (feature.defaults as configuration[K]);
 			void this.applyButtonPlacement(feature, id, config, true);
 		}, 3000);
 		this.placementRechecks.set(id, timer);
