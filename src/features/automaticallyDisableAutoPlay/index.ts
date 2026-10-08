@@ -11,10 +11,9 @@ let previousAutoPlayState: Nullable<boolean> = null;
 /** YouTube's default autoplay is overridden once per session; later videos keep whatever the user chose. */
 let hasOverriddenDefault = false;
 /**
- * When the toggle was last clicked, and how many times. The two retry loops a navigation starts, from onEnable and
- * onNavigate, must not click in quick succession and toggle autoplay straight back on.
+ * How many times the toggle has been clicked this attempt. Spacing between attempts is owned by
+ * playerRetry (minIntervalBetweenAttempts); this budget only decides when to stop clicking.
  */
-let lastToggleClickAt = 0;
 let toggleClickAttempts = 0;
 const MAX_TOGGLE_CLICK_ATTEMPTS = 3;
 const TOGGLE_CLICK_INTERVAL = 1000;
@@ -144,7 +143,6 @@ function readAutoPlayState(): Nullable<boolean> {
 }
 
 function resetToggleClicks(): void {
-	lastToggleClickAt = 0;
 	toggleClickAttempts = 0;
 	stableOffReads = 0;
 	userChoseAutoPlay = false;
@@ -170,6 +168,8 @@ function setAutoPlayThroughPlayer(enabled: boolean): boolean {
  * click handler, so a click that landed shows immediately; a click aimed at a player YouTube has not finished
  * wiring up - which is what an in-page navigation onto a watch page leaves behind - is dropped and leaves the
  * toggle on, so the caller has to try again on a later attempt rather than treat the click as done.
+ * Attempt spacing is owned by playerRetry (minIntervalBetweenAttempts); this budget only decides when to stop
+ * clicking and fall back to the player API.
  */
 function turnAutoPlayOff(toggle: HTMLButtonElement): boolean {
 	if (userChoseAutoPlay) return true;
@@ -184,12 +184,9 @@ function turnAutoPlayOff(toggle: HTMLButtonElement): boolean {
 	 * session, whereas the next video gets a fresh budget from onNavigate.
 	 */
 	if (toggleClickAttempts >= MAX_TOGGLE_CLICK_ATTEMPTS) return false;
-	if (Date.now() - lastToggleClickAt >= TOGGLE_CLICK_INTERVAL) {
-		lastToggleClickAt = Date.now();
-		toggleClickAttempts++;
-		// A click that was dropped twice is not going to land on the third try; the player API is used instead.
-		setAutoPlay(toggle, false, toggleClickAttempts >= MAX_TOGGLE_CLICK_ATTEMPTS);
-	}
+	toggleClickAttempts++;
+	// A click that was dropped twice is not going to land on the third try; the player API is used instead.
+	setAutoPlay(toggle, false, toggleClickAttempts >= MAX_TOGGLE_CLICK_ATTEMPTS);
 	return false;
 }
 
@@ -210,6 +207,7 @@ export default createFeature({
 		void registry.playerRetry(metadata.id, [makeDisableTask()], ["disableAutoPlay"], {
 			interval: 300,
 			maxAttempts: 24,
+			minIntervalBetweenAttempts: TOGGLE_CLICK_INTERVAL,
 			waitForLoaded: true
 		});
 	},
@@ -217,6 +215,7 @@ export default createFeature({
 		void registry.playerRetry(metadata.id, [makeEnableTask()], ["enableAutoPlay"], {
 			interval: 300,
 			maxAttempts: 30,
+			minIntervalBetweenAttempts: TOGGLE_CLICK_INTERVAL,
 			waitForLoaded: true
 		});
 	},
@@ -227,6 +226,7 @@ export default createFeature({
 		void registry.playerRetry(metadata.id, [makeNavigateTask()], ["navigateAutoPlay"], {
 			interval: 300,
 			maxAttempts: 30,
+			minIntervalBetweenAttempts: TOGGLE_CLICK_INTERVAL,
 			waitForLoaded: true
 		});
 	}

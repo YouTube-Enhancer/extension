@@ -162,6 +162,8 @@ Features access configuration through three mechanisms, in order of preference:
 
 **Config store write rule:** `configProvider` is the sole writer. Bootstrap and navigation call `seed` / `reseedForNavigation`; storage broadcasts and orchestrator config changes go through `applyFeatureConfig`. Do not call `featureConfigManager.setLast` from feature modules.
 
+**Retry seam:** All retry-shaped work goes through `registry.playerRetry` (`featurePlayerManager`). Budgets live on `PlayerRetryConfig` (`interval`, `maxAttempts`, `minIntervalBetweenAttempts`, …). Cancellation is generation supersede + optional `signal` + a lifecycle token aborted by `cancelRetries` before `onDisable`. Do not hand-roll bind-generation counters or click-spacing loops; put spacing in `minIntervalBetweenAttempts`.
+
 **Do NOT use `waitForSpecificMessage("options"...)` for feature-internal config access.** This function is only for infrastructure: bootstrap, navigation re-reads, locale changes, and devtools. It has a 30s timeout but creates a message bus round-trip that is always slower than a synchronous store read.
 
 # Build and Dev Commands

@@ -12,6 +12,7 @@ import {
 } from "@/src/utils/url";
 
 import { FeatureManagerBase } from "./featureManagerBase";
+import { featurePlayerManager } from "./featurePlayerManager";
 
 export type NavigationEventType = "finish" | "popstate" | "start" | "updated";
 
@@ -36,7 +37,6 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	private navigationCallback?: (signature: string, eventType: NavigationEventType) => Promise<void>;
 	private navigationListeners: Record<string, () => void> = {};
 	private navigationPatched = false;
-	private navigationSignatureRetries = 0;
 	private previousNavigationSignature: Nullable<string> = null;
 	// Store original history methods and their wrappers for proper cleanup
 	private pushStateWrapper?: { original: typeof history.pushState; wrapper: () => void };
@@ -92,7 +92,6 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		this.replaceStateWrapper = undefined;
 		this.navigationCallback = undefined;
 		this.navigating = false;
-		this.navigationSignatureRetries = 0;
 		// Allow initialize() after teardown (bfcache restore, hot reload re-init).
 		this._initialized = false;
 	}
@@ -302,18 +301,34 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	private async processNavigation(eventType: NavigationEventType) {
 		if (this.navigating) return;
 		this.navigating = true;
-		let retrySignature = false;
 		try {
 			invalidatePageTypeCache();
 			const signature = this.getNavigationSignature();
 			if (!signature) {
-				// Page-type detection can miss its window on a heavily loaded page; a silently dropped
-				// navigation leaves every feature's onNavigate unrun. Retry through the debounce instead.
-				retrySignature = this.navigationSignatureRetries < NAVIGATION_SIGNATURE_RETRIES;
-				this.navigationSignatureRetries = retrySignature ? this.navigationSignatureRetries + 1 : 0;
+				/**
+				 * Page-type detection can miss its window on a heavily loaded page; a silently dropped
+				 * navigation leaves every feature's onNavigate never running. Retry through the shared seam;
+				 * on success re-enter via handleNavigation (navigating is already false in finally).
+				 */
+				void featurePlayerManager
+					.executeWithRetries(
+						"navigation",
+						[() => this.getNavigationSignature() !== null],
+						["navigation-signature"],
+						{
+							interval: NAVIGATION_DEBOUNCE_MS,
+							maxAttempts: NAVIGATION_SIGNATURE_RETRIES,
+							overallTimeout: NAVIGATION_SIGNATURE_RETRIES * NAVIGATION_DEBOUNCE_MS,
+							skipPageGate: true,
+							waitForLoaded: false
+						}
+					)
+					.then((results) => {
+						if (results[0]) this.handleNavigation(eventType);
+						return undefined;
+					});
 				return;
 			}
-			this.navigationSignatureRetries = 0;
 			if (!this.updateNavigationSignature(signature)) return;
 			this.currentNavigationSignature = signature;
 			if (this.navigationCallback) await this.navigationCallback(signature, eventType);
@@ -321,9 +336,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 			this.logErrorToTracker("navigation handler", error);
 		} finally {
 			this.navigating = false;
-			if (retrySignature) {
-				this.handleNavigation(eventType);
-			} else if (this.currentPage === "watch") {
+			if (this.currentPage === "watch") {
 				/**
 				 * Every settled navigation on a watch URL re-arms the live refine. Live streams
 				 * boot with a burst of URL-param noise that the volatile-param filter suppresses,

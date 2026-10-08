@@ -18,6 +18,15 @@ The per-feature Map of last-applied configs inside the config store (`featureCon
 
 Config groups that are not registry features: `deepDarkCSS`, `featureMenu`, `onScreenDisplay`. Seeded with the snapshot; feature modules may update them through provider setters that write the same store.
 
+## Retry seam
+
+One in-process module for retry-shaped work: `featurePlayerManager` behind `registry.playerRetry`.
+
+- **Interface:** `playerRetry(key, tasks, taskNames, config)` with budget fields (`interval`, `maxAttempts`, `overallTimeout`, `minIntervalBetweenAttempts`, `pageTypes`, `skipPageGate`) and cancellation (`signal`, lifecycle token).
+- **Keys:** feature ids, core features (`featureMenu`), and `"navigation"` for signature retries.
+- **Cancellation:** generation supersede per key; optional caller `AbortSignal`; lifecycle token aborted by `cancelRetries` **before** `onDisable`. `onPlayerStateChange` re-queues check the token.
+- **Not behind this seam:** `waitForElement` / page readiness waits (candidate 03).
+
 ## Placement outcome
 
 What button placement reports after a pass: `deferred | inactive | landed | removed | unchanged`. Owned by `buttonPlacement`; the navigation pipeline consumes outcomes and does not re-encode their meaning.
