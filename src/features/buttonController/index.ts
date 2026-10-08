@@ -27,7 +27,7 @@ export {
 	updateFeatureMenuItemLabel,
 	updateFeatureMenuTitle
 } from "./ButtonController";
-export { buttonPlacement } from "./buttonPlacement";
+export { buttonPlacement, placementNeedsRecheck } from "./buttonPlacement";
 
 export type {
 	PlacementOutcome,

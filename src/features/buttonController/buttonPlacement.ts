@@ -328,4 +328,13 @@ class ButtonPlacementManager extends FeatureManagerBase {
 	}
 }
 
+/**
+ * True when outcomes include deferred or not-landed buttons. Callers schedule a
+ * deferred recheck; they must not re-encode what each detail value means.
+ */
+export function placementNeedsRecheck(outcomes: PlacementOutcome[]): boolean {
+	if (!outcomes.length) return false;
+	return outcomes.some((outcome) => outcome.detail === "deferred" || !outcome.landed);
+}
+
 export const buttonPlacement = new ButtonPlacementManager();
