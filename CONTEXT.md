@@ -36,6 +36,16 @@ One in-process module for retry-shaped work: `featurePlayerManager` behind `regi
 - **Cancellation:** generation supersede per key; optional caller `AbortSignal`; lifecycle token aborted by `cancelRetries` **before** `onDisable`. `onPlayerStateChange` re-queues check the token.
 - **Not behind this seam:** `waitForElement` / page readiness waits (candidate 03).
 
+## Embedded instance liveness
+
+Page-wide protocol that prevents stacked embedded scripts and gates content-script storage forwarding.
+
+- **Module:** `src/utils/embedded/instanceLiveness.ts`
+- **Slot:** `claimSlot` / `releaseSlot` / `getActiveSlotId` on `window.__yteEmbeddedActiveId` (page world).
+- **Ready marker:** `markReady` sets `data-yte-embedded-ready` on `document.documentElement` so the content script (isolated world) can `waitForReady` before forwarding storage.
+- **Adapters:** takeover timing is caller config (`timeoutMs`, `onTakeover`) — dev posts dispose + waits 1500ms; prod waits 200ms.
+- **pageLoaded:** still sent on the message bus as a faster path; readiness marker is the liveness contract.
+
 ## Placement outcome
 
 What button placement reports after a pass: `deferred | inactive | landed | removed | unchanged`. Owned by `buttonPlacement`; the navigation pipeline consumes outcomes and does not re-encode their meaning.

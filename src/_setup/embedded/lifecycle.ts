@@ -73,6 +73,9 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 
 	const removeMessageListener = setupMessageListener();
 
+	// Ready marker + pageLoaded: content forwards storage once either signal lands.
+	// markReady is the liveness module's cross-world contract; the message stays for
+	// any listeners that still key off the bus.
 	sendContentOnlyMessage("pageLoaded", undefined);
 
 	/**
