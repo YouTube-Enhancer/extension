@@ -6,6 +6,7 @@ import {
 	isDevRuntimeMessage,
 	isDevWindowMessage
 } from "@/src/utils/dev/hotReload";
+import { isSlotFree, waitForSlotRelease } from "@/src/utils/embedded/instanceLiveness";
 import {
 	invalidateDevToolsCache,
 	setupContentScriptBridge,
@@ -69,13 +70,15 @@ export function startDevelopmentMode({
 					finish();
 			};
 			/**
-			 * The embedded instance clears its page-wide slot on dispose. Poll that as well as the
-			 * disposed message so a missed message still cannot stack the next injection.
+			 * The embedded instance clears its page-wide slot on dispose. Poll via the
+			 * liveness module (DOM/page contract) as well as the disposed message so a
+			 * missed message still cannot stack the next injection.
 			 */
 			const slotPoll = setInterval(() => {
-				if (!window.__yteEmbeddedActiveId) finish();
+				if (isSlotFree()) finish();
 			}, 50);
 			const timeout = setTimeout(finish, 2000);
+			void waitForSlotRelease(2000, 50).then(() => finish());
 			window.addEventListener("message", onDisposed);
 			window.postMessage(
 				{ source: DEV_RELOAD_SOURCE, type: "dispose" } satisfies DevWindowMessage,

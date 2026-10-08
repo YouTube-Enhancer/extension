@@ -1,10 +1,14 @@
 import type { PageType } from "@/src/features/_registry/types";
 import type { ButtonPlacement } from "@/src/types";
 
-import {
-	buttonContainerId,
-	playerControlsSelectors
-} from "@/src/features/buttonController/constants";
+import { buttonContainerId } from "@/src/features/buttonController/buttonPlacementState";
+import { readinessSelectors } from "@/src/utils/dom/readiness";
+
+/** Where YouTube keeps its own player controls; the two placements inside the player append to them. */
+const playerControlsSelectors = {
+	player_controls_left: readinessSelectors.playerControlsLeft,
+	player_controls_right: readinessSelectors.playerControlsRight
+} as const;
 
 export const placementSelectors = {
 	below_player: `#${buttonContainerId}`,

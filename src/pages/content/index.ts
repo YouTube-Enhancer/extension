@@ -26,6 +26,7 @@ import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { deepMerge, parseStoredValue } from "@/src/utils/config/utils";
 import { deepEqual } from "@/src/utils/deepEqual";
+import { waitForReady } from "@/src/utils/embedded/instanceLiveness";
 import {
 	MESSAGE_ORIGIN,
 	sendExtensionMessage,
@@ -107,6 +108,21 @@ const onPageHide = () => {
 	storage.onChanged.removeListener(storageListeners);
 	document.documentElement.removeAttribute("yte-ready");
 };
+let storageForwardingEnabled = false;
+const enableStorageForwarding = (): void => {
+	if (storageForwardingEnabled) return;
+	storageForwardingEnabled = true;
+	storage.onChanged.addListener(storageListeners);
+	window.addEventListener("pagehide", onPageHide);
+};
+/**
+ * Storage forwarding waits for the embedded instance to publish readiness
+ * (DOM marker from the liveness module). pageLoaded remains a faster path.
+ */
+void waitForReady(30000).then((ready) => {
+	if (ready) enableStorageForwarding();
+	return undefined;
+});
 /**
  * Listens for messages from the embedded script via window.postMessage.
  */
@@ -171,8 +187,7 @@ const onWindowMessage = (event: MessageEvent) => {
 						break;
 					}
 					case "pageLoaded": {
-						storage.onChanged.addListener(storageListeners);
-						window.addEventListener("pagehide", onPageHide);
+						enableStorageForwarding();
 						document.documentElement.setAttribute("yte-ready", "");
 						break;
 					}
