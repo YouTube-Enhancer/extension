@@ -86,6 +86,38 @@ export function invalidatePageReadiness(): void {
 }
 
 /**
+ * Ask the movie player whether the current watch video is live.
+ * Waits for the player, then polls getVideoData until the video id matches
+ * (or a short budget ends). Does not import URL classification; callers pass
+ * the expected video id and apply the result to their page-type cache.
+ */
+export async function refineLiveFlagFromPlayer(options?: {
+	urlVideoId?: null | string;
+}): Promise<boolean> {
+	try {
+		const player = await whenReady("moviePlayer");
+		if (!player || typeof player.getVideoData !== "function") return false;
+		/**
+		 * After a single-page navigation the player can still report the previous video, so wait
+		 * until its video id matches the URL before trusting the live flag. Budget is shorter than
+		 * the old cold-load poll: classification no longer blocks on this refine.
+		 */
+		const urlVideoId = options?.urlVideoId ?? null;
+		let playerData = await player.getVideoData();
+		for (
+			let attempt = 0;
+			attempt < 12 && urlVideoId && playerData?.video_id !== urlVideoId;
+			attempt++
+		) {
+			await new Promise((resolve) => setTimeout(resolve, 200));
+			playerData = await player.getVideoData();
+		}
+		return Boolean(playerData?.isLive && (!urlVideoId || playerData.video_id === urlVideoId));
+	} catch {
+		return false;
+	}
+}
+/**
  * Wait for player-presence readiness.
  *
  * - `pagePlayer` / `pagePlayerReady`: generation-memoized by default (navigation + retry seam).
