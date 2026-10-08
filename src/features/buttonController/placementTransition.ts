@@ -8,7 +8,7 @@ import { whenReady } from "@/src/utils/dom/readiness";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
 
-import { buttonContainerId } from "./constants";
+import { buttonContainerId } from "./buttonPlacementState";
 
 // ─── PlacementTransition ──────────────────────────────────────────
 // Owns all placement observers (fullscreen, theater, geometry) as

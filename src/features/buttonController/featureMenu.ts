@@ -13,7 +13,7 @@ import { isWatchPage } from "@/src/utils/url";
 
 import type { BasicIcon, FeatureMenuOpenType, ListenerType } from "./types";
 
-import { updateTrackedButtonChecked } from "./buttonState";
+import { updateTrackedButtonChecked } from "./buttonPlacementState";
 import { getOrCreateRightControlsContainer } from "./containerTracking";
 
 const menuId = "#yte-feature-menu";
@@ -142,14 +142,15 @@ export async function enableFeatureMenu() {
 export async function enableFeatureMenuButton() {
 	if (!isWatchPage()) return;
 	if (document.querySelector(menuButtonId)) return;
-	if (document.querySelector(readinessSelectors.playerControlsRight)) {
+	const controlsReady = document.querySelector(readinessSelectors.playerControlsRight);
+	if (controlsReady) {
 		await createFeatureMenuButton();
 		return;
 	}
 	// The menu button lives in the player controls. When the controls are absent (a
 	// stripped page, or controls that render very late), waiting here would block
-	// every button feature's reconcile for the full wait duration, and a reconcile
-	// pays that cost twice. Retry creation through the player manager instead.
+	// every button feature's reconcile. Retry through the shared retry seam; core
+	// menu code talks to featurePlayerManager directly to avoid a registry import cycle.
 	void featurePlayerManager.executeWithRetries(
 		"featureMenu",
 		[createFeatureMenuButton],

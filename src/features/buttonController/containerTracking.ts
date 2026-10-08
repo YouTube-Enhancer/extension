@@ -4,20 +4,15 @@ import { createStyledElement } from "@/src/utils/dom/elements";
 import { readinessSelectors, whenReady } from "@/src/utils/dom/readiness";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
 
-import { buttonContainerId } from "./constants";
+import {
+	buttonContainerId,
+	clearContainerNodes,
+	getCachedContainer,
+	setCachedContainer
+} from "./buttonPlacementState";
 import { isFullscreen, isInTheaterMode, placementTransition } from "./placementTransition";
 
-// ─── Module-level state ───────────────────────────────────────────
-
 const rightControlsContainerId = "yte-right-controls-container";
-/** Cache of resolved placement containers, keyed by placement type. Invalidated on navigation. */
-const containerCache = new Map<ButtonPlacement, HTMLElement>();
-
-// ─── Exported functions ───────────────────────────────────────────
-
-export function getCachedContainer(placement: ButtonPlacement): HTMLElement | undefined {
-	return containerCache.get(placement);
-}
 
 export function getEffectivePlacement(
 	placement: ButtonPlacement,
@@ -109,7 +104,7 @@ export function getPlacementSelector(placement: ButtonPlacement): string | undef
 }
 
 export function invalidateContainerCache() {
-	containerCache.clear();
+	clearContainerNodes();
 }
 
 export async function placeButton(
@@ -128,12 +123,12 @@ export async function placeButton(
 			break;
 		}
 		case "player_controls_left": {
-			let leftControls = containerCache.get(placement) as HTMLDivElement | undefined;
+			let leftControls = getCachedContainer(placement) as HTMLDivElement | undefined;
 			if (!leftControls) {
 				leftControls =
 					document.querySelector<HTMLDivElement>(readinessSelectors.playerControlsLeft) ??
 					undefined;
-				if (leftControls) containerCache.set(placement, leftControls);
+				if (leftControls) setCachedContainer(placement, leftControls);
 			}
 			if (!leftControls) return;
 			const existingInContainer = leftControls.querySelectorAll(`#${button.id}`);
@@ -148,7 +143,7 @@ export async function placeButton(
 		case "player_controls_right": {
 			const container = getOrCreateRightControlsContainer();
 			if (!container) return;
-			containerCache.set(placement, container);
+			setCachedContainer(placement, container);
 			const existingInContainer = container.querySelectorAll(`#${button.id}`);
 			existingInContainer.forEach((b) => b.remove());
 			container.append(button);
