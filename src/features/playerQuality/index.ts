@@ -146,8 +146,9 @@ function handleQualityChange(): void {
 
 async function hasForeignQuality(player: YouTubePlayerDiv): Promise<boolean> {
 	/**
-	 * The request is the signal that moves first. It is the only one that is not stale while the player is still
-	 * buffering its way to a newly requested quality.
+	 * Override detection is request/pin only. Streamed format (ABR) changes continuously for the
+	 * same level and used to look like a manual switch. Auto preferred quality is not foreign —
+	 * the pin simply has not stuck yet and applyTask should try again.
 	 */
 	if (hasForeignQualityRequest(player)) return true;
 	if (
@@ -157,31 +158,35 @@ async function hasForeignQuality(player: YouTubePlayerDiv): Promise<boolean> {
 	)
 		return false;
 
-	const stats = player.getVideoStats();
-	if (enforcement.appliedFormatId != null && typeof stats?.fmt === "number") {
-		return stats.fmt !== enforcement.appliedFormatId;
-	}
-
 	const playbackQuality = await player.getPlaybackQuality();
 	return (
 		!!playbackQuality &&
 		playbackQuality !== "unknown" &&
+		playbackQuality !== "auto" &&
 		playbackQuality !== enforcement.appliedQuality
 	);
 }
 
 /**
- * Whether the quality the player was last asked to play is not the one this feature asked for. Reads nothing
- * asynchronous, so it can also serve as the last check before the feature overwrites that request.
+ * Whether the quality the player was last asked to play is not the one this feature asked for.
+ * Streamed format (ABR) is ignored. Auto (or missing) preferred quality means nothing is pinned
+ * right now — re-apply rather than treat that as a user switch. Only a different non-auto pin
+ * counts as foreign.
  */
 function hasForeignQualityRequest(player: YouTubePlayerDiv): boolean {
 	if (!enforcement.requestedQuality || !canDetectForeignQuality()) return false;
 	const requestedQuality = readRequestedQuality(player);
-	return !!requestedQuality && requestedQuality !== enforcement.requestedQuality;
+	if (!requestedQuality || requestedQuality === "auto") return false;
+	return requestedQuality !== enforcement.requestedQuality;
 }
 
 function isAdShowing(): boolean {
 	return !!document.querySelector(".ad-showing, .ytp-ad-player-overlay");
+}
+
+/** Quality setting that means "do not pin a level"; the player keeps its own ABR choice. */
+function isUnpinnedQuality(quality: "" | YoutubePlayerQualityLevel): boolean {
+	return !quality || quality === "auto";
 }
 
 function makeApplyQualityTasks(
@@ -196,6 +201,8 @@ function makeApplyQualityTasks(
 		 * still in flight nor one started by a later player state change may enforce anything.
 		 */
 		if (enforcement.overrideDetected) return true;
+		// Unpinned quality: leave the player's own ABR alone; there is nothing to apply or verify.
+		if (isUnpinnedQuality(quality)) return true;
 		/**
 		 * While an ad shows, the player answers for the ad: an "unknown" quality, the ad's level list and the ad's
 		 * request. Applying those now would then be compared against the content video. Wait for the content instead;
@@ -217,8 +224,6 @@ function makeApplyQualityTasks(
 		const availableLevels =
 			(await player.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
 		if (!availableLevels.length) return false;
-
-		if (!quality || quality === "auto") return true;
 
 		const closestQuality = chooseClosestQuality(quality, availableLevels, fallbackStrategy);
 		if (!closestQuality) return false;
@@ -266,30 +271,53 @@ function makeApplyQualityTasks(
 		player.dataset.defaultQuality = closestQuality;
 		enforcement.appliedQuality = closestQuality;
 		enforcement.appliedFormatId = qualityFormatId;
+		browserColorLog(
+			`Requested ${closestQuality}${qualityFormatId ? ` (format ${qualityFormatId})` : ""}`,
+			"FgMagenta"
+		);
 		return true;
 	};
 
 	const verifyTask = async (): Promise<boolean> => {
 		if (enforcement.overrideDetected || isAdShowing()) return true;
+		// Unpinned quality has nothing to verify; returning false here kept the retry loop spinning forever.
+		if (isUnpinnedQuality(quality)) return true;
 		if (!enforcement.appliedQuality) return false;
 		const player = getPlayer();
 		if (!player) return false;
-		let verified: boolean;
-		if (enforcement.appliedFormatId) {
-			const stats = player.getVideoStats();
-			verified = stats.fmt === enforcement.appliedFormatId;
-		} else {
-			const playbackQuality = await player.getPlaybackQuality();
-			verified = playbackQuality === enforcement.appliedQuality;
-		}
-		enforcement.verifiedOnce = enforcement.verifiedOnce || verified;
-		if (verified && !enforcement.requestedQuality) {
+
+		const recordRequestedBaseline = () => {
+			enforcement.verifiedOnce = true;
+			if (enforcement.requestedQuality) return;
 			const requestedQuality = readRequestedQuality(player);
 			enforcement.requestedQuality =
 				requestedQuality && requestedQuality !== "auto"
 					? requestedQuality
 					: enforcement.appliedQuality;
+		};
+
+		/**
+		 * Our chosen format streaming is the strongest signal the pin landed. ABR can still move
+		 * to another format for the same level later without that being a manual override.
+		 */
+		if (enforcement.appliedFormatId != null) {
+			const stats = player.getVideoStats();
+			if (typeof stats?.fmt === "number" && stats.fmt === enforcement.appliedFormatId) {
+				recordRequestedBaseline();
+				return true;
+			}
 		}
+
+		/**
+		 * Same level (playback or pin) is enough: ABR may stream a different format for that level,
+		 * and a format-only check re-ran the retry loop then treated the next ABR shift as manual.
+		 */
+		const playbackQuality = await player.getPlaybackQuality();
+		const preferredQuality = readRequestedQuality(player);
+		const verified =
+			playbackQuality === enforcement.appliedQuality ||
+			preferredQuality === enforcement.appliedQuality;
+		if (verified) recordRequestedBaseline();
 		return verified;
 	};
 
@@ -375,6 +403,7 @@ export default createFeature({
 	},
 	onEnable: async ({ fallbackStrategy, fpsPreference, preferPremium, quality }) => {
 		resetEnforcementState();
+		browserColorLog(`Enforcing quality ${quality} (fallback ${fallbackStrategy})`, "FgMagenta");
 		const player = getPlayer();
 		if (player && player.getPlaybackQuality) {
 			currentQuality = (await player.getPlaybackQuality()) as YoutubePlayerQualityLevel;
