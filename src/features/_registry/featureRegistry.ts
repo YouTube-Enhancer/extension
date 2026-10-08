@@ -55,7 +55,7 @@ export class FeatureRegistry extends FeatureManagerBase {
 	}
 
 	cleanupPlayerRetry(featureId?: PlayerRetryKey): void {
-		this.playerManager.cleanup(featureId);
+		this.playerManager.cancelRetries(featureId);
 	}
 
 	destroyNavigationListener() {
@@ -131,7 +131,7 @@ export class FeatureRegistry extends FeatureManagerBase {
 			 * Navigation aborts player retries but must not run feature disposers: features stay
 			 * enabled and keep their bus subscriptions / listeners across in-page navigations.
 			 */
-			this.playerManager.cleanup();
+			this.playerManager.cancelRetries();
 			this.orchestrator.cancelAllPlacementRechecks();
 			await this.safelyExecute<void>(
 				"navigationCallback",
@@ -190,6 +190,7 @@ export class FeatureRegistry extends FeatureManagerBase {
 	/**
 	 * Start a player retry session for this feature. The session is aborted on disable,
 	 * navigation, a newer playerRetry for the same feature, or disposeSessions.
+	 * Optional `signal` links caller-owned cancellation (menu bind teardown).
 	 */
 	playerRetry(
 		featureId: PlayerRetryKey,

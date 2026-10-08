@@ -18,25 +18,40 @@ import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 export type PlayerRetryConfig = {
 	interval?: number;
 	maxAttempts?: number;
+	/**
+	 * Minimum ms between attempt starts. Use for click-spacing budgets (autoplay toggle)
+	 * where firing faster than this drops clicks or double-toggles.
+	 */
+	minIntervalBetweenAttempts?: number;
 	onPlayerStateChange?: boolean;
 	overallTimeout?: number;
 	pageTypes?: PageType[];
+	/** Caller-owned cancellation (menu bind teardown, one-shot work). Linked to the run. */
+	signal?: AbortSignal;
+	/** Skip the page-type gate (navigation signature retries run on any page). */
+	skipPageGate?: boolean;
 	waitForLoaded?: boolean;
 };
 
-/** Retry runs are keyed by feature id; core features (featureMenu) use the same machinery. */
-export type PlayerRetryKey = CoreFeatureKeys | FeatureKeys;
+/**
+ * Retry runs are keyed by feature id; core features (featureMenu) and the
+ * navigation signature key share the same machinery.
+ */
+export type PlayerRetryKey = "navigation" | CoreFeatureKeys | FeatureKeys;
 
 export type PlayerTask = () => boolean | Promise<boolean>;
 
 type ActiveRetryState = {
 	aborted: boolean;
 	attempts: number;
+	externalSignal: Nullable<AbortSignal>;
 	intervalId: Nullable<ReturnType<typeof setInterval>>;
+	lastAttemptAt: number;
 	observer: Nullable<MutationObserver>;
 	startTime: number;
 	taskResults: boolean[];
 	tasks: { fn: PlayerTask; name: string }[];
+	token: AbortSignal;
 };
 
 type PlayerStateHookEntry = {
@@ -45,38 +60,63 @@ type PlayerStateHookEntry = {
 	featureId: PlayerRetryKey;
 	handler: () => void;
 	lastRun: number;
+	token: AbortSignal;
 	trigger: () => void;
 };
 
-const DEFAULT_CONFIG: Required<PlayerRetryConfig> = {
+const DEFAULT_CONFIG: Required<
+	Omit<PlayerRetryConfig, "minIntervalBetweenAttempts" | "signal" | "skipPageGate">
+> & {
+	minIntervalBetweenAttempts: number;
+	skipPageGate: boolean;
+} = {
 	interval: 500,
 	maxAttempts: 30,
+	minIntervalBetweenAttempts: 0,
 	onPlayerStateChange: false,
 	overallTimeout: 15000,
 	pageTypes: ["watch", "live"],
+	skipPageGate: false,
 	waitForLoaded: true
 };
 
 export class FeaturePlayerManager extends FeatureManagerBase {
 	private activeRetries = new Map<PlayerRetryKey, ActiveRetryState>();
+	/** Lifecycle cancel tokens: aborted by cleanup/cancelRetries before onDisable. */
+	private featureTokens = new Map<PlayerRetryKey, AbortController>();
 	// Bumped by every abort; a run still waiting for the player compares against it before it registers.
 	private runGenerations = new Map<PlayerRetryKey, number>();
 	private stateHooks = new Map<PlayerRetryKey, PlayerStateHookEntry>();
 
-	cleanup(featureId?: PlayerRetryKey): void {
-		if (featureId) {
-			this.abortRetry(featureId);
-			this.removeStateHook(featureId);
-		} else {
-			// Full cleanup (navigation / page teardown): drop memoized player readiness.
-			invalidatePageReadiness();
-			for (const id of new Set([...this.activeRetries.keys(), ...this.runGenerations.keys()])) {
-				this.abortRetry(id);
-			}
-			for (const id of this.stateHooks.keys()) {
-				this.removeStateHook(id);
-			}
+	/**
+	 * Abort every retry (and state hook) for a key, or for all keys. The lifecycle token is
+	 * aborted here so tasks and onPlayerStateChange re-queues that check the token stop.
+	 * Call before onDisable: a restore retry that onDisable itself queues is deliberate
+	 * post-disable work and gets a fresh token.
+	 */
+	cancelRetries(key?: PlayerRetryKey): void {
+		if (key) {
+			this.featureTokens.get(key)?.abort();
+			this.featureTokens.delete(key);
+			this.abortRetry(key);
+			this.removeStateHook(key);
+			return;
 		}
+		invalidatePageReadiness();
+		const keys = new Set<PlayerRetryKey>([
+			...this.featureTokens.keys(),
+			...this.activeRetries.keys(),
+			...this.runGenerations.keys(),
+			...this.stateHooks.keys()
+		]);
+		for (const id of keys) {
+			this.cancelRetries(id);
+		}
+	}
+
+	/** @deprecated Use cancelRetries. Kept as the registry/lifecycle call name. */
+	cleanup(featureId?: PlayerRetryKey): void {
+		this.cancelRetries(featureId);
 	}
 
 	async executeWithRetries(
@@ -85,16 +125,27 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		taskNames: string[],
 		config?: PlayerRetryConfig
 	): Promise<boolean[]> {
-		const resolved: Required<PlayerRetryConfig> = { ...DEFAULT_CONFIG, ...config };
+		const resolved = { ...DEFAULT_CONFIG, ...config };
+		const externalSignal = config?.signal ?? null;
 
+		// Supersede any prior run for this key; keep the lifecycle token (dispose aborts it).
 		this.abortRetry(featureId);
 		const generation = this.runGenerations.get(featureId);
+		const token = this.getRetrySignal(featureId);
 
-		if (!this.isOnAllowedPage(resolved.pageTypes)) {
+		const isCancelled = (): boolean =>
+			this.runGenerations.get(featureId) !== generation ||
+			token.aborted ||
+			(externalSignal?.aborted ?? false);
+
+		if (externalSignal?.aborted || token.aborted) {
 			return tasks.map(() => false);
 		}
 
-		const isCancelled = () => this.runGenerations.get(featureId) !== generation;
+		if (!resolved.skipPageGate && !this.isOnAllowedPage(resolved.pageTypes)) {
+			return tasks.map(() => false);
+		}
+
 		const player = resolved.waitForLoaded
 			? await waitForPagePlayerReady({ isCancelled, timeout: resolved.overallTimeout })
 			: await waitForPagePlayer({ isCancelled, timeout: resolved.overallTimeout });
@@ -107,29 +158,56 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		const state: ActiveRetryState = {
 			aborted: false,
 			attempts: 0,
+			externalSignal,
 			intervalId: null,
+			lastAttemptAt: 0,
 			observer: null,
 			startTime: Date.now(),
 			taskResults: tasks.map(() => false),
-			tasks: tasks.map((fn, i) => ({ fn, name: taskNames[i] ?? `task_${i}` }))
+			tasks: tasks.map((fn, i) => ({ fn, name: taskNames[i] ?? `task_${i}` })),
+			token
 		};
 
 		this.activeRetries.set(featureId, state);
 
+		const onExternalAbort = (): void => {
+			if (this.activeRetries.get(featureId) === state) {
+				this.abortRetry(featureId);
+			}
+		};
+		externalSignal?.addEventListener("abort", onExternalAbort, { once: true });
+
 		return new Promise<boolean[]>((resolve) => {
+			const settle = (): void => {
+				externalSignal?.removeEventListener("abort", onExternalAbort);
+				resolve(state.taskResults);
+			};
+
 			const tick = async (): Promise<void> => {
-				if (state.aborted) {
-					resolve(state.taskResults);
+				if (state.aborted || isCancelled()) {
+					settle();
 					return;
 				}
 
-				if (!this.isOnAllowedPage(resolved.pageTypes)) {
+				if (!resolved.skipPageGate && !this.isOnAllowedPage(resolved.pageTypes)) {
 					this.abortRetry(featureId);
-					resolve(state.taskResults);
+					settle();
 					return;
+				}
+
+				const { minIntervalBetweenAttempts: minGap } = resolved;
+				if (minGap > 0 && state.lastAttemptAt > 0) {
+					const elapsed = Date.now() - state.lastAttemptAt;
+					if (elapsed < minGap) {
+						state.intervalId = setTimeout(() => {
+							void tick();
+						}, minGap - elapsed);
+						return;
+					}
 				}
 
 				state.attempts++;
+				state.lastAttemptAt = Date.now();
 
 				const promises = state.tasks.map(async (task, i) => {
 					if (state.taskResults[i]) return;
@@ -144,12 +222,12 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 				await Promise.all(promises);
 
 				/**
-				 * A newer run or a cleanup may have aborted this run while its tasks were executing. Finishing here
-				 * would bump the generation a second time, and the newer run, still waiting for the player, would
-				 * then give up on its tasks.
+				 * A newer run, a cleanup, or an aborted token may have cancelled this run while its
+				 * tasks were executing. Finishing here would bump the generation a second time, and
+				 * the newer run, still waiting for the player, would then give up on its tasks.
 				 */
-				if (state.aborted) {
-					resolve(state.taskResults);
+				if (state.aborted || isCancelled()) {
+					settle();
 					return;
 				}
 
@@ -159,7 +237,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 
 				if (allDone || timedOut || tooManyAttempts) {
 					this.abortRetry(featureId);
-					resolve(state.taskResults);
+					settle();
 
 					/**
 					 * The hook is installed after a failed run too. A player that is still showing an ad, or has not
@@ -167,7 +245,8 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 					 * signal that another attempt is worthwhile.
 					 */
 					if (resolved.onPlayerStateChange) {
-						this.setupStateHook(featureId, () => {
+						this.setupStateHook(featureId, token, () => {
+							if (token.aborted || (externalSignal?.aborted ?? false)) return;
 							void this.executeWithRetries(featureId, tasks, taskNames, {
 								...config,
 								onPlayerStateChange: false
@@ -184,6 +263,19 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 
 			void tick();
 		});
+	}
+
+	/**
+	 * Current lifecycle cancel token for a key. Aborted by {@link cancelRetries}; a new token
+	 * is issued after abort so the next enable can run again.
+	 */
+	getRetrySignal(key: PlayerRetryKey): AbortSignal {
+		let controller = this.featureTokens.get(key);
+		if (!controller || controller.signal.aborted) {
+			controller = new AbortController();
+			this.featureTokens.set(key, controller);
+		}
+		return controller.signal;
 	}
 
 	protected getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
@@ -228,10 +320,11 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		this.stateHooks.delete(featureId);
 	}
 
-	private setupStateHook(featureId: PlayerRetryKey, trigger: () => void): void {
+	private setupStateHook(featureId: PlayerRetryKey, token: AbortSignal, trigger: () => void): void {
 		this.removeStateHook(featureId);
 
 		const handler = (): void => {
+			if (token.aborted) return;
 			const now = Date.now();
 			if (now - entry.lastRun < 5000) return;
 			entry.lastRun = now;
@@ -244,6 +337,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 			featureId,
 			handler,
 			lastRun: 0,
+			token,
 			trigger
 		};
 
@@ -259,6 +353,10 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		 */
 		let adWasShowing = player.classList.contains("ad-showing");
 		entry.adObserver = new MutationObserver(() => {
+			if (token.aborted) {
+				entry.adObserver?.disconnect();
+				return;
+			}
 			const adShowing = player.classList.contains("ad-showing");
 			if (adWasShowing && !adShowing) {
 				entry.lastRun = Date.now();

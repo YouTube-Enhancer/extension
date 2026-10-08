@@ -28,8 +28,6 @@ const featuresInMenu = new Set<AllButtonNames>();
 
 let cleanupFeatureMenuListeners: Nullable<() => void> = null;
 let featureMenuCssInjected = false;
-/** Superseded-bind counter; a newer bind (or a teardown) aborts an in-flight listener retry. */
-let featureMenuBindGeneration = 0;
 
 export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle extends boolean>(
 	buttonName: Name,
@@ -109,9 +107,11 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
  * player chrome is still rendering. setupFeatureMenuEventListeners bails when any element it needs
  * is missing; without a retry, an openType switch that lands during a re-render left the menu with
  * no listeners at all - neither hover nor click did anything until the next full setup.
+ * Supersede is the retry seam's generation/AbortSignal: a newer bind or the returned teardown
+ * aborts the in-flight run.
  */
 export function bindFeatureMenuEventListeners(openType: FeatureMenuOpenType): () => void {
-	const generation = ++featureMenuBindGeneration;
+	const controller = new AbortController();
 	let cleanup = setupFeatureMenuEventListeners(openType);
 	if (cleanup) return cleanup;
 	void featurePlayerManager.executeWithRetries(
@@ -119,17 +119,17 @@ export function bindFeatureMenuEventListeners(openType: FeatureMenuOpenType): ()
 		[
 			() => {
 				// A newer bind or a teardown superseded this retry.
-				if (generation !== featureMenuBindGeneration) return true;
+				if (controller.signal.aborted) return true;
 				cleanup = setupFeatureMenuEventListeners(openType);
 				return cleanup !== null;
 			}
 		],
 		["bind-feature-menu-listeners"],
-		{ pageTypes: ["watch"], waitForLoaded: true }
+		{ pageTypes: ["watch"], signal: controller.signal, waitForLoaded: true }
 	);
 	return () => {
 		// Supersede any in-flight retry and tear down whatever ended up bound.
-		if (generation === featureMenuBindGeneration) featureMenuBindGeneration++;
+		controller.abort();
 		cleanup?.();
 		cleanup = null;
 	};
