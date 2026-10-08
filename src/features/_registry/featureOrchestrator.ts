@@ -10,7 +10,10 @@ import type { configuration, Nullable } from "@/src/types";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featureNavigationManager } from "@/src/features/_registry/featureNavigationManager";
-import { buttonPlacement } from "@/src/features/buttonController/buttonPlacement";
+import {
+	buttonPlacement,
+	placementNeedsRecheck
+} from "@/src/features/buttonController/buttonPlacement";
 import { applyFeatureConfig } from "@/src/ui/configProvider";
 import {
 	subscribeToDomMutations,
@@ -43,8 +46,8 @@ type PhaseOneTransition = {
 type UpdateFeatureEnabledStateOptions = {
 	skipButtons?: boolean;
 	/**
-	 * Phase 1 of enableAll: resolve + place buttons only. Lifecycle is deferred to Phase 2
-	 * via the recorded transition so enable/disable hooks are not run twice.
+	 * Defer lifecycle to a later phase (navigation pipeline places buttons once after
+	 * onNavigate; cold load records the transition and runs hooks in a second pass).
 	 */
 	skipLifecycle?: boolean;
 };
@@ -53,7 +56,6 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 	/** Debounce handle for the placement rebind that follows a player-controls re-render. */
 	private controlsRebindTimer: Nullable<ReturnType<typeof setTimeout>> = null;
 	private controlsRebindUnsubscribe: Nullable<UnsubscribeFromDomMutations> = null;
-	private enableAllPromise: Nullable<Promise<void>> = null;
 	private featureEnabledState = new Map<FeatureKeys, boolean>();
 	/**
 	 * The newest request that arrived for a feature while an update of it was in flight. It runs as soon as the
@@ -64,8 +66,8 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		{ config: configuration[FeatureKeys]; enabled: boolean }
 	>();
 	/**
-	 * Transitions recorded during enableAll Phase 1. Phase 2 runs only the lifecycle for these,
-	 * so a clean cold load no longer re-resolves every feature in a parallel no-op pass.
+	 * Transitions recorded when lifecycle is deferred (skipLifecycle). A later pass runs only
+	 * the hooks for these so enable/disable is not executed twice.
 	 */
 	private phaseOneTransitions = new Map<FeatureKeys, PhaseOneTransition>();
 	/** One deferred placement recheck timer per feature; replaced on re-schedule, cleared on disable/nav. */
@@ -102,34 +104,6 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		} catch (error) {
 			console.error(`Error in disableAll`, error);
 		}
-	}
-
-	async enableAll(options: Partial<configuration>) {
-		if (this.enableAllPromise) {
-			await this.enableAllPromise;
-			return;
-		}
-
-		this.enableAllPromise = (async () => {
-			try {
-				this.ensureControlsRebindWatcher();
-				const featuresByPriority = this.getFeaturesSortedByPriority();
-				this.cacheFeatureConfigs(featuresByPriority, options);
-
-				// Phase 1: Sequential — init, resolve, place buttons per feature.
-				// Same-feature buttons stay adjacent in the DOM. Lifecycle is not run here.
-				const transitions = await this.phaseInitAndButtons(featuresByPriority, options);
-
-				// Phase 2: Parallel — run lifecycle only for transitions Phase 1 recorded.
-				await this.phaseLifecycleHooks(transitions);
-
-				this.perf.logSummary("enableAll");
-			} finally {
-				this.enableAllPromise = null;
-			}
-		})();
-
-		await this.enableAllPromise;
 	}
 
 	/**
@@ -390,20 +364,14 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			.then((outcomes) => outcomes ?? [])
 			.then((outcomes) => {
 				// Outcome-driven recheck: only deferred / missing buttons get a 3s pass.
-				if (!canEnable || !this.needsPlacementRecheck(outcomes)) {
+				// Semantics live on buttonPlacement; this module only schedules.
+				if (!canEnable || !placementNeedsRecheck(outcomes)) {
 					this.cancelPlacementRecheck(id);
 				} else {
 					this.schedulePlacementRecheck(feature, id, config);
 				}
 				return outcomes;
 			});
-	}
-
-	private cacheFeatureConfigs(features: AnyFeatureBase[], options: Partial<configuration>) {
-		for (const feature of features) {
-			const featureConfig = options[feature.id] ?? feature.defaults;
-			applyFeatureConfig(feature.id, featureConfig);
-		}
 	}
 
 	private cancelPlacementRecheck(id: FeatureKeys): void {
@@ -467,66 +435,6 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		}
 	}
 
-	private needsPlacementRecheck(outcomes: PlacementOutcome[]): boolean {
-		if (!outcomes.length) return false;
-		return outcomes.some((outcome) => outcome.detail === "deferred" || !outcome.landed);
-	}
-
-	private async phaseInitAndButtons(features: AnyFeatureBase[], options: Partial<configuration>) {
-		this.phaseOneTransitions.clear();
-		for (const feature of features) {
-			const { [feature.id]: featureConfig } = options;
-			if (!featureConfig) continue;
-			await this.lifecycle.initFeature(feature, featureConfig);
-			const enabledResult = this.safelyExecuteSync<boolean>(
-				feature.id,
-				"init:dependencies",
-				() => resolveEnabled(featureConfig),
-				{
-					fallback: false,
-					shouldRethrow: true
-				}
-			);
-			const enabled = enabledResult ?? false;
-			// Resolve + place buttons only. Lifecycle runs in Phase 2 from the recorded transition.
-			// The sequential await keeps same-feature buttons adjacent in the DOM.
-			await this.updateFeatureEnabledState(feature.id, enabled, featureConfig, {
-				skipLifecycle: true
-			});
-		}
-		return Array.from(this.phaseOneTransitions.values());
-	}
-
-	private async phaseLifecycleHooks(transitions: PhaseOneTransition[]) {
-		const CONCURRENCY_GROUP = 0;
-		const lifecyclePromises = transitions
-			.filter((transition) => transition.lifecyclePending)
-			.map(({ canEnable, config, feature, prevEnabled }) =>
-				this.safelyExecute(
-					feature.id,
-					"enable",
-					async () => {
-						// A concurrent full update may have already run lifecycle for this feature.
-						const stillPending = this.phaseOneTransitions.get(feature.id)?.lifecyclePending;
-						if (stillPending === false) return;
-						await this.executeLifecycleTransition(
-							feature,
-							feature.id,
-							config,
-							canEnable,
-							prevEnabled
-						);
-						// Recheck is scheduled by Phase 1 applyButtonPlacement when outcomes need it.
-					},
-					{
-						concurrencyGroup: CONCURRENCY_GROUP,
-						subPhase: "enable"
-					}
-				)
-			);
-		await Promise.allSettled(lifecyclePromises);
-		this.phaseOneTransitions.clear();
-	}
 	private async rebindButtonsAfterControlsRender() {
 		for (const feature of this.registry.getAll()) {
 			if (this.featureEnabledState.get(feature.id) !== true) continue;
