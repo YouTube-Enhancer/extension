@@ -140,14 +140,19 @@ export async function whenReady(
 
 	if (useMemo && (target === "pagePlayer" || target === "pagePlayerReady")) {
 		const memo = getReadinessMemo();
-		if (target === "pagePlayer") {
-			if (!memo.pagePlayer) memo.pagePlayer = loadPagePlayerOnce(timeout);
-			const player = await memo.pagePlayer;
-			if (options?.isCancelled?.()) return null;
-			return player;
+		const slot = target === "pagePlayer" ? "pagePlayer" : "pagePlayerReady";
+		if (!memo[slot]) {
+			memo[slot] =
+				target === "pagePlayer" ? loadPagePlayerOnce(timeout) : loadPagePlayerReadyOnce(timeout);
 		}
-		if (!memo.pagePlayerReady) memo.pagePlayerReady = loadPagePlayerReadyOnce(timeout);
-		const player = await memo.pagePlayerReady;
+		const { [slot]: cached } = memo;
+		const player = await cached;
+		/**
+		 * A timed-out wait must not pin null for the whole navigation generation. Concurrent
+		 * callers still share one wait; the next whenReady after a failure starts a fresh one,
+		 * which is what the playerRetry loop needs to try again.
+		 */
+		if (!player && memo[slot] === cached) memo[slot] = null;
 		if (options?.isCancelled?.()) return null;
 		return player;
 	}
