@@ -3,7 +3,7 @@ import type { FeatureStateAPI } from "@/src/features/_registry/types";
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { getPagePlayerElement, waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
+import { getPagePlayerElement, whenReady } from "@/src/utils/dom/readiness";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
@@ -59,7 +59,7 @@ async function restoreVolume(stateAPI: FeatureStateAPI<"rememberVolume">) {
 	const IsLivePage = isLivePage();
 	const IsShortsPage = isShortsPage();
 	if (!IsWatchPage && !IsLivePage && !IsShortsPage) return;
-	const playerContainer = await waitForPagePlayer();
+	const playerContainer = await whenReady("pagePlayer");
 	// Snapshot the player's own volume before applying: on shorts it tells the listener whether a
 	// later change is YouTube re-applying its persisted volume or a genuine user change.
 	const nativeVolume =

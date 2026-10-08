@@ -9,7 +9,7 @@ import {
 	resetState,
 	restorePreviewedVideo
 } from "@/src/features/timestampPeek/utils";
-import { waitForPlayerShell } from "@/src/utils/dom/pageReadiness";
+import { whenReady } from "@/src/utils/dom/readiness";
 
 import "./index.css";
 import { metadata } from "./index.metadata";
@@ -34,7 +34,7 @@ function cleanupTimestampObserver() {
 }
 
 function setupTimestampPeek() {
-	void waitForPlayerShell().then(async () => {
+	void whenReady("playerShell").then(async () => {
 		const videoHref = getVideoHref();
 		if (!videoHref) return;
 		eventManager.removeEventListeners("timestampPeek");

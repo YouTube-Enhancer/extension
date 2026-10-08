@@ -4,7 +4,7 @@ import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { addFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
-import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
+import { whenReady } from "@/src/utils/dom/readiness";
 
 import { metadata } from "./index.metadata";
 import { getEndScreenCardsButtonTitle, toCheckedStateIcons } from "./utils";
@@ -15,7 +15,7 @@ export default createFeature({
 		{
 			add: async ({ button: { fullscreenPlacement, placement } }) => {
 				// Get the player container element
-				const playerContainer = await waitForPagePlayer();
+				const playerContainer = await whenReady("pagePlayer");
 				if (!playerContainer) return;
 				const videoData = await playerContainer.getVideoData();
 				if (videoData.isLive) return;

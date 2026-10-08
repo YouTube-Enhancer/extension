@@ -3,8 +3,8 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { captionsAvailable } from "@/src/utils/dom/captions";
-import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 import { playerShowsPageVideo } from "@/src/utils/dom/player";
+import { whenReady } from "@/src/utils/dom/readiness";
 
 import { metadata } from "./index.metadata";
 
@@ -53,7 +53,7 @@ export default createFeature({
 	...metadata,
 	onDisable: async () => {
 		// Lifecycle already aborted this feature's player retries before onDisable runs
-		const playerContainer = await waitForPagePlayer();
+		const playerContainer = await whenReady("pagePlayer");
 		// If player element is not available, return
 		if (!playerContainer) return;
 		// If captions were enabled, return
@@ -63,7 +63,7 @@ export default createFeature({
 	},
 	onEnable: async () => {
 		// Get the player element
-		const playerContainer = await waitForPagePlayer();
+		const playerContainer = await whenReady("pagePlayer");
 		const subtitlesButton = document.querySelector<HTMLButtonElement>(
 			"button.ytp-subtitles-button"
 		);

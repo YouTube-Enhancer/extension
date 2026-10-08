@@ -9,8 +9,10 @@
  * The bus is always-alive: created on module import, disconnected in the
  * embedded script's teardown. Features subscribe/unsubscribe as they enable/disable.
  *
- * **Detached subtrees are not supported.** The bus observes `document.body` — elements
- * added outside the body will not trigger subscriber callbacks.
+ * **Detached parents are supported.** When a subscriber passes `parent` that is not
+ * connected to the document, the bus also observes that root so mutations inside a
+ * detached subtree still deliver. Roots are refcounted and disconnected with the
+ * last subscriber.
  *
  * @example
  * ```ts
@@ -47,10 +49,17 @@ import type { Nullable } from "@/src/types";
 
 // ─── Types ──────────────────────────────────────────────────────
 
+type DetachedRootState = {
+	observer: MutationObserver;
+	refCount: number;
+};
+
 /** Internal subscriber record. */
 type Subscriber = {
 	attributeFilter?: readonly string[];
 	callback: (elements: Element[]) => void;
+	/** Set when the subscriber's parent is detached; released on unsubscribe. */
+	detachedParent?: Element;
 	once?: boolean;
 	parent?: ParentNode;
 	selector: string;
@@ -77,6 +86,9 @@ type UnsubscribeFromDomMutations = () => void;
 
 /** Map from CSS selector to the set of subscribers interested in that selector. */
 const subscriberMap = new Map<string, Set<Subscriber>>();
+
+/** Extra observers for subscriber parents that are not connected to the document. */
+const detachedRoots = new Map<Element, DetachedRootState>();
 
 /** The single shared observer, or null after {@link disconnectFromDomMutations}. */
 let observer: Nullable<MutationObserver> = null;
@@ -118,6 +130,10 @@ function disconnectFromDomMutations(): void {
 		observer.disconnect();
 		observer = null;
 	}
+	for (const { observer: rootObserver } of detachedRoots.values()) {
+		rootObserver.disconnect();
+	}
+	detachedRoots.clear();
 	subscriberMap.clear();
 	observedAttributeFilter = [];
 }
@@ -125,6 +141,7 @@ function disconnectFromDomMutations(): void {
 /**
  * Re-observe `document.body` when the live attributeFilter set changes.
  * MutationObserver cannot add or remove attributeFilter without re-observing.
+ * Detached roots are re-observed with the same filter union.
  */
 function ensureObserverOptions(): void {
 	if (typeof document === "undefined" || !document.body) return;
@@ -135,13 +152,28 @@ function ensureObserverOptions(): void {
 	if (observer && !filterChanged) return;
 	observer?.disconnect();
 	observer = new MutationObserver(onMutations);
-	observer.observe(document.body, {
+	observeRoot(observer, document.body);
+	for (const root of detachedRoots.keys()) {
+		const state = detachedRoots.get(root);
+		if (!state) continue;
+		state.observer.disconnect();
+		observeRoot(state.observer, root);
+	}
+	observedAttributeFilter = attributeFilter;
+}
+
+function isAttached(node: Node): boolean {
+	return node.isConnected || document.contains(node);
+}
+
+function observeRoot(observerInstance: MutationObserver, root: Element): void {
+	const attributeFilter = collectAttributeFilters();
+	observerInstance.observe(root, {
 		attributes: attributeFilter.length > 0,
-		...(attributeFilter.length > 0 ? { attributeFilter } : {}),
+		...(attributeFilter.length > 0 ? { attributeFilter: [...attributeFilter] } : {}),
 		childList: true,
 		subtree: true
 	});
-	observedAttributeFilter = attributeFilter;
 }
 
 /**
@@ -206,6 +238,15 @@ function onMutations(records: MutationRecord[]): void {
 	}
 }
 
+function releaseDetachedRoot(root: Element): void {
+	const existing = detachedRoots.get(root);
+	if (!existing) return;
+	existing.refCount -= 1;
+	if (existing.refCount > 0) return;
+	existing.observer.disconnect();
+	detachedRoots.delete(root);
+}
+
 /** Remove a subscriber from the map. Cleans up the selector entry when empty. */
 function removeSubscriber(subscriber: Subscriber): void {
 	const subscribers = subscriberMap.get(subscriber.selector);
@@ -215,7 +256,22 @@ function removeSubscriber(subscriber: Subscriber): void {
 			subscriberMap.delete(subscriber.selector);
 		}
 	}
+	if (subscriber.detachedParent) {
+		releaseDetachedRoot(subscriber.detachedParent);
+		subscriber.detachedParent = undefined;
+	}
 	if (subscriber.attributeFilter) ensureObserverOptions();
+}
+
+function retainDetachedRoot(root: Element): void {
+	const existing = detachedRoots.get(root);
+	if (existing) {
+		existing.refCount += 1;
+		return;
+	}
+	const rootObserver = new MutationObserver(onMutations);
+	observeRoot(rootObserver, root);
+	detachedRoots.set(root, { observer: rootObserver, refCount: 1 });
 }
 
 /**
@@ -225,6 +281,9 @@ function removeSubscriber(subscriber: Subscriber): void {
  * `attributeFilter` is provided the subscriber receives attribute mutations on
  * elements that match the selector instead (shared observer re-observes with the
  * union of live filters).
+ *
+ * When `parent` is detached from the document, the bus also observes that root so
+ * the subscription still fires inside the detached subtree.
  *
  * @param selector - CSS selector to match against added nodes or attribute targets.
  * @param callback - Receives an array of matching elements from the mutation batch.
@@ -238,11 +297,15 @@ function subscribeToDomMutations(
 	callback: (elements: Element[]) => void,
 	options?: SubscribeToDomMutationsOptions
 ): UnsubscribeFromDomMutations {
+	const parent = options?.parent;
+	const detachedParent = parent instanceof Element && !isAttached(parent) ? parent : undefined;
+
 	const subscriber: Subscriber = {
 		attributeFilter: options?.attributeFilter,
 		callback,
+		detachedParent,
 		once: options?.once,
-		parent: options?.parent,
+		parent,
 		selector
 	};
 
@@ -253,6 +316,7 @@ function subscribeToDomMutations(
 	}
 	subscribers.add(subscriber);
 
+	if (detachedParent) retainDetachedRoot(detachedParent);
 	if (options?.attributeFilter) ensureObserverOptions();
 
 	return () => removeSubscriber(subscriber);
@@ -263,6 +327,11 @@ function subscribeToDomMutations(
 ensureObserverOptions();
 
 // ─── Exports ────────────────────────────────────────────────────
+
+/** Capability of the bus: detached subscriber parents are observed. */
+export const domMutationBusCapabilities = {
+	supportsDetachedSubtrees: true
+} as const;
 
 export { disconnectFromDomMutations, subscribeToDomMutations };
 export type { SubscribeToDomMutationsOptions, UnsubscribeFromDomMutations };
