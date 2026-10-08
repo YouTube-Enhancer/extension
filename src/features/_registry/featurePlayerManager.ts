@@ -145,12 +145,20 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 			return tasks.map(() => false);
 		}
 
-		const player = resolved.waitForLoaded
-			? await whenReady("pagePlayerReady", { isCancelled, timeout: resolved.overallTimeout })
-			: await whenReady("pagePlayer", { isCancelled, timeout: resolved.overallTimeout });
+		/**
+		 * Wait for the player before the first attempt, but do not require it. A failed wait still
+		 * starts the retry loop: tasks that need the player return false and try again on the next
+		 * tick. Returning here meant one early whenReady timeout left the feature dead for the rest
+		 * of the page (no state hook, no further attempts).
+		 */
+		if (resolved.waitForLoaded) {
+			await whenReady("pagePlayerReady", { isCancelled, timeout: resolved.overallTimeout });
+		} else {
+			await whenReady("pagePlayer", { isCancelled, timeout: resolved.overallTimeout });
+		}
 
 		// A cleanup (navigation, disable) or a newer run for the feature superseded this one while it waited.
-		if (!player || isCancelled()) {
+		if (isCancelled()) {
 			return tasks.map(() => false);
 		}
 
