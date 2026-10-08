@@ -1,6 +1,3 @@
-export { getButtonConfig } from "./buttonConfig";
-export type { ButtonConfigSlice } from "./buttonConfig";
-
 export {
 	addButton,
 	addButton as addFeatureButton,
@@ -30,13 +27,18 @@ export {
 	updateFeatureMenuItemLabel,
 	updateFeatureMenuTitle
 } from "./ButtonController";
-
 export { buttonPlacement } from "./buttonPlacement";
+
 export type {
 	PlacementOutcome,
 	PlacementStateSnapshot,
 	PriorityPlacementItem
 } from "./buttonPlacement";
+
+export { getTrackedButtonChecked } from "./buttonPlacementState";
+
+export { resolveButtonConfig } from "./resolveButtonConfig";
+export type { ButtonConfigSlice } from "./resolveButtonConfig";
 
 export type { FeatureMenuOpenType, ListenerType } from "./types";
 

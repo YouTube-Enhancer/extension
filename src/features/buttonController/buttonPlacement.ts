@@ -3,7 +3,7 @@ import type {
 	FeatureKeys,
 	FeatureKeysWithState
 } from "@/src/features/_registry/types";
-import type { ButtonConfigSlice } from "@/src/features/buttonController/buttonConfig";
+import type { ButtonConfigSlice } from "@/src/features/buttonController/resolveButtonConfig";
 import type {
 	AllButtonNames,
 	ButtonPlacement,
@@ -14,13 +14,13 @@ import type {
 
 import eventManager from "@/src/events/EventManager";
 import { FeatureManagerBase } from "@/src/features/_registry/featureManagerBase";
-import { getButtonConfig } from "@/src/features/buttonController/buttonConfig";
 import {
 	checkIfFeatureButtonExists,
 	getFeatureButton,
 	removeButton
 } from "@/src/features/buttonController/ButtonController";
 import {
+	clearContainerNodes,
 	getTrackedButtonEnabled,
 	getTrackedButtonFullscreenPlacement,
 	getTrackedButtonInitialized,
@@ -32,9 +32,9 @@ import {
 	trackedButtons,
 	updateTrackedButtonConfig,
 	updateTrackedButtonLabelResolver
-} from "@/src/features/buttonController/buttonState";
-import { invalidateContainerCache } from "@/src/features/buttonController/containerTracking";
+} from "@/src/features/buttonController/buttonPlacementState";
 import { enableFeatureMenuButton } from "@/src/features/buttonController/featureMenu";
+import { resolveButtonConfig } from "@/src/features/buttonController/resolveButtonConfig";
 
 export type PlacementOutcome = {
 	detail: "deferred" | "inactive" | "landed" | "removed" | "unchanged";
@@ -88,7 +88,7 @@ class ButtonPlacementManager extends FeatureManagerBase {
 
 	invalidateCache() {
 		// One invalidation path for navigation: container geometry + next-place readiness.
-		invalidateContainerCache();
+		clearContainerNodes();
 		this.readinessPromise = null;
 	}
 
@@ -106,7 +106,7 @@ class ButtonPlacementManager extends FeatureManagerBase {
 	}): Promise<PlacementOutcome[]> {
 		const { buttons, canEnable, config, featureId } = input;
 		if (!buttons.length) return [];
-		if (canEnable && this.allButtonsUnchanged(buttons, config)) {
+		if (canEnable && this.allButtonsUnchanged(featureId, buttons, config)) {
 			return buttons.map((btn) => ({ detail: "unchanged", landed: true, name: btn.name }));
 		}
 		await this.ensureReadiness();
@@ -130,7 +130,8 @@ class ButtonPlacementManager extends FeatureManagerBase {
 		if (!items.length) return results;
 		const ordered = [...items].sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
 		const needsWork = ordered.some(
-			(item) => item.canEnable && !this.allButtonsUnchanged(item.buttons, item.config)
+			(item) =>
+				item.canEnable && !this.allButtonsUnchanged(item.featureId, item.buttons, item.config)
 		);
 		if (needsWork) {
 			await this.ensureReadiness();
@@ -141,7 +142,7 @@ class ButtonPlacementManager extends FeatureManagerBase {
 				results.set(featureId, []);
 				continue;
 			}
-			if (canEnable && this.allButtonsUnchanged(buttons, config)) {
+			if (canEnable && this.allButtonsUnchanged(featureId, buttons, config)) {
 				results.set(
 					featureId,
 					buttons.map((btn) => ({ detail: "unchanged", landed: true, name: btn.name }))
@@ -162,11 +163,12 @@ class ButtonPlacementManager extends FeatureManagerBase {
 	}
 
 	private allButtonsUnchanged<K extends FeatureKeys>(
+		featureId: K,
 		buttons: FeatureButton<K>[],
 		config: configuration[K]
 	): boolean {
 		for (const btn of buttons) {
-			const nextBtnCfg = getButtonConfig(config, btn.name);
+			const nextBtnCfg = resolveButtonConfig(config, featureId, btn.name);
 			if (nextBtnCfg?.enabled === false) return false;
 			const nextPlacement = nextBtnCfg?.placement;
 			const nextFullscreenPlacement = nextBtnCfg?.fullscreenPlacement ?? "same";
@@ -212,7 +214,7 @@ class ButtonPlacementManager extends FeatureManagerBase {
 		config: configuration[K],
 		canEnable: boolean
 	): Promise<PlacementOutcome> {
-		const nextBtnCfg = getButtonConfig(config, btn.name);
+		const nextBtnCfg = resolveButtonConfig(config, featureId, btn.name);
 		const isActive = await this.computeButtonActive(btn, config, canEnable, nextBtnCfg);
 		const nextPlacement = nextBtnCfg?.placement;
 		const nextFullscreenPlacement = nextBtnCfg?.fullscreenPlacement ?? "same";

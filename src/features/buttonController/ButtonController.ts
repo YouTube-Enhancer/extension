@@ -16,17 +16,16 @@ import { createTooltip, removeTooltip } from "@/src/utils/dom/tooltip";
 
 import type { ListenerType } from "./types";
 
-import { getButtonConfig } from "./buttonConfig";
 import {
+	buttonContainerId,
+	getCachedContainer,
 	trackButton as trackButtonState,
 	trackedButtons,
 	untrackButton as untrackButtonState,
 	updateTrackedButtonChecked,
 	updateTrackedButtonLabel
-} from "./buttonState";
-import { buttonContainerId } from "./constants";
+} from "./buttonPlacementState";
 import {
-	getCachedContainer,
 	getEffectivePlacement,
 	getPlacementRoot,
 	getPlacementSelector,
@@ -44,6 +43,7 @@ import {
 	removeFeatureItemFromMenu
 } from "./featureMenu";
 import { isFullscreen } from "./placementTransition";
+import { resolveButtonConfig } from "./resolveButtonConfig";
 import "./index.css";
 
 // ─── Re-exports from sub-modules ──────────────────────────────────
@@ -236,7 +236,7 @@ export function removeButton<Name extends AllButtonNames>(
 	if (placement === undefined) {
 		const featureConfig = featureConfigManager.getLast(featureName);
 		if (featureConfig) {
-			placement = getButtonConfig(featureConfig, buttonName)?.placement;
+			placement = resolveButtonConfig(featureConfig, featureName, buttonName)?.placement;
 		}
 	}
 	switch (placement) {

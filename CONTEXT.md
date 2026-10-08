@@ -39,3 +39,11 @@ One in-process module for retry-shaped work: `featurePlayerManager` behind `regi
 ## Placement outcome
 
 What button placement reports after a pass: `deferred | inactive | landed | removed | unchanged`. Owned by `buttonPlacement`; the navigation pipeline consumes outcomes and does not re-encode their meaning.
+
+## Placement state
+
+Module-owned maps in uttonPlacementState.ts: tracked feature buttons (name to state) and placement container nodes. Name-based accessors only; no second public map of what landed.
+
+## Button config path
+
+Button settings resolve via feature metadata (utton.path = utton or uttons) through esolveButtonConfig(config, featureId, buttonName). No dual-shape probe at placement time.

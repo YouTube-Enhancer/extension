@@ -3,7 +3,11 @@ import type { AllButtonNames, ButtonPlacement, FullscreenPlacement } from "@/src
 
 import type { ListenerType } from "./types";
 
-// ─── Module-level state ───────────────────────────────────────────
+/**
+ * Module-owned placement state: tracked feature buttons and placement container nodes.
+ * Placement outcomes and name-based accessors read from here; callers must not keep
+ * a second map of "what landed".
+ */
 
 export type TrackedButtonInfo = {
 	checked: boolean;
@@ -20,9 +24,21 @@ export type TrackedButtonInfo = {
 	placement: ButtonPlacement;
 };
 
+export const buttonContainerId = "yte-button-container";
+
+/** Tracked feature buttons, keyed by button name. */
 export const trackedButtons = new Map<AllButtonNames, TrackedButtonInfo>();
 
-// ─── State accessors ──────────────────────────────────────────────
+/** Cache of resolved placement containers, keyed by placement type. Invalidated on navigation. */
+export const containerNodes = new Map<ButtonPlacement, HTMLElement>();
+
+export function clearContainerNodes(): void {
+	containerNodes.clear();
+}
+
+export function getCachedContainer(placement: ButtonPlacement): HTMLElement | undefined {
+	return containerNodes.get(placement);
+}
 
 export function getTrackedButtonChecked(buttonName: AllButtonNames): boolean | undefined {
 	return trackedButtons.get(buttonName)?.checked;
@@ -47,12 +63,16 @@ export function getTrackedButtonPlacement(buttonName: AllButtonNames): ButtonPla
 }
 
 /**
- * Landed = initialized + enabled in tracked state. Prefer {@link isButtonPresentInDom}
- * (or the placement module's outcomes) when a live DOM check is required; this flag alone
+ * Landed = initialized + enabled in tracked state. Prefer a live DOM check
+ * (or the placement module's outcomes) when presence is required; this flag alone
  * can go stale if the player re-renders between placements.
  */
 export function isTrackedButtonLanded(buttonName: AllButtonNames): boolean {
 	return getTrackedButtonInitialized(buttonName) && getTrackedButtonEnabled(buttonName);
+}
+
+export function setCachedContainer(placement: ButtonPlacement, node: HTMLElement): void {
+	containerNodes.set(placement, node);
 }
 
 export function setTrackedButtonEnabled(buttonName: AllButtonNames, enabled: boolean) {

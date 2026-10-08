@@ -7,10 +7,10 @@ import type {
 import type { PlacementOutcome } from "@/src/features/buttonController/buttonPlacement";
 import type { configuration, Nullable } from "@/src/types";
 
-import { featureButtonManager } from "@/src/features/_registry/featureButtonManager";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featureNavigationManager } from "@/src/features/_registry/featureNavigationManager";
+import { buttonPlacement } from "@/src/features/buttonController/buttonPlacement";
 import { applyFeatureConfig } from "@/src/ui/configProvider";
 import {
 	subscribeToDomMutations,
@@ -172,7 +172,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 					priority: item.priority
 				};
 			});
-		await featureButtonManager.placeFeaturesByPriority(buttonItems);
+		await buttonPlacement.placeFeaturesByPriority(buttonItems);
 
 		for (const { config, feature, hasButtons } of toEnable) {
 			await this.lifecycle.initFeature(feature, config);
@@ -196,7 +196,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 	}
 
 	invalidateButtonCache() {
-		featureButtonManager.invalidateCache();
+		buttonPlacement.invalidateCache();
 	}
 
 	isFeatureEnabled(id: FeatureKeys): boolean {
@@ -373,7 +373,15 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		return this.safelyExecute<PlacementOutcome[]>(
 			id,
 			"enable",
-			async () => featureButtonManager.handleButtonPlacement(feature, config, canEnable),
+			async () => {
+				if (!feature.buttons?.length) return [];
+				return buttonPlacement.placeFeatureButtons({
+					buttons: feature.buttons,
+					canEnable,
+					config,
+					featureId: id
+				});
+			},
 			{
 				fallback: [],
 				subPhase: "buttons"
