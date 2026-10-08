@@ -30,7 +30,7 @@ async function handleVolumeBoostScroll(event: WheelEvent) {
 	// Apply modifiers: Shift = 2.5x, Ctrl = 5x
 	if (event.shiftKey) delta *= 2.5;
 	if (event.ctrlKey) delta *= 5;
-	const { amount } = featureConfigManager.getLast("volumeBoost");
+	const { amount } = featureConfigManager.getLastOr("volumeBoost", metadata.defaults);
 	const newValue = clampDb(amount + delta);
 	sendContentOnlyMessage("setVolumeBoostAmount", newValue);
 	const playerContainer = await waitForElement<YouTubePlayerDiv>(
@@ -89,7 +89,7 @@ export default createFeature({
 					(checked) => {
 						isVolumeBoostEnabled = !!checked;
 						if (checked) {
-							const { amount } = featureConfigManager.getLast("volumeBoost");
+							const { amount } = featureConfigManager.getLastOr("volumeBoost", metadata.defaults);
 							applyVolumeBoostDb(amount);
 							updateFeatureButtonTitle(
 								"volumeBoostButton",
@@ -117,7 +117,10 @@ export default createFeature({
 					false,
 					fullscreenPlacement,
 					() => {
-						const { amount: currentAmount } = featureConfigManager.getLast("volumeBoost");
+						const { amount: currentAmount } = featureConfigManager.getLastOr(
+							"volumeBoost",
+							metadata.defaults
+						);
 						return placement === "feature_menu"
 							? window.i18nextInstance.t(
 									(t) => t.pages.content.features.volumeBoostButton.button.label,

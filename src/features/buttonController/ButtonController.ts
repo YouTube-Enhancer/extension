@@ -234,11 +234,9 @@ export function removeButton<Name extends AllButtonNames>(
 		stopPlacementTracking();
 	}
 	if (placement === undefined) {
-		try {
-			const featureConfig = featureConfigManager.getLast(featureName);
+		const featureConfig = featureConfigManager.getLast(featureName);
+		if (featureConfig) {
 			placement = getButtonConfig(featureConfig, buttonName)?.placement;
-		} catch {
-			placement = undefined;
 		}
 	}
 	switch (placement) {

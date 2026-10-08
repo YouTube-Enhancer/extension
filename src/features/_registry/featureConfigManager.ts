@@ -3,13 +3,20 @@ import type { configuration } from "@/src/types";
 
 import { deepEqual } from "@/src/utils/deepEqual";
 
+/**
+ * Read-only view of the per-feature config cache.
+ *
+ * configProvider is the sole writer (seed, navigation reseed, storage broadcasts,
+ * applyFeatureConfig). getLast never throws: unseeded features return undefined.
+ * Callers that need a value use getLastOr with metadata defaults, or receive
+ * config directly from lifecycle callbacks (which fall back to defaults).
+ */
 class FeatureConfigManager {
 	private lastConfig = new Map<FeatureKeys, configuration[FeatureKeys]>();
 
-	getLast<K extends FeatureKeys>(id: K): configuration[K] {
-		const cfg = this.lastConfig.get(id);
-		if (!cfg) throw new Error(`Config not found for ${id}`);
-		return cfg as configuration[K];
+	/** Soft read. Undefined until the feature has been seeded. */
+	getLast<K extends FeatureKeys>(id: K): configuration[K] | undefined {
+		return this.lastConfig.get(id) as configuration[K] | undefined;
 	}
 
 	getLastOr<K extends FeatureKeys>(id: K, fallback: configuration[K]): configuration[K] {
@@ -23,6 +30,10 @@ class FeatureConfigManager {
 		return !deepEqual(prev, next);
 	}
 
+	/**
+	 * @internal Prefer configProvider.applyFeatureConfig. Direct setLast from feature
+	 * modules bypasses the single-writer seam.
+	 */
 	setLast<K extends FeatureKeys>(id: K, config: configuration[K]) {
 		this.lastConfig.set(id, config);
 	}

@@ -39,7 +39,7 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 			async () => {
 				if (hasState(feature))
 					return await feature.onConfigChange(
-						this.configManager.getLast(feature.id),
+						this.configManager.getLast(feature.id) ?? feature.defaults,
 						this.stateManager.getStateAPI(feature.id)
 					);
 				await feature.onConfigChange(config);
@@ -63,7 +63,7 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 				async () => {
 					if (hasState(feature))
 						return await feature.onDisable(
-							this.configManager.getLast(feature.id),
+							this.configManager.getLast(feature.id) ?? feature.defaults,
 							this.stateManager.getStateAPI(feature.id)
 						);
 					await feature.onDisable(config);
@@ -83,7 +83,7 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 			async () => {
 				if (hasState(feature))
 					return await feature.onEnable(
-						this.configManager.getLast(feature.id),
+						this.configManager.getLast(feature.id) ?? feature.defaults,
 						this.stateManager.getStateAPI(feature.id)
 					);
 				await feature.onEnable(config);
@@ -100,7 +100,7 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 			async () => {
 				if (hasState(feature))
 					return await feature.onInit(
-						this.configManager.getLast(feature.id),
+						this.configManager.getLast(feature.id) ?? feature.defaults,
 						this.stateManager.getStateAPI(feature.id)
 					);
 				await feature.onInit(config);
@@ -135,7 +135,7 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 			async () => {
 				if (hasState(feature))
 					return await feature.onNavigate(
-						this.configManager.getLast(feature.id),
+						this.configManager.getLast(feature.id) ?? feature.defaults,
 						this.stateManager.getStateAPI(feature.id),
 						navigationType
 					);

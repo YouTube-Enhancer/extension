@@ -144,7 +144,10 @@ function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController): void {
 	});
 }
 function getEnabledController(): Nullable<MiniPlayerController> {
-	const { defaultPosition, defaultSize } = featureConfigManager.getLast("miniPlayer");
+	const { defaultPosition, defaultSize } = featureConfigManager.getLastOr(
+		"miniPlayer",
+		metadata.defaults
+	);
 	return ensureController({
 		defaultPosition,
 		defaultSize

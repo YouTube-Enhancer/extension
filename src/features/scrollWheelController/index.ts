@@ -129,12 +129,9 @@ async function applySpeedSteps(runtime: ControlRuntime, steps: number) {
 	if (!speedConfig) return;
 	const onScreenDisplay = getOSDConfig();
 	if (!onScreenDisplay) return;
-	let speedPerClick: number;
-	try {
-		({ speed: speedPerClick } = featureConfigManager.getLast("playbackSpeedButtons"));
-	} catch {
-		return;
-	}
+	const playbackSpeedConfig = featureConfigManager.getLast("playbackSpeedButtons");
+	if (!playbackSpeedConfig) return;
+	const { speed: speedPerClick } = playbackSpeedConfig;
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	const newSpeed = round(
@@ -310,23 +307,9 @@ function queueSteps(type: ScrollWheelControlType, wheelSteps: number) {
 
 function rebuildDispatchConfig() {
 	const speedConfig =
-		controlConfigs.speed ??
-		(() => {
-			try {
-				return featureConfigManager.getLast("scrollWheelSpeedControl");
-			} catch {
-				return null;
-			}
-		})();
+		controlConfigs.speed ?? featureConfigManager.getLast("scrollWheelSpeedControl") ?? null;
 	const volumeConfig =
-		controlConfigs.volume ??
-		(() => {
-			try {
-				return featureConfigManager.getLast("scrollWheelVolumeControl");
-			} catch {
-				return null;
-			}
-		})();
+		controlConfigs.volume ?? featureConfigManager.getLast("scrollWheelVolumeControl") ?? null;
 	if (!speedConfig || !volumeConfig) {
 		dispatchConfig = null;
 		return;

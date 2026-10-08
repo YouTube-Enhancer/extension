@@ -1,8 +1,9 @@
 import type { ToggleIcon } from "@/src/icons";
-import type { ButtonPlacement } from "@/src/types";
+import type { ButtonPlacement, configuration } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
+import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import {
 	updateFeatureButtonChecked,
 	updateFeatureButtonIconByName,
@@ -23,7 +24,11 @@ export default createFeature({
 	onConfigChange: ({ enabled }) => {
 		const {
 			button: { placement }
-		} = featureConfigManager.getLast("hideEndScreenCardsButton");
+		} = featureConfigManager.getLastOr(
+			"hideEndScreenCardsButton",
+			metadataRegistry.get("hideEndScreenCardsButton")
+				?.defaults as configuration["hideEndScreenCardsButton"]
+		);
 		const hideEndScreenCardsIcon = getFeatureIcon("hideEndScreenCardsButton", "below_player");
 		if (hideEndScreenCardsIcon instanceof SVGSVGElement) return;
 		// The button convention is aria-checked === true means the cards are hidden, which is exactly the feature's enabled state.

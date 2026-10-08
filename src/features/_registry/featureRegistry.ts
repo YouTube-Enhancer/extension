@@ -39,7 +39,6 @@ import { featureStateManager } from "./featureStateManager";
  * orchestrator / lifecycleManager / playerManager / stateManager objects.
  */
 export class FeatureRegistry extends FeatureManagerBase {
-	private readonly configManager = featureConfigManager;
 	private features = new Map<FeatureKeys, AnyFeatureBase>();
 	private readonly lifecycleManager = new FeatureLifecycleManager(
 		featureStateManager,
@@ -89,11 +88,15 @@ export class FeatureRegistry extends FeatureManagerBase {
 	}
 
 	getConfig<K extends FeatureKeys>(id: K): configuration[K] {
-		return this.configManager.getLast(id);
+		const metadata = metadataRegistry.get(id);
+		if (!metadata) {
+			throw new Error(`Unknown feature config: ${id}`);
+		}
+		return featureConfigManager.getLastOr(id, metadata.defaults as configuration[K]);
 	}
 
 	getConfigOr<K extends FeatureKeys>(id: K, fallback: configuration[K]): configuration[K] {
-		return this.configManager.getLastOr(id, fallback);
+		return featureConfigManager.getLastOr(id, fallback);
 	}
 
 	getFeature<K extends FeatureKeys>(id: K) {

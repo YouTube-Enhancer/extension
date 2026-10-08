@@ -39,7 +39,7 @@ export function updatePlaybackSpeedButtonTooltips(
 	if (buttons.every(({ buttonName }) => !getFeatureButton(buttonName))) return;
 	const {
 		button: { placement }
-	} = featureConfigManager.getLast("playbackSpeedButtons");
+	} = featureConfigManager.getLastOr("playbackSpeedButtons", metadata.defaults);
 	const minSpeed = getMinSpeed(playbackSpeedPerClick);
 	for (const { buttonName, direction } of buttons) {
 		// Resolved after the options request: a relocation or navigation that ran meanwhile has replaced the button.

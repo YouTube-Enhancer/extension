@@ -7,12 +7,12 @@ import { resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 /**
- * Single in-page store for extension configuration.
+ * Single in-page store for extension configuration (the config store).
  *
- * Seeded from the content script at bootstrap, re-seeded on SPA navigation, and kept in sync
- * by storage-change broadcasts. Core slices (deepDarkCSS, featureMenu, onScreenDisplay) and
- * per-feature last configs are derived from the same snapshot so callers stop answering
- * "what is the current config?" through three different adapters.
+ * Sole writer into the per-feature cache and the core slices. Seeded from the content
+ * script at bootstrap, re-seeded on SPA navigation, and kept in sync by storage-change
+ * broadcasts. Orchestrator config changes go through applyFeatureConfig, not setLast.
+ * Callers read via featureConfigManager.getLast / getLastOr or the core-slice getters.
  */
 
 type ConfigProviderState = {
@@ -37,6 +37,11 @@ const state: ConfigProviderState = {
 	core: {},
 	snapshot: null
 };
+
+/** Sole write path for a feature's last config. Orchestrator config changes use this. */
+export function applyFeatureConfig<K extends FeatureKeys>(id: K, config: configuration[K]): void {
+	featureConfigManager.setLast(id, config);
+}
 
 export async function fetchOptions(): Promise<configuration> {
 	const {
@@ -144,7 +149,7 @@ function applyFeatureConfigsFromSnapshot(snapshot: configuration): void {
 	for (const { id } of metadataRegistry.getAll()) {
 		const { [id]: config } = snapshot;
 		if (config === undefined) continue;
-		featureConfigManager.setLast(id, config);
+		applyFeatureConfig(id, config);
 	}
 }
 

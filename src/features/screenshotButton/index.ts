@@ -35,7 +35,7 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 			saveAs,
 			timestampFormat = "auto",
 			timestampSeparator = "auto"
-		} = featureConfigManager.getLast("screenshotButton");
+		} = featureConfigManager.getLastOr("screenshotButton", metadata.defaults);
 
 		const copyToClipboard = async () => {
 			const screenshotButton = getFeatureButton("screenshotButton");
