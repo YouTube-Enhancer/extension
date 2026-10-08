@@ -1,7 +1,7 @@
 import type { PageType } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
-import { waitForMoviePlayer } from "@/src/utils/dom/pageReadiness";
+import { whenReady } from "@/src/utils/dom/readiness";
 
 import { isSupportedYouTubeHostname } from "./constants";
 
@@ -131,7 +131,7 @@ export async function refinePageTypeFromPlayer(): Promise<Nullable<PageType>> {
 	const current = getCurrentPageType();
 	if (current !== "watch") return current;
 	try {
-		const player = await waitForMoviePlayer();
+		const player = await whenReady("moviePlayer");
 		if (!player || typeof player.getVideoData !== "function") return "watch";
 		/**
 		 * After a single-page navigation the player can still report the previous video, so wait

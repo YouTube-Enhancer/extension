@@ -4,7 +4,7 @@ import {
 	subscribeToDomMutations,
 	type UnsubscribeFromDomMutations
 } from "@/src/utils/dom/observers/domMutationBus";
-import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
+import { whenReady } from "@/src/utils/dom/readiness";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
 
@@ -129,7 +129,7 @@ class PlacementTransition {
 
 	private async startContainerGeometryObserver() {
 		if (this.containerGeometryResizeObserver) return;
-		const player = await waitForPagePlayer({ timeout: 15000 });
+		const player = await whenReady("pagePlayer", { timeout: 15000 });
 		if (!player || this.containerGeometryResizeObserver) return;
 		this.containerGeometryResizeObserver = new ResizeObserver(() => {
 			requestAnimationFrame(() => this.syncContainerGeometry());

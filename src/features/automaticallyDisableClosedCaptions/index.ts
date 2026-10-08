@@ -3,8 +3,8 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { captionsAvailable } from "@/src/utils/dom/captions";
-import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 import { playerShowsPageVideo } from "@/src/utils/dom/player";
+import { whenReady } from "@/src/utils/dom/readiness";
 
 import { metadata } from "./index.metadata";
 
@@ -14,7 +14,7 @@ let quietAttempts = 0;
 
 async function clickSubtitlesButton() {
 	// Get the player element
-	const playerContainer = await waitForPagePlayer();
+	const playerContainer = await whenReady("pagePlayer");
 	const subtitlesButton = document.querySelector<HTMLElement>("button.ytp-subtitles-button");
 	// If player element is not available, return
 	if (!playerContainer || !subtitlesButton) return;

@@ -16,7 +16,7 @@ import {
 	subscribeToDomMutations,
 	type UnsubscribeFromDomMutations
 } from "@/src/utils/dom/observers/domMutationBus";
-import { pageReadinessSelectors } from "@/src/utils/dom/pageReadiness";
+import { readinessSelectors } from "@/src/utils/dom/readiness";
 
 import type { FeatureLifecycleManager } from "./featureLifecycleManager";
 import type { FeatureRegistry } from "./featureRegistry";
@@ -417,7 +417,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 	private ensureControlsRebindWatcher() {
 		if (this.controlsRebindUnsubscribe) return;
 		this.controlsRebindUnsubscribe = subscribeToDomMutations(
-			`${pageReadinessSelectors.playerControlsLeft}, ${pageReadinessSelectors.playerControlsRight}`,
+			`${readinessSelectors.playerControlsLeft}, ${readinessSelectors.playerControlsRight}`,
 			() => {
 				// Placement itself appends buttons inside the controls, so debounce to keep those
 				// additions - and bursts of re-render mutations - from re-triggering the pass.

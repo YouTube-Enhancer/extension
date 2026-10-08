@@ -2,7 +2,7 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
+import { whenReady } from "@/src/utils/dom/readiness";
 import { waitForElement } from "@/src/utils/dom/wait";
 
 import { metadata } from "./index.metadata";
@@ -44,7 +44,7 @@ export default createFeature({
 
 async function setupRemainingTime() {
 	// Get the player element
-	const playerContainer = await waitForPagePlayer();
+	const playerContainer = await whenReady("pagePlayer");
 	// If player element is not available, return
 	if (!playerContainer) return;
 	// Get the video element
