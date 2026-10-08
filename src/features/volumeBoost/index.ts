@@ -1,5 +1,3 @@
-import type { YouTubePlayerDiv } from "@/src/types";
-
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
@@ -12,11 +10,10 @@ import {
 import { getTrackedButtonChecked } from "@/src/features/buttonController/buttonState";
 import { getFeatureIcon } from "@/src/icons";
 import { getAudioEngine } from "@/src/utils/audioEngine";
-import { waitForElement } from "@/src/utils/dom/wait";
+import { whenReady } from "@/src/utils/dom/readiness";
 import { sendContentOnlyMessage } from "@/src/utils/messaging";
 import { clampDb, STEP_DB } from "@/src/utils/misc";
 import { getOSDConfig, showOSD } from "@/src/utils/osd";
-import { isLivePage, isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
 import { applyVolumeBoostDb, setupVolumeBoost } from "./utils";
@@ -33,9 +30,7 @@ async function handleVolumeBoostScroll(event: WheelEvent) {
 	const { amount } = featureConfigManager.getLastOr("volumeBoost", metadata.defaults);
 	const newValue = clampDb(amount + delta);
 	sendContentOnlyMessage("setVolumeBoostAmount", newValue);
-	const playerContainer = await waitForElement<YouTubePlayerDiv>(
-		isWatchPage() || isLivePage() ? "div#movie_player" : "div#shorts-player"
-	);
+	const playerContainer = await whenReady("pagePlayer");
 	if (!playerContainer) return;
 	const onScreenDisplay = getOSDConfig();
 	if (onScreenDisplay) {

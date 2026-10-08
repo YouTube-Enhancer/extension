@@ -2,7 +2,7 @@ import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
+import { whenReady } from "@/src/utils/dom/readiness";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
@@ -27,7 +27,7 @@ export async function setupVolumeChangeListener(options?: { nativeVolume?: Nulla
 	const IsLivePage = isLivePage();
 	const IsShortsPage = isShortsPage();
 	if (!IsWatchPage && !IsLivePage && !IsShortsPage) return;
-	const playerContainer = await waitForPagePlayer();
+	const playerContainer = await whenReady("pagePlayer");
 	if (!playerContainer) return;
 	// The video element renders after the player shell on live pages; wait for it (scoped to the
 	// player) instead of missing the attach window entirely when the shell is up but the media

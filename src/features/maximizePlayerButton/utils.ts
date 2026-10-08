@@ -10,7 +10,7 @@ import {
 	updateFeatureButtonTitle
 } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
-import { waitForPagePlayerReady } from "@/src/utils/dom/pageReadiness";
+import { whenReady } from "@/src/utils/dom/readiness";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
 const maximizePlayerButtonStateAPI = registry.getStateAPI("maximizePlayerButton");
@@ -193,7 +193,7 @@ export async function maximizePlayer(timeout = 2500) {
 	const header = await waitForElement<HTMLElement>("#masthead-container", timeout);
 	if (!header) return;
 	// Wait for player to be fully loaded
-	const moviePlayer = await waitForPagePlayerReady({ timeout });
+	const moviePlayer = await whenReady("pagePlayerReady", { timeout });
 	if (!moviePlayer) return;
 	const inTheaterMode =
 		document

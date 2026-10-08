@@ -6,7 +6,7 @@ import { featurePlayerManager } from "@/src/features/_registry/featurePlayerMana
 import { getFeatureMenuConfig } from "@/src/ui/configProvider";
 import { createStyledElement, createSVGElement } from "@/src/utils/dom/elements";
 import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
-import { pageReadinessSelectors, waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
+import { readinessSelectors, whenReady } from "@/src/utils/dom/readiness";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
 import { isWatchPage } from "@/src/utils/url";
@@ -142,7 +142,7 @@ export async function enableFeatureMenu() {
 export async function enableFeatureMenuButton() {
 	if (!isWatchPage()) return;
 	if (document.querySelector(menuButtonId)) return;
-	if (document.querySelector(pageReadinessSelectors.playerControlsRight)) {
+	if (document.querySelector(readinessSelectors.playerControlsRight)) {
 		await createFeatureMenuButton();
 		return;
 	}
@@ -380,7 +380,7 @@ async function createFeatureMenuButton(): Promise<boolean> {
 	if (!container) return false;
 	container.insertAdjacentElement("afterend", featureMenuButton);
 
-	const playerContainer = await waitForPagePlayer();
+	const playerContainer = await whenReady("pagePlayer");
 	if (!playerContainer) return false;
 	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
 

@@ -10,14 +10,14 @@ import {
 	updateFeatureButtonTitle
 } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
-import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
+import { whenReady } from "@/src/utils/dom/readiness";
 
 import { metadata } from "./index.metadata";
 
 const speedButtonListener = async (direction: "backward" | "forward") => {
 	const { time } = featureConfigManager.getLastOr("forwardRewindButtons", metadata.defaults);
 	// Get the player element
-	const playerContainer = await waitForPagePlayer();
+	const playerContainer = await whenReady("pagePlayer");
 	// If player element is not available, return
 	if (!playerContainer) return;
 	if (!playerContainer.seekTo) return;
@@ -29,7 +29,7 @@ export default createFeature({
 	buttons: [
 		{
 			add: async ({ button: { fullscreenPlacement, placement }, time }) => {
-				const playerContainer = await waitForPagePlayer();
+				const playerContainer = await whenReady("pagePlayer");
 				if (!playerContainer) return;
 				const playerVideoData = await playerContainer.getVideoData();
 				if (playerVideoData.isLive) return;
@@ -72,7 +72,7 @@ export default createFeature({
 		{
 			add: async ({ button: { fullscreenPlacement, placement }, time }) => {
 				// Get the player element
-				const playerContainer = await waitForPagePlayer();
+				const playerContainer = await whenReady("pagePlayer");
 				// If player element is not available, return
 				if (!playerContainer) return;
 				const playerVideoData = await playerContainer.getVideoData();

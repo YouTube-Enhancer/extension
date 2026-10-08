@@ -18,6 +18,15 @@ The per-feature Map of last-applied configs inside the config store (`featureCon
 
 Config groups that are not registry features: `deepDarkCSS`, `featureMenu`, `onScreenDisplay`. Seeded with the snapshot; feature modules may update them through provider setters that write the same store.
 
+## Readiness seam
+
+Player-presence waits live in `src/utils/dom/readiness.ts` behind a single `whenReady(target, options)` interface. No `pageReadiness` module; call sites import readiness directly.
+
+- **Targets:** `pagePlayer`, `pagePlayerReady`, `moviePlayer`, `belowPlayerRoot`, `playerControls`, `playerShell`.
+- **Memo:** generation-shared by default for `pagePlayer` / `pagePlayerReady` (navigation + retry seam). Other targets are independent budget waits.
+- **Generic DOM waits** (`waitForElement`, `waitForAllElements`) stay in `src/utils/dom/wait`. Do not wait for the player through them; use `whenReady`.
+- **Mutation bus:** detached subscriber `parent`s are observed (refcounted roots). `domMutationBusCapabilities.supportsDetachedSubtrees` is true.
+
 ## Retry seam
 
 One in-process module for retry-shaped work: `featurePlayerManager` behind `registry.playerRetry`.

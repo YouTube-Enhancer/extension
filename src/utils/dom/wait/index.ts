@@ -1,5 +1,3 @@
-import type { YouTubePlayer } from "youtube-player/dist/types";
-
 import type { Nullable, Selector } from "@/src/types";
 
 import {
@@ -201,60 +199,5 @@ export function waitForElement<T extends Element>(
 			}
 			finish(null);
 		}, timeout);
-	});
-}
-/**
- * Waits until the YouTube player has fully initialized and is no longer in the "unstarted" state.
- *
- * This uses `getPlayerStateObject()` as the readiness signal, which becomes stable once the player
- * has loaded media state and is ready for interaction (e.g. audio tracks, playback state, etc.).
- *
- * @param player - The YouTube movie player element (`#movie_player`)
- * @param timeout - Maximum time to wait in milliseconds before rejecting (default: 10000ms)
- * @param options.isCancelled - Optional predicate; when it returns true the wait rejects and stops polling.
- *
- * @returns A promise that resolves with the initialized player element
- *
- * @throws If the player is null/undefined or fails to become ready within the timeout
- */
-export async function waitForPlayerLoaded(
-	player: Nullable<YouTubePlayer>,
-	timeout = 10000,
-	options?: { isCancelled?: () => boolean }
-): Promise<YouTubePlayer> {
-	if (!player) {
-		throw new Error("Player does not exist");
-	}
-	const start = performance.now();
-	return new Promise((resolve, reject) => {
-		const check = (): void => {
-			if (options?.isCancelled?.()) {
-				reject(new Error("Cancelled waiting for player to load"));
-				return;
-			}
-			let loaded = false;
-			try {
-				const state = player.getPlayerStateObject();
-				if (!state.isUnstarted || (!state.isBuffering && state.isUnstarted)) {
-					loaded = true;
-				}
-			} catch {}
-			if (!loaded) {
-				const video = (player as unknown as HTMLElement).querySelector("video");
-				if (video && video.readyState >= 2) {
-					loaded = true;
-				}
-			}
-			if (loaded) {
-				resolve(player);
-				return;
-			}
-			if (performance.now() - start >= timeout) {
-				reject(new Error("Timed out waiting for player to load"));
-				return;
-			}
-			requestAnimationFrame(check);
-		};
-		check();
 	});
 }

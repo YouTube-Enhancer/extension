@@ -164,6 +164,8 @@ Features access configuration through three mechanisms, in order of preference:
 
 **Retry seam:** All retry-shaped work goes through `registry.playerRetry` (`featurePlayerManager`). Budgets live on `PlayerRetryConfig` (`interval`, `maxAttempts`, `minIntervalBetweenAttempts`, …). Cancellation is generation supersede + optional `signal` + a lifecycle token aborted by `cancelRetries` before `onDisable`. Do not hand-roll bind-generation counters or click-spacing loops; put spacing in `minIntervalBetweenAttempts`.
 
+**Readiness seam:** Player presence is `whenReady(target, options)` from `@/src/utils/dom/readiness`. Prefer it over `waitForElement` for `#movie_player` / shorts player / player-ready. `pagePlayer` and `pagePlayerReady` memoize per navigation generation; other targets are one-shot budgets. Generic DOM waits stay in `@/src/utils/dom/wait`.
+
 **Do NOT use `waitForSpecificMessage("options"...)` for feature-internal config access.** This function is only for infrastructure: bootstrap, navigation re-reads, locale changes, and devtools. It has a 30s timeout but creates a message bus round-trip that is always slower than a synchronous store read.
 
 # Build and Dev Commands

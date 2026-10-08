@@ -1,7 +1,7 @@
 import type { ButtonPlacement, FullscreenPlacement, Nullable } from "@/src/types";
 
 import { createStyledElement } from "@/src/utils/dom/elements";
-import { pageReadinessSelectors, waitForBelowPlayerRoot } from "@/src/utils/dom/pageReadiness";
+import { readinessSelectors, whenReady } from "@/src/utils/dom/readiness";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
 
 import { buttonContainerId } from "./constants";
@@ -52,7 +52,7 @@ export async function getOrCreateButtonContainer(
 		parent.append(container);
 		return container;
 	}
-	const player = await waitForBelowPlayerRoot();
+	const player = await whenReady("belowPlayerRoot");
 	if (!player) return null;
 	player.insertAdjacentElement("afterend", container);
 	return container;
@@ -62,7 +62,7 @@ export function getOrCreateRightControlsContainer(): Nullable<HTMLDivElement> {
 	// Probe synchronously: a stripped page has no controls and must not burn the
 	// full wait budget; live pages render controls late, and callers defer.
 	const rightControls = document.querySelector<HTMLDivElement>(
-		pageReadinessSelectors.playerControlsRight
+		readinessSelectors.playerControlsRight
 	);
 	if (!rightControls) return null;
 	let container = rightControls.querySelector<HTMLDivElement>(`#${rightControlsContainerId}`);
@@ -88,9 +88,9 @@ export function getPlacementRoot(placement: ButtonPlacement) {
 		case "feature_menu":
 			return document.querySelector<HTMLDivElement>("#yte-feature-menu");
 		case "player_controls_left":
-			return document.querySelector<HTMLDivElement>(pageReadinessSelectors.playerControlsLeft);
+			return document.querySelector<HTMLDivElement>(readinessSelectors.playerControlsLeft);
 		case "player_controls_right":
-			return document.querySelector<HTMLDivElement>(pageReadinessSelectors.playerControlsRight);
+			return document.querySelector<HTMLDivElement>(readinessSelectors.playerControlsRight);
 	}
 }
 
@@ -100,11 +100,11 @@ export function getPlacementSelector(placement: ButtonPlacement): string | undef
 			? isNewYouTubeVideoLayout()
 				? "ytd-watch-grid"
 				: "ytd-watch-flexy"
-			: pageReadinessSelectors.belowPlayerRoot;
+			: readinessSelectors.belowPlayerRoot;
 	}
 	if (placement === "feature_menu") return "#yte-feature-menu";
-	if (placement === "player_controls_left") return pageReadinessSelectors.playerControlsLeft;
-	if (placement === "player_controls_right") return pageReadinessSelectors.playerControlsRight;
+	if (placement === "player_controls_left") return readinessSelectors.playerControlsLeft;
+	if (placement === "player_controls_right") return readinessSelectors.playerControlsRight;
 	return undefined;
 }
 
@@ -131,7 +131,7 @@ export async function placeButton(
 			let leftControls = containerCache.get(placement) as HTMLDivElement | undefined;
 			if (!leftControls) {
 				leftControls =
-					document.querySelector<HTMLDivElement>(pageReadinessSelectors.playerControlsLeft) ??
+					document.querySelector<HTMLDivElement>(readinessSelectors.playerControlsLeft) ??
 					undefined;
 				if (leftControls) containerCache.set(placement, leftControls);
 			}

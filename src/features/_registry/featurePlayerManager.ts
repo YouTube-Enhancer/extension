@@ -10,9 +10,8 @@ import { FeatureManagerBase } from "@/src/features/_registry/featureManagerBase"
 import {
 	getPagePlayerElement,
 	invalidatePageReadiness,
-	waitForPagePlayer,
-	waitForPagePlayerReady
-} from "@/src/utils/dom/pageReadiness";
+	whenReady
+} from "@/src/utils/dom/readiness";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
 export type PlayerRetryConfig = {
@@ -147,8 +146,8 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		}
 
 		const player = resolved.waitForLoaded
-			? await waitForPagePlayerReady({ isCancelled, timeout: resolved.overallTimeout })
-			: await waitForPagePlayer({ isCancelled, timeout: resolved.overallTimeout });
+			? await whenReady("pagePlayerReady", { isCancelled, timeout: resolved.overallTimeout })
+			: await whenReady("pagePlayer", { isCancelled, timeout: resolved.overallTimeout });
 
 		// A cleanup (navigation, disable) or a newer run for the feature superseded this one while it waited.
 		if (!player || isCancelled()) {
