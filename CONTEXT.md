@@ -24,6 +24,7 @@ Player-presence waits live in `src/utils/dom/readiness.ts` behind a single `when
 
 - **Targets:** `pagePlayer`, `pagePlayerReady`, `moviePlayer`, `belowPlayerRoot`, `playerControls`, `playerShell`.
 - **Memo:** generation-shared by default for `pagePlayer` / `pagePlayerReady` (navigation + retry seam). Other targets are independent budget waits.
+- **Live refine:** `refineLiveFlagFromPlayer` polls the movie player for `isLive` without importing URL classification. `refinePageTypeFromPlayer` in `utils/url` owns the watch gate and page-type cache write.
 - **Generic DOM waits** (`waitForElement`, `waitForAllElements`) stay in `src/utils/dom/wait`. Do not wait for the player through them; use `whenReady`.
 - **Mutation bus:** detached subscriber `parent`s are observed (refcounted roots). `domMutationBusCapabilities.supportsDetachedSubtrees` is true.
 
@@ -42,6 +43,10 @@ One in-process module for retry-shaped work: `featurePlayerManager` behind `regi
 - **SPA navigation:** `runNavigationPipeline` — reseed config, diff page + config, per-feature work list.
 - **No `enableAll`:** deleted; there is no full re-enable sweep entry.
 - **Placement recheck:** `placementNeedsRecheck(outcomes)` on buttonPlacement; callers schedule, they do not re-encode outcome meaning.
+
+## Navigation gate
+
+The navigation manager owns the in-flight gate. Events that arrive while a pipeline run is in flight are queued as a single pending event and drained in `processNavigation` finally (after live-refine re-arm). Signature + `VOLATILE_URL_PARAMS` live in `src/utils/url/signature.ts`, not on the manager.
 
 ## Embedded instance liveness
 

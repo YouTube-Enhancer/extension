@@ -1,44 +1,11 @@
 import type { PageType } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
-import { whenReady } from "@/src/utils/dom/readiness";
+import { refineLiveFlagFromPlayer } from "@/src/utils/dom/readiness";
 
 import { isSupportedYouTubeHostname } from "./constants";
 
 let cachedPageType: Nullable<PageType> = null;
-
-/**
- * Synchronous page classification from the URL alone.
- *
- * A `/watch` URL is classified as `"watch"` here even when the stream is live; live is refined
- * later from the player so registry init and first buttons are not blocked on player readiness.
- */
-export function classifyPageTypeFromUrl(href: string = window.location.href): Nullable<PageType> {
-	try {
-		if (typeof window === "undefined" || typeof document === "undefined") return null;
-		if (!isSupportedYouTubeHostname(window.location.hostname)) return null;
-		const [first, second] = extractSectionsFromYouTubeURL(href);
-		if (first === undefined) {
-			return window.location.pathname === "/" ? "home" : null;
-		}
-		if (first === "results") return "search";
-		if (first === "playlist") return "playlist";
-		if (first === "shorts") return "shorts";
-		if (first === "live") return "live";
-		if (first === "feed" && second === "subscriptions") return "subscriptions";
-		if (first?.startsWith("@")) {
-			if (second === undefined || second === "featured") return "channel_home";
-			if (second === "videos") return "channel_videos";
-			// The registry and the features that gate on them know these two pages; without this they were never detected.
-			if (second === "posts") return "channel_posts";
-			if (second === "streams") return "channel_streams";
-		}
-		if (first === "watch") return "watch";
-		return null;
-	} catch {
-		return null;
-	}
-}
 
 export function extractSectionsFromYouTubeURL(url: string): string[] {
 	let parsed: URL;
@@ -70,6 +37,7 @@ export function invalidatePageTypeCache() {
 	cachedPageType = null;
 }
 
+/** Channel home: `/@name` or `/@name/featured` (also `/c/name`). */
 export function isChannelHomePage() {
 	const [firstSection, secondSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return (
@@ -78,16 +46,34 @@ export function isChannelHomePage() {
 	);
 }
 
+/** Channel posts: `/@name/posts`. */
+export function isChannelPostsPage() {
+	const [firstSection, secondSection] = extractSectionsFromYouTubeURL(window.location.href);
+	return firstSection !== undefined && firstSection.startsWith("@") && secondSection === "posts";
+}
+
+/** Channel streams: `/@name/streams`. */
+export function isChannelStreamsPage() {
+	const [firstSection, secondSection] = extractSectionsFromYouTubeURL(window.location.href);
+	return firstSection !== undefined && firstSection.startsWith("@") && secondSection === "streams";
+}
+
+/** Channel videos: `/@name/videos`. */
 export function isChannelVideosPage() {
 	const [firstSection, secondSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return firstSection !== undefined && firstSection.startsWith("@") && secondSection === "videos";
 }
 
+/** Home: `/` with no path sections. */
 export function isHomePage() {
 	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return firstSection === undefined;
 }
 
+/**
+ * Live page. True for `/live/...` URLs and for a cached refine of a `/watch` URL
+ * that the player confirmed is live (`refinePageTypeFromPlayer`).
+ */
 export function isLivePage() {
 	if (cachedPageType) return cachedPageType === "live";
 	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
@@ -108,11 +94,18 @@ export function isPlaylistPage() {
 	return firstSection === "playlist";
 }
 
+/** Search results: `/results`. */
+export function isSearchPage() {
+	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
+	return firstSection === "results";
+}
+
 export function isShortsPage() {
 	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return firstSection === "shorts";
 }
 
+/** Subscriptions: `/feed/subscriptions`. */
 export function isSubscriptionsPage() {
 	const [firstSection, secondSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return firstSection === "feed" && secondSection === "subscriptions";
@@ -126,38 +119,48 @@ export function isWatchPage() {
 /**
  * When the cached type is `"watch"`, ask the player whether this video is actually live.
  * Resolves `"live"` or `"watch"`. Leaves other page types unchanged.
+ * The player poll lives in readiness (`refineLiveFlagFromPlayer`); this owns the cache write.
  */
 export async function refinePageTypeFromPlayer(): Promise<Nullable<PageType>> {
 	const current = getCurrentPageType();
 	if (current !== "watch") return current;
-	try {
-		const player = await whenReady("moviePlayer");
-		if (!player || typeof player.getVideoData !== "function") return "watch";
-		/**
-		 * After a single-page navigation the player can still report the previous video, so wait
-		 * until its video id matches the URL before trusting the live flag. Budget is shorter than
-		 * the old cold-load poll: classification no longer blocks on this refine.
-		 */
-		const urlVideoId = new URLSearchParams(window.location.search).get("v");
-		let playerData = await player.getVideoData();
-		for (
-			let attempt = 0;
-			attempt < 12 && urlVideoId && playerData?.video_id !== urlVideoId;
-			attempt++
-		) {
-			await new Promise((resolve) => setTimeout(resolve, 200));
-			playerData = await player.getVideoData();
-		}
-		if (playerData?.isLive && (!urlVideoId || playerData.video_id === urlVideoId)) {
-			cachedPageType = "live";
-			return "live";
-		}
-		return "watch";
-	} catch {
-		return "watch";
+	const urlVideoId = new URLSearchParams(window.location.search).get("v");
+	const isLive = await refineLiveFlagFromPlayer({ urlVideoId });
+	if (isLive) {
+		cachedPageType = "live";
+		return "live";
 	}
+	return "watch";
 }
 
-export function setPageType(pageType: PageType): void {
-	cachedPageType = pageType;
+/**
+ * Synchronous page classification from the URL alone.
+ *
+ * A `/watch` URL is classified as `"watch"` here even when the stream is live; live is refined
+ * later from the player so registry init and first buttons are not blocked on player readiness.
+ * Uses the `is*Page` helpers so path rules stay in one place.
+ */
+function classifyPageTypeFromUrl(): Nullable<PageType> {
+	try {
+		if (typeof window === "undefined" || typeof document === "undefined") return null;
+		if (!isSupportedYouTubeHostname(window.location.hostname)) return null;
+		if (isHomePage()) {
+			return window.location.pathname === "/" ? "home" : null;
+		}
+		if (isSearchPage()) return "search";
+		if (isPlaylistPage()) return "playlist";
+		if (isShortsPage()) return "shorts";
+		// Path-based /live only; refined live streams stay classified via the cache in isLivePage.
+		const [first] = extractSectionsFromYouTubeURL(window.location.href);
+		if (first === "live") return "live";
+		if (isSubscriptionsPage()) return "subscriptions";
+		if (isChannelHomePage()) return "channel_home";
+		if (isChannelVideosPage()) return "channel_videos";
+		if (isChannelPostsPage()) return "channel_posts";
+		if (isChannelStreamsPage()) return "channel_streams";
+		if (isWatchPage()) return "watch";
+		return null;
+	} catch {
+		return null;
+	}
 }
