@@ -7,7 +7,7 @@ import {
 	updateFeatureButtonTitle,
 	updateFeatureMenuItemLabel
 } from "@/src/features/buttonController";
-import { getTrackedButtonChecked } from "@/src/features/buttonController/buttonState";
+import { getTrackedButtonChecked } from "@/src/features/buttonController/buttonPlacementState";
 import { getFeatureIcon } from "@/src/icons";
 import { getAudioEngine } from "@/src/utils/audioEngine";
 import { whenReady } from "@/src/utils/dom/readiness";

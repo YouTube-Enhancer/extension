@@ -5,9 +5,9 @@ import { registry } from "@/src/features/_registry/featureRegistry";
 import {
 	bindFeatureMenuEventListeners,
 	enableFeatureMenu,
-	getButtonConfig,
 	hasFeaturesInMenu,
 	refreshAllLabels,
+	resolveButtonConfig,
 	updateFeatureMenuTitle
 } from "@/src/features/buttonController";
 import { i18nService } from "@/src/i18n";
@@ -60,7 +60,7 @@ function reverifyMenuButtonPlacement() {
 		if (!registry.hasButtons(feature, feature.id)) continue;
 		const config = registry.getConfigOr(feature.id, feature.defaults);
 		const menuPlaced = feature.buttons.some(
-			(button) => getButtonConfig(config, button.name)?.placement === "feature_menu"
+			(button) => resolveButtonConfig(config, feature.id, button.name)?.placement === "feature_menu"
 		);
 		if (!menuPlaced) continue;
 		// Config is unchanged, so the reconcile is placement-only: the enabled state does not move.

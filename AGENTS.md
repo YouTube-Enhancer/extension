@@ -104,8 +104,7 @@ These modules do not have registration in the feature registry and are not indep
 ### Where to Put Shared Logic:
 
 - Use `src/utils/` for general utilities
-- Use `src/features/buttonController/` for button-related helpers
-- Use `src/features/featureMenu/` for menu-related helpers
+- Use `src/features/buttonController/` for button and feature-menu helpers (the feature menu is infrastructure, not a registered feature)
 
 ## CSS Toggle Features
 
@@ -141,6 +140,8 @@ Features should use name-based controller APIs instead of reaching into the DOM 
 | `getTrackedButtonChecked(name)`             | `getFeatureMenuItem(name)?.ariaChecked === "true"`                      | Reads from tracked state, not DOM |
 | `updateFeatureButtonChecked(name, checked)` | Direct `setAttribute("aria-checked", ...)`                              | Syncs DOM + tracked state         |
 | `hasFeaturesInMenu()`                       | `featuresInMenu.size > 0`                                               | No mutable Set export             |
+
+**Button placement:** Orchestrator calls `buttonPlacement` directly (`placeFeatureButtons` / `placeFeaturesByPriority` / `invalidateCache`). Tracked buttons and container nodes live in `buttonPlacementState`. Button config resolves with `resolveButtonConfig(config, featureId, buttonName)` from metadata (`button` vs `buttons` path) — do not probe both shapes at call sites.
 
 # Runtime Lifecycle
 
