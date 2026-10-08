@@ -2,6 +2,13 @@ import type { Nullable } from "@/src/types";
 
 import { type CleanupHandle, setupYouTubePage } from "@/src/_setup/embedded/lifecycle";
 import { DEV_MODE } from "@/src/utils/config/env";
+import {
+	claimSlot,
+	getActiveSlotId,
+	isSlotHeldBy,
+	markReady,
+	releaseSlot
+} from "@/src/utils/embedded/instanceLiveness";
 import { browserColorLog } from "@/src/utils/logging";
 import { formatError } from "@/utils/format/error";
 
@@ -16,25 +23,21 @@ let setupInProgress = false;
  * protocol; production only waits briefly and takes over (no dev messages).
  */
 async function claimInstanceSlot(): Promise<void> {
-	const { __yteEmbeddedActiveId: existing } = window;
-	if (!existing || existing === INSTANCE_ID) {
-		window.__yteEmbeddedActiveId = INSTANCE_ID;
-		return;
-	}
-	if (DEV_MODE) {
-		const { DEV_RELOAD_SOURCE } = await import("@/src/utils/dev/hotReload");
-		window.postMessage(
-			{ source: DEV_RELOAD_SOURCE, type: "dispose" } satisfies {
-				source: typeof DEV_RELOAD_SOURCE;
-				type: "dispose";
-			},
-			"*"
-		);
-		await waitForSlotRelease(1500);
-	} else {
-		await waitForSlotRelease(200);
-	}
-	window.__yteEmbeddedActiveId = INSTANCE_ID;
+	await claimSlot(INSTANCE_ID, {
+		onTakeover: async () => {
+			if (!DEV_MODE) return;
+			const { DEV_RELOAD_SOURCE } = await import("@/src/utils/dev/hotReload");
+			window.postMessage(
+				{ source: DEV_RELOAD_SOURCE, type: "dispose" } satisfies {
+					source: typeof DEV_RELOAD_SOURCE;
+					type: "dispose";
+				},
+				"*"
+			);
+		},
+		pollMs: 50,
+		timeoutMs: DEV_MODE ? 1500 : 200
+	});
 }
 
 function initSetup() {
@@ -48,41 +51,22 @@ function initSetup() {
 		.then(() => setupYouTubePage())
 		.then((handle) => {
 			// A newer instance may have claimed the slot while we were setting up.
-			if (window.__yteEmbeddedActiveId !== INSTANCE_ID) {
+			if (!isSlotHeldBy(INSTANCE_ID) || getActiveSlotId() !== INSTANCE_ID) {
 				void handle.dispose({ disableFeatures: true });
 				return;
 			}
 			cleanupHandle = handle;
+			// Cross-world readiness for the content script's storage-forwarding gate.
+			markReady(INSTANCE_ID);
 			return undefined;
 		})
 		.finally(() => {
 			setupInProgress = false;
 		})
 		.catch((err) => {
-			releaseInstanceSlot();
+			releaseSlot(INSTANCE_ID);
 			browserColorLog(`Setup failed: ${formatError(err)}`, "FgRed");
 		});
-}
-
-function releaseInstanceSlot(): void {
-	if (window.__yteEmbeddedActiveId === INSTANCE_ID) {
-		window.__yteEmbeddedActiveId = undefined;
-	}
-}
-
-async function waitForSlotRelease(timeoutMs: number): Promise<void> {
-	await new Promise<void>((resolve) => {
-		const started = Date.now();
-		const poll = () => {
-			const { __yteEmbeddedActiveId: active } = window;
-			if (!active || active === INSTANCE_ID || Date.now() - started >= timeoutMs) {
-				resolve();
-				return;
-			}
-			setTimeout(poll, 50);
-		};
-		poll();
-	});
 }
 
 if (window.self === window.top) {
@@ -102,7 +86,7 @@ const onPageHide = (event: PageTransitionEvent) => {
 	if (event.persisted) return;
 	void cleanupHandle?.dispose();
 	cleanupHandle = null;
-	releaseInstanceSlot();
+	releaseSlot(INSTANCE_ID);
 };
 const onPageShow = () => {
 	if (!cleanupHandle) {
@@ -164,7 +148,7 @@ async function startHotReloadBridge(): Promise<void> {
 			console.error("Hot reload dispose failed:", error);
 		} finally {
 			cleanupHandle = null;
-			releaseInstanceSlot();
+			releaseSlot(INSTANCE_ID);
 			window.removeEventListener("pagehide", onPageHide);
 			window.removeEventListener("pageshow", onPageShow);
 			window.removeEventListener("error", onError);
