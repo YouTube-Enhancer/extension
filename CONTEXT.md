@@ -36,6 +36,13 @@ One in-process module for retry-shaped work: `featurePlayerManager` behind `regi
 - **Cancellation:** generation supersede per key; optional caller `AbortSignal`; lifecycle token aborted by `cancelRetries` **before** `onDisable`. `onPlayerStateChange` re-queues check the token.
 - **Not behind this seam:** `waitForElement` / page readiness waits (candidate 03).
 
+## Enablement entry points
+
+- **Cold load:** `registry.enableRegisteredForCurrentPage()` — page-matching features not yet enabled; priority placement batch then lifecycle.
+- **SPA navigation:** `runNavigationPipeline` — reseed config, diff page + config, per-feature work list.
+- **No `enableAll`:** deleted; there is no full re-enable sweep entry.
+- **Placement recheck:** `placementNeedsRecheck(outcomes)` on buttonPlacement; callers schedule, they do not re-encode outcome meaning.
+
 ## Embedded instance liveness
 
 Page-wide protocol that prevents stacked embedded scripts and gates content-script storage forwarding.
@@ -52,8 +59,8 @@ What button placement reports after a pass: `deferred | inactive | landed | remo
 
 ## Placement state
 
-Module-owned maps in uttonPlacementState.ts: tracked feature buttons (name to state) and placement container nodes. Name-based accessors only; no second public map of what landed.
+Module-owned maps in buttonPlacementState.ts: tracked feature buttons (name to state) and placement container nodes. Name-based accessors only; no second public map of what landed.
 
 ## Button config path
 
-Button settings resolve via feature metadata (utton.path = utton or uttons) through esolveButtonConfig(config, featureId, buttonName). No dual-shape probe at placement time.
+Button settings resolve via feature metadata (button.path = button or buttons) through resolveButtonConfig(config, featureId, buttonName). No dual-shape probe at placement time.

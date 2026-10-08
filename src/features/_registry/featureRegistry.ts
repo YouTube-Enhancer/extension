@@ -74,11 +74,10 @@ export class FeatureRegistry extends FeatureManagerBase {
 		disposeAllFeatureSessions();
 	}
 
-	async enableAll(options: Partial<configuration>) {
-		await this.orchestrator.enableAll(options);
-	}
-
-	/** Enable registered features that match the current page and are not enabled yet. */
+	/**
+	 * Enable registered features that match the current page gate and are not enabled yet.
+	 * Cold-load entry: same placement batch the navigation pipeline uses.
+	 */
 	async enableRegisteredForCurrentPage(): Promise<void> {
 		await this.orchestrator.enableRegisteredForCurrentPage();
 	}

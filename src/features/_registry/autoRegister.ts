@@ -12,6 +12,22 @@ import { metadataRegistry } from "./featureMetadataRegistry";
 import { registry } from "./featureRegistry";
 
 /**
+ * Glob keys modules by directory name; phases are keyed by feature id.
+ * The index is feature id → import function after this mapping.
+ */
+export function buildModuleIndex(
+	allModules: Record<string, () => Promise<{ default?: AnyFeatureBase }>>
+): Map<FeatureKeys, () => Promise<{ default?: AnyFeatureBase }>> {
+	const moduleById = new Map<FeatureKeys, () => Promise<{ default?: AnyFeatureBase }>>();
+	for (const path of Object.keys(allModules)) {
+		const { [path]: importFn } = allModules;
+		const match = path.match(/\/src\/features\/([^/]+)\//);
+		if (match && importFn) moduleById.set(match[1] as FeatureKeys, importFn);
+	}
+	return moduleById;
+}
+
+/**
  * Register all features for runtime.
  * Lazily imports each feature chunk and registers it with the registry.
  * Features are loaded in phases based on their metadata's loadPhase:
@@ -26,29 +42,10 @@ export async function registerAllFeatures(
 	const state =
 		initialState ?? (await waitForSpecificMessage("state", "request_data", "extension")).data;
 
-	// Build lookup: featureId → import function
-	const moduleById = new Map<FeatureKeys, () => Promise<{ default?: AnyFeatureBase }>>();
-	for (const [path, importFn] of Object.entries(allModules) as [
-		string,
-		() => Promise<{ default?: AnyFeatureBase }>
-	][]) {
-		const match = path.match(/\/src\/features\/([^/]+)\//);
-		if (match) moduleById.set(match[1] as FeatureKeys, importFn);
-	}
+	const moduleById = buildModuleIndex(allModules);
+	warnOnMissingFeatureDirectories(moduleById);
 
 	const phases = metadataRegistry.getFeaturesByLoadPhase();
-
-	// The glob keys modules by directory name, but phases are keyed by feature id. A directory whose
-	// name differs from its feature id would be silently skipped at import time, so list every
-	// mismatch here instead of letting the feature fail to register with no trace.
-	for (const { id } of metadataRegistry.getAll()) {
-		if (!moduleById.has(id)) {
-			console.warn(
-				`[features] Feature "${id}" has no src/features/${id}/ directory. ` +
-					"The directory name must match the feature id, or the feature will never register."
-			);
-		}
-	}
 
 	// Phase 0: Import immediately
 	const phase0 = phases.get(0) ?? [];
@@ -69,6 +66,20 @@ export async function registerAllFeatures(
 	if (phase2.length > 0) {
 		await waitForIdle(500);
 		await Promise.all(phase2.map((id) => importFeature(id, moduleById, state)));
+	}
+}
+
+/** A directory whose name differs from its feature id would be silently skipped at import time. */
+export function warnOnMissingFeatureDirectories(
+	moduleById: Map<FeatureKeys, () => Promise<{ default?: AnyFeatureBase }>>
+): void {
+	for (const { id } of metadataRegistry.getAll()) {
+		if (!moduleById.has(id)) {
+			console.warn(
+				`[features] Feature "${id}" has no src/features/${id}/ directory. ` +
+					"The directory name must match the feature id, or the feature will never register."
+			);
+		}
 	}
 }
 
