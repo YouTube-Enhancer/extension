@@ -5,6 +5,7 @@ import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
+import { metadata as playbackSpeedButtonsMetadata } from "@/src/features/playbackSpeedButtons/index.metadata";
 import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
@@ -29,6 +30,7 @@ import {
 import { parseChannelSpeeds } from "./utils";
 
 const speedValueRegex = /(\d+(?:\.\d+)?)/;
+const { defaults: playbackSpeedButtonsDefaults } = playbackSpeedButtonsMetadata;
 
 export async function setPlayerSpeed(speed: number) {
 	// Only the extension's own speed controls call this, on the user's behalf: the change is the user's choice
@@ -50,7 +52,7 @@ export async function setPlayerSpeed(speed: number) {
 }
 
 function getPlaybackSpeedPerClick() {
-	return featureConfigManager.getLast("playbackSpeedButtons").speed;
+	return featureConfigManager.getLastOr("playbackSpeedButtons", playbackSpeedButtonsDefaults).speed;
 }
 /**
  * Returns the video id of the video that the current URL points to, or null when not on watch/shorts.

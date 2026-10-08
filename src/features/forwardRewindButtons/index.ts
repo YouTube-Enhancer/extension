@@ -15,7 +15,7 @@ import { waitForPagePlayer } from "@/src/utils/dom/pageReadiness";
 import { metadata } from "./index.metadata";
 
 const speedButtonListener = async (direction: "backward" | "forward") => {
-	const { time } = featureConfigManager.getLast("forwardRewindButtons");
+	const { time } = featureConfigManager.getLastOr("forwardRewindButtons", metadata.defaults);
 	// Get the player element
 	const playerContainer = await waitForPagePlayer();
 	// If player element is not available, return

@@ -154,11 +154,13 @@ Features should use name-based controller APIs instead of reaching into the DOM 
 
 Features access configuration through three mechanisms, in order of preference:
 
-1. **Lifecycle callbacks** — `onEnable(config)`, `onDisable(config)`, `onConfigChange(config)` receive config directly. Use this when the feature already receives the config it needs.
+1. **Lifecycle callbacks** — `onEnable(config)`, `onDisable(config)`, `onConfigChange(config)` receive config directly. Stateful features get `lastConfig ?? feature.defaults` so lifecycle never sees an unseeded hole.
 
-2. **`featureConfigManager.getLast(id)`** — Synchronous read of any feature's cached config. Use this in event handlers, button click callbacks, or cross-feature reads. Throws if the feature hasn't been initialized yet (guard with try/catch).
+2. **`featureConfigManager.getLastOr(id, defaults)`** — Synchronous read of any feature's cached config. Use this in event handlers, button click callbacks, or cross-feature reads. `getLast(id)` returns `undefined` when unseeded and never throws; prefer `getLastOr` with metadata defaults when a value is required.
 
-3. **Dedicated config stores** — For core features not in the registry (`onScreenDisplay`, `featureMenu`, `deepDarkCSS`). Seeded at startup, fed by config change broadcasts. Examples: `getOnScreenDisplayConfig()`, `getFeatureMenuConfig()`, `getDeepDarkCSSConfig()`.
+3. **Core slices via `configProvider`** — For core features not in the registry (`onScreenDisplay`, `featureMenu`, `deepDarkCSS`). Seeded at startup, fed by config change broadcasts. Examples: `getOnScreenDisplayConfig()`, `getFeatureMenuConfig()`, `getDeepDarkCSSConfig()`. Core-slice setters (`setDeepDarkCSSConfig`, etc.) write through the same store.
+
+**Config store write rule:** `configProvider` is the sole writer. Bootstrap and navigation call `seed` / `reseedForNavigation`; storage broadcasts and orchestrator config changes go through `applyFeatureConfig`. Do not call `featureConfigManager.setLast` from feature modules.
 
 **Do NOT use `waitForSpecificMessage("options"...)` for feature-internal config access.** This function is only for infrastructure: bootstrap, navigation re-reads, locale changes, and devtools. It has a 30s timeout but creates a message bus round-trip that is always slower than a synchronous store read.
 

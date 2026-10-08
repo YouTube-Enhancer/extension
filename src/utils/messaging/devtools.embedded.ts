@@ -63,12 +63,8 @@ const handleDevToolsMessage = async <T extends DevToolsMessageType>(
 				const features = registry.getAll();
 				const configs = {} as { [K in FeatureKeys]?: configuration[K] };
 				for (const feature of features) {
-					try {
-						(configs as Record<string, configuration[FeatureKeys]>)[feature.id] =
-							registry.getConfig(feature.id);
-					} catch {
-						(configs as Record<string, configuration[FeatureKeys]>)[feature.id] = feature.defaults;
-					}
+					const config = registry.getConfigOr(feature.id, feature.defaults);
+					(configs as Record<string, configuration[FeatureKeys]>)[feature.id] = config;
 				}
 
 				return {
@@ -92,11 +88,7 @@ const handleDevToolsMessage = async <T extends DevToolsMessageType>(
 				const feature = registry.getFeature(message.data.id);
 				let config: configuration[FeatureKeys] | undefined;
 				if (feature) {
-					try {
-						config = registry.getConfig(message.data.id);
-					} catch {
-						config = feature.defaults;
-					}
+					config = registry.getConfigOr(message.data.id, feature.defaults);
 				}
 
 				return {
