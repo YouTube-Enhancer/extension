@@ -2,11 +2,18 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { captionsAvailable } from "@/src/utils/dom/captions";
+import {
+	captionsAvailable,
+	clearCaptionsConflictArbiter,
+	isCaptionsConflictArbiter,
+	markCaptionsConflictArbiter
+} from "@/src/utils/dom/captions";
 import { playerShowsPageVideo } from "@/src/utils/dom/player";
 import { whenReady } from "@/src/utils/dom/readiness";
 
 import { metadata } from "./index.metadata";
+
+const FEATURE_ID = "automaticallyDisableClosedCaptions";
 
 let captionsWhereEnabled = false;
 // Attempts in a row that found captions off while the video and its caption track were showing.
@@ -58,6 +65,12 @@ async function disableCaptionsTask(): Promise<boolean> {
 		quietAttempts = 0;
 		return false;
 	}
+	/**
+	 * The captions feature the user enabled last owns the captions state. When the
+	 * conflicting feature was enabled later, its retry is the one that decides - this
+	 * run ends without clicking so its clicks cannot be overridden by this one.
+	 */
+	if (!isCaptionsConflictArbiter(FEATURE_ID)) return true;
 	if (subtitlesButton.getAttribute("aria-pressed") !== "true") {
 		quietAttempts += 1;
 		return quietAttempts >= 2;
@@ -72,6 +85,8 @@ async function disableCaptionsTask(): Promise<boolean> {
 export default createFeature({
 	...metadata,
 	onDisable: async () => {
+		// A surviving captions feature (if any) acts again once this one stops owning the state.
+		clearCaptionsConflictArbiter(FEATURE_ID);
 		// Lifecycle already aborted this feature's player retries before onDisable runs
 		const subtitlesButton = await clickSubtitlesButton();
 		// If player element is not available, return
@@ -82,6 +97,8 @@ export default createFeature({
 		subtitlesButton.click();
 	},
 	onEnable: async () => {
+		// Last-enabled feature owns the captions state; the rival feature's retry stands down.
+		markCaptionsConflictArbiter(FEATURE_ID);
 		const subtitlesButton = await clickSubtitlesButton();
 		// If player element is not available, return
 		if (!subtitlesButton) return;
