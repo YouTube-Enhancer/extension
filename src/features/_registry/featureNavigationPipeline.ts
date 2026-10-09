@@ -37,9 +37,8 @@ type NavigationPipelineDeps = {
 type PreviousConfigs = Map<FeatureKeys, configuration[FeatureKeys]>;
 
 /**
- * One SPA navigation used to re-run enableAll over every feature, then walk every feature again
- * through updateFeatureOnNavigation (which could place buttons a second time). This module diffs
- * page + config and only runs the work that actually changed.
+ * One SPA navigation: reseed config, then walk each feature with a diffed work list
+ * (page gate + config change) instead of a full enableAll sweep.
  *
  * Placement outcomes decide recheck work: unchanged + landed buttons do not schedule a 3s re-pass.
  * Same-feature buttons stay sequential: each feature is fully processed before the next starts.
