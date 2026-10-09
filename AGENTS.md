@@ -41,7 +41,7 @@ Only modules that follow this contract qualify as features:
 
 1. Must be registered in the registry via `registry.register(feature)`
 2. Must have a valid `metadata` object with `id`, `defaults`, and `schemaInput`
-3. Must use the `createFeature()` wrapper function
+3. Must use the `createFeature()` wrapper (provides typed `config` on lifecycle callbacks without `satisfies` at each call site)
 
 ### Constraints:
 
@@ -79,7 +79,6 @@ Modules inside `src/features/` that are not features include:
   - `ButtonController.ts` - Button CRUD, tracked state, theme helpers
   - `containerTracking.ts` - Fullscreen/theater/geometry observers, container creation
   - `featureMenu.ts` - Menu DOM, event listeners, item management
-- `src/features/featureMenu/` - Feature menu helpers
 - `src/features/_registry/` - Feature registry system including `createCssToggleFeature` factory
 
 These modules do not have registration in the feature registry and are not independently toggleable.
@@ -165,7 +164,9 @@ Features access configuration through three mechanisms, in order of preference:
 
 **Retry seam:** All retry-shaped work goes through `registry.playerRetry` (`featurePlayerManager`). Budgets live on `PlayerRetryConfig` (`interval`, `maxAttempts`, `minIntervalBetweenAttempts`, …). Cancellation is generation supersede + optional `signal` + a lifecycle token aborted by `cancelRetries` before `onDisable`. Do not hand-roll bind-generation counters or click-spacing loops; put spacing in `minIntervalBetweenAttempts`.
 
-**Readiness seam:** Player presence is `whenReady(target, options)` from `@/src/utils/dom/readiness`. Prefer it over `waitForElement` for `#movie_player` / shorts player / player-ready. `pagePlayer` and `pagePlayerReady` memoize per navigation generation; other targets are one-shot budgets. Generic DOM waits stay in `@/src/utils/dom/wait`.
+**Readiness seam:** Player presence is `whenReady(target, options)` from `@/src/utils/dom/readiness`. Prefer it over `waitForElement` for `#movie_player` / shorts player / player-ready. `pagePlayer` and `pagePlayerReady` memoize per navigation generation; other targets are one-shot budgets. Generic DOM waits stay in `@/src/utils/dom/wait`. A timed-out memoized wait is cleared so the next call (playerRetry) starts fresh.
+
+**Navigation gate:** Events that arrive while a navigation pipeline run is in flight are queued and drained after the run. Signature + `VOLATILE_URL_PARAMS` live in `@/src/utils/url/signature`. Classify pages with the `is*Page` helpers in `@/src/utils/url`.
 
 **Do NOT use `waitForSpecificMessage("options"...)` for feature-internal config access.** This function is only for infrastructure: bootstrap, navigation re-reads, locale changes, and devtools. It has a 30s timeout but creates a message bus round-trip that is always slower than a synchronous store read.
 
