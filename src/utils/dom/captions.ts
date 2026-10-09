@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 /**
  * Whether the player offers captions right now. YouTube hides the subtitles button while the video has no caption
@@ -22,4 +22,30 @@ export function captionsAvailable(
 	} catch {
 		return true;
 	}
+}
+
+/**
+ * Conflict arbitration between the captions features (auto-enable vs auto-disable).
+ *
+ * Both install competing player retries whose tasks click the subtitles button, and
+ * each run used to end on its first successful click - so whichever feature's retry
+ * tick happened to land last decided the captions state, not the feature the user
+ * enabled last. The last feature to be enabled marks itself as arbiter; a
+ * non-arbiter's retry ends on its next attempt without clicking, which is what
+ * "last-enabled determines captions state" requires. Disabling the arbiter clears
+ * the role so a still-enabled feature acts again.
+ */
+let captionsConflictArbiter: Nullable<string> = null;
+
+export function clearCaptionsConflictArbiter(featureId: string): void {
+	if (captionsConflictArbiter === featureId) captionsConflictArbiter = null;
+}
+
+/** Whether `featureId` may act on captions: no conflict yet, or it is the last-enabled one. */
+export function isCaptionsConflictArbiter(featureId: string): boolean {
+	return captionsConflictArbiter === null || captionsConflictArbiter === featureId;
+}
+
+export function markCaptionsConflictArbiter(featureId: string): void {
+	captionsConflictArbiter = featureId;
 }
