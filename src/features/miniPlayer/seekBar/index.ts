@@ -1,6 +1,7 @@
 import type { Nullable } from "@/src/types";
 
 import { MINI_SEEK_BAR_CLASS } from "@/src/features/miniPlayer/constants";
+import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 import { clamp } from "@/src/utils/math";
 
 import type { StoryboardRenderer, StoryboardSheet } from "./core";
@@ -243,9 +244,12 @@ export function attachMiniSeekBar({
 		controlsHost.removeEventListener("pointerenter", onControlsPointer);
 		controlsHost.removeEventListener("pointermove", onControlsPointer);
 	});
-	const autohideObserver = new MutationObserver(syncVisibility);
-	autohideObserver.observe(controlsHost, { attributeFilter: ["class"], attributes: true });
-	disposers.push(() => autohideObserver.disconnect());
+	const unsubscribeAutohideBus = subscribeToDomMutations(
+		".html5-video-player",
+		() => syncVisibility(),
+		{ attributeFilter: ["class"] }
+	);
+	disposers.push(unsubscribeAutohideBus);
 	disposers.push(onMediaChanged(onMediaChange));
 	disposers.push(unbindVideo);
 	bindVideo();
