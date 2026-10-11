@@ -8,6 +8,10 @@ import type { Nullable } from "@/src/types";
 
 import { FeatureManagerBase } from "@/src/features/_registry/featureManagerBase";
 import {
+	subscribeToDomMutations,
+	type UnsubscribeFromDomMutations
+} from "@/src/utils/dom/observers/domMutationBus";
+import {
 	getPagePlayerElement,
 	invalidatePageReadiness,
 	whenReady
@@ -54,7 +58,7 @@ type ActiveRetryState = {
 };
 
 type PlayerStateHookEntry = {
-	adObserver: Nullable<MutationObserver>;
+	adObserverUnsubscribe: Nullable<UnsubscribeFromDomMutations>;
 	cooldownId: Nullable<ReturnType<typeof setTimeout>>;
 	featureId: PlayerRetryKey;
 	handler: () => void;
@@ -319,7 +323,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		const entry = this.stateHooks.get(featureId);
 		if (!entry) return;
 		if (entry.cooldownId) clearTimeout(entry.cooldownId);
-		entry.adObserver?.disconnect();
+		entry.adObserverUnsubscribe?.();
 		const player = getPagePlayerElement();
 		if (player) {
 			player.removeEventListener("onStateChange", entry.handler);
@@ -339,7 +343,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		};
 
 		const entry: PlayerStateHookEntry = {
-			adObserver: null,
+			adObserverUnsubscribe: null,
 			cooldownId: null,
 			featureId,
 			handler,
@@ -359,19 +363,24 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		 * YouTube keeps on the player while an ad shows is watched as well, and the tasks run once it clears.
 		 */
 		let adWasShowing = player.classList.contains("ad-showing");
-		entry.adObserver = new MutationObserver(() => {
-			if (token.aborted) {
-				entry.adObserver?.disconnect();
-				return;
-			}
-			const adShowing = player.classList.contains("ad-showing");
-			if (adWasShowing && !adShowing) {
-				entry.lastRun = Date.now();
-				trigger();
-			}
-			adWasShowing = adShowing;
-		});
-		entry.adObserver.observe(player, { attributeFilter: ["class"], attributes: true });
+		entry.adObserverUnsubscribe = subscribeToDomMutations(
+			"div#movie_player, div#shorts-player",
+			(elements) => {
+				if (token.aborted) {
+					entry.adObserverUnsubscribe?.();
+					entry.adObserverUnsubscribe = null;
+					return;
+				}
+				if (!elements.includes(player)) return;
+				const adShowing = player.classList.contains("ad-showing");
+				if (adWasShowing && !adShowing) {
+					entry.lastRun = Date.now();
+					trigger();
+				}
+				adWasShowing = adShowing;
+			},
+			{ attributeFilter: ["class"] }
+		);
 	}
 }
 
