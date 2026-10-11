@@ -37,6 +37,8 @@ interface YTDPlaylistVideoRenderer extends HTMLElement {
 }
 
 let playlistUnsubscribeBus: Nullable<UnsubscribeFromDomMutations> = null;
+/** Trailing debounce handle coalescing bus bursts into one button pass; see observePlaylist. */
+let passesDebounce: Nullable<ReturnType<typeof setTimeout>> = null;
 let preparePageDisposeListener: Nullable<(event: Event) => void> = null;
 let removeAllButton: Nullable<HTMLButtonElement> = null;
 /**
@@ -47,6 +49,10 @@ let setupGeneration = 0;
 
 const cleanupPlaylistManagementButtons = () => {
 	setupGeneration++;
+	if (passesDebounce) {
+		clearTimeout(passesDebounce);
+		passesDebounce = null;
+	}
 	if (playlistUnsubscribeBus) {
 		playlistUnsubscribeBus();
 		playlistUnsubscribeBus = null;
@@ -272,12 +278,24 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 			if (isStale()) return;
 			const container = document.querySelector("ytd-playlist-video-list-renderer");
 			if (container) {
+				/**
+				 * Two deltas from the direct observer this replaces, both needed to keep the old
+				 * convergence behaviour: "*" re-runs the passes for any insertion under the list, not
+				 * only item-shaped ones, and the trailing debounce restores the batching the shared bus
+				 * gives up by answering per mutation record. Without the debounce a scroll burst
+				 * interleaves hundreds of async passes over the same rows, and rows rebuilt mid-burst
+				 * never end up with their buttons.
+				 */
 				playlistUnsubscribeBus = subscribeToDomMutations(
-					PLAYLIST_ITEM_SELECTOR,
+					"*",
 					() => {
-						if (isStale()) return;
-						void addButtonToPlaylistItems();
-						void addRemoveAllButton();
+						if (isStale() || passesDebounce) return;
+						passesDebounce = setTimeout(() => {
+							passesDebounce = null;
+							if (isStale()) return;
+							void addButtonToPlaylistItems();
+							void addRemoveAllButton();
+						}, 100);
 					},
 					{ parent: container }
 				);
