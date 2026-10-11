@@ -1,17 +1,22 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import "./index.css";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
+import { isFullscreen } from "@/src/features/buttonController/placementTransition";
 import { modifyElementClassList } from "@/src/utils/dom/classList";
+import {
+	subscribeToDomMutations,
+	type UnsubscribeFromDomMutations
+} from "@/src/utils/dom/observers/domMutationBus";
 import { playerShowsPageVideo } from "@/src/utils/dom/player";
 
 import { metadata } from "./index.metadata";
 
 let isLiveVideo = false;
-let fullscreenListenerAttached = false;
+let fullscreenBusUnsubscribe: Nullable<UnsubscribeFromDomMutations> = null;
 
 function addLiveChatHide(): void {
 	modifyElementClassList("add", {
@@ -54,26 +59,33 @@ function applyVisibilityForMode(): void {
 		addLiveChatHide();
 		return;
 	}
-	if (document.fullscreenElement) {
+	/**
+	 * Fullscreen is the same definition the button placement layer uses: the Fullscreen API element or
+	 * YouTube's own fullscreen attribute, which is what drives the page when the API is unavailable.
+	 */
+	if (isFullscreen()) {
 		addLiveChatHide();
 	} else {
 		removeLiveChatHide();
 	}
 }
 
+/**
+ * YouTube mirrors every fullscreen transition onto ytd-app's fullscreen attribute, including the
+ * attribute-only mode it falls back to when the Fullscreen API is unavailable, while the API's
+ * fullscreenchange event fires only for real API transitions. The attribute subscription sees both
+ * ways in, which is also how the button placement layer tracks fullscreen.
+ */
 function attachFullscreenListener(): void {
-	if (fullscreenListenerAttached) return;
-	document.addEventListener("fullscreenchange", onFullscreenChange);
-	fullscreenListenerAttached = true;
+	if (fullscreenBusUnsubscribe) return;
+	fullscreenBusUnsubscribe = subscribeToDomMutations("ytd-app", () => applyVisibilityForMode(), {
+		attributeFilter: ["fullscreen"]
+	});
 }
 
 function detachFullscreenListener(): void {
-	document.removeEventListener("fullscreenchange", onFullscreenChange);
-	fullscreenListenerAttached = false;
-}
-
-function onFullscreenChange(): void {
-	applyVisibilityForMode();
+	fullscreenBusUnsubscribe?.();
+	fullscreenBusUnsubscribe = null;
 }
 
 function removeLiveChatHide(): void {
