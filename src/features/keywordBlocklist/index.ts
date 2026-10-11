@@ -3,6 +3,10 @@ import "./index.css";
 import type { configuration, Nullable } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
+import {
+	subscribeToDomMutations,
+	type UnsubscribeFromDomMutations
+} from "@/src/utils/dom/observers/domMutationBus";
 import { parseLineList } from "@/src/utils/string";
 
 import {
@@ -60,9 +64,16 @@ const titleStashes = new WeakMap<HTMLElement, TitleStash>();
 let matcher: (title: string) => boolean = () => false;
 let hasKeywords = false;
 let maskedTitleText = "";
-let observer: Nullable<MutationObserver> = null;
+let unsubscribeContainerBus: Nullable<UnsubscribeFromDomMutations> = null;
+let unsubscribeAttributeBus: Nullable<UnsubscribeFromDomMutations> = null;
 let scanHandle: Nullable<number> = null;
 let fallbackScanHandle: Nullable<number> = null;
+
+// Any element that is, or lives inside, a video container. Used to scope bus subscriptions
+// so that attribute and child-list deliveries only fire for mutations the scan cares about.
+const observedSelector = VIDEO_CONTAINER_SELECTOR.split(", ")
+	.flatMap((selector) => [selector, `${selector} *`])
+	.join(", ");
 
 export default createFeature({
 	...metadata,
@@ -93,7 +104,7 @@ export default createFeature({
 		);
 	},
 	onNavigate: () => {
-		if (observer) scheduleScan();
+		if (unsubscribeContainerBus) scheduleScan();
 	}
 });
 
@@ -147,33 +158,12 @@ function handleDocumentMouseOver(event: MouseEvent) {
 	}
 }
 
-function handleMutations(records: MutationRecord[]) {
-	if (records.some(isRelevantMutation)) scheduleScan();
-}
-
 function isAvatarImage(image: HTMLImageElement): boolean {
 	return image.classList.contains(AVATAR_IMAGE_CLASS) || image.closest(AVATAR_SELECTOR) !== null;
 }
 
 function isMaskedTitleText(text: string): boolean {
 	return normalizeWhitespace(text) === normalizeWhitespace(maskedTitleText);
-}
-
-function isRelevantMutation(record: MutationRecord): boolean {
-	const { addedNodes, target, type } = record;
-	const targetElement = target instanceof Element ? target : target.parentElement;
-	if (targetElement?.closest(VIDEO_CONTAINER_SELECTOR)) return true;
-	if (type !== "childList") return false;
-	for (const node of addedNodes) {
-		if (
-			node instanceof Element &&
-			(node.matches(VIDEO_CONTAINER_SELECTOR) ||
-				node.querySelector(VIDEO_CONTAINER_SELECTOR) !== null)
-		) {
-			return true;
-		}
-	}
-	return false;
 }
 
 function maskBackgroundImage(element: HTMLElement) {
@@ -361,21 +351,20 @@ function scheduleScan() {
 }
 
 function startObserving() {
-	if (observer) return;
-	observer = new MutationObserver(handleMutations);
-	observer.observe(document.body, {
-		attributeFilter: ["src", "srcset", "style"],
-		attributes: true,
-		childList: true,
-		subtree: true
+	if (unsubscribeContainerBus) return;
+	unsubscribeContainerBus = subscribeToDomMutations(observedSelector, () => scheduleScan());
+	unsubscribeAttributeBus = subscribeToDomMutations(observedSelector, () => scheduleScan(), {
+		attributeFilter: ["src", "srcset", "style"]
 	});
 	document.addEventListener("mouseover", handleDocumentMouseOver, true);
 	fallbackScanHandle = window.setInterval(scheduleScan, FALLBACK_SCAN_INTERVAL_MS);
 }
 
 function stopObserving() {
-	observer?.disconnect();
-	observer = null;
+	unsubscribeContainerBus?.();
+	unsubscribeContainerBus = null;
+	unsubscribeAttributeBus?.();
+	unsubscribeAttributeBus = null;
 	document.removeEventListener("mouseover", handleDocumentMouseOver, true);
 	document.body.classList.remove(HOVER_BLOCKED_CLASS);
 	if (scanHandle !== null) {
