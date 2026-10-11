@@ -117,7 +117,8 @@ export const featureLightManifest = {
 			enabled: false
 		},
 		hideLiveStreamChat: {
-			enabled: false
+			enabled: false,
+			mode: "always"
 		},
 		hideMembersOnlyVideos: {
 			enabled: false

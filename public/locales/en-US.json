@@ -466,6 +466,25 @@
 				},
 				"title": "Global volume override"
 			},
+			"hideLiveStreamChat": {
+				"enable": {
+					"label": "Hide live stream chat",
+					"title": "Hides the live stream chat"
+				},
+				"settings": {
+					"mode": {
+						"select": {
+							"label": "When to hide",
+							"title": "Choose whether to always hide the chat or only hide it in fullscreen",
+							"options": {
+								"always": "Always hide",
+								"fullscreen": "Only hide in fullscreen"
+							}
+						}
+					}
+				},
+				"title": "Live stream chat settings"
+			},
 			"miniPlayer": {
 				"button": {
 					"label": "Mini Player button",
@@ -617,12 +636,6 @@
 						"enable": {
 							"label": "Hide next button",
 							"title": "Hides the next video button from the player controls"
-						}
-					},
-					"hideLiveStreamChat": {
-						"enable": {
-							"label": "Hide live stream chat",
-							"title": "Hides the live stream chat"
 						}
 					},
 					"hideMembersOnlyVideos": {
