@@ -8,6 +8,10 @@ import {
 	waitForNativeButtonComponent,
 	type YtButtonViewModelElement
 } from "@/src/utils/dom/nativeComponents";
+import {
+	subscribeToDomMutations,
+	type UnsubscribeFromDomMutations
+} from "@/src/utils/dom/observers/domMutationBus";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { browserColorLog } from "@/src/utils/logging";
 import { getCurrentPageType, getCurrentVideoId } from "@/src/utils/url";
@@ -29,7 +33,7 @@ import { metadata } from "./index.metadata";
 import { inFlightSaves, performPlaylistEdit } from "./saveActions";
 import "./index.css";
 
-let videosObserver: Nullable<MutationObserver> = null;
+let videosUnsubscribeBus: Nullable<UnsubscribeFromDomMutations> = null;
 let saveClickListener: Nullable<(event: Event) => void> = null;
 // Teardown increments the generation. A setup that awaited across a teardown sees the change and aborts.
 let setupGeneration = 0;
@@ -117,22 +121,21 @@ async function setupSaveToWatchLaterButtons() {
 	const container = await waitForElement<Element>(containerSelector, 5000, "optional");
 	if (!isCurrent() || !container) return;
 
-	if (!videosObserver) {
+	if (!videosUnsubscribeBus) {
 		let passScheduled = false;
-		videosObserver = new MutationObserver((records) => {
-			const relevant = records.some((record) => {
-				const target =
-					record.target instanceof Element ? record.target : record.target.parentElement;
-				return !target?.closest(IGNORED_MUTATION_ROOTS);
-			});
-			if (!relevant || passScheduled) return;
-			passScheduled = true;
-			requestAnimationFrame(() => {
-				passScheduled = false;
-				addButtons(container);
-			});
-		});
-		videosObserver.observe(container, { childList: true, subtree: true });
+		videosUnsubscribeBus = subscribeToDomMutations(
+			`${LOCKUP_SELECTOR}, ${ACTIONS_ROW_SELECTOR}`,
+			(elements) => {
+				const relevant = elements.some((element) => !element.closest(IGNORED_MUTATION_ROOTS));
+				if (!relevant || passScheduled) return;
+				passScheduled = true;
+				requestAnimationFrame(() => {
+					passScheduled = false;
+					addButtons(container);
+				});
+			},
+			{ parent: container }
+		);
 	}
 
 	addButtons(container);
@@ -141,9 +144,9 @@ async function setupSaveToWatchLaterButtons() {
 function teardownMachinery() {
 	setupGeneration++;
 
-	if (videosObserver) {
-		videosObserver.disconnect();
-		videosObserver = null;
+	if (videosUnsubscribeBus) {
+		videosUnsubscribeBus();
+		videosUnsubscribeBus = null;
 	}
 
 	if (saveClickListener) {
