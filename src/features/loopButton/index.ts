@@ -99,6 +99,15 @@ export default createFeature({
 		unsubscribeLoopBus?.();
 		unsubscribeLoopBus = null;
 	},
+	/**
+	 * The registry requires onEnable and onDisable as a pair and drops a feature that has only one of
+	 * them, so the observer teardown needs its counterpart. Re-subscribing here also covers the enable
+	 * path directly; setupLoopObserver replaces any previous subscription, so the button-add call and
+	 * this one cannot stack.
+	 */
+	onEnable: ({ button: { placement } }) => {
+		setupLoopObserver(placement);
+	},
 	onNavigate: ({ button: { placement } }) => {
 		setupLoopObserver(placement);
 	}
