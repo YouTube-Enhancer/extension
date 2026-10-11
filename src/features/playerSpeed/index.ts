@@ -6,7 +6,10 @@ import { featureConfigManager } from "@/src/features/_registry/featureConfigMana
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
 import { metadata as playbackSpeedButtonsMetadata } from "@/src/features/playbackSpeedButtons/index.metadata";
-import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
+import {
+	subscribeToDomMutations,
+	type UnsubscribeFromDomMutations
+} from "@/src/utils/dom/observers/domMutationBus";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { getCurrentChannelId } from "@/src/utils/getChannelId";
@@ -100,100 +103,6 @@ function resolveEffectiveSpeed(
 	if (entry === undefined) return speed;
 	return Number.isFinite(entry) ? entry : speed;
 }
-function setupPlaybackSpeedChangeListener() {
-	// The settings menu can already exist when this runs (init on a page that opened settings, or a re-arm
-	// after navigation): the bus only answers added nodes, so probe first and only subscribe when the menu
-	// is genuinely absent.
-	const arm = (menu: HTMLDivElement) => {
-		if (observedSettingsMenu === menu) return;
-		observedSettingsMenu = menu;
-		setupMenuObserver(menu);
-	};
-	const existingMenu = document.querySelector<HTMLDivElement>(settingsPanelMenuSelector);
-	if (existingMenu) {
-		arm(existingMenu);
-	} else {
-		subscribeToDomMutations(
-			settingsPanelMenuSelector,
-			(elements) => {
-				const menu = elements[0] as HTMLDivElement;
-				if (menu) arm(menu);
-			},
-			{ once: true }
-		);
-	}
-	function setupMenuObserver(settingsPanelMenu: HTMLDivElement) {
-		let lastSpeed: Nullable<number> = null;
-		const updateStoredSpeed = (speed: number) => {
-			if (speed === lastSpeed) return;
-			lastSpeed = speed;
-			void updateSpeedButtons(speed);
-			const stateAPI = registry.getStateAPI(metadata.id);
-			stateAPI.setState((prev) => ({ ...prev, playbackSpeed: speed }));
-		};
-		const parseSpeed = (text: Nullable<string>): Nullable<number> => {
-			if (!text) return null;
-			const match = text.match(speedValueRegex);
-			return match ? Number(match[1]) : null;
-		};
-		const handleSliderChange = (slider: HTMLInputElement) => {
-			const speed = parseSpeed(slider.value);
-			if (speed !== null) updateStoredSpeed(speed);
-		};
-		const handlePresetClick = (button: HTMLButtonElement) => {
-			const span = button.querySelector("span");
-			const speed = parseSpeed(span?.textContent ?? null);
-			if (speed !== null) updateStoredSpeed(speed);
-		};
-		const panelObserver = new MutationObserver(() => {
-			const speedPanel = settingsPanelMenu.querySelector<HTMLDivElement>(
-				".ytp-variable-speed-panel-content"
-			);
-			if (!speedPanel) return;
-			// Slider
-			const slider = speedPanel.querySelector<HTMLInputElement>(
-				".ytp-input-slider.ytp-speedslider"
-			);
-			if (slider) {
-				eventManager.removeEventListener(slider, "input", metadata.id);
-				eventManager.addEventListener(
-					slider,
-					"input",
-					() => handleSliderChange(slider),
-					metadata.id
-				);
-			}
-			// Preset buttons
-			const presets = speedPanel.querySelectorAll<HTMLButtonElement>(
-				".ytp-variable-speed-panel-preset-button"
-			);
-			presets.forEach((preset) => {
-				eventManager.removeEventListener(preset, "click", metadata.id);
-				eventManager.addEventListener(
-					preset,
-					"click",
-					() => handlePresetClick(preset),
-					metadata.id
-				);
-			});
-			// Display span (catch programmatic updates)
-			const displaySpan = speedPanel.querySelector<HTMLSpanElement>(
-				".ytp-variable-speed-panel-display span, .ytp-speedslider-text"
-			);
-			const speed = parseSpeed(displaySpan?.textContent ?? null);
-			if (speed !== null) updateStoredSpeed(speed);
-		});
-		panelObserver.observe(settingsPanelMenu, {
-			characterData: true,
-			childList: true,
-			subtree: true
-		});
-		// Reset lastSpeed when menu closes
-		new MutationObserver(() => {
-			if (settingsPanelMenu.style.display === "none") lastSpeed = null;
-		}).observe(settingsPanelMenu, { attributeFilter: ["style"], attributes: true });
-	}
-}
 let lastRecordedSpeed: Nullable<number> = null;
 /** The speed configuration in force while the feature is enabled, for putting the rate back after YouTube resets it. */
 let enforcedConfig: Nullable<{ channelSpeeds?: string; speed: number }> = null;
@@ -201,6 +110,10 @@ let observedSettingsMenu: Nullable<Element> = null;
 /** YouTube resets the rate a few times per video at most; anything past this is a fight not worth having. */
 const MAX_AUTOMATIC_REAPPLIES = 5;
 let automaticReapplies: { count: number; videoId: Nullable<string> } = { count: 0, videoId: null };
+// Teardown handles for the menu-scoped bus subscriptions and the display-span characterData observer.
+let menuStyleUnsubscribe: Nullable<UnsubscribeFromDomMutations> = null;
+let menuPanelUnsubscribe: Nullable<UnsubscribeFromDomMutations> = null;
+let displaySpanObserver: Nullable<MutationObserver> = null;
 
 function detachRateChangeListener() {
 	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
@@ -259,11 +172,134 @@ function resetRecordedSpeed() {
 	lastRecordedSpeed = null;
 }
 
+function setupPlaybackSpeedChangeListener() {
+	// The settings menu can already exist when this runs (init on a page that opened settings, or a re-arm
+	// after navigation): the bus only answers added nodes, so probe first and only subscribe when the menu
+	// is genuinely absent.
+	const arm = (menu: HTMLDivElement) => {
+		if (observedSettingsMenu === menu) return;
+		observedSettingsMenu = menu;
+		setupMenuObserver(menu);
+	};
+	const existingMenu = document.querySelector<HTMLDivElement>(settingsPanelMenuSelector);
+	if (existingMenu) {
+		arm(existingMenu);
+	} else {
+		subscribeToDomMutations(
+			settingsPanelMenuSelector,
+			(elements) => {
+				const menu = elements[0] as HTMLDivElement;
+				if (menu) arm(menu);
+			},
+			{ once: true }
+		);
+	}
+	function setupMenuObserver(settingsPanelMenu: HTMLDivElement) {
+		teardownMenuObservers();
+		let lastSpeed: Nullable<number> = null;
+		const updateStoredSpeed = (speed: number) => {
+			if (speed === lastSpeed) return;
+			lastSpeed = speed;
+			void updateSpeedButtons(speed);
+			const stateAPI = registry.getStateAPI(metadata.id);
+			stateAPI.setState((prev) => ({ ...prev, playbackSpeed: speed }));
+		};
+		const parseSpeed = (text: Nullable<string>): Nullable<number> => {
+			if (!text) return null;
+			const match = text.match(speedValueRegex);
+			return match ? Number(match[1]) : null;
+		};
+		const handleSliderChange = (slider: HTMLInputElement) => {
+			const speed = parseSpeed(slider.value);
+			if (speed !== null) updateStoredSpeed(speed);
+		};
+		const handlePresetClick = (button: HTMLButtonElement) => {
+			const span = button.querySelector("span");
+			const speed = parseSpeed(span?.textContent ?? null);
+			if (speed !== null) updateStoredSpeed(speed);
+		};
+		const bindSpeedPanel = (elements: Element[]) => {
+			const speedPanel =
+				elements
+					.find((element) => element.classList.contains("ytp-variable-speed-panel-content"))
+					?.closest<HTMLDivElement>(".ytp-variable-speed-panel-content") ??
+				settingsPanelMenu.querySelector<HTMLDivElement>(".ytp-variable-speed-panel-content");
+			if (!speedPanel) return;
+			// Slider
+			const slider = speedPanel.querySelector<HTMLInputElement>(
+				".ytp-input-slider.ytp-speedslider"
+			);
+			if (slider) {
+				eventManager.removeEventListener(slider, "input", metadata.id);
+				eventManager.addEventListener(
+					slider,
+					"input",
+					() => handleSliderChange(slider),
+					metadata.id
+				);
+			}
+			// Preset buttons
+			const presets = speedPanel.querySelectorAll<HTMLButtonElement>(
+				".ytp-variable-speed-panel-preset-button"
+			);
+			presets.forEach((preset) => {
+				eventManager.removeEventListener(preset, "click", metadata.id);
+				eventManager.addEventListener(
+					preset,
+					"click",
+					() => handlePresetClick(preset),
+					metadata.id
+				);
+			});
+			// Display span (catch programmatic updates). The bus cannot observe characterData,
+			// so once the span exists a narrowly-scoped observer watches only its text.
+			const displaySpan = speedPanel.querySelector<HTMLSpanElement>(
+				".ytp-variable-speed-panel-display span, .ytp-speedslider-text"
+			);
+			if (displaySpan) {
+				displaySpanObserver?.disconnect();
+				displaySpanObserver = new MutationObserver(() => {
+					const speed = parseSpeed(displaySpan.textContent);
+					if (speed !== null) updateStoredSpeed(speed);
+				});
+				displaySpanObserver.observe(displaySpan, { characterData: true, childList: true });
+			}
+			const speed = parseSpeed(displaySpan?.textContent ?? null);
+			if (speed !== null) updateStoredSpeed(speed);
+		};
+		// The speed panel is added and removed inside the menu as the user opens and closes the speed
+		// submenu. The bus delivers the added panel content; the observer above then watches the display
+		// span's characterData, which the bus does not support.
+		menuPanelUnsubscribe = subscribeToDomMutations(
+			".ytp-variable-speed-panel-content",
+			bindSpeedPanel,
+			{ parent: settingsPanelMenu }
+		);
+		// Reset lastSpeed when menu closes. The bus answers attribute mutations on matching elements,
+		// which replaces the previous per-call anonymous MutationObserver.
+		menuStyleUnsubscribe = subscribeToDomMutations(
+			settingsPanelMenuSelector,
+			() => {
+				if (settingsPanelMenu.style.display === "none") lastSpeed = null;
+			},
+			{ attributeFilter: ["style"] }
+		);
+	}
+}
+
 async function setupRateChangeListener() {
 	const video = await waitForElement<HTMLVideoElement>("video.html5-main-video", 15000);
 	if (!video) return;
 	eventManager.removeEventListener(video, "ratechange", metadata.id);
 	eventManager.addEventListener(video, "ratechange", () => handleRateChange(video), metadata.id);
+}
+function teardownMenuObservers() {
+	menuStyleUnsubscribe?.();
+	menuStyleUnsubscribe = null;
+	menuPanelUnsubscribe?.();
+	menuPanelUnsubscribe = null;
+	displaySpanObserver?.disconnect();
+	displaySpanObserver = null;
 }
 async function updateEffectivePlaybackSpeedButtons(speed: number, channelSpeeds?: string) {
 	const channelId = await getCurrentChannelId();
@@ -303,6 +339,8 @@ export default createFeature({
 	},
 	onDisable: () => {
 		enforcedConfig = null;
+		teardownMenuObservers();
+		observedSettingsMenu = null;
 		// Lifecycle already aborted this feature's player retries before onDisable runs
 		detachRateChangeListener();
 		clearManualOverride();
