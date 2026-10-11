@@ -307,7 +307,7 @@ export type configuration = {
 	};
 	hideEndscreenRecommendedVideos: { enabled: boolean };
 	hideFullscreenButton: { enabled: boolean };
-	hideLiveStreamChat: { enabled: boolean };
+	hideLiveStreamChat: { enabled: boolean; mode: "always" | "fullscreen" };
 	hideMembersOnlyVideos: { enabled: boolean };
 	hideNextButton: { enabled: boolean };
 	hideOfficialArtistVideosFromHomePage: { enabled: boolean };
