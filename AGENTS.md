@@ -37,6 +37,8 @@ Only modules that follow this contract qualify as features:
 - `onConfigChange(config)` - Runs when configuration changes
 - `onInit(config)` - Runs once during initialization (optional)
 
+**`onEnable` and `onDisable` are a required pair.** A feature that implements one without the other is invalid: it fails the `FeatureWithoutStateBranch`/`FeatureWithStateBranch` both-or-neither union in `src/features/_registry/types.ts` at compile time, and the runtime `isFeature` validation rejects it so the registry never registers it (a warning naming the feature is logged). Features that manage no state or DOM may implement neither.
+
 ### Registration Requirements:
 
 1. Must be registered in the registry via `registry.register(feature)`
