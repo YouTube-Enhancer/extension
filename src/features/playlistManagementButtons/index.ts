@@ -18,6 +18,10 @@ import {
 	removeFromHistory,
 	removeFromPlaylist
 } from "@/src/features/playlistManagementButtons/utils";
+import {
+	subscribeToDomMutations,
+	type UnsubscribeFromDomMutations
+} from "@/src/utils/dom/observers/domMutationBus";
 import { IsDarkMode } from "@/src/utils/dom/state";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { getThumbnailOverlay, getWatchedPercentage } from "@/src/utils/video";
@@ -32,7 +36,7 @@ interface YTDPlaylistVideoRenderer extends HTMLElement {
 	playlistVideoId: string;
 }
 
-let playlistObserver: Nullable<MutationObserver> = null;
+let playlistUnsubscribeBus: Nullable<UnsubscribeFromDomMutations> = null;
 let preparePageDisposeListener: Nullable<(event: Event) => void> = null;
 let removeAllButton: Nullable<HTMLButtonElement> = null;
 /**
@@ -43,9 +47,9 @@ let setupGeneration = 0;
 
 const cleanupPlaylistManagementButtons = () => {
 	setupGeneration++;
-	if (playlistObserver) {
-		playlistObserver.disconnect();
-		playlistObserver = null;
+	if (playlistUnsubscribeBus) {
+		playlistUnsubscribeBus();
+		playlistUnsubscribeBus = null;
 	}
 	if (preparePageDisposeListener) {
 		document.removeEventListener("yt-action", preparePageDisposeListener);
@@ -259,7 +263,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 		}
 
 		async function observePlaylist() {
-			if (playlistObserver) {
+			if (playlistUnsubscribeBus) {
 				return;
 			}
 
@@ -268,12 +272,15 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 			if (isStale()) return;
 			const container = document.querySelector("ytd-playlist-video-list-renderer");
 			if (container) {
-				playlistObserver = new MutationObserver(() => {
-					if (isStale()) return;
-					void addButtonToPlaylistItems();
-					void addRemoveAllButton();
-				});
-				playlistObserver.observe(container, { childList: true, subtree: true });
+				playlistUnsubscribeBus = subscribeToDomMutations(
+					PLAYLIST_ITEM_SELECTOR,
+					() => {
+						if (isStale()) return;
+						void addButtonToPlaylistItems();
+						void addRemoveAllButton();
+					},
+					{ parent: container }
+				);
 			}
 		}
 
