@@ -2,6 +2,10 @@ import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
+import {
+	subscribeToDomMutations,
+	type UnsubscribeFromDomMutations
+} from "@/src/utils/dom/observers/domMutationBus";
 import { browserColorLog } from "@/src/utils/logging";
 import { sendContentToBackgroundMessage } from "@/src/utils/messaging";
 
@@ -9,7 +13,7 @@ import { metadata } from "./index.metadata";
 
 const FEATURE_ID = "pauseBackgroundPlayers";
 
-let activeObserver: Nullable<MutationObserver> = null;
+let unsubscribeBus: Nullable<UnsubscribeFromDomMutations> = null;
 let activeDebounceTimeout: Nullable<number> = null;
 let listenersAttached = false;
 
@@ -29,10 +33,8 @@ const PauseBackgroundPlayers = () => {
 };
 
 function cleanup() {
-	if (activeObserver) {
-		activeObserver.disconnect();
-		activeObserver = null;
-	}
+	unsubscribeBus?.();
+	unsubscribeBus = null;
 	if (activeDebounceTimeout) {
 		clearTimeout(activeDebounceTimeout);
 		activeDebounceTimeout = null;
@@ -74,18 +76,17 @@ function setupPlayerMonitoring() {
 		}
 	}
 
-	activeObserver = new MutationObserver((mutationsList: MutationRecord[]) => {
-		if (activeDebounceTimeout) clearTimeout(activeDebounceTimeout);
-		// @ts-expect-error - doesn't recognize browser environment properly
-		activeDebounceTimeout = setTimeout(() => {
-			for (const mutation of mutationsList) {
-				if (mutation.addedNodes.length) {
-					detectPlaying();
-				}
-			}
-		}, 100);
-	});
-	activeObserver.observe(videoPlayerContainer, { childList: true, subtree: true });
+	unsubscribeBus = subscribeToDomMutations(
+		"*",
+		() => {
+			if (activeDebounceTimeout) clearTimeout(activeDebounceTimeout);
+			// @ts-expect-error - doesn't recognize browser environment properly
+			activeDebounceTimeout = setTimeout(() => {
+				detectPlaying();
+			}, 100);
+		},
+		{ parent: videoPlayerContainer }
+	);
 
 	if (!videoPlayerContainer.paused) {
 		PauseBackgroundPlayers();
