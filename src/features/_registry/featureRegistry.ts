@@ -207,7 +207,10 @@ export class FeatureRegistry extends FeatureManagerBase {
 		feature: AnyFeatureBase,
 		initialState: Record<FeatureKeysWithState, FeatureState[`state:${FeatureKeysWithState}`]>
 	) {
-		if (!isFeature(feature)) return;
+		if (!isFeature(feature)) {
+			console.warn("Feature failed validation and was NOT registered", feature);
+			return;
+		}
 		if (this.features.has(feature.id)) return;
 		this.features.set(feature.id, feature);
 		this.orchestrator.setFeatureEnabled(feature.id, false);

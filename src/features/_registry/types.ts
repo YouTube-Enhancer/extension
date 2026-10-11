@@ -405,25 +405,13 @@ type DynamicParentSetting<F extends configurationKeys> = (
 ) => Nullable<parentSetting>;
 type FeatureKeyFromStateKey<K extends FeatureStateKeys> = K extends `state:${infer V}` ? V : never;
 
-type FeatureWithoutStateBranch<K extends FeatureKeys> = {
+type FeatureWithoutStateBranch<K extends FeatureKeys> = LifecyclePairWithoutState<K> & {
 	/**
 	 * React to config changes
 	 * @param config The configuration with the new values
 	 * @returns A promise that resolves when the feature has handled the config change
 	 */
 	onConfigChange?: (config: configuration[K]) => MaybePromise<void>;
-	/**
-	 * Runs when the feature is disabled
-	 * @param config The configuration with the new values
-	 * @returns A promise that resolves when the feature has finished disabling
-	 */
-	onDisable?: (config: configuration[K]) => MaybePromise<void>;
-	/**
-	 * Runs when the feature is enabled
-	 * @param config The configuration with the new values
-	 * @returns A promise that resolves when the feature has finished enabling
-	 */
-	onEnable?: (config: configuration[K]) => MaybePromise<void>;
 	/**
 	 * Optional initialization that runs regardless of enabled state
 	 * @param config The configuration with the initial values
@@ -446,7 +434,7 @@ type FeatureWithoutStateBranch<K extends FeatureKeys> = {
 	state?: never;
 };
 
-type FeatureWithStateBranch<K extends FeatureKeysWithState> = {
+type FeatureWithStateBranch<K extends FeatureKeysWithState> = LifecyclePairWithState<K> & {
 	/**
 	 * Optional migration from legacy localStorage keys. Called during state hydration when persistState is true.
 	 * Features that migrated from localStorage to the state system should implement this to preserve user data.
@@ -460,20 +448,6 @@ type FeatureWithStateBranch<K extends FeatureKeysWithState> = {
 	 * @returns A promise that resolves when the feature has handled the config change
 	 */
 	onConfigChange?: (config: configuration[K], stateAPI: FeatureStateAPI<K>) => MaybePromise<void>;
-	/**
-	 * Runs when the feature is disabled
-	 * @param config The configuration with the new values
-	 * @param stateAPI The feature state API
-	 * @returns A promise that resolves when the feature has finished disabling
-	 */
-	onDisable?: (config: configuration[K], stateAPI: FeatureStateAPI<K>) => MaybePromise<void>;
-	/**
-	 * Runs when the feature is enabled
-	 * @param config The configuration with the new values
-	 * @param stateAPI The feature state API
-	 * @returns A promise that resolves when the feature has finished enabling
-	 */
-	onEnable?: (config: configuration[K], stateAPI: FeatureStateAPI<K>) => MaybePromise<void>;
 	/**
 	 * Initialization hook that runs if the feature is enabled
 	 * @param config The configuration with the initial values
@@ -512,6 +486,56 @@ type FeatureWithStateBranch<K extends FeatureKeysWithState> = {
 	state: FeatureState[`state:${K}`];
 };
 
+/**
+ * A feature's enable and disable hooks are a required pair: implementing one without
+ * the other is invalid. The registry validates this at runtime, and this union makes
+ * it a compile-time error so a half-wired feature never builds.
+ */
+type LifecyclePairWithoutState<K extends FeatureKeys> =
+	| {
+			/**
+			 * Runs when the feature is disabled. Required together with onEnable.
+			 * @param config The configuration with the new values
+			 * @returns A promise that resolves when the feature has finished disabling
+			 */
+			onDisable: (config: configuration[K]) => MaybePromise<void>;
+			/**
+			 * Runs when the feature is enabled. Required together with onDisable.
+			 * @param config The configuration with the new values
+			 * @returns A promise that resolves when the feature has finished enabling
+			 */
+			onEnable: (config: configuration[K]) => MaybePromise<void>;
+	  }
+	| {
+			onDisable?: undefined;
+			onEnable?: undefined;
+	  };
+/**
+ * A feature's enable and disable hooks are a required pair: implementing one without
+ * the other is invalid. The registry validates this at runtime, and this union makes
+ * it a compile-time error so a half-wired feature never builds.
+ */
+type LifecyclePairWithState<K extends FeatureKeysWithState> =
+	| {
+			/**
+			 * Runs when the feature is disabled. Required together with onEnable.
+			 * @param config The configuration with the new values
+			 * @param stateAPI The feature state API
+			 * @returns A promise that resolves when the feature has finished disabling
+			 */
+			onDisable: (config: configuration[K], stateAPI: FeatureStateAPI<K>) => MaybePromise<void>;
+			/**
+			 * Runs when the feature is enabled. Required together with onDisable.
+			 * @param config The configuration with the new values
+			 * @param stateAPI The feature state API
+			 * @returns A promise that resolves when the feature has finished enabling
+			 */
+			onEnable: (config: configuration[K], stateAPI: FeatureStateAPI<K>) => MaybePromise<void>;
+	  }
+	| {
+			onDisable?: undefined;
+			onEnable?: undefined;
+	  };
 type NumberPaths<F extends FeatureKeys> = {
 	[P in SettingId<F>]: PathValue<configuration, P> extends number ? P : never;
 }[SettingId<F>];
