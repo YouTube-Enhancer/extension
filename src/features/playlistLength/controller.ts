@@ -1,7 +1,10 @@
 import type { Nullable, VideoDetails } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
-import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
+import {
+	subscribeToDomMutations,
+	type UnsubscribeFromDomMutations
+} from "@/src/utils/dom/observers/domMutationBus";
 import { playlistItemsSelector, selectFirstWithWidth } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
 
@@ -27,6 +30,10 @@ export class PlaylistLengthController {
 	private destroyed = false;
 	private lastPlaylistLength: Nullable<number> = null;
 	private lastUpdate: Nullable<{ total: number; watched: number }> = null;
+	private rebuilding = false;
+	private rebuildQueued = false;
+	private rebuildTimer: Nullable<number> = null;
+	private rebuildUnsubscribe: Nullable<UnsubscribeFromDomMutations> = null;
 	private resizeObserver: Nullable<ResizeObserver> = null;
 	private ui: Nullable<{ element: HTMLDivElement; update: (state: VideoTimeState) => void }> = null;
 	private unsubscribeBus: Nullable<() => void> = null;
@@ -40,6 +47,9 @@ export class PlaylistLengthController {
 		this.destroyed = true;
 
 		eventManager.removeEventListeners("playlistLength");
+
+		this.clearRebuildWatch();
+		this.rebuildQueued = false;
 
 		this.unsubscribeBus?.();
 		this.unsubscribeBus = null;
@@ -76,6 +86,27 @@ export class PlaylistLengthController {
 				playlistLengthGetMethod: "html"
 			});
 		}
+	}
+
+	private clearRebuildWatch(): void {
+		this.rebuildUnsubscribe?.();
+		this.rebuildUnsubscribe = null;
+		if (this.rebuildTimer !== null) {
+			clearTimeout(this.rebuildTimer);
+			this.rebuildTimer = null;
+		}
+	}
+
+	/**
+	 * Schedules a debounced rebuild. While a rebuild is already running, requests collapse into one
+	 * follow-up pass, so a burst of re-render mutations cannot stack initializeWithMethod runs.
+	 */
+	private debouncedRebuild(): void {
+		if (this.rebuildTimer !== null) clearTimeout(this.rebuildTimer);
+		this.rebuildTimer = window.setTimeout(() => {
+			this.rebuildTimer = null;
+			void this.rebuild();
+		}, 100);
 	}
 
 	private debouncedUpdate(methodConfig: PlaylistLengthParameters): void {
@@ -120,6 +151,12 @@ export class PlaylistLengthController {
 
 	private async handleUpdate(methodConfig: PlaylistLengthParameters): Promise<void> {
 		if (this.destroyed || !this.ui) return;
+		// A watch-layout re-render can replace the header the UI was appended into, taking the element
+		// with it. Updates on a detached element are invisible; rebuild into the live header instead.
+		if (!document.contains(this.ui.element)) {
+			this.debouncedRebuild();
+			return;
+		}
 
 		const videoElement = document.querySelector<HTMLVideoElement>("video");
 		const playerSpeed = videoElement?.playbackRate ?? 1;
@@ -167,6 +204,7 @@ export class PlaylistLengthController {
 	private async initializeWithMethod(methodConfig: PlaylistLengthParameters): Promise<void> {
 		if (this.destroyed) return;
 		this.disconnectObservers();
+		this.clearRebuildWatch();
 		if (!this.hasPlaylist()) return;
 
 		const headerSelector = this.getHeaderSelector();
@@ -175,13 +213,25 @@ export class PlaylistLengthController {
 		if (!headerContents) {
 			headerContents = await waitForElement(headerSelector);
 		}
-		if (!headerContents || this.destroyed) return;
-
-		let playlistItemsElement = document.querySelector(playlistItemsSelector());
-		if (!playlistItemsElement) {
-			playlistItemsElement = await waitForElement(playlistItemsSelector());
+		if (this.destroyed) return;
+		if (!headerContents) {
+			// The watch layout renders its playlist header late after an SPA navigation. Keep watching
+			// for it instead of giving up: a one-shot wait here left the UI missing for the rest of the
+			// page session whenever the header beat the 2500 ms budget.
+			this.watchForRebuild(headerSelector);
+			return;
 		}
-		if (!playlistItemsElement || this.destroyed) return;
+
+		const itemsSelector = playlistItemsSelector();
+		let playlistItemsElement = document.querySelector(itemsSelector);
+		if (!playlistItemsElement) {
+			playlistItemsElement = await waitForElement(itemsSelector);
+		}
+		if (this.destroyed) return;
+		if (!playlistItemsElement) {
+			this.watchForRebuild(itemsSelector);
+			return;
+		}
 
 		const videoElement = document.querySelector<HTMLVideoElement>("video");
 		const playerSpeed = videoElement?.playbackRate ?? 1;
@@ -197,7 +247,12 @@ export class PlaylistLengthController {
 		this.ui?.element.remove();
 		this.ui = createPlaylistLengthUIElement(initialState, methodConfig.pageType);
 
-		await appendPlaylistLengthUIElement(this.ui.element);
+		const appended = await appendPlaylistLengthUIElement(this.ui.element);
+		if (this.destroyed) return;
+		if (!appended) {
+			this.watchForRebuild(headerSelector);
+			return;
+		}
 
 		this.setupObservers(methodConfig, videoElement);
 	}
@@ -205,6 +260,25 @@ export class PlaylistLengthController {
 	private queryHeader(selector: string): Nullable<Element> {
 		if (this.config.pageType === "watch") return document.querySelector(selector);
 		return selectFirstWithWidth(selector);
+	}
+
+	private async rebuild(): Promise<void> {
+		if (this.destroyed) return;
+		if (this.rebuilding) {
+			this.rebuildQueued = true;
+			return;
+		}
+		this.rebuilding = true;
+		try {
+			do {
+				this.rebuildQueued = false;
+				// initialize() rather than initializeWithMethod: the rebuild re-runs the same api-then-html
+				// fallback the first pass has, so a method that throws (a UU playlist, api) cannot kill it.
+				await this.initialize();
+			} while (this.rebuildQueued && !this.destroyed);
+		} finally {
+			this.rebuilding = false;
+		}
 	}
 
 	private async resolveTotalDuration(
@@ -250,6 +324,37 @@ export class PlaylistLengthController {
 				() => void this.handleUpdate(methodConfig),
 				"playlistLength"
 			);
+		}
+	}
+
+	/**
+	 * Arms a mutation-bus watch on the anchor that was missing (or that refused the append) and
+	 * rebuilds when it lands. The watch replaces the old behavior of giving up for the page session:
+	 * after an SPA navigation the watch-layout playlist header renders late, and the one-shot 2500 ms
+	 * wait regularly lost to it. Two gaps the plain subscription cannot see are covered here: an
+	 * anchor that landed while the wait was still running (re-check on arm), and selectors whose
+	 * match depends on an ancestor's `hidden` attribute flipping (attribute subscription on the
+	 * selector's leading compound - the panel unhiding is an attribute mutation, not an added node).
+	 */
+	private watchForRebuild(anchorSelector: string): void {
+		this.clearRebuildWatch();
+		if (document.querySelector(anchorSelector)) {
+			this.debouncedRebuild();
+			return;
+		}
+		this.rebuildUnsubscribe = subscribeToDomMutations(anchorSelector, () => {
+			this.debouncedRebuild();
+		});
+		const [attributeStem] = anchorSelector.split(":not([hidden])");
+		if (attributeStem !== anchorSelector) {
+			const offAttribute = subscribeToDomMutations(attributeStem, () => this.debouncedRebuild(), {
+				attributeFilter: ["hidden"]
+			});
+			const { rebuildUnsubscribe: previous } = this;
+			this.rebuildUnsubscribe = () => {
+				previous();
+				offAttribute();
+			};
 		}
 	}
 }
