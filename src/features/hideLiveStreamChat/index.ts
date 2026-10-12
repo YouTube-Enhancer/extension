@@ -31,9 +31,11 @@ function applyLiveChatVisibility(): void {
 		[applyLiveChatVisibilityTask],
 		["applyLiveChatVisibility"],
 		{
-			interval: 500,
+			// Live pre-roll ads can run for minutes; the player reports the ad's video id until they end,
+			// so the isLive check only becomes answerable once the content resumes. 40 x 3 s = 120 s.
+			interval: 3000,
 			maxAttempts: 40,
-			overallTimeout: 20_000,
+			overallTimeout: 120_000,
 			waitForLoaded: true
 		}
 	);
