@@ -39,6 +39,10 @@ function cleanup() {
 		clearTimeout(activeDebounceTimeout);
 		activeDebounceTimeout = null;
 	}
+	// Without this the "playing" listener survives onDisable and the feature keeps pausing other
+	// tabs from a disabled tab; disabling has to stop future pausing (it does not resume tabs it
+	// already paused).
+	eventManager.removeEventListeners(FEATURE_ID);
 	listenersAttached = false;
 }
 
