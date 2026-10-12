@@ -5,7 +5,12 @@ import { registry } from "@/src/features/_registry/featureRegistry";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
-import { restorePlayerVolume, setPlayerVolume } from "./utils";
+import {
+	resetVolumeChangeListener,
+	restorePlayerVolume,
+	setPlayerVolume,
+	setupVolumeReassertListener
+} from "./utils";
 
 /**
  * Sets the volume once the player has loaded its video and checks that it stuck. A volume set while the player is
@@ -24,7 +29,14 @@ function applyVolume(volume: number) {
 async function applyVolumeTask(volume: number): Promise<boolean> {
 	const playerContainer = getPlayerContainer();
 	if (!playerContainer) return false;
+	// Snapshot the player's own volume before applying: on shorts it tells the re-assert listener whether a
+	// later change is YouTube re-applying its persisted volume or a genuine user change.
+	const nativeVolume =
+		typeof playerContainer.getVolume === "function" ? await playerContainer.getVolume() : null;
 	await setPlayerVolume(playerContainer, volume);
+	// Attached before the verification so the snapshot is the true pre-write volume even when this
+	// attempt's write lands late and the check below fails.
+	setupVolumeReassertListener(playerContainer, volume, nativeVolume);
 	return (await playerContainer.getVolume()) === Math.max(0, Math.min(volume, 100));
 }
 function getPlayerContainer(): Nullable<YouTubePlayerDiv> {
@@ -46,6 +58,7 @@ export default createFeature({
 	},
 	onDisable: async () => {
 		// Lifecycle already aborted this feature's player retries before onDisable runs
+		resetVolumeChangeListener();
 		const playerContainer = getPlayerContainer();
 		if (!playerContainer) return;
 		await restorePlayerVolume(playerContainer);
