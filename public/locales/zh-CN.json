@@ -468,22 +468,22 @@
 			},
 			"hideLiveStreamChat": {
 				"enable": {
-					"label": "Hide live stream chat",
-					"title": "Hides the live stream chat"
+					"label": "隐藏直播聊天",
+					"title": "隐藏直播聊天"
 				},
 				"settings": {
 					"mode": {
 						"select": {
-							"label": "When to hide",
-							"title": "Choose whether to always hide the chat or only hide it in fullscreen",
+							"label": "何时隐藏",
+							"title": "选择是否总是隐藏聊天或只在全屏隐藏它",
 							"options": {
-								"always": "Always hide",
-								"fullscreen": "Only hide in fullscreen"
+								"always": "始终隐藏",
+								"fullscreen": "仅在全屏幕中隐藏"
 							}
 						}
 					}
 				},
-				"title": "Live stream chat settings"
+				"title": "直播聊天设置"
 			},
 			"miniPlayer": {
 				"button": {
