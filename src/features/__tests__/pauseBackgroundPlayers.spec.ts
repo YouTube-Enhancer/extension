@@ -103,11 +103,18 @@ test.describe("pauseBackgroundPlayers", () => {
 		await openAndPlayVideo(pageA, watch);
 		await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
 		await openAndPlayVideo(pageB, watch);
-		// Proves the listener was attached, so the silence after the disable below is attributable to onDisable.
+		// Proves the listener was attached, so the states after the disable below are attributable to onDisable.
 		await expectPlayerState(pageA, PlayerStates.PAUSED, watch);
 		await disableFeature(pageA, "pauseBackgroundPlayers.enabled");
-		// Whether a tab gets paused is decided by the sender's listener, so the disabled tab has to become the
-		// sender: resuming it must no longer reach the background handler.
+		// The contract on disable is asymmetric: it stops future pausing but does not resume tabs it already
+		// paused, so pageA has to stay paused through a settle window.
+		await expectToStay(
+			async () => getValueFromYouTubePlayer(pageA, "getPlayerState", watch),
+			PlayerStates.PAUSED,
+			{ page: pageA }
+		);
+		// A new pause attempt must not reach the background handler either: the disabled tab becomes the sender
+		// when it resumes, and the other tab has to keep playing.
 		await pageA.bringToFront();
 		await ensureVideoIsPlaying(pageA, watch);
 		await expectToStay(
