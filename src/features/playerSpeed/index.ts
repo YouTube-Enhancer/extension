@@ -360,6 +360,9 @@ export default createFeature({
 		browserColorLog(`Setting player speed to ${speed}`, "FgMagenta");
 		installUserInputTracking();
 		enforcedConfig = { channelSpeeds, speed };
+		// onInit only runs for features enabled at page load; a feature enabled later through the settings
+		// still has to record manual speed changes from the player's settings menu, so arm it here too.
+		setupPlaybackSpeedChangeListener();
 		void setupRateChangeListener();
 		clearManualOverride();
 		clearSessionSpeed();
