@@ -49,7 +49,9 @@ test.describe("automaticallyMaximizePlayer", () => {
 		test(`player should automatically maximize on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "automaticallyMaximizePlayer.enabled");
-			await expect.poll(async () => await isPlayerMaximized(page), { timeout: 30000 }).toBeTruthy();
+			// The maximize retry runs for up to 45 s (overallTimeout in the feature), so the poll has to outlast
+			// it; on live the 30 s poll lost races the product was still within its rights to win late.
+			await expect.poll(async () => await isPlayerMaximized(page), { timeout: 60000 }).toBeTruthy();
 		});
 		test(`player should re-maximize after disable then re-enable on ${pageType}`, async ({
 			page
@@ -85,7 +87,7 @@ test.describe("automaticallyMaximizePlayer", () => {
 	test(`should not maximize player on non-target page`, async ({ page }) => {
 		await navigateToPageType(page, nonTargetPage!);
 		await enableFeature(page, "automaticallyMaximizePlayer.enabled");
-		// The maximize task has a 20 s budget, so a single poll would sample long before a gating regression could show.
+		// The maximize task retries for up to 45 s, so a single poll would sample long before a gating regression could show.
 		await expectToStay(async () => isPlayerMaximized(page), false, {
 			durationMs: 5000,
 			intervalMs: 500,
