@@ -175,7 +175,12 @@ test.describe("maximizePlayerButton", () => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "maximizePlayerButton.button.placement", left);
 		await enableFeature(page, "maximizePlayerButton.button.enabled");
-		await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", left);
+		// 60 s: this attach has burned the 45 s default under the full suite's 3-worker load, while sibling
+		// workers ran live hunts; placement only waits on the player controls, so the raise cannot mask a
+		// button that never attaches.
+		await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", left, {
+			timeout: 60000
+		});
 		await clickFeatureButton(page, watch, "yte-feature-maximizePlayerButton-button", left);
 		await expect(page.locator("body")).toHaveAttribute("yte-maximized");
 		await ensurePlayerControlsVisible(page, watch);
@@ -247,7 +252,10 @@ test.describe("maximizePlayerButton", () => {
 		await enableFeature(page, "maximizePlayerButton.button.enabled");
 		await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", left);
 		await clickFeatureButton(page, watch, "yte-feature-maximizePlayerButton-button", left);
-		await expect(page.locator("body")).toHaveAttribute("yte-maximized");
+		// 30 s: maximizePlayer waits up to 2.5 s each for the video, size button, masthead and player
+		// ready, and under the full suite's load those waits stretch past the bare 15 s default before
+		// the attribute lands.
+		await expect(page.locator("body")).toHaveAttribute("yte-maximized", { timeout: 30000 });
 		await expect(page.locator("body")).toHaveAttribute("yte-size-button-state", "theater");
 		await clickFeatureButton(page, watch, "yte-feature-maximizePlayerButton-button", left);
 		await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
