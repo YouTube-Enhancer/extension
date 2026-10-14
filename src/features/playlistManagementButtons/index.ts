@@ -37,6 +37,7 @@ interface YTDPlaylistVideoRenderer extends HTMLElement {
 }
 
 let playlistUnsubscribeBus: Nullable<UnsubscribeFromDomMutations> = null;
+let progressUnsubscribeBus: Nullable<UnsubscribeFromDomMutations> = null;
 /** Trailing debounce handle coalescing bus bursts into one button pass; see observePlaylist. */
 let passesDebounce: Nullable<ReturnType<typeof setTimeout>> = null;
 let preparePageDisposeListener: Nullable<(event: Event) => void> = null;
@@ -56,6 +57,10 @@ const cleanupPlaylistManagementButtons = () => {
 	if (playlistUnsubscribeBus) {
 		playlistUnsubscribeBus();
 		playlistUnsubscribeBus = null;
+	}
+	if (progressUnsubscribeBus) {
+		progressUnsubscribeBus();
+		progressUnsubscribeBus = null;
 	}
 	if (preparePageDisposeListener) {
 		document.removeEventListener("yt-action", preparePageDisposeListener);
@@ -148,9 +153,14 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 						onClick: async () => {
 							const { playlistVideoId: videoId } = item as YTDPlaylistVideoRenderer;
 							await removeFromHistory(videoId);
+							// Drop the button before the overlay goes: YouTube re-renders the row a beat
+							// after removeFromHistory resolves, so a recount run here can still see the
+							// old 100% overlay and re-label the button "Remove 1 watched video". Starting
+							// from no button means the late re-render can only take it back off, which is
+							// what the row-progress observer above is there to catch.
+							removeAllButton?.remove();
 							getThumbnailOverlay(item)?.remove();
 							resetButton.remove();
-							await addRemoveAllButton();
 						},
 						translationError: (translations) =>
 							translations.pages.content.features.playlistManagementButtons.extras
@@ -300,6 +310,34 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 					{ parent: container }
 				);
 			}
+			observeRowProgressForRemoveAll();
+		}
+		/**
+		 * The remove-all button lives in the chip-bar header, which sits *outside* the list
+		 * renderer the mutation observer above is scoped to, so a row re-render after a reset
+		 * never reaches the recount: the thumbnail overlay the count reads is restored by
+		 * YouTube a beat after the reset handler's own direct addRemoveAllButton() call, which
+		 * races the async removeFromHistory() and re-labels the button "Remove 1 watched video".
+		 * Watching each row's progress-overlay attribute closes that gap without widening the
+		 * (hot) list observer to the whole page.
+		 */
+		function observeRowProgressForRemoveAll() {
+			if (progressUnsubscribeBus) return;
+			const rows = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
+			if (!rows.length) return;
+			let debounced: null | ReturnType<typeof setTimeout> = null;
+			progressUnsubscribeBus = subscribeToDomMutations(
+				PLAYLIST_ITEM_SELECTOR,
+				() => {
+					if (isStale() || debounced) return;
+					debounced = setTimeout(() => {
+						debounced = null;
+						if (isStale()) return;
+						void addRemoveAllButton();
+					}, 100);
+				},
+				{ attributeFilter: ["style"], parent: document.body }
+			);
 		}
 
 		const {
