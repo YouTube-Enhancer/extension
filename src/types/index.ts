@@ -382,6 +382,10 @@ export type configuration = {
 	};
 	openYouTubeSettingsOnHover: { enabled: boolean };
 	pauseBackgroundPlayers: { enabled: boolean };
+	playbackSpeedBoostGesture: {
+		enabled: boolean;
+		speed: number;
+	};
 	playbackSpeedButtons: {
 		button: {
 			enabled: boolean;
