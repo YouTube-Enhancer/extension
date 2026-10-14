@@ -9,10 +9,11 @@
  * The bus is always-alive: created on module import, disconnected in the
  * embedded script's teardown. Features subscribe/unsubscribe as they enable/disable.
  *
- * **Detached parents are supported.** When a subscriber passes `parent` that is not
- * connected to the document, the bus also observes that root so mutations inside a
- * detached subtree still deliver. Roots are refcounted and disconnected with the
- * last subscriber.
+ * **Parents outside the shared observer's reach are supported.** When a subscriber passes a
+ * `parent` that mutations inside `document.body` cannot deliver on - detached from the document,
+ * inside a shadow tree, or in another document such as a same-origin frame's internal document -
+ * the bus also observes that root so mutations inside the subtree still deliver. Roots are
+ * refcounted and disconnected with the last subscriber.
  *
  * @example
  * ```ts
@@ -58,7 +59,7 @@ type DetachedRootState = {
 type Subscriber = {
 	attributeFilter?: readonly string[];
 	callback: (elements: Element[]) => void;
-	/** Set when the subscriber's parent is detached; released on unsubscribe. */
+	/** Set when the subscriber's parent needs its own root observer; released on unsubscribe. */
 	detachedParent?: Element;
 	once?: boolean;
 	parent?: ParentNode;
@@ -75,7 +76,11 @@ type SubscribeToDomMutationsOptions = {
 	attributeFilter?: readonly string[];
 	/** If true, automatically unsubscribe after the first delivery. */
 	once?: boolean;
-	/** If provided, only deliver matches that are descendants of this element. */
+	/**
+	 * If provided, only deliver matches that are descendants of this element. A parent
+	 * outside the shared observer's reach (detached, shadow-enclosed, or in another
+	 * document) is observed via its own refcounted root so mutations inside it deliver.
+	 */
 	parent?: ParentNode;
 };
 
@@ -87,7 +92,7 @@ type UnsubscribeFromDomMutations = () => void;
 /** Map from CSS selector to the set of subscribers interested in that selector. */
 const subscriberMap = new Map<string, Set<Subscriber>>();
 
-/** Extra observers for subscriber parents that are not connected to the document. */
+/** Root observers for subscriber parents the shared observer cannot reach (detached, shadow, foreign doc). */
 const detachedRoots = new Map<Element, DetachedRootState>();
 
 /** The single shared observer, or null after {@link disconnectFromDomMutations}. */
@@ -162,8 +167,20 @@ function ensureObserverOptions(): void {
 	observedAttributeFilter = attributeFilter;
 }
 
-function isAttached(node: Node): boolean {
-	return node.isConnected || document.contains(node);
+/**
+ * True when mutations inside `node` already reach the shared observer, which watches
+ * `document.body`. Anywhere else - detached from the document, inside a shadow tree, or
+ * in another document such as a same-origin frame's internal document (`isConnected`
+ * still reads true there, but the shared observer cannot see across the boundary) - the
+ * subscriber's parent needs its own refcounted root observer instead.
+ */
+function isCoveredBySharedObserver(node: Node): boolean {
+	// `getRootNode()` equals the global document only for light-DOM nodes reachable from
+	// it; frame-internal nodes root at their frame's Document, shadow-enclosed nodes at
+	// their ShadowRoot, and detached nodes at themselves.
+	if (node.getRootNode() !== document) return false;
+	const { body } = document;
+	return node === body || body?.contains(node) === true;
 }
 
 function observeRoot(observerInstance: MutationObserver, root: Element): void {
@@ -282,8 +299,9 @@ function retainDetachedRoot(root: Element): void {
  * elements that match the selector instead (shared observer re-observes with the
  * union of live filters).
  *
- * When `parent` is detached from the document, the bus also observes that root so
- * the subscription still fires inside the detached subtree.
+ * When `parent` lies outside the shared observer's reach (detached, inside a shadow tree, or in
+ * another document such as a frame's internal document), the bus also observes that root so the
+ * subscription still fires inside that subtree.
  *
  * @param selector - CSS selector to match against added nodes or attribute targets.
  * @param callback - Receives an array of matching elements from the mutation batch.
@@ -298,7 +316,8 @@ function subscribeToDomMutations(
 	options?: SubscribeToDomMutationsOptions
 ): UnsubscribeFromDomMutations {
 	const parent = options?.parent;
-	const detachedParent = parent instanceof Element && !isAttached(parent) ? parent : undefined;
+	const detachedParent =
+		parent instanceof Element && !isCoveredBySharedObserver(parent) ? parent : undefined;
 
 	const subscriber: Subscriber = {
 		attributeFilter: options?.attributeFilter,
@@ -328,9 +347,10 @@ ensureObserverOptions();
 
 // ─── Exports ────────────────────────────────────────────────────
 
-/** Capability of the bus: detached subscriber parents are observed. */
+/** Capabilities of the bus: detached subtrees and foreign-document roots are observed. */
 export const domMutationBusCapabilities = {
-	supportsDetachedSubtrees: true
+	supportsDetachedSubtrees: true,
+	supportsForeignDocumentRoots: true
 } as const;
 
 export { disconnectFromDomMutations, subscribeToDomMutations };
