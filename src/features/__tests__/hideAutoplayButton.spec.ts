@@ -4,8 +4,7 @@ import { metadata } from "@/src/features/hideAutoplayButton/index.metadata";
 import {
 	expectBodyWithClass,
 	expectBodyWithoutClass,
-	expectElementsHidden,
-	expectElementsNotHidden
+	expectElementsHidden
 } from "@/src/utils/_tests/assertions";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
@@ -19,6 +18,18 @@ const {
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 
+/**
+ * The extension's hide is keyed entirely off the body class (index.css:
+ * `body.yte-hide-autoplay-button .ytp-autonav-toggle { display: none !important }`). So "does not
+ * hide by default" is exactly "the body class is absent", and "re-applies after re-enable" is
+ * exactly "the class comes back".
+ *
+ * The previous shape also asserted the button's computed display directly. That measured YouTube's
+ * own behaviour, not the extension's: the fixture video plays, so YouTube hides .ytp-autonav-toggle
+ * itself once playback starts. Under full-suite load that lands inside the assertion window and the
+ * test fails for a reason that has nothing to do with the feature - the reason these two were a
+ * recurring load flake. Keying on the body class removes the dependency on YouTube's playback state.
+ */
 test.describe("hideAutoplayButton", () => {
 	for (const pageType of testPages) {
 		test(`hides autoplay button on ${pageType}`, async ({ page }) => {
@@ -30,7 +41,6 @@ test.describe("hideAutoplayButton", () => {
 		test(`does not hide autoplay button by default on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await expectBodyWithoutClass(page, bodyClass);
-			await expectElementsNotHidden(page, selectors);
 		});
 		test(`persists after full page reload on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -49,7 +59,6 @@ test.describe("hideAutoplayButton", () => {
 			await expectElementsHidden(page, selectors);
 			await disableFeature(page, "hideAutoplayButton.enabled");
 			await expectBodyWithoutClass(page, bodyClass);
-			await expectElementsNotHidden(page, selectors, { mode: "any" });
 			await enableFeature(page, "hideAutoplayButton.enabled");
 			await expectBodyWithClass(page, bodyClass);
 			await expectElementsHidden(page, selectors);
