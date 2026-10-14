@@ -960,6 +960,14 @@
 						},
 						"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
 					},
+					"boostGesture": {
+						"label": "Playback speed boost gesture",
+						"select": {
+							"label": "Gesture speed increment",
+							"title": "Amount of speed to change for each horizontal drag segment"
+						},
+						"title": "Replace YouTube's 2x press-and-hold gesture with horizontal dragging to adjust playback speed"
+					},
 					"speed": {
 						"select": {
 							"label": "Player speed",
