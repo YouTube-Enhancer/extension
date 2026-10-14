@@ -103,8 +103,12 @@ test.describe("skipContinueWatching", () => {
 		// live sits outside includePages but is still a /watch document, so ytd-watch-flexy exists and the
 		// handler is observable - on a channel page getHandler is null either way and nothing is asserted.
 		await navigateToPageType(page, live);
+		// YouTube installs youthereDataChanged_ on the live watch root a beat after the shell
+		// attaches, so a single read taken right after navigation can catch null and fail the
+		// baseline assertion even though the handler is about to be there. Poll for it: the
+		// assertion is about the feature not patching, which needs a baseline to compare against.
+		await expect.poll(async () => getHandler(page), { timeout: 30_000 }).not.toBeNull();
 		const before = await getHandler(page);
-		expect(before).not.toBeNull();
 		await enableFeature(page, "skipContinueWatching.enabled");
 		await expectToStay(async () => getHandler(page), before, { page });
 	});
