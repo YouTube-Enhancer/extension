@@ -1,0 +1,152 @@
+import type { YouTubePlayerDiv } from "@/src/types";
+
+import eventManager from "@/src/events/EventManager";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { setPlayerSpeed } from "@/src/features/playerSpeed";
+import { round } from "@/src/utils/math";
+import { getOSDConfig, showOSD } from "@/src/utils/osd";
+import { getMinSpeed } from "@/src/utils/speed";
+
+import { metadata } from "./index.metadata";
+
+interface ActiveGesture {
+	generation: number;
+	hasMoved: boolean;
+	initialSpeed: number;
+	lastAppliedSpeed: number;
+	startX: number;
+}
+
+const DISPLACEMENT_INTERVAL = 10;
+const MAX_SPEED = 16;
+
+const {
+	defaults: { speed: defaultGestureSpeed }
+} = metadata;
+
+let activeGesture: ActiveGesture | null = null;
+let gestureGeneration = 0;
+let gestureSpeed = defaultGestureSpeed;
+let preventNextClick = false;
+let speedUpdateQueue = Promise.resolve();
+
+function addGestureListeners() {
+	eventManager.addEventListener(document, "mousedown", handleMouseDown, metadata.id, true);
+	eventManager.addEventListener(document, "mousemove", handleMouseMove, metadata.id);
+	eventManager.addEventListener(document, "mouseup", handleMouseUp, metadata.id);
+	eventManager.addEventListener(document, "mouseleave", handleMouseUp, metadata.id);
+	eventManager.addEventListener(document, "click", stopGestureClick, metadata.id, true);
+	eventManager.addEventListener(window, "blur", handleMouseUp, metadata.id);
+}
+
+function getPlayerTarget(event: MouseEvent): Element | null {
+	const { target } = event;
+	if (!(target instanceof Element)) return null;
+	if (Element.prototype.closest.call(target, ".ytp-chrome-bottom, .ytp-ce-element")) return null;
+	if (target instanceof HTMLVideoElement) return target;
+	return Element.prototype.closest.call(target, ".html5-video-player, .ytp-player-content");
+}
+
+function handleMouseDown(event: MouseEvent) {
+	// Only handle left clicks (button === 0) on the player surface
+	if (event.button !== 0 || !getPlayerTarget(event)) return;
+	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+	if (!video) return;
+
+	// Stop immediate propagation in capture phase to suppress YouTube's native 2x press-and-hold timer
+	event.stopImmediatePropagation();
+
+	const { playbackRate: currentSpeed } = video;
+	gestureGeneration++;
+	activeGesture = {
+		generation: gestureGeneration,
+		hasMoved: false,
+		initialSpeed: currentSpeed,
+		lastAppliedSpeed: currentSpeed,
+		startX: event.clientX
+	};
+}
+
+function handleMouseMove(event: MouseEvent) {
+	if (!activeGesture || event.buttons === 0) return;
+	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+	if (!video) return;
+
+	const { generation, initialSpeed, lastAppliedSpeed, startX } = activeGesture;
+	const displacement = event.clientX - startX;
+	const segments = Math.trunc(displacement / DISPLACEMENT_INTERVAL);
+	const speedAdjustment = segments * gestureSpeed;
+	const minSpeed = getMinSpeed(gestureSpeed);
+	const newSpeed = round(
+		Math.min(MAX_SPEED, Math.max(minSpeed, initialSpeed + speedAdjustment)),
+		2
+	);
+	if (newSpeed === lastAppliedSpeed) return;
+
+	activeGesture.lastAppliedSpeed = newSpeed;
+	activeGesture.hasMoved = true;
+
+	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	if (playerContainer) {
+		const onScreenDisplay = getOSDConfig();
+		if (onScreenDisplay) {
+			showOSD(
+				onScreenDisplay,
+				playerContainer,
+				{ max: MAX_SPEED, type: "speed", value: newSpeed },
+				"text"
+			);
+		}
+	}
+
+	queueSpeedUpdate(newSpeed, generation);
+}
+
+function handleMouseUp() {
+	if (!activeGesture) return;
+	const { hasMoved, initialSpeed } = activeGesture;
+	preventNextClick = hasMoved;
+	activeGesture = null;
+	gestureGeneration++;
+	queueSpeedUpdate(initialSpeed, gestureGeneration);
+}
+
+function queueSpeedUpdate(speed: number, generation: number) {
+	speedUpdateQueue = speedUpdateQueue
+		.catch(() => undefined)
+		.then(async () => {
+			if (generation !== gestureGeneration) return undefined;
+			await setPlayerSpeed(speed);
+			return undefined;
+		})
+		.catch((error) => {
+			console.error("[playbackSpeedBoostGesture] Failed to set playback speed:", error);
+		});
+}
+
+function removeGestureListeners() {
+	eventManager.removeEventListeners(metadata.id);
+	handleMouseUp();
+}
+
+function stopGestureClick(event: MouseEvent) {
+	if (!preventNextClick || !getPlayerTarget(event)) return;
+	event.preventDefault();
+	event.stopImmediatePropagation();
+	preventNextClick = false;
+}
+
+export default createFeature({
+	...metadata,
+	onConfigChange: (config) => {
+		gestureSpeed = config.speed;
+	},
+	onDisable: removeGestureListeners,
+	onEnable: (config) => {
+		gestureSpeed = config.speed;
+		addGestureListeners();
+	},
+	onNavigate: () => {
+		handleMouseUp();
+	}
+});

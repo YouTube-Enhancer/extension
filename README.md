@@ -34,7 +34,7 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
 <!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->
 
-## 🎛️ Features • 78 features
+## 🎛️ Features • 79 features
 
 <details>
 <summary>Miscellaneous • 48 features (1 settings)</summary>
@@ -170,10 +170,12 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 </details>
 
 <details>
-<summary>Player Speed • 2 features (3 settings)</summary>
+<summary>Player Speed • 3 features (4 settings)</summary>
 
+- **Playback Speed Boost Gesture**: Replace YouTube's 2x press-and-hold gesture with horizontal dragging to adjust playback speed
 - **Playback Speed Buttons**: Adds buttons to increase or decrease the playback speed of the video you're watching
 - **Forced Playback Speed**: Sets the video speed to what you choose below
+- **Gesture Speed Increment**: Amount of speed to change for each horizontal drag segment
 - **Playback Buttons Speed**: Amount of speed to be changed per click
 - **Player Speed**: The speed to set the video to
 - **Per-channel Playback Speed**: Sets a specific playback speed for videos from a channel
