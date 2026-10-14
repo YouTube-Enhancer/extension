@@ -5,7 +5,11 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import { hasAmbientModeMenuItem } from "@/src/utils/_tests/ambient";
 import { markLiveFixturePage, unmarkLiveFixturePage } from "@/src/utils/_tests/liveFixture";
-import { ensurePlayerControlsVisible, pageSetup } from "@/src/utils/_tests/pageSetup";
+import {
+	ensurePlayerControlsVisible,
+	isExecutionContextDestroyed,
+	pageSetup
+} from "@/src/utils/_tests/pageSetup";
 import {
 	ensureCaptionsState,
 	getCaptionsState,
@@ -336,15 +340,26 @@ export async function spaNavigateToRelatedVideo(page: Page): Promise<void> {
 export async function waitForExtensionReady(page: Page): Promise<void> {
 	await expect(page.locator("html[yte-ready]")).toBeAttached({ timeout: 30_000 });
 }
-async function finishLiveVideoSetup(page: Page): Promise<void> {
+/**
+ * Resolves false when a navigation landed while the play call was in flight (YouTube's reload
+ * storm, or the harness's error-watcher reload): the stream this attempt opened is gone, so the
+ * hunt re-navigates and tries the next one instead of dying with a destroyed-context evaluate.
+ */
+async function finishLiveVideoSetup(page: Page): Promise<boolean> {
 	await waitForExtensionReady(page);
 	await waitForYoutubePlayerReady(page, "live");
 	await pageSetup(page);
-	await page.evaluate(async () => {
-		const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
-		await player?.playVideo?.();
-	});
+	try {
+		await page.evaluate(async () => {
+			const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
+			await player?.playVideo?.();
+		});
+	} catch (error) {
+		if (isExecutionContextDestroyed(error)) return false;
+		throw error;
+	}
 	await page.waitForTimeout(100);
+	return true;
 }
 /**
  * Opens a live stream from the fixture channel, walking its streams until one meets the requirements. `deadline`
@@ -377,7 +392,11 @@ async function navigateToLiveVideo(
 				everyStreamOpened = false;
 				continue;
 			}
-			await finishLiveVideoSetup(page);
+			if (!(await finishLiveVideoSetup(page))) {
+				everyStreamOpened = false;
+				await navigateToPage(page, channelUrl);
+				continue;
+			}
 			if (requirements.length === 0 || (await videoMeetsCapabilities(page, requirements))) {
 				return;
 			}

@@ -12,6 +12,15 @@ const YOUTUBE_AD_SELECTORS = {
 		", "
 	)
 } as const;
+/**
+ * A navigation that lands while an evaluate is in flight destroys its execution context. YouTube's
+ * reload storms and this file's own error-watcher reload both do it mid-hunt; callers treat the
+ * destroyed context as a lost probe, not a failed test (see the addStyleTag catches below and the
+ * live hunt's setup guard in navigation).
+ */
+export function isExecutionContextDestroyed(error: unknown): boolean {
+	return error instanceof Error && /Execution context (was )?destroyed/i.test(error.message);
+}
 
 /** Seeks the ad's video to its end so YouTube moves on to the content instead of playing the ad out. */
 async function fastForwardAd(page: Page): Promise<void> {
@@ -33,34 +42,51 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 	const startTime = Date.now();
 
 	const getAdInfo = async () => {
-		return await page.evaluate((selectors) => {
-			const isShowing = document.querySelector(selectors.adShowing) !== null;
-			if (!isShowing) {
+		try {
+			return await page.evaluate((selectors) => {
+				const isShowing = document.querySelector(selectors.adShowing) !== null;
+				if (!isShowing) {
+					return {
+						isShowing: false,
+						playerExists: document.querySelector("#movie_player") !== null,
+						podText: null,
+						remainingSeconds: null
+					};
+				}
+				const remainingText =
+					document.querySelector<HTMLElement>(selectors.remainingTime)?.textContent?.trim() ?? null;
+				const podText =
+					document.querySelector<HTMLElement>(selectors.adCount)?.textContent?.trim() ?? null;
+				let remainingSeconds: Nullable<number> = null;
+				if (remainingText) {
+					const [hours = 0, minutes = 0, seconds = 0] = remainingText
+						.split(":")
+						.map((value) => Number.parseInt(value, 10));
+					remainingSeconds = hours * 3600 + minutes * 60 + seconds;
+				}
+				return {
+					isShowing: true,
+					playerExists: true,
+					podText,
+					remainingSeconds
+				};
+			}, YOUTUBE_AD_SELECTORS);
+		} catch (error) {
+			/**
+			 * The error watcher's own reload, or a YouTube reload storm, can navigate the page while
+			 * the probe is in flight: the destroyed context is not an ad, and the loop re-checks the
+			 * new document on its next tick.
+			 */
+			if (isExecutionContextDestroyed(error)) {
 				return {
 					isShowing: false,
-					playerExists: document.querySelector("#movie_player") !== null,
+					playerExists: false,
 					podText: null,
 					remainingSeconds: null
 				};
 			}
-			const remainingText =
-				document.querySelector<HTMLElement>(selectors.remainingTime)?.textContent?.trim() ?? null;
-			const podText =
-				document.querySelector<HTMLElement>(selectors.adCount)?.textContent?.trim() ?? null;
-			let remainingSeconds: Nullable<number> = null;
-			if (remainingText) {
-				const [hours = 0, minutes = 0, seconds = 0] = remainingText
-					.split(":")
-					.map((value) => Number.parseInt(value, 10));
-				remainingSeconds = hours * 3600 + minutes * 60 + seconds;
-			}
-			return {
-				isShowing: true,
-				playerExists: true,
-				podText,
-				remainingSeconds
-			};
-		}, YOUTUBE_AD_SELECTORS);
+			throw error;
+		}
 	};
 	const clickSkipButton = async (): Promise<boolean> => {
 		const skipButton = page.locator(YOUTUBE_AD_SELECTORS.skipButton).first();
