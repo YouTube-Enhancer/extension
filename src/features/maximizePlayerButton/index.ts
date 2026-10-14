@@ -2,6 +2,7 @@
 import "./index.css";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import {
 	addFeatureButton,
 	getFeatureButton,
@@ -11,7 +12,7 @@ import { getFeatureIcon } from "@/src/icons";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 
 import { metadata } from "./index.metadata";
-import { maximizePlayer, minimizePlayer } from "./utils";
+import { makeMaximizeTask, minimizePlayer } from "./utils";
 
 export default createFeature({
 	...metadata,
@@ -56,7 +57,15 @@ export default createFeature({
 						);
 						if (checked) {
 							remove();
-							void maximizePlayer();
+							// A click must survive a player transition: the theater re-render can outlast
+							// maximizePlayer's one-shot waits, so the maximize is retried through the seam
+							// (same shape as automaticallyMaximizePlayer) instead of bailing silently.
+							void registry.playerRetry(
+								"maximizePlayerButton",
+								[makeMaximizeTask()],
+								["maximize"],
+								{ interval: 300, maxAttempts: 100, overallTimeout: 30000 }
+							);
 						} else {
 							void minimizePlayer();
 						}
