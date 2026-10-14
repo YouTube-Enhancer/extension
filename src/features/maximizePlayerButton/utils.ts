@@ -185,6 +185,18 @@ const onKeyDown = (e: KeyboardEvent) => {
 	e.preventDefault();
 	void minimizePlayer();
 };
+/**
+ * One maximize attempt for the player retry seam. maximizePlayer's element/readiness waits are
+ * one-shot budgets, and a player transition (theater mode re-renders the controls, live starts
+ * late) can outlast them, which used to drop the user's click for the rest of the page. The task
+ * reports whether the maximize actually landed, so the seam retries the failed wait instead.
+ */
+export function makeMaximizeTask(attemptTimeout = 2500): () => Promise<boolean> {
+	return async (): Promise<boolean> => {
+		await maximizePlayer(attemptTimeout);
+		return document.body.getAttribute("yte-maximized") === "";
+	};
+}
 export async function maximizePlayer(timeout = 2500) {
 	const videoPlayer = await waitForElement<HTMLVideoElement>("video.html5-main-video", timeout);
 	if (!videoPlayer) return;
@@ -219,6 +231,10 @@ export async function maximizePlayer(timeout = 2500) {
 	attachRuntimeListeners();
 }
 export async function minimizePlayer() {
+	// The last action wins: a minimize must supersede a maximize retry that is still waiting out a
+	// player transition (theater re-render, slow readiness), or the retry's next attempt would
+	// re-maximize after the user has already asked for the normal layout back.
+	registry.cleanupPlayerRetry("maximizePlayerButton");
 	const lastState = document.body.getAttribute("yte-size-button-state");
 	const sizeElement = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
 	if (lastState === "default" && sizeElement) {
