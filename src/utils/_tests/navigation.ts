@@ -4,6 +4,7 @@ import type { PageType } from "@/src/features/_registry/types";
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import { hasAmbientModeMenuItem } from "@/src/utils/_tests/ambient";
+import { markLiveFixturePage, unmarkLiveFixturePage } from "@/src/utils/_tests/liveFixture";
 import { ensurePlayerControlsVisible, pageSetup } from "@/src/utils/_tests/pageSetup";
 import {
 	ensureCaptionsState,
@@ -174,6 +175,8 @@ export async function navigateToPageType(
 	{ deadline }: { deadline?: number } = {}
 ): Promise<void> {
 	if (pageType === "live") {
+		// The attach/outcome budgets downstream scale off this marker (see attachBudget in assertions).
+		markLiveFixturePage(page);
 		// The hunt needs the time; a test that already allowed more keeps it.
 		if (test.info().timeout < 120_000) test.setTimeout(120_000);
 		await navigateToLiveVideo(page, requirements, deadline);
@@ -190,6 +193,7 @@ export async function navigateToPageType(
 			.toBe(true);
 		return;
 	}
+	unmarkLiveFixturePage(page);
 	const fixture = getFixture(pageType, requirements);
 	await navigateToYoutubePage(page, fixture.url, pageType);
 }

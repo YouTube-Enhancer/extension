@@ -5,6 +5,7 @@ import type { YoutubePlayerQualityLevel } from "@/src/features/playerQuality/typ
 import type { ButtonPlacement, FeatureButtonId, FeatureMenuItemId } from "@/src/types";
 
 import { placementSelectors } from "@/src/utils/_tests/constants";
+import { isLiveFixturePage } from "@/src/utils/_tests/liveFixture";
 import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 
 /** Fails when none of the selectors matches an element on the page. */
@@ -132,7 +133,7 @@ export async function expectFeatureButtonToBeIn(
 	page: Page,
 	featureId: FeatureButtonId,
 	placement: Exclude<ButtonPlacement, "feature_menu">,
-	{ timeout = 45000 }: { timeout?: number } = {}
+	{ timeout = attachBudget(page) }: { timeout?: number } = {}
 ) {
 	const { [placement]: selector } = placementSelectors;
 	const container = page.locator(selector);
@@ -141,11 +142,11 @@ export async function expectFeatureButtonToBeIn(
 	await expect(button).toBeAttached({ timeout });
 }
 /** The button controller places buttons once the player controls exist, which a live player renders late. */
-// 30 s: a live stream's player controls, where the buttons go, can take twice as long to settle as a video's.
+// attachBudget: a live stream's player controls, where the buttons go, can take twice as long to settle as a video's.
 export async function expectFeatureButtonToBeTruthy(
 	page: Page,
 	featureId: FeatureButtonId,
-	{ timeout = 45000 }: { timeout?: number } = {}
+	{ timeout = attachBudget(page) }: { timeout?: number } = {}
 ) {
 	const featureButton = page.locator(`#${featureId}`);
 	await expect(featureButton).toBeAttached({ timeout });
@@ -187,4 +188,14 @@ export async function expectToStay(
 		expect(await getter()).toEqual(expected);
 		await page.waitForTimeout(intervalMs);
 	} while (Date.now() < end);
+}
+/**
+ * Button placement waits on the player controls, not on player readiness, so this budget only has to ride out
+ * slow renders: 45 s normally, and 60 s on a live fixture, where the stream hunt has already consumed most of
+ * the test's budget before placement can start and, under the full suite, sibling workers running their own
+ * hunts keep starving this one (the product's controls-rebind watcher and placement recheck work in page
+ * time, which stretches with the load).
+ */
+function attachBudget(page: Page): number {
+	return isLiveFixturePage(page) ? 60000 : 45000;
 }
