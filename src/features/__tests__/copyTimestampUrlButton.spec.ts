@@ -166,7 +166,12 @@ test.describe("copyTimestampUrlButton", () => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "copyTimestampUrlButton.button.placement", right);
 		await enableFeature(page, "copyTimestampUrlButton.button.enabled");
-		await expectFeatureButtonToBeIn(page, "yte-feature-copyTimestampUrlButton-button", right);
+		// 60 s: this attach has burned the 45 s default under the full suite's 3-worker load, while sibling
+		// workers ran live hunts; placement only waits on the player controls, so the raise cannot mask a
+		// button that never attaches.
+		await expectFeatureButtonToBeIn(page, "yte-feature-copyTimestampUrlButton-button", right, {
+			timeout: 60000
+		});
 		const button = page.locator("#yte-feature-copyTimestampUrlButton-button");
 		const label = await button.getAttribute("data-title");
 		expect(label).toBeTruthy();
