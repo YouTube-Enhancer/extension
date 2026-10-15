@@ -147,16 +147,27 @@ function manageOSD(speed: number) {
 		pendingOSDSpeed = null;
 		if (displaySpeed === null) return;
 
-		const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 		const onScreenDisplay = getOSDConfig();
-		if (!playerContainer || !onScreenDisplay) return;
+		if (!onScreenDisplay) return;
 
-		showOSD(
-			onScreenDisplay,
-			playerContainer,
-			{ max: MAX_SPEED, type: "speed", value: displaySpeed },
-			"text"
-		);
+		const displayValue = { max: MAX_SPEED, type: "speed" as const, value: displaySpeed };
+
+		const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+		if (playerContainer) {
+			try {
+				showOSD(onScreenDisplay, playerContainer, displayValue, "text");
+				return;
+			} catch {}
+		}
+
+		// Fallback for when playerContainer is not found
+		const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+		if (video) {
+			const { parentElement: videoParentDiv } = video;
+			if (videoParentDiv instanceof HTMLDivElement) {
+				showOSD(onScreenDisplay, videoParentDiv as YouTubePlayerDiv, displayValue, "text");
+			}
+		}
 	});
 }
 
