@@ -9,7 +9,7 @@ export const metadata = createFeatureMetadata({
 		enabled: field(z.boolean(), false),
 		speed: field(z.number(), 0.25)
 	},
-	dependencies: { includePages: ["watch"] },
+	dependencies: { includePages: ["watch", "shorts"] },
 	id: "playbackSpeedBoostGesture",
 	loadPhase: 1,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playerSpeed.title),
