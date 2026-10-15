@@ -28,6 +28,7 @@ let activeGesture: ActiveGesture | null = null;
 let gestureGeneration = 0;
 let gestureSpeed = defaultGestureSpeed;
 let preventNextClick = false;
+let pendingRestorationSpeed: null | number = null;
 let speedUpdateQueue = Promise.resolve();
 
 /** Attaches the document and window listeners that drive the drag gesture, all scoped to this feature's id. */
@@ -37,7 +38,7 @@ function addGestureListeners() {
 	eventManager.addEventListener(document, "mouseup", handleMouseUp, metadata.id);
 	eventManager.addEventListener(document, "mouseleave", handleMouseUp, metadata.id);
 	eventManager.addEventListener(document, "click", stopGestureClick, metadata.id, true);
-	eventManager.addEventListener(window, "blur", handleMouseUp, metadata.id);
+	eventManager.addEventListener(window, "blur", () => handleMouseUp(), metadata.id);
 }
 
 /**
@@ -65,7 +66,8 @@ function handleMouseDown(event: MouseEvent) {
 	// Stop immediate propagation in capture phase to suppress YouTube's native 2x press-and-hold timer
 	event.stopImmediatePropagation();
 
-	const { playbackRate: currentSpeed } = video;
+	const currentSpeed = pendingRestorationSpeed ?? video.playbackRate;
+	pendingRestorationSpeed = null;
 	gestureGeneration++;
 	activeGesture = {
 		generation: gestureGeneration,
@@ -89,7 +91,8 @@ function handleMouseMove(event: MouseEvent) {
 	const displacement = event.clientX - startX;
 	const segments = Math.trunc(displacement / DISPLACEMENT_INTERVAL);
 	const speedAdjustment = segments * gestureSpeed;
-	const minSpeed = getMinSpeed(gestureSpeed);
+	const minSpeed =
+		segments < 0 ? Math.min(getMinSpeed(gestureSpeed), initialSpeed) : getMinSpeed(gestureSpeed);
 	const newSpeed = round(
 		Math.min(MAX_SPEED, Math.max(minSpeed, initialSpeed + speedAdjustment)),
 		2
@@ -119,24 +122,27 @@ function handleMouseMove(event: MouseEvent) {
  * Ends the active gesture: clears the gesture state, marks that the trailing click should be suppressed if
  * the pointer actually moved, and queues a revert to the pre-gesture speed.
  */
-function handleMouseUp() {
+function handleMouseUp(event?: MouseEvent) {
 	if (!activeGesture) return;
 	const { hasMoved, initialSpeed } = activeGesture;
-	preventNextClick = hasMoved;
+	preventNextClick = hasMoved && Boolean(event && getPlayerTarget(event));
 	activeGesture = null;
 	gestureGeneration++;
-	queueSpeedUpdate(initialSpeed, gestureGeneration);
+	if (hasMoved) {
+		pendingRestorationSpeed = initialSpeed;
+		queueSpeedUpdate(initialSpeed, gestureGeneration, true);
+	}
 }
 
 /**
  * Serializes playback-rate writes onto a single promise chain so they apply in order, and drops any write
  * whose gesture generation is no longer current (a newer mousedown or mouseup superseded it).
  */
-function queueSpeedUpdate(speed: number, generation: number) {
+function queueSpeedUpdate(speed: number, generation: number, preserve = false) {
 	speedUpdateQueue = speedUpdateQueue
 		.catch(() => undefined)
 		.then(async () => {
-			if (generation !== gestureGeneration) return undefined;
+			if (!preserve && generation !== gestureGeneration) return undefined;
 			await setPlayerSpeed(speed);
 			return undefined;
 		})
