@@ -209,6 +209,19 @@ const onWindowMessage = (event: MessageEvent) => {
 						// Test-only entrypoint: compiled out of release builds, where DEV_MODE is
 						// statically false, so pages cannot trigger storage rewrites.
 						if (!DEV_MODE) break;
+						/**
+						 * The write only reaches the embedded script through the storage listener
+						 * that forwards it. On a freshly (re)loaded document (YouTube's error
+						 * watcher, reload storms) that listener may not be attached yet: the
+						 * write would fire no change event, dispatch no featureUpdate, and the
+						 * fallback signal below would report success for a write nothing ever
+						 * reconciled - the feature stays disabled while the test moves on.
+						 * Wait for the embedded instance and attach forwarding first.
+						 */
+						if (!storageForwardingEnabled) {
+							const ready = await waitForReady(30_000);
+							if (ready) enableStorageForwarding();
+						}
 						const {
 							data: { key, value }
 						} = message;
