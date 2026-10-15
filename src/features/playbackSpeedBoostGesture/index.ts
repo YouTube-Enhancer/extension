@@ -29,6 +29,8 @@ let gestureGeneration = 0;
 let gestureSpeed = defaultGestureSpeed;
 let preventNextClick = false;
 let pendingRestorationSpeed: null | number = null;
+let pendingOSDSpeed: null | number = null;
+let osdAnimationFrame: null | number = null;
 let speedUpdateQueue = Promise.resolve();
 
 /** Attaches the document and window listeners that drive the drag gesture, all scoped to this feature's id. */
@@ -102,18 +104,7 @@ function handleMouseMove(event: MouseEvent) {
 	activeGesture.lastAppliedSpeed = newSpeed;
 	activeGesture.hasMoved = true;
 
-	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
-	if (playerContainer) {
-		const onScreenDisplay = getOSDConfig();
-		if (onScreenDisplay) {
-			showOSD(
-				onScreenDisplay,
-				playerContainer,
-				{ max: MAX_SPEED, type: "speed", value: newSpeed },
-				"text"
-			);
-		}
-	}
+	manageOSD(newSpeed);
 
 	queueSpeedUpdate(newSpeed, generation);
 }
@@ -122,16 +113,45 @@ function handleMouseMove(event: MouseEvent) {
  * Ends the active gesture: clears the gesture state, marks that the trailing click should be suppressed if
  * the pointer actually moved, and queues a revert to the pre-gesture speed.
  */
-function handleMouseUp(event?: MouseEvent) {
+function handleMouseUp(event?: MouseEvent, showRevertOSD = true) {
 	if (!activeGesture) return;
+
 	const { hasMoved, initialSpeed } = activeGesture;
 	preventNextClick = hasMoved && Boolean(event && getPlayerTarget(event));
 	activeGesture = null;
 	gestureGeneration++;
 	if (hasMoved) {
 		pendingRestorationSpeed = initialSpeed;
+		if (showRevertOSD) manageOSD(initialSpeed);
 		queueSpeedUpdate(initialSpeed, gestureGeneration, true);
 	}
+}
+
+/**
+ * Coalesces rapid speed changes into one OSD update per animation frame, avoiding repeated canvas setup during
+ * fast pointer movement while ensuring the latest speed is displayed.
+ */
+function manageOSD(speed: number) {
+	pendingOSDSpeed = speed;
+	if (osdAnimationFrame !== null) return;
+
+	osdAnimationFrame = requestAnimationFrame(() => {
+		osdAnimationFrame = null;
+		const displaySpeed = pendingOSDSpeed;
+		pendingOSDSpeed = null;
+		if (displaySpeed === null) return;
+
+		const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+		const onScreenDisplay = getOSDConfig();
+		if (!playerContainer || !onScreenDisplay) return;
+
+		showOSD(
+			onScreenDisplay,
+			playerContainer,
+			{ max: MAX_SPEED, type: "speed", value: displaySpeed },
+			"text"
+		);
+	});
 }
 
 /**
@@ -154,7 +174,12 @@ function queueSpeedUpdate(speed: number, generation: number, preserve = false) {
 /** Detaches every listener this feature registered and ends any gesture still in progress. */
 function removeGestureListeners() {
 	eventManager.removeEventListeners(metadata.id);
-	handleMouseUp();
+	handleMouseUp(undefined, false);
+	if (osdAnimationFrame !== null) {
+		cancelAnimationFrame(osdAnimationFrame);
+		osdAnimationFrame = null;
+	}
+	pendingOSDSpeed = null;
 }
 
 /**
