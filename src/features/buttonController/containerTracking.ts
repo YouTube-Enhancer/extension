@@ -21,36 +21,25 @@ export function getEffectivePlacement(
 	return isFullscreen() && fullscreenPlacement !== "same" ? fullscreenPlacement : placement;
 }
 
-export async function getOrCreateButtonContainer(
+let containerCreationInFlight: Nullable<Promise<Nullable<HTMLDivElement>>> = null;
+
+export function getOrCreateButtonContainer(
 	inTheaterMode: boolean
 ): Promise<Nullable<HTMLDivElement>> {
-	let container = document.querySelector<HTMLDivElement>(`#${buttonContainerId}`);
-	if (container) {
-		return container;
+	const existing = document.getElementById(buttonContainerId) as Nullable<HTMLDivElement>;
+	if (existing) {
+		// A container stranded at the other mode's position (e.g. left in the
+		// theater slot after exiting theater mode, centered on the full page
+		// width) is re-homed instead of being blindly reused.
+		placementTransition.ensureContainerPosition();
+		return Promise.resolve(existing);
 	}
-	container = createStyledElement({
-		elementId: buttonContainerId,
-		elementType: "div",
-		styles: { display: "flex", height: "48px", justifyContent: "center" }
-	});
-	if (inTheaterMode) {
-		const isNewLayout = isNewYouTubeVideoLayout();
-		const parent = isNewLayout
-			? document.querySelector<HTMLElement>("ytd-watch-grid")
-			: document.querySelector<HTMLElement>("ytd-watch-flexy");
-		if (!parent) return null;
-		const columns = parent.querySelector("#columns");
-		if (columns) {
-			parent.insertBefore(container, columns);
-			return container;
-		}
-		parent.append(container);
-		return container;
+	if (!containerCreationInFlight) {
+		containerCreationInFlight = createButtonContainer(inTheaterMode).finally(() => {
+			containerCreationInFlight = null;
+		});
 	}
-	const player = await whenReady("belowPlayerRoot");
-	if (!player) return null;
-	player.insertAdjacentElement("afterend", container);
-	return container;
+	return containerCreationInFlight;
 }
 
 export function getOrCreateRightControlsContainer(): Nullable<HTMLDivElement> {
@@ -160,4 +149,30 @@ export function startPlacementTracking(onFullscreenChange: () => void) {
 
 export function stopPlacementTracking() {
 	placementTransition.deactivate();
+}
+
+async function createButtonContainer(inTheaterMode: boolean): Promise<Nullable<HTMLDivElement>> {
+	const container = createStyledElement({
+		elementId: buttonContainerId,
+		elementType: "div",
+		styles: { display: "flex", height: "48px", justifyContent: "center" }
+	});
+	if (inTheaterMode) {
+		const isNewLayout = isNewYouTubeVideoLayout();
+		const parent = isNewLayout
+			? document.querySelector<HTMLElement>("ytd-watch-grid")
+			: document.querySelector<HTMLElement>("ytd-watch-flexy");
+		if (!parent) return null;
+		const columns = parent.querySelector("#columns");
+		if (columns) {
+			parent.insertBefore(container, columns);
+			return container;
+		}
+		parent.append(container);
+		return container;
+	}
+	const player = await whenReady("belowPlayerRoot");
+	if (!player) return null;
+	player.insertAdjacentElement("afterend", container);
+	return container;
 }

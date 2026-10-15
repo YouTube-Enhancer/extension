@@ -58,7 +58,7 @@ class PlacementTransition {
 	}
 
 	ensureContainerPosition() {
-		const container = document.querySelector<HTMLDivElement>(`#${buttonContainerId}`);
+		const container = document.getElementById(buttonContainerId) as Nullable<HTMLDivElement>;
 		if (!container) return;
 		const inTheaterMode = isInTheaterMode();
 		const { parentElement: currentParent } = container;
@@ -96,7 +96,7 @@ class PlacementTransition {
 	}
 
 	syncContainerGeometry() {
-		const container = document.querySelector<HTMLDivElement>(`#${buttonContainerId}`);
+		const container = document.getElementById(buttonContainerId) as Nullable<HTMLDivElement>;
 		if (!container?.isConnected) return;
 		if (isFullscreen()) return;
 		const player = document.querySelector<HTMLDivElement>("#movie_player");
