@@ -307,6 +307,27 @@ test.describe("buttonController", () => {
 				.toBe(true);
 			await expectContainerToMatchPlayer(page);
 		});
+		test("container must not duplicate when several below-player features place at once", async ({
+			page
+		}) => {
+			await navigateToPageType(page, watch);
+			await setOption(page, "screenshotButton.button.placement", below);
+			await setOption(page, "loopButton.button.placement", below);
+			await enableFeature(page, "screenshotButton.button.enabled");
+			await enableFeature(page, "loopButton.button.enabled");
+			await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", below);
+			await expectFeatureButtonToBeIn(page, "yte-feature-loopButton-button", below);
+			// A reload replays the cold-load path where the registry enables every
+			// configured below-player feature at once; the concurrent placements used
+			// to race the container's creation (each one missed the still-detached
+			// container) and every racer landed its own copy, stacking empty 48px
+			// bands that pushed the below-player section down.
+			await page.reload();
+			await waitForExtensionReady(page);
+			await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", below);
+			await expectFeatureButtonToBeIn(page, "yte-feature-loopButton-button", below);
+			await expect(page.locator("#yte-button-container")).toHaveCount(1);
+		});
 	});
 	test.describe("tooltips", () => {
 		test("hovering a player controls button should show its tooltip inside the player and remove it on pointer out", async ({
