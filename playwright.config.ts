@@ -314,7 +314,7 @@ export default defineConfig({
 			}
 		}
 	],
-	reporter: [["html", { host: "0.0.0.0", open: "on-failure", port: 9323 }]],
+	reporter: [["list"], ["html", { host: "0.0.0.0", open: "on-failure", port: 9323 }]],
 	retries: 1,
 	testDir: ".",
 	timeout: 120_000,
