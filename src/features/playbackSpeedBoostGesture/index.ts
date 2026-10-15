@@ -30,6 +30,7 @@ let gestureSpeed = defaultGestureSpeed;
 let preventNextClick = false;
 let speedUpdateQueue = Promise.resolve();
 
+/** Attaches the document and window listeners that drive the drag gesture, all scoped to this feature's id. */
 function addGestureListeners() {
 	eventManager.addEventListener(document, "mousedown", handleMouseDown, metadata.id, true);
 	eventManager.addEventListener(document, "mousemove", handleMouseMove, metadata.id);
@@ -39,6 +40,10 @@ function addGestureListeners() {
 	eventManager.addEventListener(window, "blur", handleMouseUp, metadata.id);
 }
 
+/**
+ * Returns the player element the event landed on, or null when the event is outside the player or over a
+ * surface the gesture should not capture (controls chrome, end screens).
+ */
 function getPlayerTarget(event: MouseEvent): Element | null {
 	const { target } = event;
 	if (!(target instanceof Element)) return null;
@@ -47,6 +52,10 @@ function getPlayerTarget(event: MouseEvent): Element | null {
 	return Element.prototype.closest.call(target, ".html5-video-player, .ytp-player-content");
 }
 
+/**
+ * Starts a gesture on left mousedown over the player: snapshots the current playback rate as the baseline
+ * and the pointer's x position, and stops propagation so YouTube's own press-and-hold 2x timer never runs.
+ */
 function handleMouseDown(event: MouseEvent) {
 	// Only handle left clicks (button === 0) on the player surface
 	if (event.button !== 0 || !getPlayerTarget(event)) return;
@@ -67,6 +76,10 @@ function handleMouseDown(event: MouseEvent) {
 	};
 }
 
+/**
+ * Maps horizontal pointer displacement to a playback rate while a gesture is active: one speed step per
+ * DISPLACEMENT_INTERVAL pixels, clamped between the feature's floor and MAX_SPEED, with an OSD readout.
+ */
 function handleMouseMove(event: MouseEvent) {
 	if (!activeGesture || event.buttons === 0) return;
 	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
@@ -102,6 +115,10 @@ function handleMouseMove(event: MouseEvent) {
 	queueSpeedUpdate(newSpeed, generation);
 }
 
+/**
+ * Ends the active gesture: clears the gesture state, marks that the trailing click should be suppressed if
+ * the pointer actually moved, and queues a revert to the pre-gesture speed.
+ */
 function handleMouseUp() {
 	if (!activeGesture) return;
 	const { hasMoved, initialSpeed } = activeGesture;
@@ -111,6 +128,10 @@ function handleMouseUp() {
 	queueSpeedUpdate(initialSpeed, gestureGeneration);
 }
 
+/**
+ * Serializes playback-rate writes onto a single promise chain so they apply in order, and drops any write
+ * whose gesture generation is no longer current (a newer mousedown or mouseup superseded it).
+ */
 function queueSpeedUpdate(speed: number, generation: number) {
 	speedUpdateQueue = speedUpdateQueue
 		.catch(() => undefined)
@@ -124,11 +145,16 @@ function queueSpeedUpdate(speed: number, generation: number) {
 		});
 }
 
+/** Detaches every listener this feature registered and ends any gesture still in progress. */
 function removeGestureListeners() {
 	eventManager.removeEventListeners(metadata.id);
 	handleMouseUp();
 }
 
+/**
+ * Suppresses the click that trails a completed drag so it does not also toggle playback; only consumed
+ * when the click lands on the player surface.
+ */
 function stopGestureClick(event: MouseEvent) {
 	if (!preventNextClick || !getPlayerTarget(event)) return;
 	event.preventDefault();
