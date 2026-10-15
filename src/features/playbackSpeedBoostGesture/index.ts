@@ -50,7 +50,13 @@ function addGestureListeners() {
 function getPlayerTarget(event: MouseEvent): Element | null {
 	const { target } = event;
 	if (!(target instanceof Element)) return null;
-	if (Element.prototype.closest.call(target, ".ytp-chrome-bottom, .ytp-ce-element")) return null;
+	if (
+		Element.prototype.closest.call(
+			target,
+			".ytp-chrome-bottom, .ytp-chrome-top, .ytp-ce-element, .ytp-popup, .ytp-settings-menu"
+		)
+	)
+		return null;
 	if (target instanceof HTMLVideoElement) return target;
 	return Element.prototype.closest.call(target, ".html5-video-player, .ytp-player-content");
 }
