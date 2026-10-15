@@ -20,6 +20,8 @@ let cachedMiniPlayerDefaults: Nullable<MiniPlayerOptions> = null;
 
 let visibilityObserver: Nullable<IntersectionObserver> = null;
 let unsubscribeCommentsBus: Nullable<() => void> = null;
+let sentinelHealerUnsubscribe: Nullable<() => void> = null;
+let sentinelHealDebounce: Nullable<ReturnType<typeof setTimeout>> = null;
 
 let lastEmittedActiveState: Nullable<boolean> = null;
 
@@ -28,6 +30,12 @@ function cleanupAutoObservers() {
 	visibilityObserver = null;
 	unsubscribeCommentsBus?.();
 	unsubscribeCommentsBus = null;
+	if (sentinelHealDebounce) {
+		clearTimeout(sentinelHealDebounce);
+		sentinelHealDebounce = null;
+	}
+	sentinelHealerUnsubscribe?.();
+	sentinelHealerUnsubscribe = null;
 }
 function emitMiniPlayerState(active: boolean) {
 	if (lastEmittedActiveState === active) return;
@@ -135,12 +143,31 @@ function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController): void {
 			},
 			{ once: true }
 		);
+		// Pages without comments (live streams) never attach the visibility observer,
+		// so nothing would re-assert the sentinel after a YouTube re-render removes it
+		// or replaces the player it was anchored to. Watch the shared bus and re-insert
+		// a missing sentinel; the check is a cheap id lookup behind a trailing debounce.
+		sentinelHealerUnsubscribe = subscribeToDomMutations("*", () => {
+			if (sentinelHealDebounce) return;
+			sentinelHealDebounce = setTimeout(() => {
+				sentinelHealDebounce = null;
+				if (document.getElementById(MINI_PLAYER_SENTINEL_ID)) return;
+				const livePlayerElement =
+					document.querySelector<Element>("#player") ??
+					document.querySelector<Element>("#player-container");
+				if (livePlayerElement) ensureSentinelBelowPlayer(livePlayerElement);
+			}, 100);
+		});
 		return true;
 	};
 	void registry.playerRetry("miniPlayer", [task], ["attach-comments-auto-mini-player"], {
 		maxAttempts: 90,
 		overallTimeout: 45000,
-		waitForLoaded: true
+		// The sentinel needs only the player element, not a loaded player. Waiting for
+		// the loaded state gated the first attempt behind live-stream startup (ads,
+		// buffering), which could consume the whole retry budget before the sentinel
+		// was ever inserted.
+		waitForLoaded: false
 	});
 }
 function getEnabledController(): Nullable<MiniPlayerController> {
