@@ -6,6 +6,7 @@ import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import { round } from "@/src/utils/math";
 import { getOSDConfig, showOSD } from "@/src/utils/osd";
 import { getMinSpeed } from "@/src/utils/speed";
+import { isShortsPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
 
@@ -153,20 +154,14 @@ function manageOSD(speed: number) {
 		const displayValue = { max: MAX_SPEED, type: "speed" as const, value: displaySpeed };
 
 		const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
-		if (playerContainer) {
-			try {
-				showOSD(onScreenDisplay, playerContainer, displayValue, "text");
-				return;
-			} catch {}
-		}
-
-		// Fallback for when playerContainer is not found
 		const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
-		if (video) {
-			const { parentElement: videoParentDiv } = video;
-			if (videoParentDiv instanceof HTMLDivElement) {
-				showOSD(onScreenDisplay, videoParentDiv as YouTubePlayerDiv, displayValue, "text");
-			}
+		const videoParentDiv = video?.parentElement;
+
+		const preferred = isShortsPage() ? videoParentDiv : playerContainer;
+		const fallback = isShortsPage() ? playerContainer : videoParentDiv;
+		const target = (preferred ?? fallback) as null | YouTubePlayerDiv;
+		if (target instanceof HTMLDivElement) {
+			showOSD(onScreenDisplay, target, displayValue, "text");
 		}
 	});
 }
