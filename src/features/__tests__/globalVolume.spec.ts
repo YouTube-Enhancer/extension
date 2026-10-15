@@ -24,6 +24,12 @@ const nonLiveTestPages: readonly PageType[] = [pageTypeRecord.watch, pageTypeRec
 const { watch } = pageTypeRecord;
 // A second volume that differs from the shared `volume` constant, so an edit while the feature runs is observable.
 const updatedVolume = 40;
+// The configured volume is applied through the player retry seam (applyVolume), which allows up
+// to 15 s for the player to be ready and the write to stick. Every volume poll in this file waits
+// on that apply (or on a direct set that is no slower), so its ceiling must outlast the apply
+// budget - otherwise a loaded player that applies late reads as a failure the product then
+// recovers from on its own retry: the one-retry flake seen under full-suite load.
+const APPLY_VOLUME_TIMEOUT = 20000;
 // The rendered options labels and conflict copy the options case drives, from the locale entries the metadata uses.
 const globalVolumeAmountLabel = localeText("settings.sections.globalVolume.settings.amount.label");
 const globalVolumeConflictReason = localeText(
@@ -52,7 +58,7 @@ async function mutePlayer(page: Page): Promise<void> {
 		await player?.mute?.();
 	});
 	await expect
-		.poll(async () => isPlayerMuted(page), { intervals: [200], timeout: 10000 })
+		.poll(async () => isPlayerMuted(page), { intervals: [200], timeout: APPLY_VOLUME_TIMEOUT })
 		.toBe(true);
 }
 test.describe("globalVolume", () => {
@@ -62,7 +68,10 @@ test.describe("globalVolume", () => {
 			await setOption(page, "globalVolume.volume", volume);
 			await enableFeature(page, "globalVolume.enabled");
 			await expect
-				.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 10000 })
+				.poll(async () => getCurrentVolume(page, pageType), {
+					intervals: [200],
+					timeout: APPLY_VOLUME_TIMEOUT
+				})
 				.toBe(volume);
 		});
 	}
@@ -75,17 +84,26 @@ test.describe("globalVolume", () => {
 			expect(original).not.toBeNull();
 			await enableFeature(page, "globalVolume.enabled");
 			await expect
-				.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 10000 })
+				.poll(async () => getCurrentVolume(page, pageType), {
+					intervals: [200],
+					timeout: APPLY_VOLUME_TIMEOUT
+				})
 				.toBe(volume);
 			await disableFeature(page, "globalVolume.enabled");
 			// restorePlayerVolume puts back the exact volume captured before the feature ran, so assert that value
 			// instead of "anything but the configured one", which also passes when getCurrentVolume returns null.
 			await expect
-				.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 10000 })
+				.poll(async () => getCurrentVolume(page, pageType), {
+					intervals: [200],
+					timeout: APPLY_VOLUME_TIMEOUT
+				})
 				.toBe(original);
 			await enableFeature(page, "globalVolume.enabled");
 			await expect
-				.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 10000 })
+				.poll(async () => getCurrentVolume(page, pageType), {
+					intervals: [200],
+					timeout: APPLY_VOLUME_TIMEOUT
+				})
 				.toBe(volume);
 		});
 		// On live this would not test a reload at all: the post-reload navigateToPageType re-runs the channel scan and opens another live video.
@@ -94,11 +112,17 @@ test.describe("globalVolume", () => {
 			await setOption(page, "globalVolume.volume", volume);
 			await enableFeature(page, "globalVolume.enabled");
 			await expect
-				.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 10000 })
+				.poll(async () => getCurrentVolume(page, pageType), {
+					intervals: [200],
+					timeout: APPLY_VOLUME_TIMEOUT
+				})
 				.toBe(volume);
 			await reloadPage(page, pageType);
 			await expect
-				.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 15000 })
+				.poll(async () => getCurrentVolume(page, pageType), {
+					intervals: [200],
+					timeout: APPLY_VOLUME_TIMEOUT
+				})
 				.toBe(volume);
 		});
 	}
@@ -120,16 +144,25 @@ test.describe("globalVolume", () => {
 		await setOption(page, "globalVolume.volume", volume);
 		await enableFeature(page, "globalVolume.enabled");
 		await expect
-			.poll(async () => getCurrentVolume(page, watch), { intervals: [200], timeout: 10000 })
+			.poll(async () => getCurrentVolume(page, watch), {
+				intervals: [200],
+				timeout: APPLY_VOLUME_TIMEOUT
+			})
 			.toBe(volume);
 		// Move the player off the configured volume so the final assertion can only pass because onNavigate re-applied it.
 		await setVolume(page, 55, watch);
 		await expect
-			.poll(async () => getCurrentVolume(page, watch), { intervals: [200], timeout: 10000 })
+			.poll(async () => getCurrentVolume(page, watch), {
+				intervals: [200],
+				timeout: APPLY_VOLUME_TIMEOUT
+			})
 			.toBe(55);
 		await spaNavigateToRelatedVideo(page);
 		await expect
-			.poll(async () => getCurrentVolume(page, watch), { intervals: [200], timeout: 10000 })
+			.poll(async () => getCurrentVolume(page, watch), {
+				intervals: [200],
+				timeout: APPLY_VOLUME_TIMEOUT
+			})
 			.toBe(volume);
 	});
 
@@ -176,13 +209,19 @@ test.describe("globalVolume", () => {
 				await enableFeature(page, "rememberVolume.enabled");
 				await setVolume(page, 50, watch);
 				await expect
-					.poll(() => getCurrentVolume(page, watch), { intervals: [200], timeout: 10000 })
+					.poll(() => getCurrentVolume(page, watch), {
+						intervals: [200],
+						timeout: APPLY_VOLUME_TIMEOUT
+					})
 					.toBe(50);
 
 				await setOption(page, "globalVolume.volume", volume);
 				await enableFeature(page, "globalVolume.enabled");
 				await expect
-					.poll(() => getCurrentVolume(page, watch), { intervals: [200], timeout: 10000 })
+					.poll(() => getCurrentVolume(page, watch), {
+						intervals: [200],
+						timeout: APPLY_VOLUME_TIMEOUT
+					})
 					.toBe(volume);
 			});
 		});
@@ -195,11 +234,14 @@ test.describe("globalVolume", () => {
 		await mutePlayer(page);
 		await enableFeature(page, "globalVolume.enabled");
 		await expect
-			.poll(async () => getCurrentVolume(page, watch), { intervals: [200], timeout: 10000 })
+			.poll(async () => getCurrentVolume(page, watch), {
+				intervals: [200],
+				timeout: APPLY_VOLUME_TIMEOUT
+			})
 			.toBe(volume);
 		// Setting a volume on a muted player would leave it silent, so the applied volume alone proves nothing.
 		await expect
-			.poll(async () => isPlayerMuted(page), { intervals: [200], timeout: 10000 })
+			.poll(async () => isPlayerMuted(page), { intervals: [200], timeout: APPLY_VOLUME_TIMEOUT })
 			.toBe(false);
 	});
 	test(`applies a new globalVolume.volume while the feature is already enabled on ${watch}`, async ({
@@ -209,12 +251,18 @@ test.describe("globalVolume", () => {
 		await setOption(page, "globalVolume.volume", volume);
 		await enableFeature(page, "globalVolume.enabled");
 		await expect
-			.poll(async () => getCurrentVolume(page, watch), { intervals: [200], timeout: 10000 })
+			.poll(async () => getCurrentVolume(page, watch), {
+				intervals: [200],
+				timeout: APPLY_VOLUME_TIMEOUT
+			})
 			.toBe(volume);
 		// Editing the number on the options page while a video is playing has to reach the player.
 		await setOption(page, "globalVolume.volume", updatedVolume);
 		await expect
-			.poll(async () => getCurrentVolume(page, watch), { intervals: [200], timeout: 10000 })
+			.poll(async () => getCurrentVolume(page, watch), {
+				intervals: [200],
+				timeout: APPLY_VOLUME_TIMEOUT
+			})
 			.toBe(updatedVolume);
 	});
 });
