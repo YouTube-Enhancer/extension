@@ -6,6 +6,13 @@
  * that opt in via `attributeFilter`. Deduplicates identical selectors and supports
  * per-subscriber parent scoping.
  *
+ * By default only the added node itself is matched against the selector. Pass
+ * `deep: true` to also scan the node's descendants with `querySelectorAll`, which
+ * is needed when the element of interest is nested inside whatever YouTube inserts
+ * but costs O(subtree) per added node. Broad selectors like `[href]` or `*` should
+ * stay shallow: the subtree scan is what made them jank the page during sidebar
+ * thumbnail loading.
+ *
  * The bus is always-alive: created on module import, disconnected in the
  * embedded script's teardown. Features subscribe/unsubscribe as they enable/disable.
  *
@@ -59,6 +66,8 @@ type DetachedRootState = {
 type Subscriber = {
 	attributeFilter?: readonly string[];
 	callback: (elements: Element[]) => void;
+	/** When true, descendants of added nodes are scanned with `querySelectorAll` in addition to the nodes themselves. */
+	deep?: boolean;
 	/** Set when the subscriber's parent needs its own root observer; released on unsubscribe. */
 	detachedParent?: Element;
 	once?: boolean;
@@ -74,6 +83,14 @@ type SubscribeToDomMutationsOptions = {
 	 * with a union of every live attributeFilter.
 	 */
 	attributeFilter?: readonly string[];
+	/**
+	 * When true, descendants of added nodes are also scanned with `querySelectorAll`,
+	 * so matches buried inside an added subtree are delivered. Off by default: the
+	 * scan is O(subtree) per added node and is what made broad selectors like `[href]`
+	 * and `*` jank the page during sidebar thumbnail churn. Only enable it when the
+	 * matched element is reliably nested inside whatever YouTube inserts.
+	 */
+	deep?: boolean;
 	/** If true, automatically unsubscribe after the first delivery. */
 	once?: boolean;
 	/**
@@ -196,8 +213,10 @@ function observeRoot(observerInstance: MutationObserver, root: Element): void {
 /**
  * MutationObserver callback. Attribute records deliver to attributeFilter subscribers
  * whose selector matches the mutation target. Child-list records collect added Element
- * nodes, run `querySelectorAll` per unique selector per added node, then deliver to
- * child-list subscribers. Subscribers with `once: true` are removed after delivery.
+ * nodes, match them against each unique selector, then deliver to child-list
+ * subscribers. A `querySelectorAll` descendant scan runs only when at least one
+ * subscriber for the selector opted into `deep`. Subscribers with `once: true` are
+ * removed after delivery.
  */
 function onMutations(records: MutationRecord[]): void {
 	if (subscriberMap.size === 0) return;
@@ -229,14 +248,27 @@ function onMutations(records: MutationRecord[]): void {
 		if (addedNodes.length === 0) continue;
 
 		for (const [selector, subscribers] of subscriberMap) {
-			const hasChildListSubscribers = [...subscribers].some((s) => !s.attributeFilter);
+			let hasChildListSubscribers = false;
+			let needsDescendantScan = false;
+			for (const s of subscribers) {
+				if (s.attributeFilter) continue;
+				hasChildListSubscribers = true;
+				if (s.deep) {
+					needsDescendantScan = true;
+					break;
+				}
+			}
 			if (!hasChildListSubscribers) continue;
 
 			const matches = new Set<Element>();
 			for (const node of addedNodes) {
 				if (node.matches(selector)) matches.add(node);
-				const descendants = node.querySelectorAll(selector);
-				for (let i = 0; i < descendants.length; i++) matches.add(descendants[i]);
+				// The O(subtree) scan is the cost that made broad selectors jank; only
+				// pay it when a subscriber actually asked for descendant matching.
+				if (needsDescendantScan) {
+					const descendants = node.querySelectorAll(selector);
+					for (let i = 0; i < descendants.length; i++) matches.add(descendants[i]);
+				}
 			}
 			if (matches.size === 0) continue;
 			const matchList = Array.from(matches);
@@ -299,6 +331,11 @@ function retainDetachedRoot(root: Element): void {
  * elements that match the selector instead (shared observer re-observes with the
  * union of live filters).
  *
+ * By default only the added node itself is matched against the selector. Pass
+ * `deep: true` to also scan the node's descendants with `querySelectorAll`, which
+ * is needed when the element of interest is nested inside whatever YouTube inserts
+ * but costs O(subtree) per added node.
+ *
  * When `parent` lies outside the shared observer's reach (detached, inside a shadow tree, or in
  * another document such as a frame's internal document), the bus also observes that root so the
  * subscription still fires inside that subtree.
@@ -306,6 +343,7 @@ function retainDetachedRoot(root: Element): void {
  * @param selector - CSS selector to match against added nodes or attribute targets.
  * @param callback - Receives an array of matching elements from the mutation batch.
  * @param options  - `{ once: true }` to auto-unsubscribe after first delivery;
+ *                   `{ deep: true }` to also scan descendants of added nodes;
  *                   `{ parent: el }` to only deliver descendants of `el`;
  *                   `{ attributeFilter: ["theater"] }` for attribute mutations.
  * @returns An {@link UnsubscribeFromDomMutations} function. Call it to remove the subscription.
@@ -322,6 +360,7 @@ function subscribeToDomMutations(
 	const subscriber: Subscriber = {
 		attributeFilter: options?.attributeFilter,
 		callback,
+		deep: options?.deep,
 		detachedParent,
 		once: options?.once,
 		parent,
