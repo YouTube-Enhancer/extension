@@ -73,7 +73,7 @@ export async function waitForAllElements(
 							if (firstMatch) foundElements[index] = firstMatch;
 							check();
 						},
-						{ once: false }
+						{ deep: true, once: false }
 					)
 				);
 			}
@@ -188,7 +188,7 @@ export function waitForElement<T extends Element>(
 				const match = elements.find((el) => parent.contains(el)) as T | undefined;
 				if (match) finish(match);
 			},
-			{ parent }
+			{ deep: true, parent }
 		);
 
 		timeoutId = setTimeout(() => {
