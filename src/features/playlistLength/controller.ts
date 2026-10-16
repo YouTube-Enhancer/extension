@@ -238,6 +238,10 @@ export class PlaylistLengthController {
 
 		const data = await this.fetchData(methodConfig);
 		if (this.destroyed) return;
+		if (!(data.totalTimeSeconds > 0)) {
+			console.error("[playlistLength] Could not determine the playlist duration");
+			return;
+		}
 
 		const initialState = {
 			totalTimeSeconds: Math.floor(data.totalTimeSeconds / playerSpeed),
