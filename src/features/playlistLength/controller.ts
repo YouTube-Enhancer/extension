@@ -346,9 +346,15 @@ export class PlaylistLengthController {
 			this.debouncedRebuild();
 			return;
 		}
-		this.rebuildUnsubscribe = subscribeToDomMutations(anchorSelector, () => {
-			this.debouncedRebuild();
-		});
+		// The playlist header and items are nested inside the page content YouTube
+		// re-renders, so the descendant scan is required to find them.
+		this.rebuildUnsubscribe = subscribeToDomMutations(
+			anchorSelector,
+			() => {
+				this.debouncedRebuild();
+			},
+			{ deep: true }
+		);
 		const [attributeStem] = anchorSelector.split(":not([hidden])");
 		if (attributeStem !== anchorSelector) {
 			const offAttribute = subscribeToDomMutations(attributeStem, () => this.debouncedRebuild(), {

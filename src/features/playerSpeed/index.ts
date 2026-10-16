@@ -191,7 +191,9 @@ function setupPlaybackSpeedChangeListener() {
 				const menu = elements[0] as HTMLDivElement;
 				if (menu) arm(menu);
 			},
-			{ once: true }
+			// The settings menu is nested inside the player chrome YouTube renders, so
+			// the descendant scan is required to find it.
+			{ deep: true, once: true }
 		);
 	}
 	function setupMenuObserver(settingsPanelMenu: HTMLDivElement) {
@@ -269,11 +271,12 @@ function setupPlaybackSpeedChangeListener() {
 		};
 		// The speed panel is added and removed inside the menu as the user opens and closes the speed
 		// submenu. The bus delivers the added panel content; the observer above then watches the display
-		// span's characterData, which the bus does not support.
+		// span's characterData, which the bus does not support. The panel is nested inside the menu, so
+		// the descendant scan is required to find it.
 		menuPanelUnsubscribe = subscribeToDomMutations(
 			".ytp-variable-speed-panel-content",
 			bindSpeedPanel,
-			{ parent: settingsPanelMenu }
+			{ deep: true, parent: settingsPanelMenu }
 		);
 		// Reset lastSpeed when menu closes. The bus answers attribute mutations on matching elements,
 		// which replaces the previous per-call anonymous MutationObserver.

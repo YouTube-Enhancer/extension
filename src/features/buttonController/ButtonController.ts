@@ -107,6 +107,8 @@ export async function addButton<
 				// enabled during page setup on live streams, whose player controls appear late.
 				// Place the button as soon as the target shows up instead of giving up until the
 				// next config change, which never comes when the stored config is already current.
+				// The controls targets are nested inside the player chrome YouTube re-renders,
+				// so the descendant scan is required to find them.
 				subscribeToDomMutations(
 					selector,
 					() => {
@@ -122,7 +124,7 @@ export async function addButton<
 							labelResolver
 						);
 					},
-					{ once: true }
+					{ deep: true, once: true }
 				);
 				return;
 			}

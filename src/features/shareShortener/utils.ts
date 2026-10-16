@@ -28,7 +28,9 @@ export function observeShareURLInput() {
 				cleanAndUpdateUrl();
 			}
 		},
-		{ once: true }
+		// The share input is nested inside the share dialog YouTube inserts, so the
+		// descendant scan is required to find it.
+		{ deep: true, once: true }
 	);
 }
 

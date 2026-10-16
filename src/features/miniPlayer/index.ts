@@ -141,7 +141,9 @@ function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController): void {
 				unsubscribeCommentsBus = null;
 				attachObserver(foundComments);
 			},
-			{ once: true }
+			// The comments section is nested inside the watch page content YouTube re-renders
+			// on navigation, so the descendant scan is required to find it.
+			{ deep: true, once: true }
 		);
 		// Pages without comments (live streams) never attach the visibility observer,
 		// so nothing would re-assert the sentinel after a YouTube re-render removes it
