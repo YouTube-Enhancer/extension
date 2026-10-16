@@ -1,3 +1,4 @@
+import type LookupView from "youtubei.js/dist/src/parser/classes/LookupView";
 import type PlaylistVideo from "youtubei.js/dist/src/parser/classes/PlaylistVideo";
 
 import type {
@@ -178,19 +179,19 @@ export async function getDurationFromAPI(playlistId: string): Promise<number> {
 		let feed = await youtube.getPlaylist(playlistId);
 		let totalSeconds = 0;
 		for (const video of feed.videos) {
-			const playlistVideo = video as PlaylistVideo;
-			if (playlistVideo?.duration?.seconds) {
-				totalSeconds += playlistVideo.duration.seconds;
+			const playlistItem = video as LockupView | PlaylistVideo;
+			if (playlistItem?.duration?.seconds) {
+				totalSeconds += playlistItem.duration.seconds;
 			}
 		}
 		while (feed.has_continuation) {
+			feed = await feed.getContinuation();
 			for (const video of feed.videos) {
-				const playlistVideo = video as PlaylistVideo;
-				if (playlistVideo?.duration?.seconds) {
-					totalSeconds += playlistVideo.duration.seconds;
+				const playlistItem = video as LockupView | PlaylistVideo;
+				if (playlistItem?.duration?.seconds) {
+					totalSeconds += playlistItem.duration.seconds;
 				}
 			}
-			feed = await feed.getContinuation();
 		}
 		return totalSeconds;
 	} catch (error) {
