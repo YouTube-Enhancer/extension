@@ -193,11 +193,17 @@ export async function observeTimestampElements(): Promise<Nullable<() => void>> 
 	if (!playerContainer) return null;
 	const videoLength = await playerContainer.getDuration();
 	const selector = `${timestampElementSelector}[href^='${href}']`;
-	const unsubscribe = subscribeToDomMutations(selector, (elements) => {
-		for (const el of elements) {
-			processNode(el as HTMLElement, href, videoLength);
-		}
-	});
+	// The timestamp anchor is a descendant of the attributed-string element YouTube
+	// inserts, so the descendant scan is required to find it.
+	const unsubscribe = subscribeToDomMutations(
+		selector,
+		(elements) => {
+			for (const el of elements) {
+				processNode(el as HTMLElement, href, videoLength);
+			}
+		},
+		{ deep: true }
+	);
 	return unsubscribe;
 }
 

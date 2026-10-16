@@ -324,10 +324,15 @@ export function setupFeatureMenuEventListeners(
 		}
 	}
 
-	// Ad modules inside player chrome ride the shared mutation bus
-	const unsubscribeAdsBus = subscribeToDomMutations(".video-ads.ytp-ad-module", () => {
-		adjustAdsContainerStyles(menuVisible);
-	});
+	// Ad modules inside player chrome ride the shared mutation bus. YouTube nests the ad
+	// module inside the player subtree, so the descendant scan is required.
+	const unsubscribeAdsBus = subscribeToDomMutations(
+		".video-ads.ytp-ad-module",
+		() => {
+			adjustAdsContainerStyles(menuVisible);
+		},
+		{ deep: true }
+	);
 
 	return () => {
 		eventManager.removeEventListeners("featureMenu");

@@ -402,7 +402,10 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 					this.controlsRebindTimer = null;
 					void this.rebindButtonsAfterControlsRender();
 				}, 300);
-			}
+			},
+			// YouTube re-renders the player chrome as a whole; the controls are descendants
+			// of the inserted subtree, not the added nodes themselves.
+			{ deep: true }
 		);
 	}
 
