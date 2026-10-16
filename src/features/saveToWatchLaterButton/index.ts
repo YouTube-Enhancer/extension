@@ -134,7 +134,9 @@ async function setupSaveToWatchLaterButtons() {
 					addButtons(container);
 				});
 			},
-			{ parent: container }
+			// The lockup and actions row are nested inside the video renderers YouTube
+			// inserts, so the descendant scan is required to find them.
+			{ deep: true, parent: container }
 		);
 	}
 

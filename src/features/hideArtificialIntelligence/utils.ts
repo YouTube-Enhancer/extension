@@ -164,9 +164,15 @@ function scheduleAttach(): void {
 
 function startChatFrameObserver(): void {
 	if (unsubscribeBus) return;
-	unsubscribeBus = subscribeToDomMutations(CHAT_FRAME_SELECTOR, () => {
-		scheduleAttach();
-	});
+	// The iframe is a descendant of the chat frame element YouTube inserts, so the
+	// subtree scan is required to find it.
+	unsubscribeBus = subscribeToDomMutations(
+		CHAT_FRAME_SELECTOR,
+		() => {
+			scheduleAttach();
+		},
+		{ deep: true }
+	);
 }
 
 function stopChatFrameObserver(): void {
