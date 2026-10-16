@@ -29,6 +29,7 @@ let activeGesture: ActiveGesture | null = null;
 let gestureGeneration = 0;
 let gestureSpeed = defaultGestureSpeed;
 let preventNextClick = false;
+let preventNextClickTimeout: null | number = null;
 let pendingRestorationSpeed: null | number = null;
 let pendingOSDSpeed: null | number = null;
 let osdAnimationFrame: null | number = null;
@@ -124,7 +125,14 @@ function handleMouseUp(event?: MouseEvent, showRevertOSD = true) {
 	if (!activeGesture) return;
 
 	const { hasMoved, initialSpeed } = activeGesture;
-	preventNextClick = hasMoved && Boolean(event && getPlayerTarget(event));
+	if (hasMoved && Boolean(event && getPlayerTarget(event))) {
+		preventNextClick = true;
+		if (preventNextClickTimeout !== null) clearTimeout(preventNextClickTimeout);
+		preventNextClickTimeout = window.setTimeout(() => {
+			preventNextClick = false;
+			preventNextClickTimeout = null;
+		}, 100);
+	}
 	activeGesture = null;
 	gestureGeneration++;
 	if (hasMoved) {
@@ -187,6 +195,11 @@ function queueSpeedUpdate(speed: number, generation: number, preserve = false) {
 function removeGestureListeners() {
 	eventManager.removeEventListeners(metadata.id);
 	handleMouseUp(undefined, false);
+	if (preventNextClickTimeout !== null) {
+		clearTimeout(preventNextClickTimeout);
+		preventNextClickTimeout = null;
+	}
+	preventNextClick = false;
 	if (osdAnimationFrame !== null) {
 		cancelAnimationFrame(osdAnimationFrame);
 		osdAnimationFrame = null;
@@ -199,10 +212,18 @@ function removeGestureListeners() {
  * when the click lands on the player surface.
  */
 function stopGestureClick(event: MouseEvent) {
-	if (!preventNextClick || !getPlayerTarget(event)) return;
+	if (!preventNextClick) return;
+
+	const isPlayerTarget = Boolean(getPlayerTarget(event));
+	preventNextClick = false;
+	if (preventNextClickTimeout !== null) {
+		clearTimeout(preventNextClickTimeout);
+		preventNextClickTimeout = null;
+	}
+	if (!isPlayerTarget) return;
+
 	event.preventDefault();
 	event.stopImmediatePropagation();
-	preventNextClick = false;
 }
 
 export default createFeature({
