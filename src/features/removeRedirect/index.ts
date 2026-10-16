@@ -20,6 +20,10 @@ export default createFeature({
 		browserColorLog(`Enabling removeRedirect`, "FgMagenta");
 		unsubscribeBus?.();
 		processDocument();
+		// Shallow on purpose: the added node itself is matched against [href], with no
+		// descendant scan. YouTube adds the redirect links as top-level nodes, and the
+		// O(subtree) querySelectorAll that a `deep` subscription would run on every
+		// added node is what made sidebar thumbnail loading jank the page.
 		unsubscribeBus = subscribeToDomMutations("[href]", (elements) => {
 			for (const el of elements) {
 				unwrapRedirect(el);
