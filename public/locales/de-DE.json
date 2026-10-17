@@ -961,6 +961,14 @@
 						},
 						"title": "Fügt Schaltflächen hinzu, um die Wiedergabegeschwindigkeit des Videos zu erhöhen oder zu verringern"
 					},
+					"boostGesture": {
+						"label": "Playback speed boost gesture",
+						"select": {
+							"label": "Gesture speed increment",
+							"title": "Amount of speed to change for each horizontal drag segment"
+						},
+						"title": "Mouse-Drag to temporarily boost playback speed (Replaces native hold to boost)"
+					},
 					"speed": {
 						"select": {
 							"label": "Video Geschwindigkeit",
