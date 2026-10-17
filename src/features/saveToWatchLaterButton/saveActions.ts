@@ -2,8 +2,8 @@
 
 import {
 	buildPlaylistEditCommand,
-	buildToastCommand,
-	dispatchNativeCommand
+	dispatchNativeCommand,
+	showSnackbar
 } from "@/src/utils/dom/nativeCommands";
 import {
 	setNativeButtonBusy,
@@ -67,7 +67,7 @@ function showSaveError(host: HTMLElement, error: unknown, removing: boolean) {
 			: translations.pages.content.features.saveToWatchLaterButton.extras.failedToSaveVideo
 	)}: ${error instanceof Error ? error.message : String(error)}`;
 	// This branch runs when the command pipeline was unavailable, so the toast can fail too.
-	if (!dispatchNativeCommand(buildToastCommand(message))) {
+	if (!showSnackbar(message)) {
 		const { listener, remove } = createTooltip({
 			element: host,
 			featureName: "saveToWatchLaterButton",

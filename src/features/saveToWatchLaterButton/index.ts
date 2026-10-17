@@ -2,7 +2,7 @@ import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { buildToastCommand, dispatchNativeCommand } from "@/src/utils/dom/nativeCommands";
+import { showSnackbar } from "@/src/utils/dom/nativeCommands";
 import {
 	readLockupData,
 	waitForNativeButtonComponent,
@@ -51,12 +51,10 @@ async function setupSaveToWatchLaterButtons() {
 				"yt-button-view-model is not registered. YouTube may have changed its components.",
 				"warning"
 			);
-			dispatchNativeCommand(
-				buildToastCommand(
-					window.i18nextInstance.t(
-						(translations) =>
-							translations.pages.content.features.saveToWatchLaterButton.extras.unavailable
-					)
+			showSnackbar(
+				window.i18nextInstance.t(
+					(translations) =>
+						translations.pages.content.features.saveToWatchLaterButton.extras.unavailable
 				)
 			);
 		}
@@ -104,6 +102,14 @@ async function setupSaveToWatchLaterButtons() {
 				 */
 				markLockupSaved(lockup);
 				host.remove();
+				// The Innertube edit raises no native toast, so confirm the save here.
+				showSnackbar(
+					window.i18nextInstance.t(
+						(translations) =>
+							translations.pages.content.features.saveToWatchLaterButton.extras.savedVideo
+					),
+					`https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`
+				);
 			},
 			removing: false,
 			videoId
