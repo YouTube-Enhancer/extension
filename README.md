@@ -9,10 +9,10 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 [![Chrome Extension Users](https://img.shields.io/chrome-web-store/users/dejhhgdpambaambdifcfbmpliolehfaj?logo=googlechrome&labelColor=5b5b5b&color=4fca21)](https://chromewebstore.google.com/detail/youtube-enhancer/dejhhgdpambaambdifcfbmpliolehfaj)
 [![Chrome Extension Downloads](https://img.shields.io/chrome-web-store/rating/dejhhgdpambaambdifcfbmpliolehfaj?logo=googlechrome&labelColor=5b5b5b&color=4fca21)](https://chromewebstore.google.com/detail/youtube-enhancer/dejhhgdpambaambdifcfbmpliolehfaj)
 <br/>
-[![GitHub Release](https://img.shields.io/github/v/release/VampireChicken12/youtube-enhancer?label=Github&logo=Github&labelColor=5b5b5b&color=4fca21)](https://github.com/VampireChicken12/youtube-enhancer/releases/latest)
-![GitHub Downloads](https://img.shields.io/github/downloads/VampireChicken12/youtube-enhancer/total?logo=Github&labelColor=5b5b5b&color=4fca21)
-![Stars](https://img.shields.io/github/stars/VampireChicken12/youtube-enhancer?logo=Github&labelColor=5b5b5b&color=4fca21)
-[![All Contributors](https://img.shields.io/github/all-contributors/VampireChicken12/youtube-enhancer?labelColor=5b5b5b&color=4fca21)](#-contributors)
+[![GitHub Release](https://img.shields.io/github/v/release/YouTube-Enhancer/extension?label=Github&logo=Github&labelColor=5b5b5b&color=4fca21)](https://github.com/YouTube-Enhancer/extension/releases/latest)
+![GitHub Downloads](https://img.shields.io/github/downloads/YouTube-Enhancer/extension/total?logo=Github&labelColor=5b5b5b&color=4fca21)
+![Stars](https://img.shields.io/github/stars/YouTube-Enhancer/extension?logo=Github&labelColor=5b5b5b&color=4fca21)
+[![All Contributors](https://img.shields.io/github/all-contributors/YouTube-Enhancer/extension?labelColor=5b5b5b&color=4fca21)](#-contributors)
 [![Crowdin Translation Project Badge](https://badges.crowdin.net/youtube-enhancer/localized.svg)](https://crowdin.com/project/youtube-enhancer)
 [![Join our Discord server](https://img.shields.io/discord/1180688348675838132?label=Discord&logo=Discord&labelColor=5b5b5b&color=4fca21)](https://discord.gg/VpdGFmuB4B)
 
@@ -270,7 +270,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 To install the YouTube Enhancer Extension from the latest release, follow these steps:
 
-1. Visit the [Latest Release Page](https://github.com/VampireChicken12/youtube-enhancer/releases/latest).
+1. Visit the [Latest Release Page](https://github.com/YouTube-Enhancer/extension/releases/latest).
 
 2. Download the pre-built zip archive for your preferred browser.
 
@@ -463,9 +463,9 @@ The YouTube Enhancer Extension is open-source and available under the [MIT Licen
 
 <a href="https://www.star-history.com/?type=date&repos=VampireChicken12%2Fyoutube-enhancer">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=VampireChicken12/youtube-enhancer&type=date&theme=dark&legend=top-left&sealed_token=uN6fZDtbTJDNjgdDQ802A9COexMJZijo0BGdT6wvQXlVSNFfSb8PEZoQaHlVArJdtyKKWqOBrXIBrY4MdSjKDfh_-tCAJM31Onfs62xho7Lghl1jtLKpZvV641IoHfqYYcfN6lA0uLHEbZJv7dHp9UzDWUnsIvudrVlbdL3cTGvp5tSXIvCLEEfkqvRw" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=VampireChicken12/youtube-enhancer&type=date&legend=top-left&sealed_token=uN6fZDtbTJDNjgdDQ802A9COexMJZijo0BGdT6wvQXlVSNFfSb8PEZoQaHlVArJdtyKKWqOBrXIBrY4MdSjKDfh_-tCAJM31Onfs62xho7Lghl1jtLKpZvV641IoHfqYYcfN6lA0uLHEbZJv7dHp9UzDWUnsIvudrVlbdL3cTGvp5tSXIvCLEEfkqvRw" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=VampireChicken12/youtube-enhancer&type=date&legend=top-left&sealed_token=uN6fZDtbTJDNjgdDQ802A9COexMJZijo0BGdT6wvQXlVSNFfSb8PEZoQaHlVArJdtyKKWqOBrXIBrY4MdSjKDfh_-tCAJM31Onfs62xho7Lghl1jtLKpZvV641IoHfqYYcfN6lA0uLHEbZJv7dHp9UzDWUnsIvudrVlbdL3cTGvp5tSXIvCLEEfkqvRw" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=YouTube-Enhancer/extension&type=date&theme=dark&legend=top-left&sealed_token=uN6fZDtbTJDNjgdDQ802A9COexMJZijo0BGdT6wvQXlVSNFfSb8PEZoQaHlVArJdtyKKWqOBrXIBrY4MdSjKDfh_-tCAJM31Onfs62xho7Lghl1jtLKpZvV641IoHfqYYcfN6lA0uLHEbZJv7dHp9UzDWUnsIvudrVlbdL3cTGvp5tSXIvCLEEfkqvRw" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=YouTube-Enhancer/extension&type=date&legend=top-left&sealed_token=uN6fZDtbTJDNjgdDQ802A9COexMJZijo0BGdT6wvQXlVSNFfSb8PEZoQaHlVArJdtyKKWqOBrXIBrY4MdSjKDfh_-tCAJM31Onfs62xho7Lghl1jtLKpZvV641IoHfqYYcfN6lA0uLHEbZJv7dHp9UzDWUnsIvudrVlbdL3cTGvp5tSXIvCLEEfkqvRw" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=YouTube-Enhancer/extension&type=date&legend=top-left&sealed_token=uN6fZDtbTJDNjgdDQ802A9COexMJZijo0BGdT6wvQXlVSNFfSb8PEZoQaHlVArJdtyKKWqOBrXIBrY4MdSjKDfh_-tCAJM31Onfs62xho7Lghl1jtLKpZvV641IoHfqYYcfN6lA0uLHEbZJv7dHp9UzDWUnsIvudrVlbdL3cTGvp5tSXIvCLEEfkqvRw" />
  </picture>
 </a>
 
