@@ -38,6 +38,8 @@ export class PlaylistLengthController {
 	private ui: Nullable<{ element: HTMLDivElement; update: (state: VideoTimeState) => void }> = null;
 	private unsubscribeBus: Nullable<() => void> = null;
 	private updateTimeout: Nullable<number> = null;
+	private zeroDurationRetries = 0;
+	private zeroDurationTimer: Nullable<number> = null;
 
 	constructor(config: PlaylistLengthParameters) {
 		this.config = config;
@@ -50,6 +52,10 @@ export class PlaylistLengthController {
 
 		this.clearRebuildWatch();
 		this.rebuildQueued = false;
+		if (this.zeroDurationTimer !== null) {
+			clearTimeout(this.zeroDurationTimer);
+			this.zeroDurationTimer = null;
+		}
 
 		this.unsubscribeBus?.();
 		this.unsubscribeBus = null;
@@ -240,8 +246,23 @@ export class PlaylistLengthController {
 		if (this.destroyed) return;
 		if (!(data.totalTimeSeconds > 0)) {
 			console.error("[playlistLength] Could not determine the playlist duration");
+			/**
+			 * A cold-enable fetch can run against a rendered-but-not-yet-populated items
+			 * container (full page reload); the zero is transient. Without a retry this
+			 * guard would end the render permanently where the previous zero-state render
+			 * self-healed through the update observers. Retry initialize a few times,
+			 * then accept the zero as permanent.
+			 */
+			if (this.zeroDurationRetries < 3) {
+				this.zeroDurationRetries += 1;
+				this.zeroDurationTimer = window.setTimeout(() => {
+					this.zeroDurationTimer = null;
+					void this.initialize();
+				}, 2000);
+			}
 			return;
 		}
+		this.zeroDurationRetries = 0;
 
 		const initialState = {
 			totalTimeSeconds: Math.floor(data.totalTimeSeconds / playerSpeed),
