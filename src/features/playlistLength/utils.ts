@@ -1,4 +1,4 @@
-import type LookupView from "youtubei.js/dist/src/parser/classes/LookupView";
+import type LockupView from "youtubei.js/dist/src/parser/classes/LockupView";
 import type PlaylistVideo from "youtubei.js/dist/src/parser/classes/PlaylistVideo";
 
 import type {
