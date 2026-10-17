@@ -136,13 +136,13 @@
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToRemoveVideo": "Failed to remove video from Watch Later",
-						"failedToSaveVideo": "No se pudo guardar el vídeo para ver más tarde",
-						"removeVideo": "Remove from Watch Later",
+						"failedToRemoveVideo": "Failed to remove video from Watch later",
+						"failedToSaveVideo": "Failed to save video to Watch later",
+						"removeVideo": "Remove from Watch later",
 						"removedVideo": "Removed from Watch later",
-						"saveVideo": "Guardar para ver más tarde",
+						"saveVideo": "Save to Watch later",
 						"savedVideo": "Saved to Watch later",
-						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
+						"unavailable": "Save to Watch later button is unavailable due to a YouTube change"
 					}
 				},
 				"screenshotButton": {
@@ -761,8 +761,8 @@
 					},
 					"saveToWatchLaterButton": {
 						"enable": {
-							"label": "Habiliar el boton para ver mas tarde",
-							"title": "Agregar botón a los vídeos de Inicio y Suscripciones para guardar el vídeo en la lista de reproducción 'Ver más tarde'"
+							"label": "Enable save to Watch later button",
+							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch later' playlist"
 						}
 					},
 					"shareShortener": {
