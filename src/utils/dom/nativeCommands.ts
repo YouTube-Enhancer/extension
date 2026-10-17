@@ -1,6 +1,9 @@
 /**
- * Runs Innertube commands through YouTube's own command pipeline, ytd-app.resolveCommand. YouTube then handles the
- * request, the authentication and the response actions, including its own toasts.
+ * Runs Innertube commands through YouTube's own command pipeline, ytd-app.resolveCommand,
+ * when it is available. On current builds `resolveCommand` is not exposed on `ytd-app`, so
+ * callers fall back to their own Innertube client for the request itself. Confirmation
+ * snackbars are a separate concern: YouTube renders its save/remove feedback as a
+ * `snackbar-view-model` inside `<snackbar-container>`, which `showSnackbar` replicates.
  */
 
 export type InnertubeCommand = Record<string, unknown>;
@@ -32,19 +35,6 @@ export function buildPlaylistEditCommand({
 	};
 }
 
-export function buildToastCommand(text: string): InnertubeCommand {
-	return {
-		openPopupAction: {
-			popup: {
-				notificationActionRenderer: {
-					responseText: { simpleText: text }
-				}
-			},
-			popupType: "TOAST"
-		}
-	};
-}
-
 // True means the dispatcher accepted the command, not that the request completed.
 export function dispatchNativeCommand(command: InnertubeCommand): boolean {
 	const app = document.querySelector<YtdAppWithCommands>("ytd-app");
@@ -55,4 +45,37 @@ export function dispatchNativeCommand(command: InnertubeCommand): boolean {
 	} catch {
 		return false;
 	}
+}
+
+/**
+ * Shows a confirmation snackbar matching YouTube's own save/remove feedback: a
+ * `snackbar-view-model` inside `<snackbar-container>`, with an optional video thumbnail on
+ * the left (YouTube includes one when saving to a playlist). YouTube exposes no public
+ * snackbar API, so this replicates the exact markup the popup renders. Returns true when
+ * the snackbar was shown.
+ */
+export function showSnackbar(text: string, thumbnailUrl?: string): boolean {
+	const container = document.querySelector("snackbar-container") ?? document.body;
+	const wrapper = document.createElement("div");
+	wrapper.className = "ytSnackbarContainerSnackbarContainer ytSnackbarContainerOpened";
+	const snack = document.createElement("snackbar-view-model");
+	snack.className = "snackbarViewModelHost snackbarViewModelSwipeable";
+	wrapper.appendChild(snack);
+	container.appendChild(wrapper);
+	// Populate after connect so the custom element's initial (empty) render is overwritten;
+	// with no later prop change our markup persists for the snackbar's lifetime. The explicit
+	// size and visibility override ytCoreImageHost's hidden-until-loaded state (YouTube's own
+	// loader never runs on an img we create), so the thumbnail actually paints.
+	const imageHtml = thumbnailUrl
+		? `<img class="ytCoreImageHost snackbarViewModelImageContainer ytCoreImageContentModeScaleAspectFit" alt="" width="86" height="48" style="width:86px;height:48px;flex:none;visibility:visible" src="${thumbnailUrl}">`
+		: "";
+	snack.innerHTML =
+		`<div class="snackbarViewModelEngagementBarWrapper">${imageHtml}` +
+		`<div class="snackbarViewModelTitleSubtextWrapper"><div class="snackbarViewModelTitle">` +
+		`<span class="ytAttributedStringHost ytAttributedStringWhiteSpacePreWrap" role="text"></span>` +
+		`</div></div></div>`;
+	const span = snack.querySelector("span");
+	if (span) span.textContent = text;
+	window.setTimeout(() => wrapper.remove(), 5000);
+	return true;
 }

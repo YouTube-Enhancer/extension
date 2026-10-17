@@ -2,7 +2,7 @@
 
 import type { Nullable } from "@/src/types";
 
-import { buildToastCommand, dispatchNativeCommand } from "@/src/utils/dom/nativeCommands";
+import { showSnackbar } from "@/src/utils/dom/nativeCommands";
 import {
 	type ButtonViewModelVariant,
 	createNativeButton,
@@ -137,17 +137,17 @@ export function createRowButtonController(isCurrent: () => boolean) {
 					if (!isCurrent()) return;
 					rowSaved.set(videoId, !saved);
 					swapButton(!saved);
-					// YouTube's pipeline shows a toast for a save, but not for a removal.
-					if (saved) {
-						dispatchNativeCommand(
-							buildToastCommand(
-								window.i18nextInstance.t(
-									(translations) =>
-										translations.pages.content.features.saveToWatchLaterButton.extras.removedVideo
-								)
-							)
-						);
-					}
+					// The edit runs through our Innertube client, which does not raise a native
+					// toast, so the feature renders its own confirmation for both directions.
+					showSnackbar(
+						window.i18nextInstance.t((translations) =>
+							saved
+								? translations.pages.content.features.saveToWatchLaterButton.extras.removedVideo
+								: translations.pages.content.features.saveToWatchLaterButton.extras.savedVideo
+						),
+						// YouTube's own save snackbar includes the video thumbnail; its removal one is text-only.
+						saved ? undefined : `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`
+					);
 				},
 				removing: saved,
 				videoId
