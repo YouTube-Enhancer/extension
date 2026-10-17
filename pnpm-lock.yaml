@@ -57,8 +57,8 @@ importers:
         specifier: ^0.12.0
         version: 0.12.0
       youtubei.js:
-        specifier: ^18.0.0
-        version: 18.1.0
+        specifier: LuanRT/YouTube.js#447c6139cde1d38c1ed1a509263469cb7dc89e1b
+        version: https://codeload.github.com/LuanRT/YouTube.js/tar.gz/447c6139cde1d38c1ed1a509263469cb7dc89e1b
     devDependencies:
       '@semantic-release/changelog':
         specifier: ^7.0.0
@@ -3546,8 +3546,9 @@ packages:
     resolution: {integrity: sha512-xYqdZFUK/VYazNl/oCDYN+3WloWQwMfZxBoiNt6qNyk+xfOdi598muWE42rNZFp1kNOiqW936q5RhUdnpqElSg==}
     engines: {node: '>=18'}
 
-  youtubei.js@18.1.0:
-    resolution: {integrity: sha512-4Goo3ZeO6/kE8Mq67eC8Z9K1rijeqRwyKxf/YM4lqf8bB4r/s8JC0V3YFx7+l/AJR3LnAsulTsiIj+AFe0cduA==}
+  youtubei.js@https://codeload.github.com/LuanRT/YouTube.js/tar.gz/447c6139cde1d38c1ed1a509263469cb7dc89e1b:
+    resolution: {gitHosted: true, integrity: sha512-emh9Uk8fKF2RflTXXnrEVF6IBGs09uewYZmtpv29AhhwCEQS9PErGTIbvlfwATbtM+JI2+zU+HQoh6yUTaXIJw==, tarball: https://codeload.github.com/LuanRT/YouTube.js/tar.gz/447c6139cde1d38c1ed1a509263469cb7dc89e1b}
+    version: 18.1.0
 
   zip-stream@7.0.5:
     resolution: {integrity: sha512-dSvYKdvLsAHCDqPOhIwk/q5CvuWtTB3Dgpoe0uVEFjTzIOAmsQpprX25InCvrvJsirEbu1OHyy67n/kAj1Sw/w==}
@@ -6518,7 +6519,7 @@ snapshots:
 
   yoctocolors@2.2.0: {}
 
-  youtubei.js@18.1.0:
+  youtubei.js@https://codeload.github.com/LuanRT/YouTube.js/tar.gz/447c6139cde1d38c1ed1a509263469cb7dc89e1b:
     dependencies:
       '@bufbuild/protobuf': 2.15.0
       fflate: 0.8.3

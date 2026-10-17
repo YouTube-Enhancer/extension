@@ -1,3 +1,4 @@
 allowBuilds:
   "@swc/core": true
   esbuild: true
+  "youtubei.js@https://codeload.github.com/LuanRT/YouTube.js/tar.gz/447c6139cde1d38c1ed1a509263469cb7dc89e1b": true
