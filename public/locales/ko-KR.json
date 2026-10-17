@@ -961,6 +961,14 @@
 						},
 						"title": "보고있는 동영상의 재생 속도를 변경하기 위한 버튼 추가"
 					},
+					"boostGesture": {
+						"label": "Playback speed boost gesture",
+						"select": {
+							"label": "Gesture speed increment",
+							"title": "Amount of speed to change for each horizontal drag segment"
+						},
+						"title": "Mouse-Drag to temporarily boost playback speed (Replaces native hold to boost)"
+					},
 					"speed": {
 						"select": {
 							"label": "플레이어 속도",
