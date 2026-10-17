@@ -136,13 +136,13 @@
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToRemoveVideo": "Failed to remove video from Watch Later",
-						"failedToSaveVideo": "Nepodařilo se uložit video do hodinek později",
-						"removeVideo": "Remove from Watch Later",
+						"failedToRemoveVideo": "Failed to remove video from Watch later",
+						"failedToSaveVideo": "Failed to save video to Watch later",
+						"removeVideo": "Remove from Watch later",
 						"removedVideo": "Removed from Watch later",
-						"saveVideo": "Uložit do sledování později",
+						"saveVideo": "Save to Watch later",
 						"savedVideo": "Saved to Watch later",
-						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
+						"unavailable": "Save to Watch later button is unavailable due to a YouTube change"
 					}
 				},
 				"screenshotButton": {
@@ -761,8 +761,8 @@
 					},
 					"saveToWatchLaterButton": {
 						"enable": {
-							"label": "Povolit uložení na tlačítko Později",
-							"title": "Přidá tlačítko do domovské a odebírací videa pro uložení videa do playlistu 'Sledujte později'"
+							"label": "Enable save to Watch later button",
+							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch later' playlist"
 						}
 					},
 					"shareShortener": {
