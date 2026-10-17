@@ -961,6 +961,14 @@
 						},
 						"title": "加入加快或減慢播放速度按鈕"
 					},
+					"boostGesture": {
+						"label": "Playback speed boost gesture",
+						"select": {
+							"label": "Gesture speed increment",
+							"title": "Amount of speed to change for each horizontal drag segment"
+						},
+						"title": "Mouse-Drag to temporarily boost playback speed (Replaces native hold to boost)"
+					},
 					"speed": {
 						"select": {
 							"label": "播放速度",
