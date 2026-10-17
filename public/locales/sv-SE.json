@@ -139,8 +139,9 @@
 						"failedToRemoveVideo": "Failed to remove video from Watch Later",
 						"failedToSaveVideo": "Det gick inte att spara videon till titta på senare",
 						"removeVideo": "Remove from Watch Later",
-						"removedVideo": "Removed from Watch Later",
+						"removedVideo": "Removed from Watch later",
 						"saveVideo": "Spara till titta på senare",
+						"savedVideo": "Saved to Watch later",
 						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
 					}
 				},
