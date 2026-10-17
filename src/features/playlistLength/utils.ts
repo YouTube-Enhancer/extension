@@ -124,8 +124,12 @@ export function createPlaylistLengthUIElement(
 					? "var(--yt-sys-color-baseline--text-primary)"
 					: "var(--yt-sys-color-baseline--overlay-text-primary)",
 			fontSize: "15px",
-			marginLeft: "19px",
-			position: "absolute"
+			left: "19px",
+			overflow: "hidden",
+			position: "absolute",
+			right: "72px",
+			textOverflow: "ellipsis",
+			whiteSpace: "nowrap"
 		}
 	});
 	videoTimeDisplay.textContent = `${formatDuration(initialState.watchedTimeSeconds)} / ${formatDuration(initialState.totalTimeSeconds)} (- ${formatDuration(initialState.totalTimeSeconds - initialState.watchedTimeSeconds)})`;
@@ -155,7 +159,9 @@ export function createPlaylistLengthUIElement(
 		const safeWatched = Number.isFinite(watchedTimeSeconds) ? watchedTimeSeconds : 0;
 		const watchedPercentage = safeTotal > 0 ? Math.floor((safeWatched / safeTotal) * 100) : 0;
 		watchedProgressBar.style.width = `${watchedPercentage}%`;
-		videoTimeDisplay.textContent = `${formatDuration(safeWatched)} / ${formatDuration(safeTotal)} (- ${formatDuration(safeTotal - safeWatched)})`;
+		const times = `${formatDuration(safeWatched)} / ${formatDuration(safeTotal)} (- ${formatDuration(safeTotal - safeWatched)})`;
+		videoTimeDisplay.textContent = times;
+		videoTimeDisplay.title = times;
 		percentageWatched.textContent = `${watchedPercentage}%`;
 	};
 	wrapper.title = window.i18nextInstance.t(
