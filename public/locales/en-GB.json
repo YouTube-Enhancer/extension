@@ -136,6 +136,7 @@
 						"removeVideo": "Remove from Watch Later",
 						"removedVideo": "Removed from Watch Later",
 						"saveVideo": "Save to Watch Later",
+						"savedVideo": "Saved to Watch Later",
 						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
 					}
 				},
