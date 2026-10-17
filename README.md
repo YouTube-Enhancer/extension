@@ -81,7 +81,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Remember Last Volume**: Remembers the volume of the last video you were watching and sets it when you open a new video
 - **Remove You Tube /redirect URLs**: Replaces YouTube redirect URLs with actual URLs, skipping the redirect warning dialogue
 - **Restore Fullscreen Scrolling**: Restores scrolling in fullscreen mode
-- **Enable Save To Watch Later Button**: Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist
+- **Enable Save To Watch Later Button**: Adds a button to Home and Subscriptions videos to save the video to the 'Watch later' playlist
 - **Shorten You Tube Video Share Link**: Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it
 - **Sharp Corners**: Removes border-radius from YouTube elements for a sharp corners look
 - **Shorts Auto Scroll**: Automatically scrolls to the next short
