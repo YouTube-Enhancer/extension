@@ -20,15 +20,21 @@ export default createFeature({
 		browserColorLog(`Enabling removeRedirect`, "FgMagenta");
 		unsubscribeBus?.();
 		processDocument();
-		// Shallow on purpose: the added node itself is matched against [href], with no
-		// descendant scan. YouTube adds the redirect links as top-level nodes, and the
-		// O(subtree) querySelectorAll that a `deep` subscription would run on every
-		// added node is what made sidebar thumbnail loading jank the page.
-		unsubscribeBus = subscribeToDomMutations("[href]", (elements) => {
-			for (const el of elements) {
-				unwrapRedirect(el);
-			}
-		});
+		// Narrow AND deep. The jank a bare `[href]` subscription caused during sidebar
+		// churn was its delivery volume — every thumbnail link matched and was processed —
+		// not the descendant scan itself. Restricting to real redirect links keeps
+		// deliveries at ~zero while thumbnail renderers stream in, and deep still catches
+		// the links YouTube nests inside added subtrees (SPA descriptions, dynamically
+		// inserted sections) that shallow matching missed outright.
+		unsubscribeBus = subscribeToDomMutations(
+			'a[href*="/redirect?"]',
+			(elements) => {
+				for (const el of elements) {
+					unwrapRedirect(el);
+				}
+			},
+			{ deep: true }
+		);
 		registry.on("removeRedirect", "bus", () => {
 			unsubscribeBus?.();
 			unsubscribeBus = null;
@@ -37,7 +43,7 @@ export default createFeature({
 });
 
 function processDocument(): void {
-	document.querySelectorAll("[href]").forEach((link) => {
+	document.querySelectorAll('a[href*="/redirect?"]').forEach((link) => {
 		unwrapRedirect(link);
 	});
 }
