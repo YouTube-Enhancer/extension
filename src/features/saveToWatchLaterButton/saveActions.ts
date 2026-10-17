@@ -1,10 +1,6 @@
 // The save and remove requests, shared by the card buttons and the actions-row toggle.
 
-import {
-	buildPlaylistEditCommand,
-	dispatchNativeCommand,
-	showSnackbar
-} from "@/src/utils/dom/nativeCommands";
+import { buildPlaylistEditCommand, dispatchNativeCommand } from "@/src/utils/dom/nativeCommands";
 import {
 	setNativeButtonBusy,
 	type YtButtonViewModelElement
@@ -66,16 +62,16 @@ function showSaveError(host: HTMLElement, error: unknown, removing: boolean) {
 			? translations.pages.content.features.saveToWatchLaterButton.extras.failedToRemoveVideo
 			: translations.pages.content.features.saveToWatchLaterButton.extras.failedToSaveVideo
 	)}: ${error instanceof Error ? error.message : String(error)}`;
-	// This branch runs when the command pipeline was unavailable, so the toast can fail too.
-	if (!showSnackbar(message)) {
-		const { listener, remove } = createTooltip({
-			element: host,
-			featureName: "saveToWatchLaterButton",
-			id: "yte-feature-saveToWatchLaterButton-tooltip"
-		});
-		host.dataset.title = message;
-		listener();
-		// The tooltip removes itself on mouseleave. Remove it as well when the pointer never entered.
-		window.setTimeout(remove, 5000);
-	}
+	// Errors stay attached to the button that failed. The snackbar is transient
+	// confirmation for successful saves; a failed one needs feedback the user can
+	// still see while deciding what to do next.
+	const { listener, remove } = createTooltip({
+		element: host,
+		featureName: "saveToWatchLaterButton",
+		id: "yte-feature-saveToWatchLaterButton-tooltip"
+	});
+	host.dataset.title = message;
+	listener();
+	// The tooltip removes itself on mouseleave. Remove it as well when the pointer never entered.
+	window.setTimeout(remove, 5000);
 }
