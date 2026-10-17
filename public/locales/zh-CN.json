@@ -136,13 +136,13 @@
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToRemoveVideo": "从稍后观察中删除视频失败",
-						"failedToSaveVideo": "将视频保存到稍后观看失败",
-						"removeVideo": "从稍后再看移除",
+						"failedToRemoveVideo": "Failed to remove video from Watch later",
+						"failedToSaveVideo": "Failed to save video to Watch later",
+						"removeVideo": "Remove from Watch later",
 						"removedVideo": "Removed from Watch later",
-						"saveVideo": "保存至稍后观看",
+						"saveVideo": "Save to Watch later",
 						"savedVideo": "Saved to Watch later",
-						"unavailable": "由于YouTube的更改，保存到稍后再看按钮不可用"
+						"unavailable": "Save to Watch later button is unavailable due to a YouTube change"
 					}
 				},
 				"screenshotButton": {
@@ -761,8 +761,8 @@
 					},
 					"saveToWatchLaterButton": {
 						"enable": {
-							"label": "启用保存到稍后观看按钮",
-							"title": "在主页和订阅视频中添加一个按钮，将视频保存到“稍后观看”播放列表"
+							"label": "Enable save to Watch later button",
+							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch later' playlist"
 						}
 					},
 					"shareShortener": {
