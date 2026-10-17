@@ -139,8 +139,9 @@
 						"failedToRemoveVideo": "Nie udało się usunąć filmu z listy Do Obejrzenia",
 						"failedToSaveVideo": "Nie udało się zapisać filmu do obejrzenia później",
 						"removeVideo": "Usuń z listy Do Obejrzenia",
-						"removedVideo": "Usunięto z listy Do Obejrzenia",
+						"removedVideo": "Removed from Watch later",
 						"saveVideo": "Zapisz aby obejrzeć później",
+						"savedVideo": "Saved to Watch later",
 						"unavailable": "Przycisk Zapisz w Do Obejrzenia jest niedostępny z powodu zmiany wprowadzonej przez YouTube"
 					}
 				},
