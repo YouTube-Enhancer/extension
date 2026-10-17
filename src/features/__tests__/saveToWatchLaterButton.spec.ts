@@ -41,9 +41,13 @@ const MARKED_LOCKUP_ATTRIBUTE = "data-yte-test-lockup";
 // The saved/unsaved state is carried by the icon (see the watchLater harness) and the label on the native button.
 const SAVE_LABEL = localeText("pages.content.features.saveToWatchLaterButton.extras.saveVideo");
 const REMOVE_LABEL = localeText("pages.content.features.saveToWatchLaterButton.extras.removeVideo");
-// YouTube's pipeline toasts the save itself; the feature only toasts the removal.
+// The feature renders its own snackbar for both directions, matching YouTube's: a save
+// carries the video thumbnail, a removal is text-only.
 const REMOVED_TOAST_TEXT = localeText(
 	"pages.content.features.saveToWatchLaterButton.extras.removedVideo"
+);
+const SAVED_TOAST_TEXT = localeText(
+	"pages.content.features.saveToWatchLaterButton.extras.savedVideo"
 );
 const { home, watch } = pageTypeRecord;
 
@@ -52,7 +56,23 @@ async function clickActionsRowButton(page: Page): Promise<void> {
 }
 
 async function expectRemovedToast(page: Page): Promise<void> {
-	await expect(page.getByText(REMOVED_TOAST_TEXT).first()).toBeVisible({ timeout: 10000 });
+	const snackbar = page
+		.locator("snackbar-view-model")
+		.filter({ hasText: REMOVED_TOAST_TEXT })
+		.first();
+	await expect(snackbar).toBeVisible({ timeout: 10000 });
+	// YouTube's removal snackbar is text-only; the save one carries a thumbnail.
+	await expect(snackbar.locator("img")).toHaveCount(0);
+}
+
+async function expectSavedToast(page: Page): Promise<void> {
+	const snackbar = page
+		.locator("snackbar-view-model")
+		.filter({ hasText: SAVED_TOAST_TEXT })
+		.first();
+	await expect(snackbar).toBeVisible({ timeout: 10000 });
+	// YouTube's save snackbar carries the video thumbnail on the left.
+	await expect(snackbar.locator("img")).toBeAttached({ timeout: 5000 });
 }
 
 /** Marks the feed card built from `videoId`, so later assertions cannot silently pass on a different card. */
@@ -347,6 +367,7 @@ test.describe("saveToWatchLaterButton", () => {
 				}
 			);
 			if (flippedIcon === UNSAVED_ICON) await expectRemovedToast(page);
+			else await expectSavedToast(page);
 			await clickActionsRowButton(page);
 			await expect.poll(async () => readActionsRowIcon(page), { timeout: 15000 }).toBe(initialIcon);
 			await expect(actionsRowButton.locator("button").first()).toHaveAccessibleName(
@@ -356,6 +377,7 @@ test.describe("saveToWatchLaterButton", () => {
 				}
 			);
 			if (initialIcon === UNSAVED_ICON) await expectRemovedToast(page);
+			else await expectSavedToast(page);
 		});
 
 		test("falls back to the Innertube client when YouTube's command pipeline is unavailable", async ({
