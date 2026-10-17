@@ -1,5 +1,8 @@
 #!/bin/sh
 set -e
 npx lint-staged
-pnpm run lint
-pnpm run typecheck
+# only run full lint/typecheck when code files changed
+if git diff --cached --name-only | grep -qE '\.(ts|tsx|js|mjs|cjs)$'; then
+  pnpm run lint
+  pnpm run typecheck
+fi
