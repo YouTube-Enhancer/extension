@@ -51,6 +51,29 @@ test.describe("restoreFullscreenScrolling", () => {
 				{ timeout: POLL_TIMEOUT_MS }
 			);
 		});
+		test(`should restore fullscreen scrolling classes after a full page reload on ${pageType}`, async ({
+			page
+		}) => {
+			test.setTimeout(POLL_TIMEOUT_MS * 2 + 60_000);
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "restoreFullscreenScrolling.enabled");
+			await expect(page.locator("ytd-watch-flexy")).toHaveClass(
+				/yte-ytd-watch-flexy-restore-fullscreen-scrolling/,
+				{ timeout: POLL_TIMEOUT_MS }
+			);
+			await page.reload();
+			await navigateToPageType(page, pageType);
+			await expect(page.locator("ytd-watch-flexy")).toHaveClass(
+				/yte-ytd-watch-flexy-restore-fullscreen-scrolling/,
+				{ timeout: POLL_TIMEOUT_MS }
+			);
+			await expect(page.locator("ytd-app")).toHaveClass(
+				/yte-ytd-app-restore-fullscreen-scrolling/,
+				{
+					timeout: POLL_TIMEOUT_MS
+				}
+			);
+		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
 			// The product waits up to POLL_TIMEOUT_MS for the watch root, so the polling
 			// budgets below have to cover the worst case of both the enable and the re-enable.

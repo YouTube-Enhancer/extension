@@ -133,6 +133,21 @@ test.describe("videoHistory", () => {
 			.toBeGreaterThan(storedTime - 2);
 		await expect.poll(async () => isVideoPaused(page), { timeout: 15000 }).toBe(false);
 	});
+	test("video history resume prompt should come back after a full page reload", async ({
+		page
+	}) => {
+		await navigateToPageType(page, watch, ["videoHistory"]);
+		await enableFeature(page, "videoHistory.enabled");
+		await setOption(page, "videoHistory.resumeType", "prompt");
+		await expect(page.locator("div#movie_player video")).toBeAttached();
+		const seekTarget = await seekToQuarterDuration(page);
+		await waitForStoredTimestamp(page, seekTarget - 1);
+		// Startup after a real document load must read the stored entry and rebuild the prompt;
+		// the in-page navigation test above cannot prove that path.
+		await page.reload();
+		await navigateToPageType(page, watch, ["videoHistory"]);
+		await expect(page.locator("#resume-prompt")).toBeAttached({ timeout: 15000 });
+	});
 	test("video history close button should hide the resume prompt", async ({ page }) => {
 		await navigateToPageType(page, watch, ["videoHistory"]);
 		await enableFeature(page, "videoHistory.enabled");

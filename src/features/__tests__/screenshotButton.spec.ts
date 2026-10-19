@@ -80,6 +80,16 @@ test.describe("screenshotButton", () => {
 
 	// The remaining screenshot and lifecycle paths are page-agnostic and the live fixture costs up to 120 s,
 	// so they run on watch only; live stays covered by the save-as-file smoke case above.
+	test(`the button should re-appear after a full page reload on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "screenshotButton.button.enabled");
+		await setOption(page, "screenshotButton.button.placement", left);
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
+		await page.reload();
+		await navigateToPageType(page, watch);
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
+	});
+
 	test(`should take a screenshot and copy it to the clipboard on ${watch}`, async ({ page }) => {
 		page.on("dialog", (dialog) => {
 			void (async () => {

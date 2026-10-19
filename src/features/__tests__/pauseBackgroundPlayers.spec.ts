@@ -76,6 +76,24 @@ test.describe("pauseBackgroundPlayers", () => {
 			await pageB.close();
 		});
 	}
+	test("should still pause a background player after a full page reload on watch", async ({
+		context,
+		page
+	}) => {
+		test.setTimeout(120_000);
+		const pageA = page;
+		const pageB = await context.newPage();
+		await openAndPlayVideo(pageA, watch);
+		await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
+		await expectPlayerState(pageA, PlayerStates.PLAYING, watch);
+		// The reload re-runs startup from storage: the listener has to be back on the fresh
+		// document, not just on the page that carried the in-page enable.
+		await pageA.reload();
+		await openAndPlayVideo(pageA, watch);
+		await openAndPlayVideo(pageB, watch);
+		await expectPlayerState(pageA, PlayerStates.PAUSED, watch);
+		await pageB.close();
+	});
 	// Runs on watch only: the feature has no live/VOD branch and the live fixture costs up to 120 s per iteration.
 	test("should not pause the tab that started playing on watch", async ({ context, page }) => {
 		test.setTimeout(120_000);

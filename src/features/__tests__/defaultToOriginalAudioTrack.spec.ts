@@ -245,6 +245,20 @@ test.describe("defaultToOriginalAudioTrack", () => {
 			await expectOriginalAudioTrack(page);
 		});
 
+		test(`should keep switching to the original audio track after a full page reload on ${pageType}`, async ({
+			page
+		}) => {
+			await navigateToPageType(page, pageType, ["dubbedAudio"]);
+			await requireAutoDubbedStart(page);
+			await enableFeature(page, "defaultToOriginalAudioTrack.enabled");
+			await expectOriginalAudioTrack(page);
+			// The reload re-runs startup from storage; the switch must happen again without the
+			// in-page enable that preceded it.
+			await page.reload();
+			await navigateToPageType(page, pageType, ["dubbedAudio"]);
+			await expectOriginalAudioTrack(page);
+		});
+
 		test(`should restore original audio track when disabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType, ["dubbedAudio"]);
 			await requireAutoDubbedStart(page);

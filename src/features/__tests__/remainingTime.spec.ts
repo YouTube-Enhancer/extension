@@ -66,6 +66,14 @@ test.describe("remainingTime", () => {
 				.poll(async () => remainingTimeElement.textContent(), { timeout: 10000 })
 				.toMatch(REMAINING_TIME_TEXT);
 		});
+		test(`remaining time should survive a full page reload on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "remainingTime.enabled");
+			await expect(page.locator(REMAINING_TIME_SELECTOR)).toBeAttached();
+			await page.reload();
+			await navigateToPageType(page, pageType);
+			await expect(page.locator(REMAINING_TIME_SELECTOR)).toBeAttached({ timeout: 10000 });
+		});
 		test(`remaining time shouldn't be displayed on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await disableFeature(page, "remainingTime.enabled");
