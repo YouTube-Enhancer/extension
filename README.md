@@ -34,7 +34,7 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
 <!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->
 
-## 🎛️ Features • 78 features
+## 🎛️ Features • 79 features
 
 <details>
 <summary>Miscellaneous • 48 features (1 settings)</summary>
@@ -81,7 +81,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Remember Last Volume**: Remembers the volume of the last video you were watching and sets it when you open a new video
 - **Remove You Tube /redirect URLs**: Replaces YouTube redirect URLs with actual URLs, skipping the redirect warning dialogue
 - **Restore Fullscreen Scrolling**: Restores scrolling in fullscreen mode
-- **Enable Save To Watch Later Button**: Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist
+- **Enable Save To Watch Later Button**: Adds a button to Home and Subscriptions videos to save the video to the 'Watch later' playlist
 - **Shorten You Tube Video Share Link**: Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it
 - **Sharp Corners**: Removes border-radius from YouTube elements for a sharp corners look
 - **Shorts Auto Scroll**: Automatically scrolls to the next short
@@ -170,10 +170,12 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 </details>
 
 <details>
-<summary>Player Speed • 2 features (3 settings)</summary>
+<summary>Player Speed • 3 features (4 settings)</summary>
 
+- **Playback Speed Boost Gesture**: Mouse-Drag to temporarily boost playback speed (Replaces native hold to boost)
 - **Playback Speed Buttons**: Adds buttons to increase or decrease the playback speed of the video you're watching
 - **Forced Playback Speed**: Sets the video speed to what you choose below
+- **Gesture Speed Increment**: Amount of speed to change for each horizontal drag segment
 - **Playback Buttons Speed**: Amount of speed to be changed per click
 - **Player Speed**: The speed to set the video to
 - **Per-channel Playback Speed**: Sets a specific playback speed for videos from a channel

@@ -226,6 +226,10 @@ export const featureLightManifest = {
 		pauseBackgroundPlayers: {
 			enabled: false
 		},
+		playbackSpeedBoostGesture: {
+			enabled: false,
+			speed: 0.25
+		},
 		playbackSpeedButtons: {
 			button: {
 				enabled: false,
@@ -384,6 +388,7 @@ export const featureLightManifest = {
 		"openTranscriptButton",
 		"openYouTubeSettingsOnHover",
 		"pauseBackgroundPlayers",
+		"playbackSpeedBoostGesture",
 		"playbackSpeedButtons",
 		"playerQuality",
 		"playerSpeed",

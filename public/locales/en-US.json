@@ -136,13 +136,13 @@
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToRemoveVideo": "Failed to remove video from Watch Later",
-						"failedToSaveVideo": "Failed to save video to Watch Later",
-						"removeVideo": "Remove from Watch Later",
+						"failedToRemoveVideo": "Failed to remove video from Watch later",
+						"failedToSaveVideo": "Failed to save video to Watch later",
+						"removeVideo": "Remove from Watch later",
 						"removedVideo": "Removed from Watch later",
-						"saveVideo": "Save to Watch Later",
+						"saveVideo": "Save to Watch later",
 						"savedVideo": "Saved to Watch later",
-						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
+						"unavailable": "Save to Watch later button is unavailable due to a YouTube change"
 					}
 				},
 				"screenshotButton": {
@@ -761,8 +761,8 @@
 					},
 					"saveToWatchLaterButton": {
 						"enable": {
-							"label": "Enable save to Watch Later button",
-							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+							"label": "Enable save to Watch later button",
+							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch later' playlist"
 						}
 					},
 					"shareShortener": {
@@ -960,6 +960,14 @@
 							"title": "Amount of speed to be changed per click"
 						},
 						"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+					},
+					"boostGesture": {
+						"label": "Playback speed boost gesture",
+						"select": {
+							"label": "Gesture speed increment",
+							"title": "Amount of speed to change for each horizontal drag segment"
+						},
+						"title": "Mouse-Drag to temporarily boost playback speed (Replaces native hold to boost)"
 					},
 					"speed": {
 						"select": {
