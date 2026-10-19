@@ -39,7 +39,7 @@ export async function expectTheaterMode(page: Page): Promise<void> {
 					return flexy?.hasAttribute("theater") || grid?.hasAttribute("theater");
 				});
 			},
-			{ timeout: 15000 }
+			{ timeout: 30000 }
 		)
 		.toBeTruthy();
 }

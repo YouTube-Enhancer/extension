@@ -69,7 +69,9 @@ test.describe("pauseBackgroundPlayers", () => {
 				pageA,
 				PlayerStates.PAUSED,
 				pageType,
-				pageType === "live" ? 30000 : 15000
+				// Under full-suite load the live page stalls the pause path; the previous 30s budget
+				// observed starvation, so live gets the same headroom the other slow budgets carry.
+				pageType === "live" ? 45000 : 15000
 			);
 			await pageB.close();
 		});

@@ -60,6 +60,13 @@ export async function readActionsRowIcon(page: Page): Promise<null | string> {
 
 /** Waits for the actions-row icon to hold still for ten samples, since the membership read can flip it late. */
 export async function settleActionsRowIcon(page: Page): Promise<string> {
+	// Two phases: the button itself can take tens of seconds to be created under full-suite load, and
+	// polling its icon while the button does not exist just burns the settle window on nulls (the poll
+	// resets on every null read). Waiting for the host first keeps the settle phase measuring real icon
+	// flips instead of measuring absence.
+	await expect(page.locator(WATCH_LATER_ACTIONS_ROW_BUTTON_SELECTOR).first()).toBeAttached({
+		timeout: 30000
+	});
 	let lastIcon: null | string = null;
 	let stableSamples = 0;
 	await expect

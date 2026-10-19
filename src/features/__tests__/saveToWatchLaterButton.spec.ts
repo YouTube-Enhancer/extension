@@ -307,7 +307,9 @@ test.describe("saveToWatchLaterButton", () => {
 		await expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached({ timeout: 10000 });
 		// A cold load of a non-target page cannot fail: the feature only observes containers that page never
 		// renders. Clicking through to a channel page makes the page gate run the removal instead.
-		const channelLink = page.locator('ytd-rich-grid-renderer a[href^="/@"]').first();
+		// :visible because the grid can carry invisible channel links (ad-area cards) that resolve first
+		// in DOM order but can never be clicked.
+		const channelLink = page.locator('ytd-rich-grid-renderer a[href^="/@"]:visible').first();
 		await expect(channelLink).toBeAttached({ timeout: 15000 });
 		await channelLink.evaluate((el) => el.scrollIntoView({ block: "center" }));
 		await channelLink.click();
