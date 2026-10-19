@@ -51,7 +51,7 @@
     "tailwindcss-multi": "^0.4.6",
     "vite-plugin-css-injected-by-js": "^5.0.2",
     "webextension-polyfill": "^0.12.0",
-    "youtubei.js": "LuanRT/YouTube.js#447c6139cde1d38c1ed1a509263469cb7dc89e1b"
+    "youtubei.js": "^18.2.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^7.0.0",
