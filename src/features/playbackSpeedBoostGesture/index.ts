@@ -65,16 +65,12 @@ function getPlayerTarget(event: MouseEvent): Element | null {
 
 /**
  * Starts a gesture on left mousedown over the player: snapshots the current playback rate as the baseline
- * and the pointer's x position, and stops propagation so YouTube's own press-and-hold 2x timer never runs.
+ * and the pointer's x position.
  */
 function handleMouseDown(event: MouseEvent) {
-	// Only handle left clicks (button === 0) on the player surface
 	if (event.button !== 0 || !getPlayerTarget(event)) return;
 	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!video) return;
-
-	// Stop immediate propagation in capture phase to suppress YouTube's native 2x press-and-hold timer
-	event.stopImmediatePropagation();
 
 	const currentSpeed = pendingRestorationSpeed ?? video.playbackRate;
 	pendingRestorationSpeed = null;
