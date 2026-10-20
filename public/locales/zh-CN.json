@@ -136,13 +136,13 @@
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToRemoveVideo": "Failed to remove video from Watch later",
-						"failedToSaveVideo": "Failed to save video to Watch later",
-						"removeVideo": "Remove from Watch later",
-						"removedVideo": "Removed from Watch later",
-						"saveVideo": "Save to Watch later",
-						"savedVideo": "Saved to Watch later",
-						"unavailable": "Save to Watch later button is unavailable due to a YouTube change"
+						"failedToRemoveVideo": "从稍后观看中删除视频失败",
+						"failedToSaveVideo": "将视频保存到稍后观看失败",
+						"removeVideo": "从稍后再看移除",
+						"removedVideo": "已从稍后再看移除",
+						"saveVideo": "保存至稍后观看",
+						"savedVideo": "已经保存至稍后观看",
+						"unavailable": "由于YouTube的更改，保存到稍后再看按钮不可用"
 					}
 				},
 				"screenshotButton": {
@@ -761,8 +761,8 @@
 					},
 					"saveToWatchLaterButton": {
 						"enable": {
-							"label": "Enable save to Watch later button",
-							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch later' playlist"
+							"label": "启用保存到稍后观看按钮",
+							"title": "在主页和订阅视频中添加一个按钮，将视频保存到“稍后观看”播放列表"
 						}
 					},
 					"shareShortener": {
@@ -962,12 +962,12 @@
 						"title": "添加按钮以增加或降低您观看的视频的播放速度"
 					},
 					"boostGesture": {
-						"label": "Playback speed boost gesture",
+						"label": "回放速度提升手势",
 						"select": {
-							"label": "Gesture speed increment",
-							"title": "Amount of speed to change for each horizontal drag segment"
+							"label": "手势速度增量",
+							"title": "每个水平拖动段要更改的速度量"
 						},
-						"title": "Mouse-Drag to temporarily boost playback speed (Replaces native hold to boost)"
+						"title": "鼠标拖动以临时提升播放速度 (替换原生按住以提高速度)"
 					},
 					"speed": {
 						"select": {
