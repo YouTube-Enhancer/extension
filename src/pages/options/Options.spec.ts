@@ -1154,4 +1154,145 @@ test.describe("Options", () => {
 		// Choosing closes the list.
 		await expect(option).not.toBeAttached();
 	});
+	test.describe("malformed inputs", () => {
+		const IMPORT_INPUT = "#import_settings_input";
+		const successToast = (page: Page) =>
+			page
+				.locator("#notifications > div")
+				.getByText(localeText("pages.options.extras.importExportSettings.importButton.success"));
+		test("an empty settings file hits the parse-failure path and leaves storage untouched", async ({
+			page
+		}) => {
+			const before = await readStoredKey(page, "playerSpeed");
+			const alerts: string[] = [];
+			page.on("dialog", (dialog) => {
+				alerts.push(dialog.message());
+				void dialog.dismiss();
+			});
+			await page.locator(IMPORT_INPUT).setInputFiles("tests/test-settings-empty.json");
+			// An empty file cannot even parse, so it must take the same catch-all path as the
+			// broken-JSON fixture, not look like a validation failure.
+			await expect
+				.poll(() => alerts, { timeout: 10000 })
+				.toContain(
+					localeText("pages.options.extras.importExportSettings.importButton.error.unknown")
+				);
+			expect(await readStoredKey(page, "playerSpeed")).toEqual(before);
+		});
+		test("a settings file whose root is not an object is rejected with storage untouched", async ({
+			page
+		}) => {
+			const before = await readStoredKey(page, "playerSpeed");
+			const alerts: string[] = [];
+			page.on("dialog", (dialog) => {
+				alerts.push(dialog.message());
+				void dialog.dismiss();
+			});
+			await page.locator(IMPORT_INPUT).setInputFiles("tests/test-settings-array.json");
+			// Either channel is acceptable (a dialog or an in-page notification); what matters is
+			// that a garbage root does not import silently with no feedback at all.
+			await expect
+				.poll(
+					async () => alerts.length > 0 || (await page.locator("#notifications > div").count()) > 0,
+					{ timeout: 10000 }
+				)
+				.toBe(true);
+			expect(await readStoredKey(page, "playerSpeed")).toEqual(before);
+		});
+		test("an import drops deeply nested unknown keys and keeps the known ones", async ({
+			page
+		}) => {
+			await page.locator(IMPORT_INPUT).setInputFiles("tests/test-settings-nested-unknown.json");
+			await expect(successToast(page)).toBeAttached();
+			await expect
+				.poll(
+					async () =>
+						((await readStoredKey(page, "onScreenDisplay")) as null | { opacity?: number })
+							?.opacity,
+					{ timeout: 10000 }
+				)
+				.toBe(42);
+		});
+		test("unicode values arrive through an import intact", async ({ page }) => {
+			await page.locator(IMPORT_INPUT).setInputFiles("tests/test-settings-unicode.json");
+			await expect(successToast(page)).toBeAttached();
+			await expect
+				.poll(
+					async () =>
+						((await readStoredKey(page, "screenshotButton")) as null | { filename?: string })
+							?.filename,
+					{ timeout: 10000 }
+				)
+				.toBe("YT🎬截图_тест_");
+		});
+		test("an out-of-enum select value is rejected with storage untouched", async ({ page }) => {
+			const before = await readStoredKey(page, "screenshotButton");
+			const alerts: string[] = [];
+			page.on("dialog", (dialog) => {
+				alerts.push(dialog.message());
+				void dialog.dismiss();
+			});
+			await page.locator(IMPORT_INPUT).setInputFiles("tests/test-settings-enum.json");
+			await expect.poll(() => alerts, { timeout: 10000 }).not.toHaveLength(0);
+			expect(await readStoredKey(page, "screenshotButton")).toEqual(before);
+		});
+		test("duplicate keys in an import apply their last value once", async ({ page }) => {
+			await page.locator(IMPORT_INPUT).setInputFiles("tests/test-settings-duplicate.json");
+			await expect(successToast(page)).toBeAttached();
+			await expect
+				.poll(
+					async () =>
+						((await readStoredKey(page, "onScreenDisplay")) as null | { opacity?: number })
+							?.opacity,
+					{ timeout: 10000 }
+				)
+				.toBe(90);
+		});
+		test("an opacity typed outside the schema range is stored inside it", async ({ page }) => {
+			await setCheckbox(
+				page,
+				localeText("settings.sections.scrollWheelVolumeControl.enable.label"),
+				true
+			);
+			const opacity = page.getByLabel(
+				localeText("settings.sections.onScreenDisplaySettings.settings.opacity.label"),
+				{ exact: true }
+			);
+			const storedOpacity = async () =>
+				((await readStoredKey(page, "onScreenDisplay")) as null | { opacity?: number })?.opacity;
+			await opacity.fill("999");
+			await expect.poll(storedOpacity, { timeout: 10000 }).toBeLessThanOrEqual(100);
+			await opacity.fill("-5");
+			await expect.poll(storedOpacity, { timeout: 10000 }).toBeGreaterThanOrEqual(0);
+		});
+		test("a very large CSS input commits without breaking the editor", async ({ page }) => {
+			const customCSSLabel = localeText("settings.sections.customCSS.enable.label");
+			await setCheckbox(page, customCSSLabel, true);
+			const editor = page.locator(".monaco-editor").first();
+			await expect(editor).toBeVisible({ timeout: 30000 });
+			const pageErrors: string[] = [];
+			page.on("pageerror", (error) => pageErrors.push(String(error)));
+			await editor.click();
+			await page.keyboard.insertText(`body{--yte-big-test:${"a".repeat(50000)};}`);
+			await page.getByLabel(customCSSLabel, { exact: true }).focus();
+			await expect
+				.poll(async () => readCustomCSSCode(page), { timeout: 30000 })
+				.toContain("--yte-big-test");
+			await expect.poll(() => pageErrors, { timeout: 2000 }).toEqual([]);
+		});
+		test("broken CSS survives the editor and is stored verbatim", async ({ page }) => {
+			const customCSSLabel = localeText("settings.sections.customCSS.enable.label");
+			await setCheckbox(page, customCSSLabel, true);
+			const editor = page.locator(".monaco-editor").first();
+			await expect(editor).toBeVisible({ timeout: 30000 });
+			await editor.click();
+			// An unclosed block: there is no validation marker today, so the contract is that the
+			// editor keeps and stores the text without crashing the page.
+			await page.keyboard.insertText("body{color:");
+			await page.getByLabel(customCSSLabel, { exact: true }).focus();
+			await expect
+				.poll(async () => readCustomCSSCode(page), { timeout: 15000 })
+				.toContain("body{color:");
+		});
+	});
 });

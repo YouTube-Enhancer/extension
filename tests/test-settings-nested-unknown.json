@@ -1,0 +1,19 @@
+{
+	"onScreenDisplay": {
+		"opacity": 42
+	},
+	"unknownSection": {
+		"level1": {
+			"level2": {
+				"level3": [
+					{
+						"deep": true,
+						"deeper": {
+							"x": 1
+						}
+					}
+				]
+			}
+		}
+	}
+}
