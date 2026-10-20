@@ -256,6 +256,14 @@ test.describe("saveToWatchLaterButton", () => {
 			await expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached({ timeout: 10000 });
 		});
 
+		test(`save button should not appear by default on ${pageType}`, async ({ page }) => {
+			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
+			await navigateToPageType(page, pageType);
+			// Fresh page with the shipped defaults, before any enable: the feature puts its class
+			// on every button it renders, card and actions row alike, so none may be attached.
+			await expect(page.locator(BUTTON_SELECTOR)).not.toBeAttached();
+		});
+
 		test(`save button should re-appear after disable then re-enable on ${pageType}`, async ({
 			page
 		}) => {

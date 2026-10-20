@@ -8,7 +8,7 @@ import {
 	expectElementsNotHidden
 } from "@/src/utils/_tests/assertions";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
@@ -52,6 +52,17 @@ test.describe("hideNextButton", () => {
 			await expectElementsNotHidden(page, selectors, { mode: "any" });
 			await enableFeature(page, "hideNextButton.enabled");
 			await expectBodyWithClass(page, bodyClass);
+			await expectElementsHidden(page, selectors);
+		});
+		test(`hides next button after navigation on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "hideNextButton.enabled");
+			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+			await expectElementsHidden(page, selectors);
+			// A genuine in-page navigation to another watch page, so the includePages gate runs through
+			// the navigation manager instead of a fresh document load re-running onEnable.
+			await spaNavigateToRelatedVideo(page);
+			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 			await expectElementsHidden(page, selectors);
 		});
 	}

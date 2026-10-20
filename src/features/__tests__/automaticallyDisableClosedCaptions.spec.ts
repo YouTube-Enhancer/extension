@@ -6,7 +6,7 @@ import { navigateToCaptionedPage, spaNavigateToCaptionedVideo } from "@/src/util
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { localeText } from "@/src/utils/_tests/locale";
-import { reloadPage } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
 import { setCheckbox } from "@/src/utils/_tests/options";
 import {
 	ensureCaptionsState,
@@ -17,7 +17,7 @@ import {
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const { watch } = pageTypeRecord;
+const { home, watch } = pageTypeRecord;
 // The feature watches the first 15 s of the video for captions YouTube turns on late; the wait has to outlast that.
 const disableTimeout = 20000;
 // The rendered options labels the conflict test drives; they come from the same locale entries the metadata points at.
@@ -41,6 +41,22 @@ test.describe("automaticallyDisableClosedCaptions", () => {
 			await expectStableCaptionsState(page, false, { timeout: disableTimeout });
 		});
 	}
+
+	// Off by default: nothing is enabled and no config is written, so the disable retry must never
+	// start and the captions the viewer turned on have to stay on. Watch only: the feature has no
+	// live/VOD branch and the live fixture costs up to 120 s.
+	test(`does not disable captions by default on ${watch}`, async ({ page }) => {
+		await navigateToCaptionedPage(page, watch);
+		test.skip(!(await waitForCaptionsAvailable(page)), "this video offers no captions");
+		test.skip(!(await ensureCaptionsState(page, true)), "captions could not be turned on");
+		// The disable retry outlasts this window by a wide margin (60 s), so a feature that
+		// shipped enabled would be caught clicking the captions off here.
+		await expectToStay(async () => getCaptionsState(page), true, {
+			durationMs: 5000,
+			intervalMs: 500,
+			page
+		});
+	});
 
 	// The cases below run on watch only: the feature has no live/VOD branch (index.ts has no page checks) and the live fixture costs up to 120 s.
 	// onEnable returns early when aria-pressed is already "false" (index.ts:39-41), so this covers that branch, not an actual toggle.
@@ -136,4 +152,15 @@ optionsTest.describe("automaticallyDisableClosedCaptions options", () => {
 			await expect(conflictReason).toHaveCount(0);
 		}
 	);
+});
+
+test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, home);
+	await enableFeature(page, "automaticallyDisableClosedCaptions.enabled");
+	// The page gate must keep the feature's listeners away from a page it was not built for;
+	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
 });

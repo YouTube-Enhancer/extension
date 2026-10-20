@@ -19,9 +19,9 @@ import { setCheckbox } from "@/src/utils/_tests/options";
 import { getCurrentVolume, setVolume } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
+const { home, shorts, watch } = pageTypeRecord;
 // live takes exactly the same `isWatchPage() || isLivePage() -> #movie_player` branch as watch (index.ts:12), so it adds no coverage while each navigateToPageType(live) re-runs the channel scan with a 120 s budget.
-const nonLiveTestPages: readonly PageType[] = [pageTypeRecord.watch, pageTypeRecord.shorts];
-const { watch } = pageTypeRecord;
+const nonLiveTestPages: readonly PageType[] = [watch, shorts];
 // A second volume that differs from the shared `volume` constant, so an edit while the feature runs is observable.
 const updatedVolume = 40;
 // The configured volume is applied through the player retry seam (applyVolume), which allows up
@@ -285,4 +285,15 @@ optionsTest.describe("globalVolume options", () => {
 			await expect(conflictReason).toHaveCount(0);
 		}
 	);
+});
+
+test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, home);
+	await enableFeature(page, "globalVolume.enabled");
+	// The page gate must keep the feature's listeners away from a page it was not built for;
+	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
 });

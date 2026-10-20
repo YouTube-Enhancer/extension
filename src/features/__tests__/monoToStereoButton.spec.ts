@@ -22,7 +22,7 @@ import {
 	setOption
 } from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -96,6 +96,32 @@ test.describe("monoToStereoButton", () => {
 		await page.reload();
 		await navigateToPageType(page, testPages[0], ["monoAudio"]);
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-monoToStereoButton-button");
+	});
+
+	// Neither the button lifecycle nor the toggle branches on live vs VOD, and the live fixture costs
+	// up to 120 s, so the navigation case runs on watch only.
+	test(`button should re-appear after navigation on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch, ["monoAudio"]);
+		await enableFeature(page, "monoToStereoButton.button.enabled");
+		await setOption(page, "monoToStereoButton.button.placement", right);
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-monoToStereoButton-button");
+		// A genuine in-page navigation to another video: the button lives inside the player, which the
+		// navigation rebuilds, so the placement pass has to put it back without a fresh document load.
+		await spaNavigateToRelatedVideo(page);
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-monoToStereoButton-button");
+	});
+
+	test(`applies live changes to the button placement while enabled on ${watch}`, async ({
+		page
+	}) => {
+		// Placement attaches to the player controls without a mono source, so the fixture needs no audio capability.
+		await navigateToPageType(page, watch);
+		// The shipped default placement is the left side of the player controls.
+		await enableFeature(page, "monoToStereoButton.button.enabled");
+		await expectFeatureButtonToBeIn(page, "yte-feature-monoToStereoButton-button", left);
+		// A placement change while the button is up has to relocate it without a reload.
+		await setOption(page, "monoToStereoButton.button.placement", right);
+		await expectFeatureButtonToBeIn(page, "yte-feature-monoToStereoButton-button", right);
 	});
 
 	test(`should not create mono to stereo button on non-target page`, async ({ page }) => {

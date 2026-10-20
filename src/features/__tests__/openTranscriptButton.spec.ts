@@ -61,6 +61,11 @@ test.describe("openTranscriptButton", () => {
 				)
 			).toHaveAttribute("visibility", "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED", { timeout: 10000 });
 		});
+		test(`transcript button should not appear by default on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			// Fresh page with the shipped defaults, before any enable: the button must not be placed.
+			await expectFeatureButtonToBeFalsy(page, "yte-feature-openTranscriptButton-button");
+		});
 		test("transcript button should persist after navigation", async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "openTranscriptButton.button.enabled");
@@ -83,6 +88,13 @@ test.describe("openTranscriptButton", () => {
 		});
 	}
 
+	test("transcript button should not appear on a non-target page", async ({ page }) => {
+		await navigateToPageType(page, home);
+		await enableFeature(page, "openTranscriptButton.button.enabled");
+		// Home carries no transcript button container; if the page gate leaked, the button
+		// controller would still try to place one and this would see it.
+		await expectFeatureButtonToBeFalsy(page, "yte-feature-openTranscriptButton-button");
+	});
 	test("transcript button should persist after full page reload", async ({ page }) => {
 		await navigateToPageType(page, testPages[0]);
 		await enableFeature(page, "openTranscriptButton.button.enabled");

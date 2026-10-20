@@ -23,6 +23,7 @@ const REDIRECT_URL = `https://www.youtube.com/redirect?q=${encodeURIComponent(RE
 const INJECTED_ANCHOR_ID = "yte-test-redirect";
 const LATE_ANCHOR_ID = "yte-test-redirect-late";
 const NESTED_ANCHOR_ID = "yte-test-redirect-nested";
+const REENABLE_ANCHOR_ID = "yte-test-redirect-re-enable";
 
 async function expectNoRedirects(page: Page): Promise<void> {
 	await expect.poll(async () => (await getRedirectLinks(page)).length, { timeout: 15000 }).toBe(0);
@@ -116,6 +117,25 @@ test.describe("removeRedirect", () => {
 			REDIRECT_URL,
 			{ page }
 		);
+	});
+	test("redirect unwrapping re-applies after disable then re-enable on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "removeRedirect.enabled");
+		await injectRedirectAnchor(page);
+		await expect(page.locator(`#${INJECTED_ANCHOR_ID}`)).toHaveAttribute("href", REDIRECT_TARGET);
+		await disableFeature(page, "removeRedirect.enabled");
+		await injectRedirectAnchor(page, LATE_ANCHOR_ID);
+		await expectToStay(
+			async () => page.locator(`#${LATE_ANCHOR_ID}`).getAttribute("href"),
+			REDIRECT_URL,
+			{ page }
+		);
+		// The observer has to be armed again on the same document: an anchor added after the
+		// re-enable must be unwrapped like any other, not left behind as a redirect link.
+		await enableFeature(page, "removeRedirect.enabled");
+		await injectRedirectAnchor(page, REENABLE_ANCHOR_ID);
+		await expect(page.locator(`#${REENABLE_ANCHOR_ID}`)).toHaveAttribute("href", REDIRECT_TARGET);
+		await expectNoRedirects(page);
 	});
 	test("should unwrap redirect links rendered after SPA navigation on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);

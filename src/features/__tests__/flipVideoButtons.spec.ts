@@ -144,6 +144,18 @@ test.describe("flipVideoButtons", () => {
 		}
 	});
 
+	test(`applies live changes to the button placement while enabled on ${watch}`, async ({
+		page
+	}) => {
+		await navigateToPageType(page, watch);
+		// The shipped default placement is the right side of the player controls.
+		await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
+		await expectFeatureButtonToBeIn(page, "yte-feature-flipVideoHorizontalButton-button", right);
+		// A placement change while the button is up has to relocate it without a reload.
+		await setOption(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.placement", left);
+		await expectFeatureButtonToBeIn(page, "yte-feature-flipVideoHorizontalButton-button", left);
+	});
+
 	test.describe("flipping the video", () => {
 		test("horizontal flip button should flip the video and restore it on a second click on watch", async ({
 			page

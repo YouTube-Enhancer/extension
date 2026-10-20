@@ -7,7 +7,11 @@ import type { PageType } from "@/src/features/_registry/types";
 import { expectBodyWithClass, expectBodyWithoutClass } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
+import {
+	navigateToPageType,
+	reloadPage,
+	spaNavigateToRelatedVideo
+} from "@/src/utils/_tests/navigation";
 
 const { channel_videos: channelVideos, watch } = pageTypeRecord;
 
@@ -97,6 +101,22 @@ test.describe("videosPerRow", () => {
 		});
 	}
 
+	// Fresh page with the shipped defaults, before any enable: neither the body class nor the
+	// count variable may reach the page.
+	test(`should not set videos per row by default on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await expectBodyWithoutClass(page, "yte-videos-per-row");
+		await expect
+			.poll(
+				() =>
+					page.evaluate(() =>
+						document.documentElement.style.getPropertyValue("--yte-videos-per-row-count")
+					),
+				{ timeout: 10000 }
+			)
+			.toBe("");
+	});
+
 	test(`renders the configured number of grid columns on ${channelVideos}`, async ({ page }) => {
 		await navigateToPageType(page, channelVideos);
 		// The suite runs at 1280px wide, where the stylesheet clamps to min(4, count), so only counts up to 4 reach the grid.
@@ -126,5 +146,19 @@ test.describe("videosPerRow", () => {
 				{ timeout: 10000 }
 			)
 			.toBe("");
+	});
+	// All pages: the feature declares no includePages, so the case is the effect surviving an SPA
+	// navigation rather than re-arm on a new page type.
+	test(`videos per row should persist after navigation on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await setOption(page, "videosPerRow.videosPerRow", 6);
+		await enableFeature(page, "videosPerRow.enabled");
+		await expectBodyWithClass(page, "yte-videos-per-row", { timeout: 15000 });
+		await expectVideosPerRowCount(page, 6);
+		// A genuine in-page navigation to another video, so the navigation manager's yt-navigate
+		// listeners run instead of a fresh document load re-running onEnable.
+		await spaNavigateToRelatedVideo(page);
+		await expectBodyWithClass(page, "yte-videos-per-row", { timeout: 15000 });
+		await expectVideosPerRowCount(page, 6);
 	});
 });

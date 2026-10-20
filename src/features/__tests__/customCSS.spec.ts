@@ -41,6 +41,11 @@ test.describe("customCSS", () => {
 			await expect(page.locator("#yte-custom-css")).toBeAttached();
 		});
 	}
+	// Fresh page with the shipped defaults, before any enable: no style element may exist yet.
+	test("does not inject custom CSS by default on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await expectToStay(async () => page.locator("#yte-custom-css").count(), 0, { page });
+	});
 	test("should update custom CSS content on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "customCSS.code", "body { color: blue !important; }");

@@ -17,7 +17,7 @@ import {
 	setOption
 } from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { getCurrentSpeed, setValueOnYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -117,6 +117,18 @@ test.describe("playbackSpeedButtons", () => {
 			await expectFeatureButtonToBeFalsy(page, "yte-feature-increasePlaybackSpeedButton-button");
 			await expectFeatureButtonToBeFalsy(page, "yte-feature-decreasePlaybackSpeedButton-button");
 			await enableFeature(page, "playbackSpeedButtons.button.enabled");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
+		});
+		test(`speed buttons should re-appear after navigation on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await setOption(page, "playbackSpeedButtons.button.placement", left);
+			await enableFeature(page, "playbackSpeedButtons.button.enabled");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
+			// A genuine in-page navigation to another watch page: the navigation replaces the player the
+			// buttons live in, so the placement pass has to re-add them without a fresh document load.
+			await spaNavigateToRelatedVideo(page);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
 		});

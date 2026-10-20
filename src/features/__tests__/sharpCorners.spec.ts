@@ -4,7 +4,7 @@ import type { pageTypeRecord } from "@/src/utils/_tests/constants";
 
 import { expectBodyWithClass, expectBodyWithoutClass } from "@/src/utils/_tests/assertions";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 
 const bodyClass = "yte-sharp-corners";
 const testPages: (keyof typeof pageTypeRecord)[] = ["watch", "home"];
@@ -38,4 +38,15 @@ test.describe("sharpCorners", () => {
 			await expectBodyWithClass(page, bodyClass);
 		});
 	}
+	// All pages: the feature declares no includePages, so the case is the effect surviving an SPA
+	// navigation rather than re-arm on a new page type. The body class is the feature's whole effect.
+	test("body class should persist after navigation on watch", async ({ page }) => {
+		await navigateToPageType(page, "watch");
+		await enableFeature(page, "sharpCorners.enabled");
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		// A genuine in-page navigation to another video, so the navigation manager's yt-navigate
+		// listeners run instead of a fresh document load re-running onEnable.
+		await spaNavigateToRelatedVideo(page);
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+	});
 });

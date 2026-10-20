@@ -6,7 +6,7 @@ import { deepDarkPreset, deepDarkPresets } from "@/src/deepDarkPresets";
 import { expectFeatureButtonToBeIn, expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { deepDarkCssID } from "@/src/utils/constants";
 import {
 	DEEP_DARK_COLORS_ATTRIBUTE,
@@ -57,6 +57,21 @@ test.describe("deepDarkCSS", () => {
 			.toBe(1);
 		await page.reload();
 		await navigateToPageType(page, watch);
+		await expect
+			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 15000 })
+			.toBe(1);
+	});
+	// All pages: the feature declares no includePages, so the case is the effect surviving an SPA
+	// navigation rather than re-arm on a new page type.
+	test("deep dark CSS persists after navigation on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "deepDarkCSS.enabled");
+		await expect
+			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 })
+			.toBe(1);
+		// A genuine in-page navigation to another video; the style tag lives in document.head, which
+		// the navigation keeps, so the assertion observes what the navigation produced.
+		await spaNavigateToRelatedVideo(page);
 		await expect
 			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 15000 })
 			.toBe(1);

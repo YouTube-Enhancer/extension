@@ -86,6 +86,17 @@ test.describe("automaticallyDisableAutoPlay", () => {
 			await enableFeature(page, "automaticallyDisableAutoPlay.enabled");
 			await expect.poll(() => getAutoPlayState(page), { timeout: 10000 }).toBe(false);
 		});
+		test(`does not disable autoplay by default on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType, ["autoPlay"]);
+			await setAutoPlayState(page, true);
+			// Nothing is enabled and no config is written: with the shipped default the feature
+			// must never click the toggle off, so the state the test set up has to hold.
+			await expectToStay(() => getAutoPlayState(page), true, {
+				durationMs: 4000,
+				intervalMs: 500,
+				page
+			});
+		});
 		test(`persists disable after full page reload on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType, ["autoPlay"]);
 			await setAutoPlayState(page, true);

@@ -17,7 +17,7 @@ import { resolvePageTypes } from "@/src/utils/_tests/utils";
 const pageTypes = resolvePageTypes(metadata.dependencies?.includePages).filter(
 	(pageType) => pageType !== "live"
 );
-const { search, watch } = pageTypeRecord;
+const { home, search, watch } = pageTypeRecord;
 
 // YouTube leaves a closed share dialog's input in the DOM, so a bare `#share-url` matches more than one
 // element once a second dialog has been opened; the visible one is the dialog that is on screen.
@@ -88,6 +88,13 @@ test.describe("shareShortener", () => {
 			await expect.poll(async () => await getShareUrl(page)).toMatch(SHARE_PARAM_REGEXP);
 		});
 	}
+	// Fresh page with the shipped defaults, before any enable: no observer may rewrite the URL
+	// YouTube puts in the dialog, so its tracking params have to survive untouched.
+	test(`should preserve share params by default on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await openShareDialog(page, watch);
+		await expect.poll(async () => await getShareUrl(page)).toMatch(SHARE_PARAM_REGEXP);
+	});
 	// The lifecycle cases below only run removeObserver + setupShareShortener, which have no page-specific code
 	// path, so they run on watch only; the per-page dialog behaviour is covered by the two tests above.
 	test(`re-applies after disable then re-enable on ${watch}`, async ({ page }) => {
@@ -165,4 +172,15 @@ test.describe("shareShortener", () => {
 			.poll(async () => getShareUrl(page), { timeout: 10000 })
 			.toMatch(SHARE_PARAM_REGEXP);
 	});
+});
+
+test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, home);
+	await enableFeature(page, "shareShortener.enabled");
+	// The page gate must keep the feature's listeners away from a page it was not built for;
+	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
 });

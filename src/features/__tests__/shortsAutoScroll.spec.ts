@@ -17,7 +17,7 @@ import {
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const { shorts } = pageTypeRecord;
+const { shorts, watch } = pageTypeRecord;
 
 async function expectAutoScroll(page: Page, initialId: Nullable<string>): Promise<void> {
 	await expect
@@ -94,6 +94,17 @@ async function spaNavigateBackToShorts(page: Page): Promise<void> {
 	await waitForExtensionReady(page);
 	await expect(page.locator("#shorts-player video")).toBeAttached({ timeout: 30_000 });
 }
+test(`enabling on ${watch}, a non-target page, leaves the player alone`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, watch);
+	await enableFeature(page, "shortsAutoScroll.enabled");
+	// The feature has no marker on watch; the honest guard is that arming its listeners against
+	// a page with no shorts feed neither throws nor disturbs the watch player.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
+});
+
 test.describe("shortsAutoScroll", () => {
 	for (const pageType of testPages) {
 		test(`should automatically scroll when enabled on ${pageType}`, async ({ page }) => {

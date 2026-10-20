@@ -140,6 +140,17 @@ test.describe("scrollWheelSpeedControl", () => {
 			});
 		});
 	}
+	// Fresh page with the shipped defaults, before any enable: the control's body signal must be
+	// absent and even the default modifier must leave the playback rate alone. Watch only - the
+	// attach path has no page-specific branch beyond the container lookup.
+	test(`speed should not change by default on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await waitForScrollWheelControl(page, "speed", false);
+		await setValueOnYouTubePlayer(page, watch, "setPlaybackRate", speed);
+		await expect.poll(async () => getCurrentSpeed(page, watch)).toBe(speed);
+		await dispatchWheelNotches(page, watch, "up", 1, { altKey: true });
+		await expectToStay(async () => getCurrentSpeed(page, watch), speed, { page });
+	});
 	test(`does not change the speed when scrolling without the configured modifier key on ${watch}`, async ({
 		page
 	}) => {
@@ -229,4 +240,15 @@ test.describe("scrollWheelSpeedControl", () => {
 			await expectToStay(async () => getCurrentSpeed(page, watch), speed + steps, { page });
 		});
 	});
+});
+
+test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, home);
+	await enableFeature(page, "scrollWheelSpeedControl.enabled");
+	// The page gate must keep the feature's listeners away from a page it was not built for;
+	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
 });

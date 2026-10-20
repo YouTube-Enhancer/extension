@@ -242,6 +242,20 @@ test.describe("maximizePlayerButton", () => {
 		});
 	});
 
+	test(`applies live changes to the button placement while enabled on ${watch}`, async ({
+		page
+	}) => {
+		await navigateToPageType(page, watch);
+		// The shipped default placement is the feature menu, so the default effect is the menu item.
+		await enableFeature(page, "maximizePlayerButton.button.enabled");
+		await expectFeatureMenuItemToBeTruthy(page, "yte-feature-maximizePlayerButton-menuitem");
+		// A placement change while the feature is on has to move the control out of the menu and
+		// into the player controls without a reload.
+		await setOption(page, "maximizePlayerButton.button.placement", left);
+		await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", left);
+		await expectFeatureMenuItemToBeFalsy(page, "yte-feature-maximizePlayerButton-menuitem");
+	});
+
 	test("maximizing from theater mode should leave theater mode untouched on restore on watch", async ({
 		page
 	}) => {

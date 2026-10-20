@@ -104,6 +104,13 @@ test.describe("hideMembersOnlyVideos", () => {
 		});
 	}
 
+	// Fresh page with the shipped defaults, before any enable: the body class must never reach
+	// the page, which is what would make the generated rule hide anything at all.
+	test(`does not hide members only videos by default on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await expectBodyWithoutClass(page, bodyClass);
+	});
+
 	for (const pageType of transitionPages) {
 		test(`hides elements after navigation on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);

@@ -235,6 +235,48 @@ test.describe("videoHistory", () => {
 		await disableFeature(page, "videoHistory.enabled");
 		await expect(resumePrompt).not.toBeAttached();
 	});
+	// The prompt is built by onEnable -> handleVideoChange, which early-returns for the video it
+	// already tracked (currentVideoId is never reset), so the re-enable only becomes observable
+	// once the next video change re-arms the listeners - the in-page navigation below is that
+	// re-arm. The negative half proves the disable really stopped the tracking in between.
+	test("re-applies after disable then re-enable on watch", async ({ page }) => {
+		test.setTimeout(240_000);
+		await navigateToPageType(page, watch, ["videoHistory"]);
+		await enableFeature(page, "videoHistory.enabled");
+		await setOption(page, "videoHistory.resumeType", "prompt");
+		const seekTarget = await seekToQuarterDuration(page);
+		const storedTime = await waitForStoredTimestamp(page, seekTarget - 1);
+		await disableFeature(page, "videoHistory.enabled");
+		// With the listeners removed the stored timestamp must stop following playback.
+		await page.evaluate(async () => {
+			const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+			await player?.playVideo?.();
+		});
+		await expectToStay(async () => (await readStoredEntry(page))?.timestamp, storedTime, {
+			durationMs: 4000,
+			page
+		});
+		await enableFeature(page, "videoHistory.enabled");
+		await spaNavigateToRelatedVideo(page);
+		// The feature leaves official artist channels alone and the related list often leads with
+		// music videos, so those are hopped over until a video the feature tracks comes up.
+		for (let hop = 0; hop < 4 && (await isOfficialArtistVideo(page)); hop++)
+			await spaNavigateToRelatedVideo(page);
+		test.skip(
+			await isOfficialArtistVideo(page),
+			"every related video within four hops was from an official artist channel"
+		);
+		await pageSetup(page);
+		await expect(page.locator("#movie_player.ad-showing")).toHaveCount(0, { timeout: 60_000 });
+		await page.evaluate(async () => {
+			const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+			await player?.playVideo?.();
+		});
+		await expect.poll(async () => getCurrentTime(page), { timeout: 20000 }).toBeGreaterThan(2);
+		// readStoredEntry keys off the URL, so this reads the new video's entry: only a
+		// re-enabled feature would have written it.
+		await waitForStoredTimestamp(page, 1);
+	});
 	test("no resume prompt for a video already marked watched", async ({ page }) => {
 		test.setTimeout(120_000);
 		await navigateToPageType(page, watch, ["videoHistory"]);
@@ -278,4 +320,15 @@ test.describe("videoHistory", () => {
 		await expectToStay(async () => readStoredEntry(page), null, { durationMs: 8000, page });
 		await expect(page.locator("#resume-prompt")).not.toBeAttached();
 	});
+});
+
+test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, home);
+	await enableFeature(page, "videoHistory.enabled");
+	// The page gate must keep the feature's listeners away from a page it was not built for;
+	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
 });

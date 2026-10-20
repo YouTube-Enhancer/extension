@@ -9,7 +9,7 @@ import { navigateToCaptionedPage, spaNavigateToCaptionedVideo } from "@/src/util
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { localeText } from "@/src/utils/_tests/locale";
-import { reloadPage } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
 import { setCheckbox } from "@/src/utils/_tests/options";
 import {
 	ensureCaptionsState,
@@ -21,7 +21,7 @@ import {
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const { watch } = pageTypeRecord;
+const { home, watch } = pageTypeRecord;
 // The rendered options labels the conflict test drives; they come from the same locale entries the metadata points at.
 const autoDisableLabel = localeText(
 	"settings.sections.miscellaneous.settings.automaticallyDisableClosedCaptions.enable.label"
@@ -235,4 +235,15 @@ optionsTest.describe("automaticallyEnableClosedCaptions options", () => {
 			await expect(conflictReason).toHaveCount(0);
 		}
 	);
+});
+
+test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, home);
+	await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
+	// The page gate must keep the feature's listeners away from a page it was not built for;
+	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
 });

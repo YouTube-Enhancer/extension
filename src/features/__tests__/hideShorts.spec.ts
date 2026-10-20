@@ -111,6 +111,14 @@ test.describe("hideShorts", () => {
 				await expectBodyWithClass(pageObj, bodyClass);
 				await expectElementsHidden(pageObj, selectors, { mode: hiddenMode });
 			});
+			test(`${subFeature} hiding should be off by default on ${page}`, async ({
+				page: pageObj
+			}) => {
+				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
+				await navigateToPageType(pageObj, page);
+				// Fresh page with the shipped defaults: the section class must never reach the body.
+				await expectBodyWithoutClass(pageObj, bodyClass);
+			});
 			test(`${subFeature} hiding should persist after navigation on ${page}`, async ({
 				page: pageObj
 			}) => {

@@ -359,6 +359,27 @@ test.describe("automaticallyDisableAmbientMode", () => {
 		);
 	});
 
+	// Off by default: nothing is enabled and no config is written, so the disable task must never run
+	// and the ambient mode the viewer was left with has to hold.
+	test(`does not disable ambient mode by default on ${watch}`, async ({ page }) => {
+		await useDarkTheme(page);
+		await navigateToPageType(page, watch, ["ambientMode"]);
+		test.skip((await getAmbientState(page)) === null, "no watch shell to read ambient mode from");
+		// Ambient mode on is the state the feature would switch off, so it is what proves the
+		// default config leaves the page untouched.
+		test.skip(
+			!(await trySetAmbientState(page, true, 10000)),
+			"this video exposes no ambient mode control"
+		);
+		await expectToStay(
+			async () => {
+				return getAmbientState(page);
+			},
+			true,
+			{ durationMs: 5000, intervalMs: 500, page }
+		);
+	});
+
 	// The shorts page keeps ambient mode behind the reel's "more" sheet, which the feature opens out of sight, reads and
 	// closes again; these cases read it the same way, with a real click. As on watch, the row only exists in YouTube's
 	// dark theme. YouTube offers it on the reel a page loads on only, and its switch does not turn back on within a

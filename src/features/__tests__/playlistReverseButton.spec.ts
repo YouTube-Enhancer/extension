@@ -34,7 +34,7 @@ import { resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const playlistRequirements: FixtureCapabilities[] = ["playlistLength", "playlistManagementButtons"];
 const { below } = placementRecord;
-const { playlist, watch } = pageTypeRecord;
+const { home, playlist, watch } = pageTypeRecord;
 
 type AutoplayTarget = Nullable<{ playlistId: Nullable<string>; videoId: Nullable<string> }>;
 
@@ -922,4 +922,12 @@ test.describe("playlistReverseButton", () => {
 			.poll(async () => (await readLivePlaylist(page))?.localCurrentIndex, { timeout: 10000 })
 			.toBe(stateBefore!.length - 1 - stateBefore!.localCurrentIndex);
 	});
+});
+
+test(`reverse button should not appear on ${home}, a non-target page`, async ({ page }) => {
+	await navigateToPageType(page, home);
+	await enableFeature(page, "playlistReverseButton.enabled");
+	// Home has no playlist panel at all; a leaked page gate would still arm the panel observer
+	// that injects the button.
+	await expect(page.locator(`#${REVERSE_BUTTON_ID}`)).not.toBeAttached();
 });

@@ -142,6 +142,17 @@ test.describe("copyTimestampUrlButton", () => {
 		await expectFeatureButtonToBeIn(page, "yte-feature-copyTimestampUrlButton-button", right);
 	});
 
+	test("applies live changes to the button placement while enabled on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		// The shipped default placement is the right side of the player controls.
+		await enableFeature(page, "copyTimestampUrlButton.button.enabled");
+		await expectFeatureButtonToBeIn(page, "yte-feature-copyTimestampUrlButton-button", right);
+		// A placement change while the button is up has to relocate it without a reload: the
+		// orchestrator re-runs button placement for every config change, onConfigChange or not.
+		await setOption(page, "copyTimestampUrlButton.button.placement", left);
+		await expectFeatureButtonToBeIn(page, "yte-feature-copyTimestampUrlButton-button", left);
+	});
+
 	test("copy timestamp url button should keep working after an in-page navigation on watch", async ({
 		page
 	}) => {

@@ -6,7 +6,7 @@ import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-const { watch } = pageTypeRecord;
+const { home, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const SETTINGS_MENU_SELECTOR = ".ytp-settings-menu:not(#yte-feature-menu)";
 
@@ -229,4 +229,15 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		await page.locator(".ytp-settings-button").dispatchEvent("mouseenter");
 		await expect(settingsMenu).toBeVisible({ timeout: 15000 });
 	});
+});
+
+test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, home);
+	await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
+	// The page gate must keep the feature's listeners away from a page it was not built for;
+	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
 });

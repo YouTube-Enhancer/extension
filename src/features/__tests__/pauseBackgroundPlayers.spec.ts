@@ -236,6 +236,46 @@ test.describe("pauseBackgroundPlayers", () => {
 		await pageB.close();
 	});
 
+	// The enable/disable pair must be idempotent: a re-enable has to re-attach the listeners on
+	// the same document, so a background player is paused once more. Watch only: the feature has
+	// no live/VOD branch and the live fixture costs up to 120 s per iteration.
+	test("background pausing re-applies after disable then re-enable on watch", async ({
+		context,
+		page
+	}) => {
+		test.setTimeout(180_000);
+		const pageA = page;
+		const pageB = await context.newPage();
+		await openAndPlayVideo(pageA, watch);
+		await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
+		await openAndPlayVideo(pageB, watch);
+		// Positive: the listeners are live, so pageB's playback start pauses pageA.
+		await expectPlayerState(pageA, PlayerStates.PAUSED, watch);
+		await disableFeature(pageA, "pauseBackgroundPlayers.enabled");
+		// The disable stops future pausing but does not resume tabs it already paused, so pageA
+		// has to be brought back before the negative half can be observed at all.
+		await pageA.bringToFront();
+		await ensureVideoIsPlaying(pageA, watch);
+		await expectPlayerState(pageA, PlayerStates.PLAYING, watch);
+		// Negative: with the listeners removed, pageA resuming must not reach pageB.
+		await expectToStay(
+			async () => getValueFromYouTubePlayer(pageB, "getPlayerState", watch),
+			PlayerStates.PLAYING,
+			{ page: pageB }
+		);
+		// Positive again: re-enabling on the same document has to re-attach the monitoring. The
+		// feature broadcasts when this tab STARTS playing, so the already-playing pageA emits
+		// nothing at enable time; the play has to be restarted for the re-armed listener to fire.
+		await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
+		await pageA.evaluate(() => {
+			const player = document.querySelector("#movie_player") as null | { pauseVideo?: () => void };
+			player?.pauseVideo?.();
+		});
+		await ensureVideoIsPlaying(pageA, watch);
+		await expectPlayerState(pageB, PlayerStates.PAUSED, watch);
+		await pageB.close();
+	});
+
 	test("should not affect non-target page", async ({ context, page }) => {
 		test.setTimeout(120_000);
 		const pageA = page;

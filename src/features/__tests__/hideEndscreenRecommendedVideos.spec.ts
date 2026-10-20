@@ -13,7 +13,7 @@ import {
 	expectElementsNotHidden
 } from "@/src/utils/_tests/assertions";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
@@ -88,6 +88,17 @@ test.describe("hideEndscreenRecommendedVideos", () => {
 			await expectBodyWithClass(page, bodyClass);
 			await showEndScreen(page, pageType);
 			await expectElementsHidden(page, selectors, { requireMatch: true });
+		});
+		test(`hides endscreen recommended videos after navigation on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "hideEndscreenRecommendedVideos.enabled");
+			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+			// A genuine in-page navigation to another watch page, so the includePages gate runs through
+			// the navigation manager instead of a fresh document load re-running onEnable. The body
+			// class is the feature's whole effect; the hidden-elements assertion is not repeated because
+			// the end screen of the new video may never render (the by-default case skips in that state).
+			await spaNavigateToRelatedVideo(page);
+			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 		});
 	}
 

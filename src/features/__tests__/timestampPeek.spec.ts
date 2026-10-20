@@ -18,7 +18,7 @@ import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_test
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const { watch } = pageTypeRecord;
+const { home, watch } = pageTypeRecord;
 const { right } = placementRecord;
 
 const OVERLAY = "#yte-timestamp-peek-overlay";
@@ -574,4 +574,15 @@ test.describe("timestampPeek", () => {
 		await expect(page.locator(PLACEHOLDER)).not.toBeAttached({ timeout: 10000 });
 		await expect(miniPlayerOverlay).toHaveCSS("display", "block");
 	});
+});
+
+test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, home);
+	await enableFeature(page, "timestampPeek.enabled");
+	// The page gate must keep the feature's listeners away from a page it was not built for;
+	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
 });

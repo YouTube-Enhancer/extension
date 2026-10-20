@@ -100,6 +100,17 @@ test.describe("scrollWheelVolumeControl", () => {
 			});
 		});
 	}
+	// Fresh page with the shipped defaults, before any enable: the control's body signal must be
+	// absent and a bare wheel must leave the volume alone. Watch only - the attach path has no
+	// page-specific branch beyond the container lookup.
+	test(`volume should not change by default on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await waitForScrollWheelVolumeControl(page, false);
+		await setVolume(page, volume, watch);
+		await expect.poll(async () => getCurrentVolume(page, watch)).toBe(volume);
+		await dispatchWheelNotches(page, watch, "up", 1);
+		await expectToStay(async () => getCurrentVolume(page, watch), volume, { page });
+	});
 	// The only page-specific branch is findPlayerContainer's container lookup, which the increase test above already
 	// exercises on every page type; direction and navigation add no page-specific path, so these run on watch only
 	// (the live fixture re-crawls the channel and costs up to 120 s per iteration).
@@ -412,4 +423,15 @@ test.describe("scrollWheelVolumeControl", () => {
 				.toBe(volume + 2 * steps);
 		});
 	});
+});
+
+test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, home);
+	await enableFeature(page, "scrollWheelVolumeControl.enabled");
+	// The page gate must keep the feature's listeners away from a page it was not built for;
+	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
 });

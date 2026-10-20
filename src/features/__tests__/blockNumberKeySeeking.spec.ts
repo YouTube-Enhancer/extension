@@ -13,7 +13,7 @@ import {
 import { freezeAndGetTime } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
-const { watch } = pageTypeRecord;
+const { home, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
 const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"] as const;
@@ -138,4 +138,15 @@ test.describe("blockNumberKeySeeking", () => {
 		if (end === null) return;
 		expect(end - start).toBeGreaterThan(5);
 	});
+});
+
+test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, home);
+	await enableFeature(page, "blockNumberKeySeeking.enabled");
+	// The page gate must keep the feature's listeners away from a page it was not built for;
+	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
 });

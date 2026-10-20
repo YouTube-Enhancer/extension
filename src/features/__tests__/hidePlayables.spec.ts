@@ -129,6 +129,11 @@ test.describe("hidePlayables", () => {
 	});
 
 	// onEnable/onDisable only add/remove a body class and no page gating exists, so the remaining cycles run on home only.
+	// Fresh page with the shipped defaults, before any enable: the body class must never reach watch.
+	test("does not hide playables by default on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await expectBodyWithoutClass(page, bodyClass);
+	});
 	test("shows playables section when disabled on home", async ({ page }) => {
 		test.skip(!hasAuthState(), "home requires login");
 		await navigateToPageType(page, home);

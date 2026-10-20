@@ -14,7 +14,7 @@ import {
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
-const { watch } = pageTypeRecord;
+const { home, watch } = pageTypeRecord;
 export async function expectNotTheaterMode(page: Page): Promise<void> {
 	await expect
 		.poll(
@@ -60,6 +60,18 @@ test.describe("automaticTheaterMode", () => {
 			await expectTheaterMode(page);
 		});
 	}
+
+	// Off by default: no config is written at all, so whatever layout YouTube restores on load is
+	// the layout that has to stay - the feature must not put the player into theater mode by itself.
+	test(`theater mode should not be applied by default on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		const initialTheaterMode = await isTheaterMode(page);
+		await expectToStay(async () => isTheaterMode(page), initialTheaterMode, {
+			durationMs: 5000,
+			intervalMs: 500,
+			page
+		});
+	});
 
 	// Watch only: onNavigate needs a genuine single-page navigation, and clicking through to a related video is only
 	// possible from a watch page (navigateToPageType would be a document load that re-runs onEnable instead).
@@ -127,4 +139,15 @@ test.describe("automaticTheaterMode", () => {
 			page
 		});
 	});
+});
+
+test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, home);
+	await enableFeature(page, "automaticTheaterMode.enabled");
+	// The page gate must keep the feature's listeners away from a page it was not built for;
+	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
 });

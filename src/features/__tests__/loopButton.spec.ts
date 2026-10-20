@@ -7,6 +7,7 @@ import {
 	expectFeatureButtonToBeFalsy,
 	expectFeatureButtonToBeIn,
 	expectFeatureButtonToBeTruthy,
+	expectFeatureMenuItemToBeFalsy,
 	expectFeatureMenuItemToBeTruthy,
 	expectToggleButtonState,
 	expectToStay
@@ -85,6 +86,20 @@ test.describe("loopButton", () => {
 			await setVideoLoopAttribute(page, false);
 			await expect.poll(async () => await getLoopButtonIcon(page)).toBe(offIcon);
 		});
+		test("loop button re-applies after disable then re-enable", async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "loopButton.button.enabled");
+			await setOption(page, "loopButton.button.placement", left);
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-loopButton-button");
+			await disableFeature(page, "loopButton.button.enabled");
+			await expectFeatureButtonToBeFalsy(page, "yte-feature-loopButton-button");
+			await enableFeature(page, "loopButton.button.enabled");
+			await setOption(page, "loopButton.button.placement", left);
+			// Exactly one button: a re-enable that re-ran the add without removing the old node
+			// would leave a duplicate in the player controls.
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-loopButton-button");
+			await expect(page.locator("#yte-feature-loopButton-button")).toHaveCount(1);
+		});
 		test("loop button should persist after navigation", async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "loopButton.button.enabled");
@@ -127,6 +142,20 @@ test.describe("loopButton", () => {
 			await setOption(page, "loopButton.button.placement", "feature_menu");
 			await enableFeature(page, "loopButton.button.enabled");
 			await expectFeatureMenuItemToBeTruthy(page, "yte-feature-loopButton-menuitem");
+		});
+
+		test(`applies live changes to the button placement while enabled on ${watch}`, async ({
+			page
+		}) => {
+			await navigateToPageType(page, watch);
+			// The shipped default placement is the feature menu, so the default effect is the menu item.
+			await enableFeature(page, "loopButton.button.enabled");
+			await expectFeatureMenuItemToBeTruthy(page, "yte-feature-loopButton-menuitem");
+			// A placement change while the feature is on has to move the control out of the menu and
+			// into the player controls without a reload.
+			await setOption(page, "loopButton.button.placement", left);
+			await expectFeatureButtonToBeIn(page, "yte-feature-loopButton-button", left);
+			await expectFeatureMenuItemToBeFalsy(page, "yte-feature-loopButton-menuitem");
 		});
 
 		test("loop should toggle on and off from the feature menu item", async ({ page }) => {

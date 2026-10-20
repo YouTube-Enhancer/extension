@@ -7,7 +7,7 @@ import {
 	expectElementsHidden
 } from "@/src/utils/_tests/assertions";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
@@ -62,6 +62,17 @@ test.describe("hideAutoplayButton", () => {
 			await enableFeature(page, "hideAutoplayButton.enabled");
 			await expectBodyWithClass(page, bodyClass);
 			await expectElementsHidden(page, selectors);
+		});
+		test(`hides autoplay button after navigation on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "hideAutoplayButton.enabled");
+			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+			// A genuine in-page navigation to another watch page, so the includePages gate runs through
+			// the navigation manager instead of a fresh document load re-running onEnable. The body
+			// class is the feature's whole effect; expectElementsHidden is deliberately not repeated
+			// because YouTube hides .ytp-autonav-toggle itself once playback starts (see above).
+			await spaNavigateToRelatedVideo(page);
+			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 		});
 	}
 

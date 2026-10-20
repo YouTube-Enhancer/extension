@@ -18,7 +18,7 @@ import { resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages).filter(
 	(pageType) => pageType !== "live"
 );
-const { live, shorts, watch } = pageTypeRecord;
+const { home, live, shorts, watch } = pageTypeRecord;
 type RememberVolumeState = { shortsPageVolume: number; watchPageVolume: number };
 /** Reads the volume the feature has recorded for `pageType`, or undefined when it never recorded one. */
 async function readStoredVolume(page: Page, pageType: PageType): Promise<number | undefined> {
@@ -37,6 +37,16 @@ test.describe("rememberVolume", () => {
 			await expect.poll(() => getCurrentVolume(page, pageType), { timeout: 10000 }).toBe(volume);
 			// YouTube persists the volume natively, so the player value proves nothing. The observable contract
 			// is the extension side: with no volumechange listener the recorded volume never moves.
+			await expectToStay(async () => readStoredVolume(page, pageType), storedBefore, { page });
+		});
+		test(`volume should not be recorded by default on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			const storedBefore = await readStoredVolume(page, pageType);
+			await setVolume(page, volume, pageType);
+			await expect.poll(() => getCurrentVolume(page, pageType), { timeout: 10000 }).toBe(volume);
+			// No config write at all: the shipped default must leave the volumechange listener
+			// unattached, so the recorded volume never moves. The "when disabled" test below writes
+			// the default false first, which would mask a feature that shipped enabled.
 			await expectToStay(async () => readStoredVolume(page, pageType), storedBefore, { page });
 		});
 		test(`persists remembered volume after full page reload on ${pageType}`, async ({ page }) => {
@@ -201,4 +211,15 @@ test.describe("rememberVolume", () => {
 			await expect.poll(() => getCurrentVolume(page, shorts), { timeout: 10000 }).toBe(80);
 		});
 	});
+});
+
+test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, home);
+	await enableFeature(page, "rememberVolume.enabled");
+	// The page gate must keep the feature's listeners away from a page it was not built for;
+	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
 });

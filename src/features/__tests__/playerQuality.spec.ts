@@ -18,7 +18,7 @@ import { getClosestQuality, getValueFromYouTubePlayer } from "@/src/utils/_tests
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { lookupItag } from "@/src/utils/player/itagDb";
-const { live, watch } = pageTypeRecord;
+const { home, live, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
 export const qualityLevel = "hd2160" as YoutubePlayerQualityLevel;
@@ -492,4 +492,15 @@ test.describe("playerQuality", () => {
 		await enableFeature(page, "playerQuality.enabled");
 		await expect.poll(readRequestedFormat, { timeout: 15000 }).toBe(135);
 	});
+});
+
+test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => errors.push(String(error)));
+	await navigateToPageType(page, home);
+	await enableFeature(page, "playerQuality.enabled");
+	// The page gate must keep the feature's listeners away from a page it was not built for;
+	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
+	await page.waitForTimeout(2000);
+	expect(errors).toEqual([]);
 });
