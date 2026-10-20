@@ -435,6 +435,77 @@ test.describe("playlistManagementButtons", () => {
 			await ensureInWatchLater(page, WATCH_LATER_SHORT_VIDEO);
 		});
 	});
+	test(`a failed history edit keeps the watched row's overlay and reset button on ${playlist}`, async ({
+		page
+	}) => {
+		test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
+		test.setTimeout(300_000);
+		await ensureInWatchLater(page, WATCH_LATER_SHORT_VIDEO);
+		await watchToTheEnd(page, WATCH_LATER_SHORT_VIDEO);
+		await navigateToPageType(page, playlist, ["playlistChipBar"]);
+		await expect
+			.poll(
+				async () => {
+					const progress = await readRowProgress(page, WATCH_LATER_SHORT_VIDEO);
+					if (progress !== 100) await reloadPage(page, playlist);
+					return progress;
+				},
+				{ intervals: [3000], timeout: 90_000 }
+			)
+			.toBe(100);
+		await enableFeature(page, "playlistManagementButtons.resetButton.enabled");
+		const row = page
+			.locator(PLAYLIST_ITEM_SELECTOR)
+			.filter({ has: page.locator(`a[href*="v=${WATCH_LATER_SHORT_VIDEO}"]`) });
+		const resetButton = row.locator(RESET_BUTTON_SELECTOR);
+		await expect(resetButton).toBeAttached({ timeout: 15000 });
+
+		// History.removeVideo resolves its feedback token from the history feed and then posts it
+		// to /feedback; that post is the request whose rejection must leave the row untouched.
+		await page.route("**/youtubei/v1/feedback*", (route) => route.abort());
+		await resetButton.click();
+		// The onClick awaits the history edit before touching the overlay or the button, so a
+		// rejection must leave the row's watched state exactly as it was.
+		await page.waitForTimeout(2000);
+		await expect
+			.poll(async () => readRowProgress(page, WATCH_LATER_SHORT_VIDEO), {
+				timeout: 10000
+			})
+			.toBe(100);
+		await expect(resetButton).toBeAttached();
+	});
+	test(`a failed remove-all leaves the watched rows in place on ${playlist}`, async ({ page }) => {
+		test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
+		test.setTimeout(300_000);
+		await ensureInWatchLater(page, WATCH_LATER_SHORT_VIDEO);
+		await watchToTheEnd(page, WATCH_LATER_SHORT_VIDEO);
+		await navigateToPageType(page, playlist, ["playlistChipBar"]);
+		await expect
+			.poll(
+				async () => {
+					const progress = await readRowProgress(page, WATCH_LATER_SHORT_VIDEO);
+					if (progress !== 100) await reloadPage(page, playlist);
+					return progress;
+				},
+				{ intervals: [3000], timeout: 90_000 }
+			)
+			.toBe(100);
+		await enableFeature(page, "playlistManagementButtons.removeAllButton.enabled");
+		const removeAllButton = page.locator(REMOVE_ALL_BUTTON_SELECTOR);
+		await expect(removeAllButton).toBeAttached({ timeout: 15000 });
+
+		await page.route("**/youtubei/v1/browse/edit_playlist*", (route) => route.abort());
+		await removeAllButton.click();
+		// The remove-all request is an edit_playlist batch; on rejection the button and the
+		// watched rows must all survive.
+		await page.waitForTimeout(2000);
+		await expect(removeAllButton).toBeAttached();
+		await expect
+			.poll(async () => readRowProgress(page, WATCH_LATER_SHORT_VIDEO), {
+				timeout: 10000
+			})
+			.toBe(100);
+	});
 	test(`management buttons should not appear on ${watch}, a non-target page`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "playlistManagementButtons.removeButton.enabled");
