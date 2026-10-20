@@ -268,6 +268,22 @@ test.describe("every feature", () => {
 				"ytd-playlist-header-renderer",
 				"yt-page-header-view-model"
 			]
+		},
+		{
+			// The combination strip: navigation chrome and the video at once, the shape a feature
+			// meets when the page is still assembling.
+			pageType: watch,
+			removed: ["#masthead-container", "#guide", "video"]
+		},
+		{
+			// A live page without its chat: the live-only features must find nothing and stand down.
+			pageType: live,
+			removed: ["ytd-live-chat-frame", "ytd-comments", "ytd-playlist-panel-renderer"]
+		},
+		{
+			// Shorts with the player intact but its reel list empty.
+			pageType: shorts,
+			removed: ["ytd-reel-video-renderer"]
 		}
 	] as const) {
 		test(`every feature enabled on a ${pageType} page stripped of ${removed.join(", ")}`, async ({
@@ -289,4 +305,50 @@ test.describe("every feature", () => {
 			expect(errors, "the extension raised errors on the page").toEqual([]);
 		});
 	}
+	test(`every feature enabled on ${watch} treats a player without its ready class as absent`, async ({
+		page
+	}) => {
+		test.setTimeout(240_000);
+		await navigateToPageType(page, watch);
+		// The player stays mounted but loses the class the readiness gate looks for: features must
+		// treat it as not-ready rather than reaching into a half-initialised player.
+		await page.evaluate(() => {
+			document.querySelector("#movie_player")?.classList.remove("html5-video-player");
+		});
+		const errors = watchExtensionErrors(page);
+		const switches = collectSwitches(await loadDefaultConfig());
+		await setEverySwitch(page, switches, true);
+		await page.waitForTimeout(SETTLE_MS * 2);
+		await setEverySwitch(page, switches, false);
+		await page.waitForTimeout(SETTLE_MS);
+		expect(errors, "the extension raised errors on the page").toEqual([]);
+	});
+	test(`every feature enabled on ${watch} survives secondary content that appears only after enable`, async ({
+		page
+	}) => {
+		test.setTimeout(240_000);
+		await navigateToPageType(page, watch);
+		// Hidden, not removed: the enable pass sees no secondary info or end screen, and the
+		// restore makes them appear afterwards - the timing shape where only an observer can
+		// catch up. Anything that assumed presence at enable time must recover or stand down.
+		await page.evaluate(() => {
+			for (const selector of ["#secondary", "ytd-endscreen-content"])
+				document
+					.querySelectorAll(selector)
+					.forEach((element) => (element as HTMLElement).style.setProperty("display", "none"));
+		});
+		const errors = watchExtensionErrors(page);
+		const switches = collectSwitches(await loadDefaultConfig());
+		await setEverySwitch(page, switches, true);
+		await page.evaluate(() => {
+			for (const selector of ["#secondary", "ytd-endscreen-content"])
+				document
+					.querySelectorAll(selector)
+					.forEach((element) => (element as HTMLElement).style.removeProperty("display"));
+		});
+		await page.waitForTimeout(SETTLE_MS * 2);
+		await setEverySwitch(page, switches, false);
+		await page.waitForTimeout(SETTLE_MS);
+		expect(errors, "the extension raised errors on the page").toEqual([]);
+	});
 });
