@@ -967,7 +967,7 @@
 							"label": "手势速度增量",
 							"title": "每个水平拖动段要更改的速度量"
 						},
-						"title": "Mouse-Drag to temporarily boost playback speed"
+						"title": "鼠标拖动以临时提升播放速度"
 					},
 					"speed": {
 						"select": {
