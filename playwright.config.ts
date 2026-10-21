@@ -60,6 +60,116 @@ type OptionsFixtures = Fixtures & {
 	extensionId: string;
 };
 
+/**
+ * Best-effort service worker coverage. page.coverage cannot see the worker, so a raw CDP session
+ * runs the same Profiler precise-coverage protocol the page fixture uses, with Debugger.scriptParsed
+ * plus getScriptSource supplying the source text monocart needs to map the bundle. Failures at any
+ * step leave the report without the SW's share rather than failing a test.
+ */
+function attachWorkerCoverage(context: BrowserContext, label: string): () => Promise<void> {
+	if (!COVERAGE_DIR) return async () => {};
+	const browser = context.browser();
+	if (!browser) return async () => {};
+	const scripts = new Map<string, { source: string; url: string }>();
+	let bridge: null | {
+		detach: () => Promise<void>;
+		send: (method: string, params: object) => Promise<unknown>;
+	} = null;
+	void (async () => {
+		try {
+			const [existing] = context.serviceWorkers();
+			const worker =
+				existing ??
+				(await context.waitForEvent("serviceworker", { timeout: 60_000 }).catch(() => null));
+			if (!worker) return;
+			const browserCdp = await browser.newBrowserCDPSession();
+			const { targetInfos } = (await browserCdp.send("Target.getTargets")) as {
+				targetInfos: { targetId: string; type: string; url: string }[];
+			};
+			const swTarget = targetInfos.find(
+				(target) => target.type === "service_worker" && target.url.startsWith("chrome-extension://")
+			);
+			if (!swTarget) {
+				await browserCdp.detach().catch(() => {});
+				return;
+			}
+			// Non-flatten is the session shape Target.sendMessageToTarget addresses; flattened
+			// sessions would need sessionId-routed sends Playwright's CDPSession cannot express.
+			const { sessionId } = await browserCdp.send("Target.attachToTarget", {
+				flatten: false,
+				targetId: swTarget.targetId
+			});
+			let nextId = 1;
+			const pending = new Map<number, (result: unknown) => void>();
+			browserCdp.on("Target.receivedMessageFromTarget", (event: { message: string }) => {
+				const { error, id, method, params, result } = JSON.parse(event.message) as {
+					error?: unknown;
+					id?: number;
+					method?: string;
+					params?: { scriptId: string; url: string };
+					result?: unknown;
+				};
+				if (id !== undefined) {
+					const resolve = pending.get(id);
+					if (resolve) resolve(error ? undefined : result);
+					pending.delete(id);
+				}
+				if (
+					method === "Debugger.scriptParsed" &&
+					params &&
+					params.url.startsWith("chrome-extension://")
+				) {
+					const { scriptId, url } = params;
+					void (async () => {
+						const result = await bridge?.send("Debugger.getScriptSource", { scriptId });
+						const source = (result as undefined | { scriptSource?: string })?.scriptSource;
+						if (source) scripts.set(scriptId, { source, url });
+					})();
+				}
+			});
+			const send = (method: string, params: object) =>
+				new Promise<unknown>((resolve) => {
+					const id = nextId++;
+					pending.set(id, resolve);
+					void browserCdp
+						.send("Target.sendMessageToTarget", {
+							message: JSON.stringify({ id, method, params }),
+							sessionId
+						})
+						.catch(() => resolve(undefined));
+				});
+			bridge = {
+				detach: async () => {
+					await browserCdp.detach().catch(() => {});
+				},
+				send
+			};
+			await send("Profiler.enable", {});
+			await send("Profiler.startPreciseCoverage", { callCount: false, detailed: false });
+			// Enabling the Debugger replays scriptParsed for scripts already loaded.
+			await send("Debugger.enable", {});
+		} catch {
+			// Best effort: without the session the report simply stays SW-free.
+		}
+	})();
+	return async () => {
+		if (!bridge) return;
+		try {
+			const result = (await bridge.send("Profiler.takePreciseCoverage", {})) as
+				| undefined
+				| { result?: { functions: unknown; scriptId: string }[] };
+			const entries = (result?.result ?? []).flatMap((script) => {
+				const meta = scripts.get(script.scriptId);
+				return meta ? [{ functions: script.functions, source: meta.source, url: meta.url }] : [];
+			});
+			if (entries.length > 0) writeCoverageRecord(entries, `${label}-sw`);
+		} catch {
+			// Teardown can race the worker stopping; losing the last flush is acceptable.
+		}
+		await bridge.detach();
+	};
+}
+
 async function createExtensionContext(
 	browserName: string
 ): Promise<{ context: BrowserContext; userDataDir: string }> {
@@ -215,9 +325,22 @@ async function saveCoverage(page: Page, label: string): Promise<void> {
 	const own = bufferedCoverage.get(page) ?? [];
 	bufferedCoverage.delete(page);
 	if (own.length === 0) return;
+	writeCoverageRecord(own, label);
+}
+
+async function startCoverage(page: Page): Promise<void> {
+	if (!COVERAGE_DIR) return;
+	await page.coverage.startJSCoverage({ resetOnNavigation: false }).catch(() => {});
+}
+
+function writeCoverageRecord(
+	entries: { functions: unknown; source?: string; url: string }[],
+	label: string
+): void {
+	if (!COVERAGE_DIR) return;
 	const sourcesDir = join(COVERAGE_DIR, "sources");
 	mkdirSync(sourcesDir, { recursive: true });
-	const stripped = own.map(({ functions, source, url }) => {
+	const stripped = entries.map(({ functions, source, url }) => {
 		const sourceHash = createHash("sha1")
 			.update(source ?? "")
 			.digest("hex");
@@ -228,19 +351,17 @@ async function saveCoverage(page: Page, label: string): Promise<void> {
 	writeFileSync(join(COVERAGE_DIR, `${label}.json.gz`), gzipSync(JSON.stringify(stripped)));
 }
 
-async function startCoverage(page: Page): Promise<void> {
-	if (!COVERAGE_DIR) return;
-	await page.coverage.startJSCoverage({ resetOnNavigation: false }).catch(() => {});
-}
-
 export const test = base.extend<Fixtures>({
 	context: async ({ browserName }, use, testInfo) => {
 		const { context, userDataDir } = await createExtensionContext(browserName);
-		const closeExtraPages = recordExtraPages(context, `${testInfo.testId}-${testInfo.retry}`);
+		const label = `${testInfo.testId}-${testInfo.retry}`;
+		const closeExtraPages = recordExtraPages(context, label);
+		const flushWorker = attachWorkerCoverage(context, label);
 		try {
 			await use(context);
 		} finally {
 			await closeExtraPages();
+			await flushWorker();
 			await context.close();
 			await rm(userDataDir, { force: true, recursive: true });
 		}
@@ -254,11 +375,13 @@ export const test = base.extend<Fixtures>({
 	}
 });
 export const optionsTest = base.extend<OptionsFixtures>({
-	context: async ({ browserName }, use) => {
+	context: async ({ browserName }, use, testInfo) => {
 		const { context, userDataDir } = await createExtensionContext(browserName);
+		const flushWorker = attachWorkerCoverage(context, `${testInfo.testId}-${testInfo.retry}`);
 		try {
 			await use(context);
 		} finally {
+			await flushWorker();
 			await context.close();
 			await rm(userDataDir, { force: true, recursive: true });
 		}
