@@ -967,7 +967,7 @@
 							"label": "Gesture speed increment",
 							"title": "Amount of speed to change for each horizontal drag segment"
 						},
-						"title": "Mouse-Drag to temporarily boost playback speed"
+						"title": "Przytrzymaj film, aby zwiększyć prędkość odtwarzania"
 					},
 					"speed": {
 						"select": {
