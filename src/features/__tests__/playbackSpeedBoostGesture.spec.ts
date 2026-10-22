@@ -56,21 +56,29 @@ async function expectRate(page: Page, expected: number): Promise<void> {
  * querySelector, which is what readRate checks, so both sides stay on the same element by construction.
  */
 async function pressPointOnVideo(page: Page): Promise<{ x: number; y: number }> {
-	const box = await page.evaluate((selector) => {
+	const point = await page.evaluate((selector) => {
 		const videos = Array.from(document.querySelectorAll<HTMLVideoElement>(selector));
 		for (const video of videos) {
 			const rect = video.getBoundingClientRect();
 			const { bottom, height, left, top, width } = rect;
-			if (height > 0 && width > 0 && bottom > 0 && top < window.innerHeight)
-				return { height, left, top, width };
+			const x = left + width / 2;
+			const y = top + height * 0.35;
+			if (
+				height > 0 &&
+				width > 0 &&
+				bottom > 0 &&
+				top < window.innerHeight &&
+				x >= 0 &&
+				x <= window.innerWidth &&
+				y >= 0 &&
+				y <= window.innerHeight
+			)
+				return { x, y };
 		}
 		return null;
 	}, VIDEO_SELECTOR);
-	if (!box) throw new Error("no video element is visible in the viewport");
-	const { height, left, top, width } = box;
-	// Biased above the vertical middle: the bottom strip of the player is the controls chrome, which
-	// the gesture deliberately ignores.
-	return { x: left + width / 2, y: top + height * 0.35 };
+	if (!point) throw new Error("no video element has a press point in the viewport");
+	return point;
 }
 
 /**
@@ -162,8 +170,8 @@ test.describe("playbackSpeedBoostGesture", () => {
 		await page.mouse.move(x, y);
 		await page.mouse.down();
 		await page.mouse.move(x + 300, y, { steps: 15 });
-		await page.mouse.up();
 		await expect.poll(() => readRate(page), { timeout: 2000 }).toBe(baseline);
+		await page.mouse.up();
 	});
 	test(`does not change speed or show OSD without movement on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
@@ -290,9 +298,7 @@ test.describe("playbackSpeedBoostGesture", () => {
 		// Release well above the player, so the feature skips the click suppression.
 		await page.mouse.move(x, y - 200);
 		await page.mouse.up();
-		await page.waitForTimeout(300);
-		expect(await readPaused(page)).toBe(pausedBefore);
-
+		// The next click is immediate: an off-player release must not start the suppression window.
 		await page.mouse.click(x, y);
 		await expect.poll(() => readPaused(page), { timeout: 5000 }).toBe(!pausedBefore);
 	});
