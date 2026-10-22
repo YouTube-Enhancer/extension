@@ -90,6 +90,15 @@ function watchExtensionErrors(page: Page): string[] {
 }
 
 test.describe("every feature", () => {
+	// The extension's onInstalled options page is the window's active tab, so these tests run on a
+	// hidden page; hidden tabs throttle main-thread work and the heaviest readiness gates (the
+	// live-page navigation gate especially) starve under five-worker load, which is what the
+	// recurring everyFeature live-strip failure was. Fronting the page here keeps this spec's
+	// environment visible without changing any other spec's: visibility-sensitive families
+	// (pauseBackgroundPlayers) depend on the historical hidden-tab behaviour.
+	test.beforeEach(async ({ page }) => {
+		await page.bringToFront();
+	});
 	test(`every feature enabled on ${watch} survives an in-page round trip through home and a full disable`, async ({
 		page
 	}) => {

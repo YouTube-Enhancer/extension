@@ -250,6 +250,15 @@ function getExtensionPath(browserName: string): string {
 async function getPrimaryPage(context: BrowserContext): Promise<Page> {
 	let [page] = context.pages();
 	if (!page) page = await context.newPage();
+	// The extension's onInstalled handler opens its options page, whose React surface refetches on a
+	// 75 ms interval through the service worker for the life of the context, a permanent contention
+	// tax that starved the heaviest readiness gates. No spec needs this tab (the options fixture has
+	// its own discovery path), so drop it; visibility is deliberately untouched here, since
+	// fronting pages globally loads extra videos and breaks the visibility-sensitive specs.
+	for (const other of context.pages()) {
+		if (other !== page && other.url().startsWith("chrome-extension://"))
+			await other.close().catch(() => {});
+	}
 	await Promise.all(
 		context
 			.pages()
