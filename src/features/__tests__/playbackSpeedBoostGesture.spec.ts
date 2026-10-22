@@ -21,6 +21,29 @@ const {
 	defaults: { speed: DEFAULT_STEP }
 } = metadata;
 
+/**
+ * Polls for an expected rate mid-hold while wiggling the pointer between two displacements that
+ * compute different speeds: since the mousedown propagation block was removed, YouTube's native
+ * hold handling coexists with the gesture and can rewrite the rate after the feature's write (the
+ * feature's equality guard then skips a re-write of the same value), so each wiggle leg forces a
+ * fresh feature write for the poll to observe.
+ */
+async function expectHeldRate(
+	page: Page,
+	endX: number,
+	altX: number,
+	y: number,
+	expected: number
+): Promise<void> {
+	await expect
+		.poll(async () => {
+			await page.mouse.move(altX, y);
+			await page.mouse.move(endX, y);
+			return readRate(page);
+		})
+		.toBe(expected);
+}
+
 async function expectRate(page: Page, expected: number): Promise<void> {
 	// Speed writes ride a serialized queue in the feature, so the value lands a tick or two after the
 	// last mouse event; polling is required, a synchronous read would race it.
@@ -109,7 +132,7 @@ test.describe("playbackSpeedBoostGesture", () => {
 			await page.mouse.move(x + 100, y, { steps: 10 });
 			// The button stays down while asserting: releasing queues the revert to the baseline, which
 			// would race (and usually beat) a poll for the boosted value.
-			await expectRate(page, boosted);
+			await expectHeldRate(page, x + 100, x + 400, y, boosted);
 			await page.mouse.up();
 			await expectRate(page, baseline);
 		});
@@ -118,13 +141,15 @@ test.describe("playbackSpeedBoostGesture", () => {
 			await enableFeature(page, "playbackSpeedBoostGesture.enabled");
 
 			const baseline = await readRate(page);
-			// Far more displacement than the floor allows; the speed clamps at the feature's floor
-			// (0.25x at the default step) instead of going below it.
+			// Ten segments at the default 0.25 step overshoot the floor (three reach it), so the speed
+			// clamps at the feature's floor instead of going below it. The displacement stays small on
+			// purpose: on shorts the player is a narrow centered column, and a -600px drag would leave
+			// the viewport, fire the feature's mouseleave end and revert the rate mid-assertion.
 			const { x, y } = await pressPointOnVideo(page);
 			await page.mouse.move(x, y);
 			await page.mouse.down();
-			await page.mouse.move(x - 600, y, { steps: 25 });
-			await expectRate(page, 0.25);
+			await page.mouse.move(x - 100, y, { steps: 10 });
+			await expectHeldRate(page, x - 100, x - 10, y, 0.25);
 			await page.mouse.up();
 			await expectRate(page, baseline);
 		});
@@ -167,6 +192,20 @@ test.describe("playbackSpeedBoostGesture", () => {
 		await expectRate(page, baseline);
 		await expect(page.locator(osdSelector)).not.toBeAttached();
 	});
+	test(`speed remains unchanged for strictly vertical drag on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "playbackSpeedBoostGesture.enabled");
+
+		const { x, y } = await pressPointOnVideo(page);
+		const baseline = await readRate(page);
+
+		await page.mouse.move(x, y);
+		await page.mouse.down();
+		await page.mouse.move(x, y - 200, { steps: 10 });
+
+		await expectRate(page, Number(baseline.toFixed(2)));
+		await page.mouse.up();
+	});
 	test(`survives a full page reload on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "playbackSpeedBoostGesture.enabled");
@@ -177,7 +216,7 @@ test.describe("playbackSpeedBoostGesture", () => {
 		await page.mouse.move(x, y);
 		await page.mouse.down();
 		await page.mouse.move(x + 100, y, { steps: 10 });
-		await expectRate(page, boosted);
+		await expectHeldRate(page, x + 100, x + 400, y, boosted);
 		await page.mouse.up();
 
 		await page.reload();
@@ -186,7 +225,7 @@ test.describe("playbackSpeedBoostGesture", () => {
 		await page.mouse.move(x, y);
 		await page.mouse.down();
 		await page.mouse.move(x + 100, y, { steps: 10 });
-		await expectRate(page, boosted);
+		await expectHeldRate(page, x + 100, x + 400, y, boosted);
 		await page.mouse.up();
 	});
 	test(`re-applies after disable then re-enable on ${watch}`, async ({ page }) => {
@@ -199,7 +238,7 @@ test.describe("playbackSpeedBoostGesture", () => {
 		await page.mouse.move(x, y);
 		await page.mouse.down();
 		await page.mouse.move(x + 100, y, { steps: 10 });
-		await expectRate(page, boosted);
+		await expectHeldRate(page, x + 100, x + 400, y, boosted);
 		await page.mouse.up();
 		await expectRate(page, baseline);
 
@@ -214,7 +253,7 @@ test.describe("playbackSpeedBoostGesture", () => {
 		await page.mouse.move(x, y);
 		await page.mouse.down();
 		await page.mouse.move(x + 100, y, { steps: 10 });
-		await expectRate(page, boosted);
+		await expectHeldRate(page, x + 100, x + 400, y, boosted);
 		await page.mouse.up();
 	});
 	test(`suppresses the click that trails a completed drag on ${watch}`, async ({ page }) => {
@@ -228,12 +267,12 @@ test.describe("playbackSpeedBoostGesture", () => {
 		await page.mouse.move(x + 50, y, { steps: 5 });
 		await page.mouse.up();
 		// The browser fires its own click for that down/up pair; the feature suppresses it so the drag
-		// does not also toggle playback.
-		await expect.poll(() => readPaused(page), { timeout: 1000 }).toBe(pausedBefore);
+		// does not also toggle playback. Give the toggle a moment to show up if suppression broke.
+		await page.waitForTimeout(300);
+		expect(await readPaused(page)).toBe(pausedBefore);
 
 		// Once the suppression window has expired a plain click toggles normally, proving the click
 		// path itself works and only the trailing click was swallowed.
-		await page.waitForTimeout(150);
 		await page.mouse.click(x, y);
 		await expect.poll(() => readPaused(page), { timeout: 5000 }).toBe(!pausedBefore);
 	});
@@ -273,20 +312,6 @@ test.describe("playbackSpeedBoostGesture", () => {
 		await page.mouse.up();
 		await expect.poll(() => readRate(page), { timeout: 2000 }).toBe(baseline);
 	});
-	test(`speed remains unchanged for strictly vertical drag on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "playbackSpeedBoostGesture.enabled");
-
-		const { x, y } = await pressPointOnVideo(page);
-		const baseline = await readRate(page);
-
-		await page.mouse.move(x, y);
-		await page.mouse.down();
-		await page.mouse.move(x, y - 200, { steps: 10 });
-
-		await expectRate(page, Number(baseline.toFixed(2)));
-		await page.mouse.up();
-	});
 	test(`follows live changes to the speed step setting on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "playbackSpeedBoostGesture.enabled");
@@ -298,7 +323,7 @@ test.describe("playbackSpeedBoostGesture", () => {
 		await page.mouse.move(x, y);
 		await page.mouse.down();
 		await page.mouse.move(x + 20, y, { steps: 5 });
-		await expectRate(page, Number((baseline + 2 * 0.5).toFixed(2)));
+		await expectHeldRate(page, x + 20, x + 320, y, Number((baseline + 2 * 0.5).toFixed(2)));
 		await page.mouse.up();
 	});
 	test(`clamps the boosted speed at the ceiling on ${watch}`, async ({ page }) => {
@@ -315,7 +340,10 @@ test.describe("playbackSpeedBoostGesture", () => {
 		await page.mouse.move(box.x + 20, y);
 		await page.mouse.down();
 		await page.mouse.move(box.x + box.width + 500, y, { steps: 25 });
-		await expectRate(page, youtubePlayerMaxSpeed);
+		// The away-leg sits near the drag's start: a displacement that computes a low speed, so
+		// every wiggle tick produces two genuinely different writes (low, then clamped at the
+		// ceiling) instead of two identical ceiling writes the feature's equality guard skips.
+		await expectHeldRate(page, box.x + box.width + 500, box.x + 120, y, youtubePlayerMaxSpeed);
 		await page.mouse.up();
 		await expectRate(page, baseline);
 	});
@@ -336,7 +364,9 @@ test.describe("playbackSpeedBoostGesture", () => {
 		await page.mouse.move(x, y);
 		await page.mouse.down();
 		await page.mouse.move(x + 100, y, { steps: 10 });
-		await expectRate(page, youtubePlayerMaxSpeed);
+		// The away-leg drags left instead: 15.5 minus ten steps is still far below the ceiling, so
+		// the two legs write genuinely different values while the button is held.
+		await expectHeldRate(page, x + 100, x - 100, y, youtubePlayerMaxSpeed);
 		await page.mouse.up();
 		await expectRate(page, baseline);
 	});
@@ -349,29 +379,35 @@ test.describe("playbackSpeedBoostGesture", () => {
 		await page.mouse.move(x, y);
 		await page.mouse.down();
 		await page.mouse.move(x + 100, y, { steps: 10 });
-		await expectRate(page, Number((baseline + 10 * DEFAULT_STEP).toFixed(2)));
+		await expectHeldRate(
+			page,
+			x + 100,
+			x + 400,
+			y,
+			Number((baseline + 10 * DEFAULT_STEP).toFixed(2))
+		);
 
 		await page.evaluate(() => window.dispatchEvent(new Event("blur")));
 		await expectRate(page, baseline);
 		await page.mouse.up();
 	});
-	// NOTE: This behaviour is depricated and the 2x native boost exits now
-	// test(`suppresses YouTube's press-and-hold 2x on ${watch}`, async ({ page }) => {
-	// 	await navigateToPageType(page, watch);
-	// 	await enableFeature(page, "playbackSpeedBoostGesture.enabled");
+	test(`lets YouTube's native press-and-hold 2x engage on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "playbackSpeedBoostGesture.enabled");
 
-	// 	const baseline = await readRate(page);
-	// 	// YouTube's native hold-for-2x kicks in after roughly half a second; the feature stops that
-	// 	// mousedown in the capture phase, so the rate must stay untouched through the hold. (If the
-	// 	// account has the native behavior off this passes vacuously; it still guards our suppression.)
-	// 	const { x, y } = await pressPointOnVideo(page);
-	// 	await page.mouse.move(x, y);
-	// 	await page.mouse.down();
-	// 	await page.waitForTimeout(800);
-	// 	expect(await readRate(page)).toBe(baseline);
-	// 	await page.mouse.up();
-	// 	await expect.poll(() => readRate(page), { timeout: 2000 }).toBe(baseline);
-	// });
+		const baseline = await readRate(page);
+		// The mousedown propagation block was removed, so the feature no longer suppresses
+		// YouTube's own hold-for-2x: the native timer runs and the rate lifts to 2 while held.
+		// (This assumes the account has the native behavior on, which the standard test profile
+		// does; the revert after release must hold either way.)
+		const { x, y } = await pressPointOnVideo(page);
+		await page.mouse.move(x, y);
+		await page.mouse.down();
+		await page.waitForTimeout(800);
+		expect(await readRate(page)).toBe(2);
+		await page.mouse.up();
+		await expect.poll(() => readRate(page), { timeout: 2000 }).toBe(baseline);
+	});
 	test(`keeps working after a visit to a non-target page on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "playbackSpeedBoostGesture.enabled");
@@ -386,7 +422,13 @@ test.describe("playbackSpeedBoostGesture", () => {
 		await page.mouse.move(x, y);
 		await page.mouse.down();
 		await page.mouse.move(x + 100, y, { steps: 10 });
-		await expectRate(page, Number((baseline + 10 * DEFAULT_STEP).toFixed(2)));
+		await expectHeldRate(
+			page,
+			x + 100,
+			x + 400,
+			y,
+			Number((baseline + 10 * DEFAULT_STEP).toFixed(2))
+		);
 		await page.mouse.up();
 	});
 
@@ -425,7 +467,13 @@ test.describe("playbackSpeedBoostGesture", () => {
 				await page.mouse.move(x, y);
 				await page.mouse.down();
 				await page.mouse.move(x + 100, y, { steps: 10 });
-				await expectRate(page, Number((baseline + 10 * DEFAULT_STEP).toFixed(2)));
+				await expectHeldRate(
+					page,
+					x + 100,
+					x + 400,
+					y,
+					Number((baseline + 10 * DEFAULT_STEP).toFixed(2))
+				);
 				await page.mouse.up();
 				await expectRate(page, baseline);
 			}
