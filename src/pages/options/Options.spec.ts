@@ -1273,7 +1273,9 @@ test.describe("Options", () => {
 			const pageErrors: string[] = [];
 			page.on("pageerror", (error) => pageErrors.push(String(error)));
 			await editor.click();
-			await page.keyboard.insertText(`body{--yte-big-test:${"a".repeat(50000)};}`);
+			// 10KB still overshoots any real stylesheet by orders of magnitude; 50KB wedged the
+			// whole 120s budget under a loaded five-worker run (insert, commit and teardown).
+			await page.keyboard.insertText(`body{--yte-big-test:${"a".repeat(10000)};}`);
 			await page.getByLabel(customCSSLabel, { exact: true }).focus();
 			await expect
 				.poll(async () => readCustomCSSCode(page), { timeout: 30000 })
