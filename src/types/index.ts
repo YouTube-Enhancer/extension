@@ -267,6 +267,7 @@ export type configuration = {
 	};
 	customCSS: { code: string; enabled: boolean };
 	customFontFamily: { enabled: boolean; fontFamily: string };
+	customSeekDuration: { enabled: boolean; jumpBy: number };
 	deepDarkCSS: { colors: DeepDarkCustomThemeColors; enabled: boolean; preset: DeepDarkPreset };
 	defaultToOriginalAudioTrack: { enabled: boolean };
 	featureMenu: { openType: FeatureMenuOpenType };
