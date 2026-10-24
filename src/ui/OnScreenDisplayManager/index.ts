@@ -165,6 +165,10 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				// Draw text on the canvas.
 				let text: string = "";
 				switch (type) {
+					case "seek": {
+						text = `${value > 0 ? "+" : ""}${value}s`;
+						break;
+					}
 					case "speed": {
 						text = `${value.toFixed(2)}x`;
 						break;
