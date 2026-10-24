@@ -1,6 +1,10 @@
+import type { YouTubePlayerDiv } from "@/src/types";
+
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
+import { getOSDConfig, showOSD } from "@/src/utils/osd";
+import { isShortsPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
 
@@ -10,9 +14,54 @@ let { jumpBy: jumpByTime } = featureConfigManager.getLastOr(
 );
 
 const { id: customSeekId } = metadata;
+const OSD_ACCUMULATION_TIMEOUT = 800;
 
 function addKeyListener() {
 	eventManager.addEventListener(document, "keydown", blockNativeSeek, customSeekId, true);
+}
+
+let pendingOSDJump = 0;
+let osdAnimationFrame: null | number = null;
+let osdAccumulationTimeout: null | number = null;
+
+function manageOSD(direction: "backward" | "forward") {
+	pendingOSDJump += direction === "forward" ? jumpByTime : -jumpByTime;
+	if (osdAccumulationTimeout !== null) {
+		window.clearTimeout(osdAccumulationTimeout);
+	}
+	osdAccumulationTimeout = window.setTimeout(() => {
+		osdAccumulationTimeout = null;
+		pendingOSDJump = 0;
+	}, OSD_ACCUMULATION_TIMEOUT);
+	if (osdAnimationFrame !== null) return;
+
+	osdAnimationFrame = requestAnimationFrame(() => {
+		osdAnimationFrame = null;
+		const jumpAmount = pendingOSDJump;
+		if (jumpAmount === 0) return;
+
+		const onScreenDisplay = getOSDConfig();
+		if (!onScreenDisplay) return;
+
+		const displayValue = { max: jumpByTime, type: "seek" as const, value: jumpAmount };
+
+		const playerContainer = document.querySelector<HTMLDivElement>("div#movie_player");
+		const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+		const videoParentDiv = video?.parentElement;
+
+		const preferred = isShortsPage() ? videoParentDiv : playerContainer;
+		const fallback = isShortsPage() ? playerContainer : videoParentDiv;
+		const target = (preferred ?? fallback) as null | YouTubePlayerDiv;
+		if (target instanceof HTMLDivElement) {
+			showOSD(
+				onScreenDisplay,
+				target,
+				displayValue,
+				"text",
+				jumpAmount > 0 ? "center_right" : "center_left"
+			);
+		}
+	});
 }
 
 const seekArrowKeys = ["ArrowLeft", "ArrowRight"];
@@ -94,6 +143,7 @@ function seekHandler(direction: "backward" | "forward") {
 		videoElement.duration,
 		videoElement.currentTime + jumpAmount
 	);
+	manageOSD(direction);
 }
 
 function timelineBoundardCheck(videoMaxDuration: number, playbackTime: number) {
@@ -113,6 +163,15 @@ export default createFeature({
 	},
 	onDisable: () => {
 		removeKeyListener();
+		if (osdAccumulationTimeout !== null) {
+			window.clearTimeout(osdAccumulationTimeout);
+			osdAccumulationTimeout = null;
+		}
+		if (osdAnimationFrame !== null) {
+			cancelAnimationFrame(osdAnimationFrame);
+			osdAnimationFrame = null;
+		}
+		pendingOSDJump = 0;
 	},
 	onEnable: () => {
 		addKeyListener();
