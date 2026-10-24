@@ -34,7 +34,7 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
 <!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->
 
-## 🎛️ Features • 79 features
+## 🎛️ Features • 80 features
 
 <details>
 <summary>Miscellaneous • 48 features (1 settings)</summary>
@@ -88,6 +88,13 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Skip "Video Is Paused. Continue Watching?"**: Skips the idle dialog that pauses video playback
 - **Timestamp Preview**: Preview the video by hovering over a timestamp. Click the preview to start playback from that moment.
 - **Font Family**: The CSS font-family value to apply
+</details>
+
+<details>
+<summary>Custom Seek Duration</summary>
+
+- **Custom Seek Duration**: Customize the video seek duration
+- **Seek Duration**: Time to seek forward or backward
 </details>
 
 <details>
