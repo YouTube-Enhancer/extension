@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
@@ -121,6 +121,11 @@ function blockNativeSeek(event: KeyboardEvent) {
 		}
 	}
 
+	const videoElement = getVideoElement();
+	if (!videoElement || !Number.isFinite(videoElement.duration) || videoElement.duration <= 0) {
+		return;
+	}
+
 	event.stopImmediatePropagation();
 	event.preventDefault();
 	seekHandler(event.key === "ArrowLeft" ? "backward" : "forward");
@@ -129,6 +134,11 @@ function blockNativeSeek(event: KeyboardEvent) {
 function clampSeekTime(playbackTime: number, duration: number) {
 	if (!Number.isFinite(duration) || duration <= 0) return 0;
 	return clamp(playbackTime, 0, duration);
+}
+
+function getVideoElement(): Nullable<HTMLVideoElement> {
+	const playerElement = document.querySelector<HTMLElement>("#movie_player");
+	return playerElement?.querySelector<HTMLVideoElement>("video.html5-main-video") ?? null;
 }
 
 function isElement(target: EventTarget | undefined): target is Element {
@@ -140,8 +150,7 @@ function removeKeyListener() {
 }
 
 function seekHandler(direction: "backward" | "forward") {
-	const playerElement = document.querySelector<HTMLElement>("#movie_player");
-	const videoElement = playerElement?.querySelector<HTMLVideoElement>("video.html5-main-video");
+	const videoElement = getVideoElement();
 	if (!videoElement) return;
 
 	const { currentTime, duration, ended } = videoElement;
