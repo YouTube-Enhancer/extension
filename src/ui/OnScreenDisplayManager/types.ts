@@ -18,7 +18,9 @@ export const onScreenDisplayPositions = [
 	"top_right",
 	"bottom_left",
 	"bottom_right",
-	"center"
+	"center",
+	"center_left",
+	"center_right"
 ] as const;
 export type DisplayOptions = {
 	displayColor: OnScreenDisplayColor;
@@ -33,6 +35,7 @@ export type DisplayOptions = {
 export type OnScreenDisplayPosition = (typeof onScreenDisplayPositions)[number];
 
 export const valueType = {
+	Seek: "seek",
 	Speed: "speed",
 	Volume: "volume",
 	VolumeBoostDB: "volume_boost_db"

@@ -21,6 +21,12 @@ export function calculateCanvasPosition(
 		case "center":
 			styles = { left: "50%", top: "50%", transform: "translate(-50%, -50%)" };
 			break;
+		case "center_left":
+			styles = { left: `${displayPadding}px`, top: "50%", transform: "translateY(-50%)" };
+			break;
+		case "center_right":
+			styles = { right: `${displayPadding}px`, top: "50%", transform: "translateY(-50%)" };
+			break;
 		case "top_left":
 			styles = { left: `${displayPadding}px`, top: `${displayPadding + paddingTop}px` };
 			break;
