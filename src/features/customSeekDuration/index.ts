@@ -3,6 +3,7 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
+import { clamp } from "@/src/utils/math";
 import { getOSDConfig, showOSD } from "@/src/utils/osd";
 import { isShortsPage } from "@/src/utils/url";
 
@@ -125,6 +126,11 @@ function blockNativeSeek(event: KeyboardEvent) {
 	seekHandler(event.key === "ArrowLeft" ? "backward" : "forward");
 }
 
+function clampSeekTime(playbackTime: number, duration: number) {
+	if (!Number.isFinite(duration) || duration <= 0) return 0;
+	return clamp(playbackTime, 0, duration);
+}
+
 function isElement(target: EventTarget | undefined): target is Element {
 	return target instanceof Element;
 }
@@ -138,22 +144,19 @@ function seekHandler(direction: "backward" | "forward") {
 	const videoElement = playerElement?.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!videoElement) return;
 
-	const jumpAmount = direction === "forward" ? jumpByTime : -jumpByTime;
-	videoElement.currentTime = timelineBoundardCheck(
-		videoElement.duration,
-		videoElement.currentTime + jumpAmount
-	);
-	manageOSD(direction);
-}
+	const { currentTime, duration, ended } = videoElement;
+	if (!Number.isFinite(duration) || duration <= 0) return;
 
-function timelineBoundardCheck(videoMaxDuration: number, playbackTime: number) {
-	if (playbackTime > videoMaxDuration) {
-		return videoMaxDuration;
-	}
-	if (playbackTime < 0) {
-		return 0;
-	}
-	return playbackTime;
+	if (direction === "forward" && (currentTime >= duration || ended)) return;
+	if (direction === "backward" && currentTime <= 0) return;
+
+	const jumpAmount = direction === "forward" ? jumpByTime : -jumpByTime;
+	const targetTime = clampSeekTime(currentTime + jumpAmount, duration);
+
+	if (Math.abs(targetTime - currentTime) < 0.001) return;
+
+	videoElement.currentTime = targetTime;
+	manageOSD(direction);
 }
 
 export default createFeature({
