@@ -394,6 +394,16 @@
 				},
 				"title": "Custom CSS settings"
 			},
+			"customSeekDuration": {
+				"enable": {
+					"label": "Custom seek duration",
+					"title": "Customize the video seek duration"
+				},
+				"jumpBy": {
+					"label": "Seek duration",
+					"title": "Time to seek forward or backward"
+				}
+			},
 			"deepDarkCSS": {
 				"enable": {
 					"label": "Deep dark theme",
