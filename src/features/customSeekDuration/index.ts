@@ -22,10 +22,12 @@ function addKeyListener() {
 }
 
 let pendingOSDJump = 0;
+let pendingOSDVideo: HTMLVideoElement | null = null;
 let osdAnimationFrame: null | number = null;
 let osdAccumulationTimeout: null | number = null;
 
-function manageOSD(direction: "backward" | "forward") {
+function manageOSD(direction: "backward" | "forward", video: HTMLVideoElement) {
+	pendingOSDVideo = video;
 	pendingOSDJump += direction === "forward" ? jumpByTime : -jumpByTime;
 	if (osdAccumulationTimeout !== null) {
 		window.clearTimeout(osdAccumulationTimeout);
@@ -33,22 +35,25 @@ function manageOSD(direction: "backward" | "forward") {
 	osdAccumulationTimeout = window.setTimeout(() => {
 		osdAccumulationTimeout = null;
 		pendingOSDJump = 0;
+		pendingOSDVideo = null;
 	}, OSD_ACCUMULATION_TIMEOUT);
 	if (osdAnimationFrame !== null) return;
 
 	osdAnimationFrame = requestAnimationFrame(() => {
 		osdAnimationFrame = null;
 		const jumpAmount = pendingOSDJump;
-		if (jumpAmount === 0) return;
+		const seekedVideo = pendingOSDVideo;
+		if (jumpAmount === 0 || !seekedVideo) return;
 
 		const onScreenDisplay = getOSDConfig();
 		if (!onScreenDisplay) return;
 
 		const displayValue = { max: jumpByTime, type: "seek" as const, value: jumpAmount };
 
-		const playerContainer = document.querySelector<HTMLDivElement>("div#movie_player");
-		const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
-		const videoParentDiv = video?.parentElement;
+		const playerContainer =
+			seekedVideo.closest<HTMLDivElement>("div#movie_player") ??
+			document.querySelector<HTMLDivElement>("div#movie_player");
+		const { parentElement: videoParentDiv } = seekedVideo;
 
 		const preferred = isShortsPage() ? videoParentDiv : playerContainer;
 		const fallback = isShortsPage() ? playerContainer : videoParentDiv;
@@ -165,7 +170,7 @@ function seekHandler(direction: "backward" | "forward") {
 	if (Math.abs(targetTime - currentTime) < 0.001) return;
 
 	videoElement.currentTime = targetTime;
-	manageOSD(direction);
+	manageOSD(direction, videoElement);
 }
 
 export default createFeature({
@@ -184,6 +189,7 @@ export default createFeature({
 			osdAnimationFrame = null;
 		}
 		pendingOSDJump = 0;
+		pendingOSDVideo = null;
 	},
 	onEnable: () => {
 		addKeyListener();
