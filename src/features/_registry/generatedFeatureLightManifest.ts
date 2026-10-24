@@ -52,6 +52,10 @@ export const featureLightManifest = {
 			enabled: false,
 			fontFamily: "Arial, sans-serif"
 		},
+		customSeekDuration: {
+			enabled: false,
+			jumpBy: 10
+		},
 		deepDarkCSS: {
 			colors: {
 				colorShadow: "#383c4a4d",
@@ -354,6 +358,7 @@ export const featureLightManifest = {
 		"copyTimestampUrlButton",
 		"customCSS",
 		"customFontFamily",
+		"customSeekDuration",
 		"deepDarkCSS",
 		"defaultToOriginalAudioTrack",
 		"flipVideoButtons",
