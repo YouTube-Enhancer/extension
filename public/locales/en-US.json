@@ -402,7 +402,8 @@
 				"jumpBy": {
 					"label": "Seek duration",
 					"title": "Time to seek forward or backward"
-				}
+				},
+				"title": "Custom seek duration settings"
 			},
 			"deepDarkCSS": {
 				"enable": {
