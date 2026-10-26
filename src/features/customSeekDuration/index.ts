@@ -24,6 +24,7 @@ let pendingOSDJump = 0;
 let pendingOSDVideo: HTMLVideoElement | null = null;
 let osdAnimationFrame: null | number = null;
 let osdAccumulationTimeout: null | number = null;
+let lastDirection: Nullable<"backward" | "forward"> = null;
 
 const seekArrowKeys = ["ArrowLeft", "ArrowRight"];
 const interactiveRoles = [
@@ -144,9 +145,13 @@ function seekHandler(direction: "backward" | "forward", videoElement: HTMLVideoE
 	const baseTime = ended && direction === "forward" ? duration : currentTime;
 	const jumpAmount = direction === "forward" ? jumpByTime : -jumpByTime;
 	const targetTime = clamp(baseTime + jumpAmount, 0, duration);
+	if (targetTime === baseTime) return;
 	const actualJump = Math.round(targetTime - baseTime);
 
-	if (actualJump === 0) return;
+	if (lastDirection !== direction) {
+		pendingOSDJump = 0;
+		lastDirection = direction;
+	}
 
 	videoElement.currentTime = targetTime;
 	manageOSD(actualJump, videoElement);
@@ -169,6 +174,7 @@ export default createFeature({
 		}
 		pendingOSDJump = 0;
 		pendingOSDVideo = null;
+		lastDirection = null;
 	},
 	onEnable: ({ jumpBy }) => {
 		jumpByTime = jumpBy;
