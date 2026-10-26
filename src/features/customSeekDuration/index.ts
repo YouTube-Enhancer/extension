@@ -5,7 +5,6 @@ import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { clamp } from "@/src/utils/math";
 import { getOSDConfig, showOSD } from "@/src/utils/osd";
-import { isShortsPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
 
@@ -26,55 +25,21 @@ let pendingOSDVideo: HTMLVideoElement | null = null;
 let osdAnimationFrame: null | number = null;
 let osdAccumulationTimeout: null | number = null;
 
-function manageOSD(direction: "backward" | "forward", video: HTMLVideoElement) {
-	pendingOSDVideo = video;
-	pendingOSDJump += direction === "forward" ? jumpByTime : -jumpByTime;
-	if (osdAccumulationTimeout !== null) {
-		window.clearTimeout(osdAccumulationTimeout);
-	}
-	osdAccumulationTimeout = window.setTimeout(() => {
-		osdAccumulationTimeout = null;
-		pendingOSDJump = 0;
-		pendingOSDVideo = null;
-	}, OSD_ACCUMULATION_TIMEOUT);
-	if (osdAnimationFrame !== null) return;
-
-	osdAnimationFrame = requestAnimationFrame(() => {
-		osdAnimationFrame = null;
-		const jumpAmount = pendingOSDJump;
-		const seekedVideo = pendingOSDVideo;
-		if (jumpAmount === 0 || !seekedVideo) return;
-
-		const onScreenDisplay = getOSDConfig();
-		if (!onScreenDisplay) return;
-
-		const displayValue = { max: jumpByTime, type: "seek" as const, value: jumpAmount };
-
-		const playerContainer =
-			seekedVideo.closest<HTMLDivElement>("div#movie_player") ??
-			document.querySelector<HTMLDivElement>("div#movie_player");
-		const { parentElement: videoParentDiv } = seekedVideo;
-
-		const preferred = isShortsPage() ? videoParentDiv : playerContainer;
-		const fallback = isShortsPage() ? playerContainer : videoParentDiv;
-		const target = (preferred ?? fallback) as null | YouTubePlayerDiv;
-		if (target instanceof HTMLDivElement) {
-			showOSD(
-				onScreenDisplay,
-				target,
-				displayValue,
-				"text",
-				jumpAmount > 0 ? "center_right" : "center_left"
-			);
-		}
-	});
-}
-
 const seekArrowKeys = ["ArrowLeft", "ArrowRight"];
-function blockNativeSeek(event: KeyboardEvent) {
-	const video = document.querySelector("video");
-	if (!video) return;
+const interactiveRoles = [
+	"slider",
+	"menuitem",
+	"menuitemradio",
+	"menuitemcheckbox",
+	"tab",
+	"spinbutton",
+	"listbox",
+	"combobox",
+	"treeitem",
+	"radio"
+];
 
+function blockNativeSeek(event: KeyboardEvent) {
 	if (!seekArrowKeys.includes(event.key)) return;
 
 	// Exclude modifier-key events before intercepting the arrow keys.
@@ -90,21 +55,7 @@ function blockNativeSeek(event: KeyboardEvent) {
 		return;
 	}
 
-	// standard UI roles that require arrow keys for navigation
-	const interactiveRoles = [
-		"slider",
-		"menuitem",
-		"menuitemradio",
-		"menuitemcheckbox",
-		"tab",
-		"spinbutton",
-		"listbox",
-		"combobox",
-		"treeitem",
-		"radio"
-	];
-
-	// We check the all nodes to catch roles applied to parent container divs
+	// We check all nodes to catch roles applied to parent container divs
 	for (let i = 0; i < path.length; i++) {
 		const { [i]: node } = path;
 
@@ -115,9 +66,8 @@ function blockNativeSeek(event: KeyboardEvent) {
 				// EXCEPTION: The YouTube timeline progress bar exposes the slider role, but native seeking
 				// must remain blocked to avoid conflicting with the custom seek handler.
 				if (
-					node.classList &&
-					(node.classList.contains("ytp-progress-bar") ||
-						node.classList.contains("ytp-progress-bar-container"))
+					node.classList.contains("ytp-progress-bar") ||
+					node.classList.contains("ytp-progress-bar-container")
 				) {
 					break;
 				}
@@ -133,12 +83,7 @@ function blockNativeSeek(event: KeyboardEvent) {
 
 	event.stopImmediatePropagation();
 	event.preventDefault();
-	seekHandler(event.key === "ArrowLeft" ? "backward" : "forward");
-}
-
-function clampSeekTime(playbackTime: number, duration: number) {
-	if (!Number.isFinite(duration) || duration <= 0) return 0;
-	return clamp(playbackTime, 0, duration);
+	seekHandler(event.key === "ArrowLeft" ? "backward" : "forward", videoElement);
 }
 
 function getVideoElement(): Nullable<HTMLVideoElement> {
@@ -150,27 +95,61 @@ function isElement(target: EventTarget | undefined): target is Element {
 	return target instanceof Element;
 }
 
+function manageOSD(jumpAmount: number, video: HTMLVideoElement) {
+	pendingOSDVideo = video;
+	pendingOSDJump += jumpAmount;
+	if (osdAccumulationTimeout !== null) {
+		window.clearTimeout(osdAccumulationTimeout);
+	}
+	osdAccumulationTimeout = window.setTimeout(() => {
+		osdAccumulationTimeout = null;
+		pendingOSDJump = 0;
+		pendingOSDVideo = null;
+	}, OSD_ACCUMULATION_TIMEOUT);
+	if (osdAnimationFrame !== null) return;
+
+	osdAnimationFrame = requestAnimationFrame(() => {
+		osdAnimationFrame = null;
+		const accumulatedJump = pendingOSDJump;
+		const seekedVideo = pendingOSDVideo;
+		if (accumulatedJump === 0 || !seekedVideo) return;
+
+		const onScreenDisplay = getOSDConfig();
+		if (!onScreenDisplay || onScreenDisplay.type === "no_display") return;
+
+		const displayValue = { max: jumpByTime, type: "seek" as const, value: accumulatedJump };
+
+		const { parentElement: videoParentDiv } = seekedVideo;
+
+		const target = videoParentDiv as null | YouTubePlayerDiv;
+		if (target instanceof HTMLDivElement) {
+			showOSD(
+				onScreenDisplay,
+				target,
+				displayValue,
+				"text",
+				accumulatedJump > 0 ? "center_right" : "center_left"
+			);
+		}
+	});
+}
+
 function removeKeyListener() {
 	eventManager.removeEventListener(document, "keydown", customSeekId);
 }
 
-function seekHandler(direction: "backward" | "forward") {
-	const videoElement = getVideoElement();
-	if (!videoElement) return;
-
+function seekHandler(direction: "backward" | "forward", videoElement: HTMLVideoElement) {
 	const { currentTime, duration, ended } = videoElement;
-	if (!Number.isFinite(duration) || duration <= 0) return;
 
-	if (direction === "forward" && (currentTime >= duration || ended)) return;
-	if (direction === "backward" && currentTime <= 0) return;
-
+	const baseTime = ended && direction === "forward" ? duration : currentTime;
 	const jumpAmount = direction === "forward" ? jumpByTime : -jumpByTime;
-	const targetTime = clampSeekTime(currentTime + jumpAmount, duration);
+	const targetTime = clamp(baseTime + jumpAmount, 0, duration);
+	const actualJump = Math.round(targetTime - baseTime);
 
-	if (Math.abs(targetTime - currentTime) < 0.001) return;
+	if (actualJump === 0) return;
 
 	videoElement.currentTime = targetTime;
-	manageOSD(direction, videoElement);
+	manageOSD(actualJump, videoElement);
 }
 
 export default createFeature({
@@ -191,7 +170,8 @@ export default createFeature({
 		pendingOSDJump = 0;
 		pendingOSDVideo = null;
 	},
-	onEnable: () => {
+	onEnable: ({ jumpBy }) => {
+		jumpByTime = jumpBy;
 		addKeyListener();
 	}
 });
