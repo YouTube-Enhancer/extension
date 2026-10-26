@@ -14,7 +14,7 @@ export const metadata = createFeatureMetadata({
 	dependencies: { includePages: ["watch"] },
 	id: "customSeekDuration",
 	loadPhase: 1,
-	sectionTitle: (t) => t((tr) => tr.settings.sections.customSeekDuration.enable.title),
+	sectionTitle: (t) => t((tr) => tr.settings.sections.customSeekDuration.title),
 	settings: [
 		{
 			children: [
@@ -31,6 +31,10 @@ export const metadata = createFeatureMetadata({
 					label: (t) => t((tr) => tr.settings.sections.customSeekDuration.jumpBy.label),
 					max: 60,
 					min: 5,
+					parentSetting: {
+						type: "singular",
+						value: (tr) => tr.settings.sections.customSeekDuration.enable.label
+					},
 					step: 1,
 					title: (t) => t((tr) => tr.settings.sections.customSeekDuration.jumpBy.title)
 				}
