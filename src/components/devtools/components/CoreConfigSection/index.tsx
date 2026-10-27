@@ -9,7 +9,6 @@ import { coreConfigQuery } from "@/components/devtools/hooks/useDevToolsQuery";
 import { useNotifications } from "@/src/hooks";
 import { sendDevToolsMessage } from "@/src/utils/messaging/devtools";
 
-import ApiKeySetting from "./ApiKeySetting";
 import ButtonPlacementSetting from "./ButtonPlacementSetting";
 import FeatureMenuOpenTypeSetting from "./FeatureMenuOpenTypeSetting";
 import LanguageSetting from "./LanguageSetting";
@@ -67,10 +66,6 @@ export default function CoreConfigSection(): JSX.Element {
 			<VersionToggleSetting
 				onChange={(v) => handleChange("openSettingsOnMajorOrMinorVersionChange", v)}
 				value={config.openSettingsOnMajorOrMinorVersionChange ?? true}
-			/>
-			<ApiKeySetting
-				onChange={(v) => handleChange("youtubeDataApiV3Key", v)}
-				value={config.youtubeDataApiV3Key ?? ""}
 			/>
 			<ButtonPlacementSetting config={config} />
 		</div>

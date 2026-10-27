@@ -326,9 +326,6 @@ export function migrateConfiguration(
 			case "volume_boost_mode":
 				newConfig.volumeBoost.mode = value as VolumeBoostMode;
 				break;
-			case "youtube_data_api_v3_key":
-				newConfig.youtubeDataApiV3Key = String(value);
-				break;
 		}
 	}
 	return newConfig;

@@ -457,7 +457,6 @@ export type configuration = {
 		enabled: boolean;
 		mode: VolumeBoostMode;
 	};
-	youtubeDataApiV3Key: string;
 };
 export type configurationId = Path<configuration>;
 export type configurationKeys = keyof configuration;
@@ -584,6 +583,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		"onScreenDisplayConfigChange",
 		{ onScreenDisplay: configuration["onScreenDisplay"] }
 	>;
+	stateReset: DataResponseMessage<"stateReset", { ids: FeatureKeysWithState[] }>;
 };
 export type ExtensionSendOnlyMessages =
 	ExtensionSendOnlyMessageMappings[keyof ExtensionSendOnlyMessageMappings];
