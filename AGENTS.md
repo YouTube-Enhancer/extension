@@ -130,6 +130,29 @@ Button features define a `buttons` array with `add` and optional `remove`/`onRem
 
 **Default remove behavior** (when `remove` is omitted): calls `removeFeatureButton(name, placement)` then `eventManager.removeEventListeners(featureId)`. Most features need no custom remove.
 
+## Feature Teardown (Disposers)
+
+Prefer the disposer API for a feature's **disable-only listener cleanup** instead of removing event listeners by hand in `onDisable`. Register the teardown in `onEnable` with `registry.on(featureId, name, fn)` (usually `name: "events"` and `fn: () => eventManager.removeEventListeners(featureId)`):
+
+```ts
+onEnable: () => {
+	// ...attach listeners...
+	registry.on(featureId, "events", () => eventManager.removeEventListeners(featureId));
+},
+onDisable: () => {
+	// ...state / DOM teardown only; no manual eventManager listener removal...
+}
+```
+
+Disposers run **after** `onDisable`, even when `onDisable` throws partway, and they also run on the light page-teardown path that skips `onDisable`. That is why they replace manual `eventManager.removeEventListener*` calls in `onDisable`.
+
+**Keep teardown in the shared lifecycle function when:**
+
+- It must also run on `onNavigate` or `onConfigChange` (to drop the old listeners before re-adding fresh ones) - a disposer only runs on disable, so it cannot cover those paths.
+- Listener removal has to happen **before** other work inside `onDisable` - disposers run after, so they would be too late.
+
+Button features need no disposer for their button listeners: the default `remove` behavior already calls `eventManager.removeEventListeners(featureId)`.
+
 ## Button Controller APIs
 
 Features should use name-based controller APIs instead of reaching into the DOM directly:
