@@ -44,11 +44,23 @@ async function build() {
 		`/* eslint-disable no-secrets/no-secrets */
 ${headerComment}
 export const deepDarkMaterial = \`
-${finalCSS}
+${escapeTemplateLiteral(finalCSS)}
 \`;
 `
 	);
 	console.log(`Done! File written: ${OUTPUT_FILE}`);
+}
+
+/**
+ * Escapes downloaded CSS so it remains string data inside the generated template literal:
+ * backslashes first (so the escapes added here are not processed again), then backticks and
+ * "${" sequences. For content without those characters the output is byte-identical to the
+ * unescaped format, so regenerating does not rewrite the file.
+ * @param {string} value
+ * @returns {string}
+ */
+function escapeTemplateLiteral(value) {
+	return value.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$\{/g, "\\${");
 }
 
 /**
@@ -85,10 +97,11 @@ function extractVersion(header) {
 
 /**
  * Fetches text from a given url and returns a promise that resolves with the text content.
- * Rejects with an error if the request fails.
+ * Rejects with an error if the request fails or the response exceeds the size budget.
  * @param {string} url - The url to fetch from.
  * @returns {Promise<string>} - A promise with the text content.
  */
+const MAX_DOWNLOAD_BYTES = 10 * 1024 * 1024;
 function fetchText(url) {
 	return new Promise((resolve, reject) => {
 		https
@@ -96,7 +109,13 @@ function fetchText(url) {
 				if (!res.statusCode || res.statusCode >= 400)
 					return reject(new Error(`Request failed: ${res.statusCode}`));
 				let data = "";
-				res.on("data", (c) => (data += c));
+				res.on("data", (c) => {
+					data += c;
+					if (data.length > MAX_DOWNLOAD_BYTES) {
+						res.destroy();
+						return reject(new Error("Response exceeded the download size budget"));
+					}
+				});
 				res.on("end", () => resolve(data));
 			})
 			.on("error", reject);
@@ -225,17 +244,47 @@ function removeStylusRootConditionals(css) {
 	return css.replace(/^\s*:root\s*\{[^}]*if\s+[\s\S]*?}\s*}/gm, "").trim();
 }
 
+/** Names must be plain identifiers; anything else from the upstream header is rejected. */
+const VAR_NAME_PATTERN = /^[A-Za-z0-9_-]+$/;
+/** Bound on the expanded CSS so a pathological variable set cannot exhaust memory. */
+const MAX_EXPANDED_CSS_BYTES = 5_000_000;
+
 /**
- * Replaces variables in a CSS string with their corresponding values.
+ * Replaces variables in a CSS string with their corresponding values in a single pass over the
+ * original text. Values inserted by the replacement are never re-scanned, so an ordered chain of
+ * variables cannot expand exponentially, and the total output size stays bounded.
  * @param {string} css - CSS string to replace variables in
  * @param {Record<string,string>} vars - Object with variable names as keys and their values as values
  * @returns {string} CSS string with variables replaced
  */
 function replaceVars(css, vars) {
-	for (const [name, value] of Object.entries(vars)) {
-		css = css.replace(new RegExp(`\\b${name}\\b`, "g"), value);
+	const names = Object.keys(vars);
+	for (const name of names) {
+		if (!VAR_NAME_PATTERN.test(name)) {
+			throw new Error(
+				`Refusing to build a regex from an unexpected variable name: ${JSON.stringify(name)}`
+			);
+		}
 	}
-	return css;
+	if (!names.length) return css;
+	// Longest first so "main-color" wins over "main" at the same position.
+	const alternation = [...names].sort((a, b) => b.length - a.length).join("|");
+	const pattern = new RegExp(`\\b(${alternation})\\b`, "g");
+	let output = "";
+	let lastIndex = 0;
+	let match;
+	while ((match = pattern.exec(css)) !== null) {
+		output += css.slice(lastIndex, match.index) + vars[match[1]];
+		if (output.length > MAX_EXPANDED_CSS_BYTES) {
+			throw new Error("Expanded CSS exceeded the size budget");
+		}
+		lastIndex = pattern.lastIndex;
+	}
+	output += css.slice(lastIndex);
+	if (output.length > MAX_EXPANDED_CSS_BYTES) {
+		throw new Error("Expanded CSS exceeded the size budget");
+	}
+	return output;
 }
 
 /**
