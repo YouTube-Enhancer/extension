@@ -21,6 +21,7 @@ import type {
 
 import { isFeatureKey, resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
 import { featureLightStateFeatureIds } from "@/src/features/_registry/generatedFeatureLightManifest";
+import { videoHistoryEntrySchema } from "@/src/features/videoHistory/index.metadata";
 import { startDevelopmentMode } from "@/src/pages/content/development";
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { DEV_MODE } from "@/src/utils/config/env";
@@ -32,11 +33,24 @@ import {
 	sendExtensionMessage,
 	sendExtensionOnlyMessage
 } from "@/src/utils/messaging";
+import { getCurrentVideoId } from "@/src/utils/url";
 
 // Polyfill may return Chrome's native (partial) browser API which can lack storage.
 const storage = browser.storage ?? chrome.storage;
 const defaultConfiguration = getDefaultConfiguration();
 const defaultConfigKeys = Object.keys(defaultConfiguration);
+/** Upper bound on a single page-originated feature-state write (roughly a quarter of the storage quota). */
+const MAX_STATE_JSON_BYTES = 100_000;
+/** videoHistory entries kept in storage; the oldest beyond this are pruned on write. */
+const MAX_HISTORY_ENTRIES = 1000;
+/**
+ * The content script applies the feature's own stateSchema (exported by its
+ * index.metadata.ts) at the page-facing write boundary, and hydration applies the same schema
+ * again inside the page-world registry. Without the write-boundary check a page-planted invalid
+ * entry would fail every hydration while the merge path kept re-storing it forever.
+ */
+const isValidVideoHistoryEntry = (value: unknown): boolean =>
+	videoHistoryEntrySchema.safeParse(value).success;
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
  */
@@ -97,13 +111,64 @@ const getStoredState = async (): Promise<StoredFeatureState> => {
 	cachedState = state;
 	return state;
 };
-void (async () => {
-	const [options, state] = await Promise.all([getStoredSettings(), getStoredState()]);
-	await Promise.all([
-		sendExtensionMessage("options", "data_response", { options }),
-		sendExtensionMessage("state", "data_response", state)
-	]);
-})();
+/**
+ * Page-facing state is deliberately narrower than stored state. videoHistory keeps its full
+ * record in extension storage; only the current video's entry crosses the page bridge, so a
+ * page script cannot collect the accumulated watch history from message traffic.
+ */
+const scopeStateForPage = (state: StoredFeatureState): StoredFeatureState => {
+	const { videoHistory: history } = state;
+	if (!history) return state;
+	const storageEntries = history.storage ?? {};
+	const videoId = getCurrentVideoId();
+	const scopedStorage = videoId ? { [videoId]: storageEntries[videoId] } : {};
+	return { ...state, videoHistory: { ...history, storage: scopedStorage } };
+};
+/**
+ * Page-originated videoHistory updates are merged entry-by-entry instead of replacing the stored
+ * map, so a page script cannot wipe or rewrite the history of videos other than its own. The
+ * entry count is capped so repeated writes cannot grow storage without bound.
+ */
+const mergeVideoHistoryUpdate = async (incomingState: unknown): Promise<void> => {
+	const incoming = (incomingState as null | { storage?: unknown })?.storage;
+	if (typeof incoming !== "object" || incoming === null || Array.isArray(incoming)) return;
+	const key = "state:videoHistory";
+	const { [key]: stored } = (await storage.local.get(key)) as Record<
+		string,
+		undefined | { storage?: Record<string, unknown> }
+	>;
+	/**
+	 * Self-healing filter: every entry, incoming or already stored, must satisfy the feature's
+	 * schema, so invalid data can neither enter storage nor survive there to fail hydration.
+	 */
+	const candidates = { ...stored?.storage, ...incoming } as Record<string, unknown>;
+	const mergedStorage: Record<string, unknown> = {};
+	for (const entryKey of Object.keys(candidates)) {
+		const { [entryKey]: entryValue } = candidates;
+		if (isValidVideoHistoryEntry(entryValue)) mergedStorage[entryKey] = entryValue;
+	}
+	const entryKeys = Object.keys(mergedStorage);
+	if (entryKeys.length > MAX_HISTORY_ENTRIES) {
+		const entryTimestamp = (entryKey: string): number => {
+			const entry = mergedStorage[entryKey] as null | { timestamp?: unknown };
+			return typeof entry?.timestamp === "number" ? entry.timestamp : 0;
+		};
+		entryKeys
+			.sort((a, b) => entryTimestamp(b) - entryTimestamp(a))
+			.slice(MAX_HISTORY_ENTRIES)
+			.forEach((entryKey) => delete mergedStorage[entryKey]);
+	}
+	const merged = { ...stored, storage: mergedStorage } as StoredFeatureState["videoHistory"];
+	await storage.local.set({ [key]: merged });
+	if (cachedState) {
+		cachedState = { ...cachedState, videoHistory: merged };
+	}
+};
+/**
+ * State only reaches the page in response to an explicit request; the embedded script asks for
+ * what it needs (bootstrap, and videoHistory per navigation) instead of receiving a startup
+ * broadcast of the complete persisted state.
+ */
 const onPageHide = () => {
 	storage.onChanged.removeListener(storageListeners);
 };
@@ -137,7 +202,14 @@ const onWindowMessage = (event: MessageEvent) => {
 		const { requestId } = message as { requestId?: string };
 		switch (message.action) {
 			case "request_action": {
-				await browser.runtime.sendMessage(message);
+				/**
+				 * Only known background messages are forwarded, with the source field forced to
+				 * "content". The background keys privileged work off message fields, so a page
+				 * script must not be able to choose them (see the devtools branch in the
+				 * background worker).
+				 */
+				if (message.type !== "pauseBackgroundPlayers") break;
+				await browser.runtime.sendMessage({ ...message, source: "content" });
 				break;
 			}
 			case "request_data": {
@@ -165,7 +237,12 @@ const onWindowMessage = (event: MessageEvent) => {
 					}
 					case "state": {
 						const state = await getStoredState();
-						void sendExtensionMessage("state", "data_response", state, requestId);
+						void sendExtensionMessage(
+							"state",
+							"data_response",
+							scopeStateForPage(state),
+							requestId
+						);
 						break;
 					}
 				}
@@ -177,6 +254,14 @@ const onWindowMessage = (event: MessageEvent) => {
 						const {
 							data: { id, state }
 						} = message;
+						// Only registered stateful features may be written; anything else is ignored.
+						if (!(featureLightStateFeatureIds as readonly string[]).includes(id)) break;
+						const serialized = JSON.stringify(state ?? null);
+						if (serialized.length > MAX_STATE_JSON_BYTES) break;
+						if (id === "videoHistory") {
+							await mergeVideoHistoryUpdate(state);
+							break;
+						}
 						await storage.local.set({
 							[`state:${id}`]: state
 						});
@@ -190,11 +275,15 @@ const onWindowMessage = (event: MessageEvent) => {
 						break;
 					}
 					case "setVolumeBoostAmount": {
+						// Page-originated amounts must be finite, non-negative numbers; the
+						// setting otherwise keeps its existing fields.
+						const { data: amount } = message;
+						if (typeof amount !== "number" || !Number.isFinite(amount) || amount < 0) break;
 						const { volumeBoost: existingVolumeBoost } = (await storage.local.get(
 							"volumeBoost"
 						)) as configuration;
 						void storage.local.set({
-							volumeBoost: { ...existingVolumeBoost, amount: message.data }
+							volumeBoost: { ...existingVolumeBoost, amount }
 						});
 						break;
 					}
@@ -206,6 +295,24 @@ const onWindowMessage = (event: MessageEvent) => {
 window.addEventListener("message", onWindowMessage);
 const storageListeners = (changes: StorageChanges<configuration>, areaName: string) => {
 	if (areaName !== "local") return;
+	/**
+	 * "Clear Data" deletes the registered state keys. Drop them from the cache and tell the page,
+	 * so active holders reset instead of writing cleared history back after the wipe.
+	 */
+	const removedStateIds = Object.entries(changes)
+		.filter(([key, change]) => key.startsWith("state:") && change?.newValue === undefined)
+		.map(([key]) => key.replace("state:", ""))
+		.filter((id): id is keyof StoredFeatureState =>
+			(featureLightStateFeatureIds as readonly string[]).includes(id)
+		);
+	if (removedStateIds.length) {
+		if (cachedState) {
+			const remaining: Partial<StoredFeatureState> = { ...cachedState };
+			for (const id of removedStateIds) delete remaining[id];
+			cachedState = remaining as StoredFeatureState;
+		}
+		sendExtensionOnlyMessage("stateReset", { ids: removedStateIds });
+	}
 	const changeKeys = Object.keys(changes).filter(
 		(key): key is keyof configuration => key in defaultConfiguration
 	);

@@ -97,14 +97,17 @@ export default function SettingsFooter() {
 				}
 				// Validate number constraints
 				try {
-					validateNumbers(castSettings, getNumberConstraints());
+					validateNumbers(result.data, getNumberConstraints());
 				} catch (numError) {
 					window.alert((numError as Error).message);
 					return;
 				}
 
-				// Detect conflicts
-				const { conflicts: detectedConflicts, resolved } = detectConflicts(castSettings);
+				// Detect conflicts. The schema output is a complete configuration here: it was
+				// parsed from the defaults-merged object above.
+				const { conflicts: detectedConflicts, resolved } = detectConflicts(
+					result.data as configuration
+				);
 				if (detectedConflicts.length > 0) {
 					pendingStateEntriesRef.current = { ...stateEntries };
 					setPendingSettings(resolved);
@@ -112,10 +115,11 @@ export default function SettingsFooter() {
 					return;
 				}
 
-				// Store validated settings
+				// Store validated settings. The schema's parsed result is persisted (not the raw
+				// parsed object), so unrecognized nested properties never reach storage.
 				const validKeys = new Set(Object.keys(defaultConfiguration));
 				const filteredConfig = Object.fromEntries(
-					Object.entries(castSettings).filter(([key]) => validKeys.has(key))
+					Object.entries(result.data).filter(([key]) => validKeys.has(key))
 				);
 				const stateKeys = metadataRegistry
 					.getAll()
@@ -162,7 +166,16 @@ export default function SettingsFooter() {
 				t((translations) => translations.pages.options.extras.clearData.confirmAlert)
 			);
 			if (userHasConfirmed) {
-				void browser.storage.local.set(defaultConfiguration);
+				/**
+				 * Reset the configuration and delete every registered feature-state key. Success is
+				 * only reported after the promised erasure completes, so retained state (such as
+				 * video history) cannot survive a confirmed clear.
+				 */
+				const stateKeys = metadataRegistry
+					.getAll()
+					.map((feature) => `state:${feature.id}` as const);
+				await browser.storage.local.set(defaultConfiguration);
+				await browser.storage.local.remove(stateKeys);
 				await refreshSettings();
 				addNotification(
 					"success",

@@ -236,6 +236,18 @@ export class FeatureRegistry extends FeatureManagerBase {
 			await this.orchestrator.updateFeatureEnabledState(feature.id, enabled, config);
 		}
 	}
+	/**
+	 * Drops in-memory state for the given features and restores their declared defaults. Sent by
+	 * the content script when persisted state keys are deleted ("Clear Data"), so an active
+	 * feature cannot write cleared state back through the merge path.
+	 */
+	resetFeatureState(ids: FeatureKeysWithState[]) {
+		for (const id of ids) {
+			const feature = this.getFeature(id);
+			if (!feature || !hasState(feature)) continue;
+			this.stateManager.updateFeatureState(id, structuredClone(feature.state));
+		}
+	}
 
 	setFeatureEnabled(id: FeatureKeys, enabled: boolean): void {
 		this.orchestrator.setFeatureEnabled(id, enabled);

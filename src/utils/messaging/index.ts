@@ -177,7 +177,6 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 				const matchesAction = response?.action === "data_response";
 				const matchesSource = response?.source === "extension";
 				const matchesRequestId = response.requestId === requestId;
-				const matchesType = response?.type === type;
 				const matchesData =
 					!data ||
 					(typeof data === "object" &&
@@ -188,8 +187,11 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 							key in response.data ? response.data[key] === value : false
 						));
 
-				// Always require action+source match; requestId or type both work for matching
-				if (matchesAction && matchesSource && (matchesRequestId || matchesType) && matchesData) {
+				/**
+				 * Only a response echoing this request's id resolves it. A same-typed response
+				 * without the id could come from a page script and must not pre-empt the real one.
+				 */
+				if (matchesAction && matchesSource && matchesRequestId && matchesData) {
 					cleanup();
 					resolve(response);
 				}

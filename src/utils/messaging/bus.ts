@@ -70,9 +70,9 @@ export class MessageBus {
 					const matchesAction = response?.action === "data_response";
 					const matchesSource = response?.source === "extension";
 					const matchesRequestId = response.requestId === requestId;
-					const matchesType = response?.type === type;
 
-					if (matchesAction && matchesSource && (matchesRequestId || matchesType)) {
+					// Only a response echoing this request's id resolves it; see messaging/index.ts.
+					if (matchesAction && matchesSource && matchesRequestId) {
 						cleanup();
 						resolve(response);
 					}
