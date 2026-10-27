@@ -35,5 +35,8 @@ async function routeMessage(message: ExtensionSendOnlyMessages | Messages["respo
 		case "onScreenDisplayConfigChange":
 			setOnScreenDisplayConfig(message.data.onScreenDisplay);
 			break;
+		case "stateReset":
+			registry.resetFeatureState(message.data.ids);
+			break;
 	}
 }
