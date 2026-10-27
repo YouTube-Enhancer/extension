@@ -28,9 +28,9 @@
     "lint:manifest": "tsx src/pipeline/checkFeatureLightManifest.ts",
     "lint:readme": "tsx src/pipeline/checkReadme.ts",
     "lint:fix": "oxlint . --fix && oxfmt --write \"**/*.{ts,tsx,js,mjs,cjs}\"",
-    "update:deepdark": "concurrently \"node scripts/updateDeepDarkMaterialCSS.js\" \"node scripts/updateDeepDarkPresets.js\"",
+    "update:deepdark": "concurrently \"node scripts/updateDeepDarkMaterialCSS.js\" \"tsx scripts/updateDeepDarkPresets.js\"",
     "update:deepdark-css": "node scripts/updateDeepDarkMaterialCSS.js",
-    "update:deepdark-presets": "node scripts/updateDeepDarkPresets.js",
+    "update:deepdark-presets": "tsx scripts/updateDeepDarkPresets.js",
     "prepare": "husky"
   },
   "type": "module",
