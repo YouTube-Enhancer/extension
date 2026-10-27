@@ -2,6 +2,7 @@ import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 
 import { metadata } from "./index.metadata";
@@ -13,12 +14,15 @@ let unsubscribePlayerBus: Nullable<() => void> = null;
 export default createFeature({
 	...metadata,
 	onDisable: () => {
-		eventManager.removeEventListeners("shortsAutoScroll");
+		// Listener removal is a disposer (registered in onEnable); the bus teardown and binding state stay here.
 		unsubscribePlayerBus?.();
 		unsubscribePlayerBus = null;
 		boundVideo = null;
 	},
 	onEnable: () => {
+		registry.on("shortsAutoScroll", "events", () =>
+			eventManager.removeEventListeners("shortsAutoScroll")
+		);
 		setupShortsAutoScroll();
 		armPlayerBus();
 	},

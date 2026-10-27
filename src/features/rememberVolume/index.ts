@@ -79,10 +79,14 @@ async function restoreVolume(stateAPI: FeatureStateAPI<"rememberVolume">) {
 export default createFeature({
 	...metadata,
 	onDisable: () => {
-		eventManager.removeEventListeners("rememberVolume");
+		// Listener removal is a disposer (registered in onEnable); the tracking reset stays here so the
+		// next enable re-attaches a fresh listener.
 		resetVolumeChangeListener();
 	},
 	onEnable: async (_, stateAPI) => {
+		registry.on("rememberVolume", "events", () =>
+			eventManager.removeEventListeners("rememberVolume")
+		);
 		await restoreVolume(stateAPI);
 		queueVolumeReapply(stateAPI);
 	},
