@@ -51,7 +51,8 @@
     "tailwindcss-multi": "^0.4.6",
     "vite-plugin-css-injected-by-js": "^5.0.2",
     "webextension-polyfill": "^0.12.0",
-    "youtubei.js": "^18.2.0"
+    "youtubei.js": "^18.2.0",
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^7.0.0",
@@ -95,7 +96,6 @@
     "typescript": "~7.0.2",
     "vite": "^8.3.0",
     "ws": "^8.21.3",
-    "zod": "^4.6.5",
     "zod-error": "^2.0.0"
   },
   "overrides": {
