@@ -1,6 +1,6 @@
 import type { AddressInfo } from "net";
 
-import { createHash } from "crypto";
+import { createHash, randomBytes } from "crypto";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { dirname, resolve } from "path";
 import { WebSocketServer } from "ws";
@@ -46,6 +46,11 @@ export function startHotReloadServer({
 }): HotReloadServer {
 	let server: null | WebSocketServer = null;
 	let buildId = "0";
+	/**
+	 * Written into the port file; the background worker only processes messages carrying it, so a
+	 * local process squatting the port cannot command a loaded development extension.
+	 */
+	const nonce = randomBytes(16).toString("hex");
 	let backgroundDigest = digestEntryGraph(targetDir, BACKGROUND_ENTRY);
 	let pagesDigest = digestEntryGraph(targetDir, ...PAGE_ENTRIES);
 	const pending = new Set<RebuildTarget>();
@@ -58,7 +63,7 @@ export function startHotReloadServer({
 			candidateServer.once("listening", () => {
 				server = candidateServer;
 				candidateServer.on("connection", (socket) => {
-					socket.send(JSON.stringify({ buildId, type: "hello" } satisfies DevServerMessage));
+					socket.send(JSON.stringify({ buildId, nonce, type: "hello" } satisfies DevServerMessage));
 				});
 				resolve((candidateServer.address() as AddressInfo).port);
 			});
@@ -72,12 +77,15 @@ export function startHotReloadServer({
 		})
 		.then((bound) => {
 			console.log(`[Dev] Hot reload channel on ws://127.0.0.1:${bound}`);
-			writeFileSync(resolve(targetDir, DEV_RELOAD_PORT_FILE), JSON.stringify({ port: bound }));
+			writeFileSync(
+				resolve(targetDir, DEV_RELOAD_PORT_FILE),
+				JSON.stringify({ nonce, port: bound })
+			);
 			return bound;
 		});
 	/** Only WebSocket traffic keeps an otherwise idle extension service worker alive; Chrome ends it after ~30 s. */
 	const keepAlive = setInterval(() => {
-		const ping = JSON.stringify({ type: "ping" } satisfies DevServerMessage);
+		const ping = JSON.stringify({ nonce, type: "ping" } satisfies DevServerMessage);
 		for (const client of server?.clients ?? [])
 			if (client.readyState === client.OPEN) client.send(ping);
 	}, KEEPALIVE_MS);
@@ -93,6 +101,7 @@ export function startHotReloadServer({
 		pending.clear();
 		const message = JSON.stringify({
 			buildId,
+			nonce,
 			targets,
 			type: "rebuild"
 		} satisfies DevServerMessage);
