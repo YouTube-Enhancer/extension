@@ -2,6 +2,7 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import { round } from "@/src/utils/math";
 import { getOSDConfig, showOSD } from "@/src/utils/osd";
@@ -187,9 +188,11 @@ function queueSpeedUpdate(speed: number, generation: number, preserve = false) {
 		});
 }
 
-/** Detaches every listener this feature registered and ends any gesture still in progress. */
-function removeGestureListeners() {
-	eventManager.removeEventListeners(metadata.id);
+/**
+ * Ends any gesture still in progress and clears its timers. Listener removal is owned by the
+ * disposer registered in onEnable, so it also runs when onDisable is skipped on page teardown.
+ */
+function resetGestureState() {
 	handleMouseUp(undefined, false);
 	if (preventNextClickTimeout !== null) {
 		clearTimeout(preventNextClickTimeout);
@@ -227,10 +230,11 @@ export default createFeature({
 	onConfigChange: (config) => {
 		gestureSpeed = config.speed;
 	},
-	onDisable: removeGestureListeners,
+	onDisable: resetGestureState,
 	onEnable: (config) => {
 		gestureSpeed = config.speed;
 		addGestureListeners();
+		registry.on(metadata.id, "events", () => eventManager.removeEventListeners(metadata.id));
 	},
 	onNavigate: () => {
 		handleMouseUp();
