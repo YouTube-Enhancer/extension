@@ -65,15 +65,26 @@ export function showSnackbar(text: string, thumbnailUrl?: string): boolean {
 	// Populate after connect so the custom element's initial (empty) render is overwritten;
 	// with no later prop change our markup persists for the snackbar's lifetime. The explicit
 	// size and visibility override ytCoreImageHost's hidden-until-loaded state (YouTube's own
-	// loader never runs on an img we create), so the thumbnail actually paints.
-	const imageHtml = thumbnailUrl
-		? `<img class="ytCoreImageHost snackbarViewModelImageContainer ytCoreImageContentModeScaleAspectFit" alt="" width="86" height="48" style="width:86px;height:48px;flex:none;visibility:visible" src="${thumbnailUrl}">`
-		: "";
+	// loader never runs on an img we create), so the thumbnail actually paints. The image is
+	// built with DOM APIs rather than interpolated into markup, so a crafted URL cannot break
+	// out of an attribute context.
 	snack.innerHTML =
-		`<div class="snackbarViewModelEngagementBarWrapper">${imageHtml}` +
+		`<div class="snackbarViewModelEngagementBarWrapper">` +
 		`<div class="snackbarViewModelTitleSubtextWrapper"><div class="snackbarViewModelTitle">` +
 		`<span class="ytAttributedStringHost ytAttributedStringWhiteSpacePreWrap" role="text"></span>` +
 		`</div></div></div>`;
+	if (thumbnailUrl) {
+		const engagementBar = snack.querySelector(".snackbarViewModelEngagementBarWrapper");
+		const image = document.createElement("img");
+		image.className =
+			"ytCoreImageHost snackbarViewModelImageContainer ytCoreImageContentModeScaleAspectFit";
+		image.alt = "";
+		image.width = 86;
+		image.height = 48;
+		image.style.cssText = "width:86px;height:48px;flex:none;visibility:visible";
+		image.src = thumbnailUrl;
+		engagementBar?.insertBefore(image, engagementBar.firstChild);
+	}
 	const span = snack.querySelector("span");
 	if (span) span.textContent = text;
 	window.setTimeout(() => wrapper.remove(), 5000);
