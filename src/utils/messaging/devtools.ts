@@ -8,6 +8,11 @@ import type {
 	Nullable
 } from "@/src/types";
 
+import { getDefaultConfiguration } from "@/src/utils/config/defaults";
+
+/** Known configuration keys; window-message storage writes are filtered to this set. */
+const allowedConfigKeys = new Set<string>(Object.keys(getDefaultConfiguration()));
+
 let contentBridgeListenerAdded = false;
 
 type pendingRequest = {
@@ -273,7 +278,18 @@ function setupMessageListener() {
 		if (rawData.action === "request_storage_update" && rawData.source === "injected") {
 			void (async () => {
 				try {
-					await browser.storage.local.set(rawData.data as Record<string, unknown>);
+					/**
+					 * Dev-build-only bridge, still narrowed to known configuration keys: the write
+					 * comes from a window message, so whatever arrives is treated as untrusted.
+					 */
+					const { data } = rawData;
+					if (typeof data !== "object" || data === null) return;
+					const filtered = Object.fromEntries(
+						Object.entries(data as Record<string, unknown>).filter(([key]) =>
+							allowedConfigKeys.has(String(key))
+						)
+					);
+					await browser.storage.local.set(filtered);
 				} catch (error) {
 					console.error(
 						"[DevTools ContentScript] Failed to persist storage update from injected script:",

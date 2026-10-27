@@ -18,8 +18,10 @@ export function deepEqual(a: unknown, b: unknown): boolean {
 	const keysA = Object.keys(a);
 	const keysB = Object.keys(b);
 	if (keysA.length !== keysB.length) return false;
+	// Set membership keeps the comparison linear in the number of keys.
+	const keySetB = new Set(keysB);
 	for (const key of keysA) {
-		if (!keysB.includes(key)) return false;
+		if (!keySetB.has(key)) return false;
 		if (!deepEqual((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key]))
 			return false;
 	}
