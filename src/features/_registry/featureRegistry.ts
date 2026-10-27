@@ -178,9 +178,10 @@ export class FeatureRegistry extends FeatureManagerBase {
 	}
 
 	/**
-	 * Register a named teardown that runs when the feature is disabled.
-	 * Registering the same name again replaces the previous fn.
-	 * Prefer this over calling playerManager.cleanup or removing listeners by hand in onDisable.
+	 * Register a named teardown that runs when the feature is disabled (after onDisable, even if it
+	 * throws) and on the light page-teardown path. Registering the same name again replaces the
+	 * previous fn. Prefer this for disable-only listener cleanup; teardown that must also run on
+	 * navigation or a config change stays in that shared lifecycle function.
 	 */
 	on(featureId: DisposerKey, name: DisposerName, fn: () => void): void {
 		registerFeatureDisposer(featureId, name, fn);
