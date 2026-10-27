@@ -751,14 +751,6 @@ export type OldTranslationStruct = {
 				};
 				title: string;
 			};
-			youtubeDataApiV3Key: {
-				getApiKeyLinkText: string;
-				input: {
-					label: string;
-					title: string;
-				};
-				title: string;
-			};
 			youtubeDeepDark: {
 				author: string;
 				"co-authors": string;
@@ -957,11 +949,6 @@ export type NewTranslationStruct = {
 					};
 				};
 				settingSearch: { placeholder: string };
-				youtubeDataApiV3Key: {
-					getApiKeyLinkText: string;
-					input: { label: string; title: string };
-					title: string;
-				};
 			};
 			notifications: {
 				error: {

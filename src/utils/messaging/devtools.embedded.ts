@@ -27,7 +27,6 @@ function validateCoreConfigKey(key: NonFeatureConfigKeys): void {
 		case "language":
 		case "onScreenDisplay":
 		case "openSettingsOnMajorOrMinorVersionChange":
-		case "youtubeDataApiV3Key":
 			return;
 		default:
 			key satisfies never;

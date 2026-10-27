@@ -1,5 +1,6 @@
 import type { ZodArray, ZodError, ZodIssue, ZodObject, ZodOptional, ZodType } from "zod";
 
+import { randomBytes } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { object, string } from "zod";
@@ -673,14 +674,6 @@ export const OldTranslationSchema: TypeToZodSchema<OldTranslationStruct> = objec
 				}),
 				title: string()
 			}),
-			youtubeDataApiV3Key: object({
-				getApiKeyLinkText: string(),
-				input: object({
-					label: string(),
-					title: string()
-				}),
-				title: string()
-			}),
 			youtubeDeepDark: object({
 				author: string(),
 				"co-authors": string(),
@@ -806,8 +799,7 @@ function migrate(old: OldTranslationStruct): NewTranslationStruct {
 					importExportSettings: old.settings.sections.importExportSettings,
 					language: old.settings.sections.language,
 					optionDisabled: old.settings.optionDisabled,
-					settingSearch: old.settings.sections.settingSearch,
-					youtubeDataApiV3Key: old.settings.sections.youtubeDataApiV3Key
+					settingSearch: old.settings.sections.settingSearch
 				},
 				notifications: old.pages.options.notifications
 			}
@@ -1111,9 +1103,22 @@ function readJson<T>(filePath: string): T {
 }
 
 function writeAtomic(filePath: string, data: string) {
-	const tmpPath = `${filePath}.tmp`;
-	fs.writeFileSync(tmpPath, data, "utf8");
-	fs.renameSync(tmpPath, filePath);
+	/**
+	 * Exclusive create with an unpredictable name: a pre-existing entry at a predictable temp
+	 * path (including a symlink) can never redirect the write outside the intended destination.
+	 */
+	for (let attempt = 0; attempt < 5; attempt++) {
+		const tmpPath = `${filePath}.${randomBytes(8).toString("hex")}.tmp`;
+		try {
+			fs.writeFileSync(tmpPath, data, { encoding: "utf8", flag: "wx" });
+			fs.renameSync(tmpPath, filePath);
+			return;
+		} catch (error) {
+			if ((error as NodeJS.ErrnoException).code === "EEXIST") continue;
+			throw error;
+		}
+	}
+	throw new Error(`Could not create a temporary file next to ${filePath}`);
 }
 
 const { dryRun, inputPath, outPath, replace } = parseArgs(process.argv.slice(2));

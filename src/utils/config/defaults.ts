@@ -14,8 +14,7 @@ const coreConfiguration = {
 		position: "center",
 		type: "text"
 	},
-	openSettingsOnMajorOrMinorVersionChange: true,
-	youtubeDataApiV3Key: ""
+	openSettingsOnMajorOrMinorVersionChange: true
 } as const satisfies Pick<configuration, CoreFeatureKeys | NonFeatureKeys>;
 export type CoreSettingsKey = Path<typeof coreConfiguration>;
 export const getDefaultConfiguration = () => {

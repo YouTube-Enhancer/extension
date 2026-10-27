@@ -22,8 +22,7 @@ const coreConfigurationImportSchema = {
 			type: z.enum(onScreenDisplayTypes)
 		})
 	),
-	openSettingsOnMajorOrMinorVersionChange: z.optional(z.boolean()),
-	youtubeDataApiV3Key: z.optional(z.string())
+	openSettingsOnMajorOrMinorVersionChange: z.optional(z.boolean())
 };
 export const getConfigurationImportSchema = () => {
 	return z.object({ ...metadataRegistry.getImportSchemaShape(), ...coreConfigurationImportSchema });

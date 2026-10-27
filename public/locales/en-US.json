@@ -321,14 +321,6 @@
 				},
 				"settingSearch": {
 					"placeholder": "Search for a setting"
-				},
-				"youtubeDataApiV3Key": {
-					"getApiKeyLinkText": "You can get one from here",
-					"input": {
-						"label": "API Key",
-						"title": "Enter your YouTube Data API V3 key"
-					},
-					"title": "YouTube API V3 key"
 				}
 			},
 			"notifications": {
