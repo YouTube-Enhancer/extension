@@ -164,9 +164,14 @@ export function disposeAllFeatureSessions(): void {
 }
 
 /**
- * Register a named teardown that runs when the feature is disabled.
- * Registering the same name again replaces the previous fn, so re-enabling does not stack listeners.
- * Prefer this over calling playerManager.cancelRetries / eventManager remove by hand in onDisable.
+ * Register a named teardown that runs when the feature is disabled - after onDisable, even if
+ * onDisable throws - and on the light page-teardown path that skips onDisable. Registering the same
+ * name again replaces the previous fn, so re-enabling does not stack listeners.
+ *
+ * Prefer this for a feature's disable-only listener cleanup instead of removing event listeners by
+ * hand in onDisable. Cleanup that must also run on navigation or a config change belongs in that
+ * shared lifecycle function: a disposer only runs on disable, so it cannot replace it there.
+ * Player retries need no disposer - the lifecycle aborts them before onDisable for every feature.
  */
 export function registerFeatureDisposer(
 	featureId: DisposerKey,
