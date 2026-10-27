@@ -9,7 +9,7 @@ import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { formatTime } from "@/src/features/remainingTime/utils";
-import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
+import { requestStoredVideoEntry, setVideoHistory } from "@/src/features/videoHistory/utils";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { whenReady } from "@/src/utils/dom/readiness";
 import { createTooltip } from "@/src/utils/dom/tooltip";
@@ -264,7 +264,7 @@ async function handleVideoChange(resumeType: VideoHistoryResumeType) {
 		playerContainer.getDuration()
 	]);
 	if (isArtist) return;
-	const { [videoId]: video_history_entry } = getVideoHistory(registry.getStateAPI("videoHistory"));
+	const video_history_entry = await requestStoredVideoEntry(videoId);
 	if (
 		video_history_entry &&
 		video_history_entry.status === "watching" &&
