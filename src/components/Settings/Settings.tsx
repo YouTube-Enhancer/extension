@@ -21,8 +21,7 @@ import {
 	ButtonPlacementSection,
 	FeatureMenuOpenTypeSection,
 	LanguageSettingsSection,
-	OnScreenDisplaySection,
-	YouTubeDataApiKeySection
+	OnScreenDisplaySection
 } from "@/src/components/Settings/sections";
 import SettingsGenerator from "@/src/components/Settings/SettingsGenerator";
 import { type i18nInstanceType, i18nService } from "@/src/i18n";
@@ -200,7 +199,6 @@ export default function Settings() {
 					<LanguageSettingsSection />
 					<FeatureMenuOpenTypeSection />
 					<ButtonPlacementSection />
-					<YouTubeDataApiKeySection />
 					<OnScreenDisplaySection />
 					<SettingsGenerator />
 				</div>
