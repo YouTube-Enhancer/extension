@@ -96,9 +96,9 @@ function isElement(target: EventTarget | undefined): target is Element {
 	return target instanceof Element;
 }
 
-function manageOSD(jumpAmount: number, video: HTMLVideoElement) {
+function manageOSD(actualJump: number, video: HTMLVideoElement) {
 	pendingOSDVideo = video;
-	pendingOSDJump += jumpAmount;
+	pendingOSDJump += actualJump;
 	if (osdAccumulationTimeout !== null) {
 		window.clearTimeout(osdAccumulationTimeout);
 	}
@@ -118,7 +118,14 @@ function manageOSD(jumpAmount: number, video: HTMLVideoElement) {
 		const onScreenDisplay = getOSDConfig();
 		if (!onScreenDisplay || onScreenDisplay.type === "no_display") return;
 
-		const displayValue = { max: jumpByTime, type: "seek" as const, value: accumulatedJump };
+		// The display type is overridden to "text" below, which only formats `value` (e.g. `+10s`).
+		// `max` is set to the accumulated jump magnitude to keep `value / max` in bounds if a non-text
+		// display type (e.g., line or circle) is ever used.
+		const displayValue = {
+			max: Math.abs(accumulatedJump),
+			type: "seek" as const,
+			value: accumulatedJump
+		};
 
 		const { parentElement: videoParentDiv } = seekedVideo;
 
@@ -142,6 +149,9 @@ function removeKeyListener() {
 function seekHandler(direction: "backward" | "forward", videoElement: HTMLVideoElement) {
 	const { currentTime, duration, ended } = videoElement;
 
+	// When HTML5 media ends, `video.ended` is true but `currentTime` can lag slightly
+	// behind `duration` due to container frame rounding. Normalizing `baseTime` to `duration`
+	// ensures forward seeks on an ended video evaluate `targetTime === baseTime` and no-op.
 	const baseTime = ended && direction === "forward" ? duration : currentTime;
 	const jumpAmount = direction === "forward" ? jumpByTime : -jumpByTime;
 	const targetTime = clamp(baseTime + jumpAmount, 0, duration);
