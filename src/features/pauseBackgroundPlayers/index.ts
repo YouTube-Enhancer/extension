@@ -2,6 +2,7 @@ import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import {
 	subscribeToDomMutations,
 	type UnsubscribeFromDomMutations
@@ -39,10 +40,6 @@ function cleanup() {
 		clearTimeout(activeDebounceTimeout);
 		activeDebounceTimeout = null;
 	}
-	// Without this the "playing" listener survives onDisable and the feature keeps pausing other
-	// tabs from a disabled tab; disabling has to stop future pausing (it does not resume tabs it
-	// already paused).
-	eventManager.removeEventListeners(FEATURE_ID);
 	listenersAttached = false;
 }
 
@@ -53,6 +50,13 @@ export default createFeature({
 		browserColorLog("Disabling pauseBackgroundPlayers", "FgMagenta");
 	},
 	onEnable: () => {
+		/**
+		 * The "playing" listener is removed by this disposer on disable, so a disabled tab stops
+		 * pausing other tabs (it does not resume tabs it already paused). It is deliberately not torn
+		 * down in cleanup() so the navigate re-setup can lean on the event manager de-duplicating the
+		 * stable callback rather than detaching and re-attaching it on every navigation.
+		 */
+		registry.on(FEATURE_ID, "events", () => eventManager.removeEventListeners(FEATURE_ID));
 		setupPlayerMonitoring();
 	},
 	onNavigate: () => {

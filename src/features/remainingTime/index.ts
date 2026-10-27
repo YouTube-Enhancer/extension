@@ -2,6 +2,7 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import { whenReady } from "@/src/utils/dom/readiness";
 import { waitForElement } from "@/src/utils/dom/wait";
 
@@ -29,12 +30,13 @@ function playerTimeUpdateListener() {
 export default createFeature({
 	...metadata,
 	onDisable: () => {
-		const remainingTimeElement = document.querySelector("span#ytp-time-remaining");
-		if (!remainingTimeElement) return;
-		remainingTimeElement.remove();
-		eventManager.removeEventListeners("remainingTime");
+		document.querySelector("span#ytp-time-remaining")?.remove();
 	},
 	onEnable: async () => {
+		// Listener cleanup is a disposer so it always runs, even when the element above was already gone.
+		registry.on("remainingTime", "events", () =>
+			eventManager.removeEventListeners("remainingTime")
+		);
 		await setupRemainingTime();
 	},
 	onNavigate: async () => {

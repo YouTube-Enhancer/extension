@@ -2,6 +2,7 @@ import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { isLivePage, isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
@@ -12,10 +13,13 @@ export default createFeature({
 	...metadata,
 	onDisable: () => {
 		// A setup still waiting for its elements would otherwise pass its generation check and install listeners after this.
+		// The listeners already installed are removed by the disposer registered in onEnable.
 		setupGeneration++;
-		eventManager.removeEventListeners("openYouTubeSettingsOnHover");
 	},
 	onEnable: async () => {
+		registry.on("openYouTubeSettingsOnHover", "events", () =>
+			eventManager.removeEventListeners("openYouTubeSettingsOnHover")
+		);
 		await setupHoverListeners();
 	},
 	onNavigate: async () => {
