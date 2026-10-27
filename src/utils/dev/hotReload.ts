@@ -30,6 +30,12 @@ export const DEV_RELOAD_SOURCE = "yte-dev-reload" as const;
 /** id of the `<style>` element the embedded bundle injects; removed when the bundle is swapped out. */
 export const EMBEDDED_STYLE_ID = "yte-embedded-style";
 
+/** Shape of the dev-reload port file the watch pipeline writes into the output folder. */
+export type DevReloadPortInfo = {
+	nonce?: string;
+	port?: number;
+};
+
 /** Sent by the background worker to a content script through `chrome.tabs.sendMessage`. */
 export type DevRuntimeMessage = {
 	buildId: string;
@@ -38,13 +44,16 @@ export type DevRuntimeMessage = {
 };
 
 /**
- * Sent by the watch pipeline over the WebSocket. `ping` carries nothing; Chrome ends an idle extension service
- * worker after about 30 s and only WebSocket traffic counts as activity, so the pipeline pings every 20 s.
+ * Sent by the watch pipeline over the WebSocket. Every message carries the channel nonce, which
+ * the pipeline writes into the port file; the background worker drops messages that do not match,
+ * so a local process squatting the port cannot command the extension. `ping` carries nothing
+ * else; Chrome ends an idle extension service worker after about 30 s and only WebSocket traffic
+ * counts as activity, so the pipeline pings every 20 s.
  */
 export type DevServerMessage =
-	| { buildId: string; targets: RebuildTarget[]; type: "rebuild" }
-	| { buildId: string; type: "hello" }
-	| { type: "ping" };
+	| { buildId: string; nonce: string; targets: RebuildTarget[]; type: "rebuild" }
+	| { buildId: string; nonce: string; type: "hello" }
+	| { nonce: string; type: "ping" };
 
 /**
  * Posted on the page's `window`, which every content-script instance and the embedded script can see regardless of

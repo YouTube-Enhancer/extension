@@ -2,6 +2,7 @@ import {
 	DEV_RELOAD_PORT_FILE,
 	DEV_RELOAD_SOURCE,
 	devReloadPort,
+	type DevReloadPortInfo,
 	type DevRuntimeMessage,
 	type DevServerMessage
 } from "@/src/utils/dev/hotReload";
@@ -47,14 +48,24 @@ async function broadcastToYouTubeTabs(message: DevRuntimeMessage): Promise<void>
 }
 
 async function connect(): Promise<void> {
-	const socket = new WebSocket(`ws://127.0.0.1:${await discoverPort()}`);
+	const { nonce, port } = await discoverChannel();
+	const socket = new WebSocket(`ws://127.0.0.1:${port}`);
 	socket.onopen = () => {
 		reconnectDelay = RECONNECT_MIN_MS;
 		announcedDisconnect = false;
 		console.log("[Dev] Connected to the watch pipeline");
 	};
 	socket.onmessage = (event) => {
-		void handle(JSON.parse(String(event.data)) as DevServerMessage);
+		let message: DevServerMessage;
+		try {
+			message = JSON.parse(String(event.data)) as DevServerMessage;
+		} catch {
+			return;
+		}
+		// Only the pipeline that wrote the port file may command this extension; a process
+		// squatting the port does not know the nonce and its messages are dropped.
+		if (message.nonce !== nonce) return;
+		void handle(message);
 	};
 	socket.onclose = () => {
 		if (!announcedDisconnect) {
@@ -69,16 +80,18 @@ async function connect(): Promise<void> {
 	socket.onerror = () => socket.close();
 }
 
-/** The port the running pipeline wrote into the output folder; falls back to the compiled-in one. */
-async function discoverPort(): Promise<number> {
+/** The channel the running pipeline published in the output folder; falls back to the compiled-in port. */
+async function discoverChannel(): Promise<{ nonce: string; port: number }> {
 	try {
 		const response = await fetch(chrome.runtime.getURL(DEV_RELOAD_PORT_FILE));
-		const { port } = (await response.json()) as { port?: unknown };
-		if (typeof port === "number") return port;
+		const { nonce, port } = (await response.json()) as DevReloadPortInfo;
+		if (typeof port === "number") {
+			return { nonce: typeof nonce === "string" ? nonce : "", port };
+		}
 	} catch {
 		// No file: the build was made without the watch pipeline.
 	}
-	return devReloadPort();
+	return { nonce: "", port: devReloadPort() };
 }
 
 async function handle(message: DevServerMessage): Promise<void> {
