@@ -1,6 +1,6 @@
 /* eslint-disable no-secrets/no-secrets */
 /**
- * Version 4.8.0
+ * Version 4.8.6
  * Author: https://github.com/RaitaroH
  * Co-authors: https://github.com/MechaLynx https://github.com/MaximeRF
  * Repository: https://github.com/RaitaroH/YouTube-DeepDark
@@ -151,6 +151,11 @@ yt-formatted-string.ytd-menu-service-item-download-renderer {
 }
 ytd-menu-renderer .ytd-menu-renderer[style-target="button"] yt-icon:hover {
 	color: var(--main-color) !important;
+}
+
+/*user settings dropdown*/
+#channel-handle.ytd-active-account-header-renderer {
+	color: var(--main-text) !important;
 }
 
 /*Placeholder image on pages that need an account - such as Subscriptions*/
@@ -331,7 +336,8 @@ ytd-rich-item-renderer.ytd-rich-item-renderer-highlight {
 
 /*Feed filter*/
 #home-chips /*skeleton*/,
-#chips-wrapper.ytd-feed-filter-chip-bar-renderer {
+#chips-wrapper.ytd-feed-filter-chip-bar-renderer,
+.ytItemSectionRendererStickyHeader /* on liked videos */ {
 	background-color: var(--main-background) !important;
 	border-color: var(--hover-background) !important;
 }
@@ -422,12 +428,13 @@ ytd-backstage-poll-renderer:not([is-image-poll]) tp-yt-paper-item.ytd-backstage-
 
 /*Channel page*/
 /*cover art background*/
-#page-header-container.ytd-tabbed-page-header, #tabs-container.ytd-tabbed-page-header {
+#page-header-container.ytd-tabbed-page-header {
 	background-color: var(--main-background) !important;
 }
 /*header*/
-#channel-header.ytd-c4-tabbed-header-renderer, #tabs-inner-container.ytd-c4-tabbed-header-renderer {
-	background: var(--hover-background) !important;
+#channel-header.ytd-c4-tabbed-header-renderer, #tabs-inner-container.ytd-c4-tabbed-header-renderer,
+#page-header.ytd-tabbed-page-header {
+	background: var(--second-background) !important;
 }
 #channel-title.ytd-c4-tabbed-header-renderer,
 .dynamicTextViewModelH1 {
@@ -443,6 +450,9 @@ ytd-backstage-poll-renderer:not([is-image-poll]) tp-yt-paper-item.ytd-backstage-
 /*show more*/
 .truncated-text-wiz__absolute-button {
 	color: var(--main-color) !important;
+}
+#tabs-container.ytd-tabbed-page-header, #tabs-inner-container.ytd-tabbed-page-header {
+	background: var(--second-background) !important;
 }
 .tab-content.paper-tab, .tab-content.tp-yt-paper-tab,
 .yt-tab-shape-wiz__tab,
@@ -1120,6 +1130,19 @@ ytd-clarification-renderer[clarify-style="medium"] .description.ytd-clarificatio
 ytd-clarification-renderer yt-button-renderer.style-suggestive[is-paper-button] paper-button.yt-button-renderer {
 	border-color: var(--main-color) !important;
 }
+/*on shorts*/
+.ytInfoPanelOverviewViewModelHostExtractOverlay {
+	background-color: var(--hover-background) !important;
+}
+.ytInfoPanelOverviewViewModelHostExtractOverlay .ytSpecIconShapeHost,
+.ytInfoPanelOverviewViewModelHostExtractOverlay .ytAttributedStringWhiteSpacePreWrap,
+.ytInfoPanelDetailsViewModelHostTitle {
+	color: var(--main-text) !important;
+}
+.ytInfoPanelOverviewViewModelHostExtractOverlay:hover .ytSpecIconShapeHost,
+.ytInfoPanelOverviewViewModelHostExtractOverlay:hover .ytAttributedStringWhiteSpacePreWrap {
+	color: var(--main-color) !important;
+}
 
 /*Change subtitles settings tooltip*/
 .ytp-promotooltip-container {
@@ -1349,6 +1372,11 @@ ytd-button-renderer.style-primary[is-paper-button] {
 .ytContextualSheetLayoutHost,
 .ytSpecDialogLayoutHost /*2026-04-17*/ {
 	background-color: var(--second-background) !important;
+}
+/*2026-07-23*/
+.ytLockupMetadataViewModelMoveLockupOverflowMenuToBottomRight .ytLockupMetadataViewModelMenuButton::after,
+.ytLockupMetadataViewModelMoveLockupOverflowMenuToBottomRight .ytLockupMetadataViewModelMenuButton::before {
+	background: transparent !important;
 }
 .yt-list-item-view-model-wiz__title,
 .yt-list-item-view-model__title {
@@ -1597,7 +1625,8 @@ ytd-thumbnail-overlay-resume-playback-renderer[enable-refresh-signature-moments-
 .YtProgressBarLineProgressBarPlayedRefresh,
 .ytProgressBarLineProgressBarPlayedRefresh,
 .YtThumbnailOverlayProgressBarHostWatchedProgressBarSegmentModern,
-.ytThumbnailOverlayProgressBarHostWatchedProgressBarSegment {
+.ytThumbnailOverlayProgressBarHostWatchedProgressBarSegment,
+.ytwThumbnailOverlayResumePlaybackRendererThumbnailOverlayResumePlaybackProgress /*2026-09-05 queue*/ {
 	background: var(--main-color) !important;
 }
 #container.ytd-player {
@@ -1668,8 +1697,8 @@ ytd-thumbnail-overlay-resume-playback-renderer[enable-refresh-signature-moments-
 	text-shadow: none !important;
 }
 /*2025-10-14 new style controls*/
-/*add back the old gradient - only when controls are visible*/
-.html5-video-player:not(.ytp-autohide) .ytp-gradient-bottom {
+/*add back the old gradient*/
+.ytp-gradient-bottom {
 	display: block !important;
 	height: 61px;
 	padding-top: 37px;
@@ -1754,6 +1783,9 @@ ytd-playlist-panel-renderer[collapsible][collapsed][use-color-palette] .publishe
 ytd-playlist-panel-renderer[collapsible][collapsed][use-color-palette] .publisher.ytd-playlist-panel-renderer:not([is-empty]).ytd-playlist-panel-renderer + .index-message-wrapper.ytd-playlist-panel-renderer::before,
 ytd-playlist-panel-renderer[collapsible][collapsed][use-color-palette] .index-message-wrapper.ytd-playlist-panel-renderer {
 	color: var(--main-color) !important;
+}
+#container.ytd-playlist-panel-renderer {
+	border: none !important;
 }
 
 /*download button*/
@@ -3007,7 +3039,8 @@ ytd-notification-renderer.unread #new.ytd-notification-renderer,
 .text.ytd-notification-renderer,
 .message.ytd-notification-renderer,
 #yt-masthead-notifications-title, .yt-lockup-notification .yt-lockup-title a, /*account settings*/
-h2.yt-multi-page-menu-section-renderer /*comments and notifications headers*/ {
+h2.yt-multi-page-menu-section-renderer, /*comments and notifications headers*/
+.title.ytd-comment-video-thumbnail-header-renderer {
 	color: var(--main-text) !important;
 }
 /*gear icon*/
@@ -3064,12 +3097,19 @@ ytd-multi-page-menu-renderer,
 	background-color: var(--hover-background) !important;
 	color: var(--main-text) !important;
 }
+#primary-text-container.ytd-compact-link-renderer {
+	color: var(--main-text) !important;
+}
 .yt-ui-menu-item:hover /*account settings*/ {
 	color: var(--main-color) !important;
 }
 /*gear icon*/
 .yt-uix-button-icon-icon-account-settings /*account settings*/ {
 	filter: brightness(250%) invert(1);
+}
+/*special links*/
+.ytAttributedStringLinkCallToActionColor {
+	color: var(--main-color) !important;
 }
 
 /*Cards*/
@@ -3398,8 +3438,13 @@ ytd-alert-with-button-renderer[type="INFO"] #text.ytd-alert-with-button-renderer
 }
 
 /*Paid membership*/
-yt-subscription-product-header-renderer.ytd-item-section-renderer {
+yt-subscription-product-header-renderer.ytd-item-section-renderer,
+.ytwPlayerDisclosureViewModelExtractOverlay .ytwPlayerDisclosureViewModelEndpoint /*shorts paid*/ {
 	color: var(--main-text) !important;
+}
+yt-subscription-product-header-renderer.ytd-item-section-renderer:hover,
+.ytwPlayerDisclosureViewModelExtractOverlay .ytwPlayerDisclosureViewModelEndpoint:hover {
+	color: var(--main-color) !important;
 }
 
 /*Reporting*/

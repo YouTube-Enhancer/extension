@@ -3,7 +3,7 @@
  * Author: https://github.com/RaitaroH
  * Co-authors: https://github.com/MechaLynx
  * Repository: https://github.com/RaitaroH/YouTube-DeepDark
- * Version: 4.8.0
+ * Version: 4.8.6
  */
 export const deepDarkPreset = [
 	"9anime",
@@ -110,14 +110,14 @@ export const deepDarkPresets = {
 	}`,
 	"Catppuccin-Mocha": `
 		:root {
-			--main-color: #cba6f7;               /*Mauve*/
-			--main-background: #1e1e2e;          /*Base*/
-			--second-background: #181825;        /*Mantle*/
-			--hover-background: #313244;         /*Surface 0*/
-			--main-text: #cdd6f4;                /*Text*/
-			--dimmer-text: #a6adc8;              /*Subtext 1*/
-			--shadow: 0 1px 0.5px rgba(0, 0, 0, .15);
-	}`,
+		--main-color: #cba6f7;               /*Mauve*/
+		--main-background: #1e1e2e;          /*Base*/
+		--second-background: #181825;        /*Mantle*/
+		--hover-background: #313244;         /*Surface 0*/
+		--main-text: #cdd6f4;                /*Text*/
+		--dimmer-text: #a6adc8;              /*Subtext 1*/
+		--shadow: 0 1px 0.5px rgba(0, 0, 0, .15);
+		}`,
 	"Deep-Dark": `
 	:root {
 		--main-color: #00adee;
