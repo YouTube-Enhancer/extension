@@ -4,6 +4,8 @@ import path from "path";
 import postcss from "postcss";
 import safeParser from "postcss-safe-parser";
 
+import { deepDarkLocalPresets } from "../src/deepDarkLocalPresets.ts";
+
 const SOURCE_URL =
 	"https://raw.githubusercontent.com/RaitaroH/YouTube-DeepDark/master/YouTubeDeepDarkMaterial.user.css";
 
@@ -51,21 +53,29 @@ async function build() {
 	console.log("Extracting :root from @-moz-document...");
 	const mozRoot = extractMozRoot(body);
 	console.log("Extracting theme blocks...");
-	const themes = extractThemes(mozRoot);
+	// Hand-maintained presets are merged over upstream themes of the same name, so a
+	// regeneration never drops contributor-added presets.
+	const localThemes = {};
+	for (const [name, css] of Object.entries(deepDarkLocalPresets)) {
+		localThemes[name] = cleanThemeBody(css);
+	}
+	const themes = { ...extractThemes(mozRoot), ...localThemes };
+	const presetNames = withLocalPresetNames(Object.keys(deepDarkLocalPresets));
 	console.log("Generating TypeScript output...");
-	await fs.writeFile(OUTPUT_FILE, buildTS(version, themes));
+	await fs.writeFile(OUTPUT_FILE, buildTS(version, presetNames, themes));
 	console.log(`Done! File written: ${OUTPUT_FILE}`);
 }
 
 /**
  * Builds a TypeScript module containing the theme presets adapted from "YouTube DeepDark" by RaitaroH.
  * @param {string} version - The version of the theme presets.
+ * @param {string[]} presetNames - Every preset name, upstream and hand-maintained, in display order.
  * @param {DeepDarkPresets} themes - The theme presets mapped by name to CSS string.
  * @returns {string} The built TypeScript module as a string.
  */
-function buildTS(version, themes) {
-	const realThemes = PRESET_ORDER.filter((t) => t !== "Custom");
-	const presetArray = PRESET_ORDER.map((t) => `\t"${t}"`).join(",\n");
+function buildTS(version, presetNames, themes) {
+	const realThemes = presetNames.filter((t) => t !== "Custom");
+	const presetArray = presetNames.map((t) => `\t"${t}"`).join(",\n");
 	const themeEntries = realThemes
 		.map((name, i) => {
 			const key = needsQuotes(name) ? `"${name}"` : name;
@@ -75,7 +85,12 @@ function buildTS(version, themes) {
 				.map((l) => "\t" + l)
 				.join("\n");
 			const comma = i === realThemes.length - 1 ? "" : ",";
-			return `\t${key}: \`\n${indented}\`${comma}`;
+			/**
+			 * escapeTemplateLiteral keeps backticks and interpolation syntax inside string data,
+			 * so a hostile or compromised upstream stylesheet cannot introduce executable code
+			 * into the generated module. Clean content keeps the file's existing format.
+			 */
+			return `\t${key}: \`\n${escapeTemplateLiteral(indented)}\`${comma}`;
 		})
 		.join("\n");
 	return `/**
@@ -100,6 +115,35 @@ export const deepDarkPresets = {
 ${themeEntries}
 } as const satisfies DeepDarkPresets;
 `;
+}
+
+/**
+ * Normalizes a theme body (or a hand-maintained local preset block) the same way: drop comment
+ * lines, trim every line, drop empties, and indent one level. Shared by upstream extraction and
+ * local presets so both emit in one shape.
+ * @param {string} body
+ * @returns {string}
+ */
+function cleanThemeBody(body) {
+	return body
+		.replace(/^\s*\/\/.*$/gm, "")
+		.split("\n")
+		.map((l) => l.trim())
+		.filter(Boolean)
+		.map((l) => `\t${l}`)
+		.join("\n");
+}
+
+/**
+ * Escapes downloaded CSS so it remains string data inside the generated template literals:
+ * backslashes first (so the escapes added here are not processed again), then backticks and
+ * "${" sequences. For content without those characters the output is byte-identical to the
+ * unescaped format, so regenerating does not rewrite the file.
+ * @param {string} value
+ * @returns {string}
+ */
+function escapeTemplateLiteral(value) {
+	return value.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$\{/g, "\\${");
 }
 
 /**
@@ -130,17 +174,21 @@ function extractMozRoot(css) {
  */
 function extractThemes(css) {
 	const themes = {};
-	const re = /(?:if|else if)\s+stylus-deepdark-style\s*==\s*["'](.+?)["']\s*\{([\s\S]*?)\}/g;
-	for (const match of css.matchAll(re)) {
+	const opener = /(?:if|else if)\s+stylus-deepdark-style\s*==\s*["'](.+?)["']\s*\{/g;
+	let match;
+	while ((match = opener.exec(css)) !== null) {
 		const name = match[1].trim();
-		const cleaned = match[2]
-			.replace(/^\s*\/\/.*$/gm, "")
-			.split("\n")
-			.map((l) => l.trim())
-			.filter(Boolean)
-			.map((l) => `\t${l}`)
-			.join("\n");
-		themes[name] = `:root {\n${cleaned}\n}`;
+		/**
+		 * Same body boundary the lazy regex produced (up to the first "}"), found with indexOf
+		 * and a monotonically advancing pointer instead of re-scanning overlapping suffixes, so a
+		 * stylesheet full of unterminated openers costs one linear pass rather than quadratic
+		 * backtracking.
+		 */
+		const bodyStart = opener.lastIndex;
+		const bodyEnd = css.indexOf("}", bodyStart);
+		const body = bodyEnd === -1 ? css.slice(bodyStart) : css.slice(bodyStart, bodyEnd);
+		opener.lastIndex = bodyEnd === -1 ? css.length : bodyEnd + 1;
+		themes[name] = `:root {\n${cleanThemeBody(body)}\n}`;
 	}
 	return themes;
 }
@@ -158,11 +206,29 @@ function extractVersion(header) {
 }
 
 /**
+ * Preset order stays as listed in PRESET_ORDER; hand-maintained local names are slotted in
+ * alphabetically, so the generated list stays stable and sorted across regenerations.
+ * @param {string[]} localNames
+ * @returns {string[]}
+ */
+function withLocalPresetNames(localNames) {
+	const names = [...PRESET_ORDER];
+	for (const name of [...localNames].sort()) {
+		if (names.includes(name)) continue;
+		const at = names.findIndex((existing) => existing > name);
+		if (at === -1) names.push(name);
+		else names.splice(at, 0, name);
+	}
+	return names;
+}
+
+/**
  * Fetches text from a given url and returns a promise that resolves with the text content.
- * Rejects with an error if the request fails.
+ * Rejects with an error if the request fails or the response exceeds the size budget.
  * @param {string} url - The url to fetch from.
  * @returns {Promise<string>} - A promise with the text content.
  */
+const MAX_DOWNLOAD_BYTES = 10 * 1024 * 1024;
 function fetchText(url) {
 	return new Promise((resolve, reject) => {
 		https
@@ -170,7 +236,13 @@ function fetchText(url) {
 				if (!res.statusCode || res.statusCode >= 400)
 					return reject(new Error(`Request failed: ${res.statusCode}`));
 				let data = "";
-				res.on("data", (c) => (data += c));
+				res.on("data", (c) => {
+					data += c;
+					if (data.length > MAX_DOWNLOAD_BYTES) {
+						res.destroy();
+						return reject(new Error("Response exceeded the download size budget"));
+					}
+				});
 				res.on("end", () => resolve(data));
 			})
 			.on("error", reject);
