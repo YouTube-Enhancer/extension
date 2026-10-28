@@ -421,18 +421,20 @@
 				},
 				"title": "Ustawienia ciemne YouTube"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "Przyciski do przodu/przewijania",
-					"title": "Dodaje przyciski do przodu i przewijania do odtwarzacza wideo"
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "Czas przewijania/przewijania",
-						"title": "Ilość czasu do przekierowania/przewijania wideo przez"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Przyciski do przodu/przewijania",
+							"title": "Dodaje przyciski do przodu i przewijania do odtwarzacza wideo"
+						},
+						"time": {
+							"label": "Czas przewijania/przewijania",
+							"title": "Ilość czasu do przekierowania/przewijania wideo przez"
+						}
 					}
 				},
-				"title": "Ustawienia przycisków Przekierowanie/Przewijanie"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {

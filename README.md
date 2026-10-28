@@ -91,13 +91,6 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 </details>
 
 <details>
-<summary>Custom Seek Duration</summary>
-
-- **Custom Seek Duration**: Customize the video seek duration
-- **Seek Duration**: Time to seek forward or backward
-</details>
-
-<details>
 <summary>Deep Dark CSS</summary>
 
 - **Deep Dark Theme**: Activates the selected theme for the page
@@ -110,13 +103,6 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Main Text Color**: Color for main text
 - **Secondary Text Color**: Color for secondary text
 - **Shadow Color**: Color for shadows
-</details>
-
-<details>
-<summary>Forward Rewind Buttons</summary>
-
-- **Forward/rewind Buttons**: Adds forward and rewind buttons to the video player
-- **Forward/rewind Time**: The amount of time to forward/rewind the video by
 </details>
 
 <details>
@@ -249,6 +235,15 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Track Watched Videos**: Keeps track of where you left off on videos you were watching and enables resuming playback
 - **Resume Type**: Select how you want to resume videos
   - Options: Automatic, Prompt
+</details>
+
+<details>
+<summary>Video Seeking • 2 features (2 settings)</summary>
+
+- **Custom Seek Duration**: Customize the video seek duration
+- **Forward/rewind Buttons**: Adds forward and rewind buttons to the video player
+- **Seek Duration**: Time to seek forward or backward
+- **Forward/rewind Time**: The amount of time to forward/rewind the video by
 </details>
 
 <details>

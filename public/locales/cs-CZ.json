@@ -421,18 +421,20 @@
 				},
 				"title": "Nastavení hlubokého tmavého YouTube"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "Tlačítka Vpřed/Vrátit zpět",
-					"title": "Přidá tlačítka vpřed a znovu převrátit do video přehrávače"
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "Doba převodu/převrácení",
-						"title": "Časový limit dopředu/rewind videa od"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Tlačítka Vpřed/Vrátit zpět",
+							"title": "Přidá tlačítka vpřed a znovu převrátit do video přehrávače"
+						},
+						"time": {
+							"label": "Doba převodu/převrácení",
+							"title": "Časový limit dopředu/rewind videa od"
+						}
 					}
 				},
-				"title": "Nastavení tlačítek Vpřed/Vrátit zpět"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {

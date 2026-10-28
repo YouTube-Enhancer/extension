@@ -13,32 +13,37 @@ export const metadata = createFeatureMetadata({
 	dependencies: { includePages: ["watch"] },
 	id: "forwardRewindButtons",
 	loadPhase: 1,
-	sectionTitle: (t) => t((tr) => tr.settings.sections.forwardRewindButtons.title),
+	sectionTitle: (t) => t((tr) => tr.settings.sections.videoSeeking.title),
 	settings: [
 		{
 			children: [
 				{
 					component: "checkbox",
 					id: "forwardRewindButtons.button.enabled",
-					label: (t) => t((tr) => tr.settings.sections.forwardRewindButtons.enable.label),
-					title: (t) => t((tr) => tr.settings.sections.forwardRewindButtons.enable.title)
+					label: (t) =>
+						t((tr) => tr.settings.sections.videoSeeking.settings.forwardRewindButtons.enable.label),
+					title: (t) =>
+						t((tr) => tr.settings.sections.videoSeeking.settings.forwardRewindButtons.enable.title)
 				},
 				{
 					component: "number",
 					disabledWhen: [{ equals: false, setting: "forwardRewindButtons.button.enabled" }],
 					id: "forwardRewindButtons.time",
-					label: (t) => t((tr) => tr.settings.sections.forwardRewindButtons.settings.time.label),
+					label: (t) =>
+						t((tr) => tr.settings.sections.videoSeeking.settings.forwardRewindButtons.time.label),
 					max: 30,
 					min: 1,
 					parentSetting: {
 						type: "singular",
-						value: (tr) => tr.settings.sections.forwardRewindButtons.enable.label
+						value: (tr) =>
+							tr.settings.sections.videoSeeking.settings.forwardRewindButtons.enable.label
 					},
 					step: 1,
-					title: (t) => t((tr) => tr.settings.sections.forwardRewindButtons.settings.time.title)
+					title: (t) =>
+						t((tr) => tr.settings.sections.videoSeeking.settings.forwardRewindButtons.time.title)
 				}
 			],
-			section: "forwardRewindButtons",
+			section: "videoSeeking",
 			type: "group"
 		}
 	]
