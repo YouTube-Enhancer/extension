@@ -421,18 +421,20 @@
 				},
 				"title": "YouTube deep dark settings"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "啟用快轉倒帶按鈕",
-					"title": "在播放器加入快轉和倒帶按鈕"
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "快轉/倒帶時間",
-						"title": "每次快轉/倒帶的時間"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "啟用快轉倒帶按鈕",
+							"title": "在播放器加入快轉和倒帶按鈕"
+						},
+						"time": {
+							"label": "快轉/倒帶時間",
+							"title": "每次快轉/倒帶的時間"
+						}
 					}
 				},
-				"title": "快轉/倒帶按鈕設定"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {

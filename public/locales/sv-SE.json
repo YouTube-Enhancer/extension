@@ -421,18 +421,20 @@
 				},
 				"title": "YouTube mörkt temainställningar"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "Knappar för framåt-/bakåtspolning",
-					"title": "Lägger till spola framåt- och bakåtknappar till videospelaren"
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "Framåt-/bakåtspolningstid",
-						"title": "Tiden som videon ska spolas framåt/bakåt med"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Knappar för framåt-/bakåtspolning",
+							"title": "Lägger till spola framåt- och bakåtknappar till videospelaren"
+						},
+						"time": {
+							"label": "Framåt-/bakåtspolningstid",
+							"title": "Tiden som videon ska spolas framåt/bakåt med"
+						}
 					}
 				},
-				"title": "Inställningar för knapparna spola framåt/bakåt"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {

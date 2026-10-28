@@ -421,18 +421,20 @@
 				},
 				"title": "YouTube 暗黑模式设置"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "启用快进/快退按钮",
-					"title": "给视频播放器添加快进/快退按钮"
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "快进/快退时间",
-						"title": "快进/快退视频的时间长度"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "启用快进/快退按钮",
+							"title": "给视频播放器添加快进/快退按钮"
+						},
+						"time": {
+							"label": "快进/快退时间",
+							"title": "快进/快退视频的时间长度"
+						}
 					}
 				},
-				"title": "快进/快退按钮设置"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {
