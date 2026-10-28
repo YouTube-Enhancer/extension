@@ -421,18 +421,20 @@
 				},
 				"title": "YouTube diepe donkere instellingen"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "Schakel doorspoelen/terugspoelen knoppen in",
-					"title": "Voegt doorspoelen en terugspoelen knoppen toe aan de videospeler"
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "Tijd door/terugspoelen",
-						"title": "Het aantal tijd waarmee je de video doorspoelt / terugspoelt"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Schakel doorspoelen/terugspoelen knoppen in",
+							"title": "Voegt doorspoelen en terugspoelen knoppen toe aan de videospeler"
+						},
+						"time": {
+							"label": "Tijd door/terugspoelen",
+							"title": "Het aantal tijd waarmee je de video doorspoelt / terugspoelt"
+						}
 					}
 				},
-				"title": "Doorspoel/terugspoel knop instellingen"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {

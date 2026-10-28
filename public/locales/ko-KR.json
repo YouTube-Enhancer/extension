@@ -421,18 +421,20 @@
 				},
 				"title": "YouTube deep dark settings"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "되감기/빨리 감기 버튼 사용",
-					"title": "플레이어에 되감기와 빨리 감기 버튼을 추가합니다."
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "되감기/빨리 감기 시간",
-						"title": "되감기/빨리 감기 시간"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "되감기/빨리 감기 버튼 사용",
+							"title": "플레이어에 되감기와 빨리 감기 버튼을 추가합니다."
+						},
+						"time": {
+							"label": "되감기/빨리 감기 시간",
+							"title": "되감기/빨리 감기 시간"
+						}
 					}
 				},
-				"title": "되감기/빨리 감기 버튼 설정"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {

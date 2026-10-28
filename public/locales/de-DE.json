@@ -421,18 +421,20 @@
 				},
 				"title": "YouTube dunkle Einstellungen"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "Vorwärts/Zurückwärts-Buttons",
-					"title": "Fügt dem Videoplayer Schaltflächen vorwärts und zurück"
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "Vorwärts/Rückwärtszeit",
-						"title": "Die Zeit, um das Video weiterzuleiten/zurückzusenden von"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Vorwärts/Zurückwärts-Buttons",
+							"title": "Fügt dem Videoplayer Schaltflächen vorwärts und zurück"
+						},
+						"time": {
+							"label": "Vorwärts/Rückwärtszeit",
+							"title": "Die Zeit, um das Video weiterzuleiten/zurückzusenden von"
+						}
 					}
 				},
-				"title": "Vorwärts/Zurückwärts-Button Einstellungen"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {
