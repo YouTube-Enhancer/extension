@@ -421,18 +421,20 @@
 				},
 				"title": "YouTubeディープダーク設定"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "早送/リワインドボタンを可能にする",
-					"title": "早送ボタンとリワインドボタンをビデオ・プレーヤーに追加する"
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "早送/リワインド時間",
-						"title": "動画に早送/リワインドを量時間"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "早送/リワインドボタンを可能にする",
+							"title": "早送ボタンとリワインドボタンをビデオ・プレーヤーに追加する"
+						},
+						"time": {
+							"label": "早送/リワインド時間",
+							"title": "動画に早送/リワインドを量時間"
+						}
 					}
 				},
-				"title": "早送/リワインドボタン設定"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {

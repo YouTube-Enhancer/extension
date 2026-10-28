@@ -421,18 +421,20 @@
 				},
 				"title": "Ajustes de tono muy oscuro de YouTube"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "Botones de avance/retroceso",
-					"title": "Añade botones de avance y retroceso al reproductor de vídeo"
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "Adelantar/rebobinar tiempo",
-						"title": "La cantidad de tiempo para avanzar/retroceder el video"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Botones de avance/retroceso",
+							"title": "Añade botones de avance y retroceso al reproductor de vídeo"
+						},
+						"time": {
+							"label": "Adelantar/rebobinar tiempo",
+							"title": "La cantidad de tiempo para avanzar/retroceder el video"
+						}
 					}
 				},
-				"title": "Ajustes del botón avanzar/retroceder"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {

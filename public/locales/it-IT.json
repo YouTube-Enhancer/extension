@@ -421,18 +421,20 @@
 				},
 				"title": "Impostazioni scure di YouTube"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "Abilita pulsanti avanti/riavvolgi",
-					"title": "Aggiunge i pulsanti avanti e riavvolgi al riproduttore video"
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "Tempo avanzamento/riavvolgimento",
-						"title": "Il periodo di tempo da usare per avanzare/riavvolgere il video"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Abilita pulsanti avanti/riavvolgi",
+							"title": "Aggiunge i pulsanti avanti e riavvolgi al riproduttore video"
+						},
+						"time": {
+							"label": "Tempo avanzamento/riavvolgimento",
+							"title": "Il periodo di tempo da usare per avanzare/riavvolgere il video"
+						}
 					}
 				},
-				"title": "Impostazioni pulsante Avanti / Riavvolgi"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {
