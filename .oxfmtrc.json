@@ -15,7 +15,6 @@
 		"CHANGELOG.md",
 		"README.md",
 		"package.json",
-		"package-lock.json",
 		"yarn.lock",
 		"pnpm-lock.yaml",
 		"pnpm-workspace.yaml",
