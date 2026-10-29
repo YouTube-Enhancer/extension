@@ -107,7 +107,7 @@ export async function buildContentScripts({
 			plugins: [
 				cssInjectedByJsPlugin({
 					attributes: { id: EMBEDDED_STYLE_ID },
-					topExecutionPriority: !ENABLE_SOURCE_MAP
+					topExecutionPriority: true
 				})
 			],
 			publicDir: false,
