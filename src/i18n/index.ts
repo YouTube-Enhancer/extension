@@ -13,6 +13,11 @@ type Translations = typeof import("../../public/locales/en-US.json");
  */
 const i18nInstances = new Map<AvailableLocales, Promise<i18nInstanceType>>();
 
+/**
+ * Shared promise for the en-US bundle used as `fallbackLng`. Cached so each locale instance only fetches it once.
+ */
+let fallbackTranslationsPromise: Promise<Translations> | undefined;
+
 export async function i18nService(locale: AvailableLocales = "en-US") {
 	if (!availableLocales.includes(locale))
 		throw new Error(`The locale '${locale}' is not available`);
@@ -36,20 +41,23 @@ export async function i18nService(locale: AvailableLocales = "en-US") {
 }
 async function createLocaleInstance(locale: AvailableLocales): Promise<i18nInstanceType> {
 	const extensionURL = await getExtensionURL();
-	const response = await fetch(`${extensionURL}locales/${locale}.json`).catch((err) => {
-		if (err instanceof Error) {
-			throw err;
-		} else {
-			throw new Error("unknown error");
-		}
-	});
-	const translations = (await response.json()) as Translations;
+	// i18next can only fall back to en-US when its resources are present in the instance, so every instance
+	// loads them alongside the target locale. The en-US fetch is shared across instances; when the target
+	// locale is en-US itself it doubles as the target's own fetch.
+	const fallbackTranslationsPromise = loadFallbackTranslations(extensionURL);
+	const translationsPromise =
+		locale === "en-US" ? fallbackTranslationsPromise : fetchTranslations(extensionURL, locale);
+	const [translations, fallbackTranslations] = await Promise.all([
+		translationsPromise,
+		fallbackTranslationsPromise
+	]);
 	return new Promise<i18nInstanceType>((resolve, reject) => {
 		const resources: {
 			[k in AvailableLocales]?: {
 				translation: Translations;
 			};
 		} = {
+			"en-US": { translation: fallbackTranslations },
 			[locale]: { translation: translations }
 		};
 		const i18nextInstance = createInstance();
@@ -73,6 +81,19 @@ async function createLocaleInstance(locale: AvailableLocales): Promise<i18nInsta
 		);
 	});
 }
+async function fetchTranslations(
+	extensionURL: string,
+	locale: AvailableLocales
+): Promise<Translations> {
+	const response = await fetch(`${extensionURL}locales/${locale}.json`).catch((err) => {
+		if (err instanceof Error) {
+			throw err;
+		} else {
+			throw new Error("unknown error");
+		}
+	});
+	return (await response.json()) as Translations;
+}
 async function getExtensionURL(): Promise<string> {
 	const {
 		location: { hostname }
@@ -89,4 +110,14 @@ async function getExtensionURL(): Promise<string> {
 		data: { extensionURL }
 	} = extensionURLResponse;
 	return extensionURL;
+}
+function loadFallbackTranslations(extensionURL: string): Promise<Translations> {
+	fallbackTranslationsPromise ??= fetchTranslations(extensionURL, "en-US").catch(
+		(error: unknown) => {
+			// A failed load must not poison the cache, otherwise en-US could never be loaded again.
+			fallbackTranslationsPromise = undefined;
+			throw error;
+		}
+	);
+	return fallbackTranslationsPromise;
 }
