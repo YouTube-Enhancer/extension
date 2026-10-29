@@ -6,6 +6,7 @@ overrides:
   dompurify: ">=3.4.17"
   handlebars: ">=4.7.10"
   postcss-selector-parser: ">=6.1.5"
+  rolldown: "1.2.12"
   shell-quote: ">=1.11.0"
   source-map-js: ">=1.2.2"
   undici: ">=7.30.1"
