@@ -63,6 +63,8 @@ type PlayerStateHookEntry = {
 	featureId: PlayerRetryKey;
 	handler: () => void;
 	lastRun: number;
+	/** Set when a state change fires while a run is active; consumed when that run ends unsuccessful. */
+	pendingChange: boolean;
 	token: AbortSignal;
 	trigger: () => void;
 };
@@ -188,6 +190,25 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		};
 		externalSignal?.addEventListener("abort", onExternalAbort, { once: true });
 
+		/**
+		 * The state hook now covers the whole run, not only its failure. A change that arrives while
+		 * the loop is still ticking (the video starts, its levels populate) used to be lost: the loop's
+		 * gates kept refusing, and once it ended the change that should have re-armed it had already
+		 * happened, leaving the feature dead until the next navigation. While a run is active the
+		 * handler only flags; the flag is consumed when the run ends unsuccessful.
+		 */
+		if (resolved.onPlayerStateChange) {
+			this.setupStateHook(featureId, token, () => {
+				if (token.aborted || (externalSignal?.aborted ?? false)) return;
+				const entry = this.stateHooks.get(featureId);
+				if (this.activeRetries.has(featureId)) {
+					if (entry) entry.pendingChange = true;
+					return;
+				}
+				void this.executeWithRetries(featureId, tasks, taskNames, config);
+			});
+		}
+
 		return new Promise<boolean[]>((resolve) => {
 			const settle = (): void => {
 				externalSignal?.removeEventListener("abort", onExternalAbort);
@@ -249,20 +270,19 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 				if (allDone || timedOut || tooManyAttempts) {
 					this.abortRetry(featureId);
 					settle();
-
-					/**
-					 * The hook is installed after a failed run too. A player that is still showing an ad, or has not
-					 * started, gives the tasks nothing to act on, and the state change that ends that is the only
-					 * signal that another attempt is worthwhile.
-					 */
-					if (resolved.onPlayerStateChange) {
-						this.setupStateHook(featureId, token, () => {
-							if (token.aborted || (externalSignal?.aborted ?? false)) return;
-							void this.executeWithRetries(featureId, tasks, taskNames, {
-								...config,
-								onPlayerStateChange: false
-							});
-						});
+					if (allDone) {
+						// Nothing left to enforce; the hook that protected the run ends with it.
+						if (resolved.onPlayerStateChange) this.removeStateHook(featureId);
+						return;
+					}
+					// A change that arrived while the loop was still ticking was flagged instead of lost;
+					// it is the readiness the gates were waiting for, so the tasks get a fresh run at once.
+					// With no flag the run-start hook simply stays installed and waits, which is what the
+					// post-failure hook did before.
+					const entry = this.stateHooks.get(featureId);
+					if (resolved.onPlayerStateChange && entry?.pendingChange) {
+						entry.pendingChange = false;
+						void this.executeWithRetries(featureId, tasks, taskNames, config);
 					}
 					return;
 				}
@@ -348,6 +368,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 			featureId,
 			handler,
 			lastRun: 0,
+			pendingChange: false,
 			token,
 			trigger
 		};
