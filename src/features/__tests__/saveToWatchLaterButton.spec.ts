@@ -485,9 +485,11 @@ test.describe("saveToWatchLaterButton", () => {
 				expect((await saveRequest).ok()).toBe(true);
 			}
 			// A fresh load always inserts the button unsaved, so only the membership check can turn it saved.
+			// The membership query reads the same pipeline as Watch Later's progress propagation, which has
+			// served stale state for over 30s under load, so this polls as long as that case does.
 			await reloadPage(page, watch);
 			await expect(page.locator(ACTIONS_ROW_BUTTON_SELECTOR)).toBeAttached({ timeout: 15000 });
-			await expect.poll(async () => readActionsRowIcon(page), { timeout: 30000 }).toBe(SAVED_ICON);
+			await expect.poll(async () => readActionsRowIcon(page), { timeout: 60_000 }).toBe(SAVED_ICON);
 			await expect(
 				page.locator(`${ACTIONS_ROW_BUTTON_SELECTOR} button`).first()
 			).toHaveAccessibleName(REMOVE_LABEL, { timeout: 10000 });
