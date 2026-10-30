@@ -214,6 +214,16 @@ function isCoveredBySharedObserver(node: Node): boolean {
 	return node === body || body?.contains(node) === true;
 }
 
+/**
+ * Element-ness via `nodeType` rather than `instanceof`: nodes from another realm (a same-origin frame's
+ * document, which is where detached roots like the live chat iframe live) fail `instanceof Element`
+ * against this realm's constructor, which would drop their records entirely. `nodeType` is a plain number
+ * on every realm's wrapper, so it stays reliable where the constructor identity check does not.
+ */
+function isElementNode(node: Node): node is Element {
+	return node.nodeType === 1;
+}
+
 function observeRoot(observerInstance: MutationObserver, root: Element): void {
 	const attributeFilter = collectAttributeFilters();
 	observerInstance.observe(root, {
@@ -240,7 +250,7 @@ function onMutations(records: MutationRecord[], fromSharedRoot: boolean): void {
 	const toRemove: Subscriber[] = [];
 
 	for (const record of records) {
-		if (record.type === "attributes" && record.target instanceof Element) {
+		if (record.type === "attributes" && isElementNode(record.target)) {
 			const { target } = record;
 			const { attributeName } = record;
 			if (!attributeName) continue;
@@ -259,7 +269,7 @@ function onMutations(records: MutationRecord[], fromSharedRoot: boolean): void {
 
 		const addedNodes: Element[] = [];
 		for (const node of record.addedNodes) {
-			if (node instanceof Element) addedNodes.push(node);
+			if (isElementNode(node)) addedNodes.push(node);
 		}
 		if (addedNodes.length === 0) continue;
 
@@ -371,7 +381,7 @@ function subscribeToDomMutations(
 ): UnsubscribeFromDomMutations {
 	const parent = options?.parent;
 	const detachedParent =
-		parent instanceof Element && !isCoveredBySharedObserver(parent) ? parent : undefined;
+		parent && isElementNode(parent) && !isCoveredBySharedObserver(parent) ? parent : undefined;
 
 	const subscriber: Subscriber = {
 		attributeFilter: options?.attributeFilter,
