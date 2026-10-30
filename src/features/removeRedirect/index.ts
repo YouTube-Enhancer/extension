@@ -6,8 +6,13 @@ import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBu
 import { browserColorLog } from "@/src/utils/logging";
 
 import { metadata } from "./index.metadata";
-
-const REDIRECT_PREFIX = "https://www.youtube.com/redirect?";
+import {
+	attachFrameUnwrapping,
+	detachFrameUnwrapping,
+	REDIRECT_LINK_SELECTOR,
+	unwrapRedirectElements,
+	unwrapRedirectsIn
+} from "./utils";
 
 let unsubscribeBus: Nullable<() => void> = null;
 
@@ -19,43 +24,24 @@ export default createFeature({
 	onEnable: () => {
 		browserColorLog(`Enabling removeRedirect`, "FgMagenta");
 		unsubscribeBus?.();
-		processDocument();
+		unwrapRedirectsIn(document);
 		// Narrow AND deep. The jank a bare `[href]` subscription caused during sidebar
 		// churn was its delivery volume — every thumbnail link matched and was processed —
 		// not the descendant scan itself. Restricting to real redirect links keeps
 		// deliveries at ~zero while thumbnail renderers stream in, and deep still catches
 		// the links YouTube nests inside added subtrees (SPA descriptions, dynamically
 		// inserted sections) that shallow matching missed outright.
-		unsubscribeBus = subscribeToDomMutations(
-			'a[href*="/redirect?"]',
-			(elements) => {
-				for (const el of elements) {
-					unwrapRedirect(el);
-				}
-			},
-			{ deep: true }
-		);
+		unsubscribeBus = subscribeToDomMutations(REDIRECT_LINK_SELECTOR, unwrapRedirectElements, {
+			deep: true
+		});
+		// The live chat iframe is a separate document this subscription cannot observe (the embedded
+		// script never runs inside frames, and the shared observer stops at the top document's body),
+		// so chat links would keep their redirect wrapper without a per-frame subscription.
+		attachFrameUnwrapping();
 		registry.on("removeRedirect", "bus", () => {
 			unsubscribeBus?.();
 			unsubscribeBus = null;
 		});
+		registry.on("removeRedirect", "chat-frames", detachFrameUnwrapping);
 	}
 });
-
-function processDocument(): void {
-	document.querySelectorAll('a[href*="/redirect?"]').forEach((link) => {
-		unwrapRedirect(link);
-	});
-}
-
-function unwrapRedirect(el: Element): void {
-	const href: Nullable<string> = el.getAttribute("href");
-	if (!href || !href.startsWith(REDIRECT_PREFIX)) return;
-	try {
-		const url = new URL(href);
-		const target = url.searchParams.get("q");
-		if (target) el.setAttribute("href", target);
-	} catch {
-		/* ignore malformed urls */
-	}
-}
