@@ -105,6 +105,7 @@ test.describe("screenshotButton", () => {
 		await expect(page.getByText("Screenshot copied to clipboard")).toBeVisible();
 		// copyToClipboard hardcodes image/png; screenshotButton.format only applies to the saved file.
 		// The tooltip shows before the write finishes, so the clipboard is polled until the image lands.
+		// The capture and encode have crossed 10s under profiling load, so the write gets 20.
 		await expect
 			.poll(
 				async () =>
@@ -112,7 +113,7 @@ test.describe("screenshotButton", () => {
 						const items = await navigator.clipboard.read();
 						return items.some((item) => item.types.includes("image/png"));
 					}),
-				{ timeout: 10000 }
+				{ timeout: 20000 }
 			)
 			.toBe(true);
 	});

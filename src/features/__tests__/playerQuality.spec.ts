@@ -205,10 +205,11 @@ test.describe("playerQuality", () => {
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
 		await disableFeature(page, "playerQuality.enabled");
 		// onDisable restores the quality captured before enforcement and records it on the player element,
-		// so the restore has to be observed there rather than performed by the test itself.
+		// so the restore has to be observed there rather than performed by the test itself. Applying the
+		// restored quality has crossed 15s under profiling load, so the attribute gets 30s.
 		await expect(
 			page.locator(`div#movie_player[data-default-quality="${originalQuality}"]`)
-		).toBeAttached({ timeout: 15000 });
+		).toBeAttached({ timeout: 30000 });
 		if (originalQuality !== closestQuality) {
 			await expect
 				.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", watch), {

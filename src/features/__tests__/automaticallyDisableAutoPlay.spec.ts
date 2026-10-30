@@ -106,7 +106,9 @@ test.describe("automaticallyDisableAutoPlay", () => {
 			// cannot tell the extension re-applying the override from YouTube simply remembering the off state.
 			await setAutoPlayState(page, true);
 			await reloadPage(page, pageType);
-			await expect.poll(() => getAutoPlayState(page), { timeout: 15000 }).toBe(false);
+			// Fresh player boot plus the enable task's own retries stretches well past 15s under
+			// profiling load before the feature can re-apply the override, so the poll allows 30.
+			await expect.poll(() => getAutoPlayState(page), { timeout: 30000 }).toBe(false);
 		});
 	}
 

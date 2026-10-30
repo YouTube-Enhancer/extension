@@ -99,9 +99,10 @@ function toSeconds(value: string): number {
 async function waitForPlaylist(page: Page, pageType: string): Promise<void> {
 	if (pageType !== "playlist") return;
 	// The containers the controller reads its items from. Awaiting them replaces a swallowed selector
-	// timeout followed by an unconditional 2 s sleep.
+	// timeout followed by an unconditional 2 s sleep. First render of the rows has crossed 15s under
+	// profiling load, so the wait allows 30.
 	await expect(page.locator(PLAYLIST_ITEM_SELECTOR).first()).toBeVisible({
-		timeout: 15000
+		timeout: 30000
 	});
 }
 
