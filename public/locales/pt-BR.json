@@ -421,18 +421,20 @@
 				},
 				"title": "Configurações YouTube Deep Dark"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "Botões de avançar/retroceder",
-					"title": "Adiciona botões de avançar e de retroceder ao player de vídeo"
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "Avançar/retroceder tempo",
-						"title": "Quantidade de tempo para avançar/retroceder o vídeo"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Botões de avançar/retroceder",
+							"title": "Adiciona botões de avançar e de retroceder ao player de vídeo"
+						},
+						"time": {
+							"label": "Avançar/retroceder tempo",
+							"title": "Quantidade de tempo para avançar/retroceder o vídeo"
+						}
 					}
 				},
-				"title": "Configurações do botão de avançar/retroceder"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {

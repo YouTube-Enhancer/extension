@@ -386,6 +386,31 @@
 				},
 				"title": "Custom CSS settings"
 			},
+			"videoSeeking": {
+				"settings": {
+					"customSeekDuration": {
+						"enable": {
+							"label": "Custom seek duration",
+							"title": "Customize the video seek duration"
+						},
+						"jumpBy": {
+							"label": "Seek duration",
+							"title": "Time to seek forward or backward"
+						}
+					},
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Forward/rewind buttons",
+							"title": "Adds forward and rewind buttons to the video player"
+						},
+						"time": {
+							"label": "Forward/rewind time",
+							"title": "The amount of time to forward/rewind the video by"
+						}
+					}
+				},
+				"title": "Video seeking settings"
+			},
 			"deepDarkCSS": {
 				"enable": {
 					"label": "Deep dark theme",
@@ -432,19 +457,6 @@
 					}
 				},
 				"title": "YouTube deep dark settings"
-			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "Forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
-				},
-				"settings": {
-					"time": {
-						"label": "Forward/rewind time",
-						"title": "The amount of time to forward/rewind the video by"
-					}
-				},
-				"title": "Forward/rewind button settings"
 			},
 			"globalVolume": {
 				"enable": {

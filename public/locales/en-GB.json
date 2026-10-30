@@ -422,18 +422,20 @@
 				},
 				"title": "YouTube deep dark settings"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "Forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "Forward/rewind time",
-						"title": "The amount of time to forward/rewind the video by"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Forward/rewind buttons",
+							"title": "Adds forward and rewind buttons to the video player"
+						},
+						"time": {
+							"label": "Forward/rewind time",
+							"title": "The amount of time to forward/rewind the video by"
+						}
 					}
 				},
-				"title": "Forward/rewind button settings"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {

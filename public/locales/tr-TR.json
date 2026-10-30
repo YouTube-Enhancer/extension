@@ -421,18 +421,20 @@
 				},
 				"title": "YouTube deep dark ayarları"
 			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "İleri/geri sarma düğmeleri",
-					"title": "Video oynatıcısına ileri ve geri sarma düğmeleri ekler"
-				},
+			"videoSeeking": {
 				"settings": {
-					"time": {
-						"label": "İleri/geri sarma süresi",
-						"title": "Videoyu ileri/geri sarmak için atlanacak süre"
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "İleri/geri sarma düğmeleri",
+							"title": "Video oynatıcısına ileri ve geri sarma düğmeleri ekler"
+						},
+						"time": {
+							"label": "İleri/geri sarma süresi",
+							"title": "Videoyu ileri/geri sarmak için atlanacak süre"
+						}
 					}
 				},
-				"title": "İleri/geri sarma düğmesi ayarları"
+				"title": "Video seeking settings"
 			},
 			"globalVolume": {
 				"enable": {
