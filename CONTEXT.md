@@ -68,4 +68,5 @@ Module-owned maps in buttonPlacementState.ts: tracked feature buttons (name to s
 
 ## Button config path
 
-Button settings resolve via feature metadata (button.path = button or buttons) through resolveButtonConfig(config, featureId, buttonName). No dual-shape probe at placement time.
+Button settings resolve via feature metadata (button.path = button or buttons) through
+resolveButtonConfig(config, featureId, buttonName). No dual-shape probe at placement time.

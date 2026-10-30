@@ -18,17 +18,17 @@ Executed is not asserted: a line the suite runs is not a line the suite would no
 
 ## By area
 
-| Area             | Files | Statements % | Branches % | Functions % |
-| ---------------- | ----- | ------------ | ---------- | ----------- |
-| src/features     | 219   | 88.3         | 75.1       | 92.4        |
-| src/utils        | 65    | 75.9         | 66.9       | 85.2        |
-| src/components   | 91    | 87.6         | 76.0       | 92.8        |
-| src/pages        | 12    | 87.8         | 62.0       | 84.5        |
-| src/ui           | 3     | 90.4         | 71.6       | 93.1        |
-| src/hooks        | 14    | 89.9         | 79.5       | 97.2        |
-| src/_setup       | 4     | 73.3         | 60.0       | 68.2        |
-| src/validation   | 2     | 85.9         | 74.6       | 100.0       |
-| src/i18n         | 7     | 75.6         | 60.0       | 83.3        |
+| Area           | Files | Statements % | Branches % | Functions % |
+| -------------- | ----- | ------------ | ---------- | ----------- |
+| src/features   | 219   | 88.3         | 75.1       | 92.4        |
+| src/utils      | 65    | 75.9         | 66.9       | 85.2        |
+| src/components | 91    | 87.6         | 76.0       | 92.8        |
+| src/pages      | 12    | 87.8         | 62.0       | 84.5        |
+| src/ui         | 3     | 90.4         | 71.6       | 93.1        |
+| src/hooks      | 14    | 89.9         | 79.5       | 97.2        |
+| src/_setup     | 4     | 73.3         | 60.0       | 68.2        |
+| src/validation | 2     | 85.9         | 74.6       | 100.0       |
+| src/i18n       | 7     | 75.6         | 60.0       | 83.3        |
 
 `src/chunks` and `src/preload-helper.js` are bundler runtime, not product logic. The clean store lists 84 zero-execution files against the multi-run store's 16: the difference is mostly the devtools panel components (the excluded surface, whose earlier nonzero rows came from the since-deleted smoke spec's records), plus re-export-only barrels such as `Inputs/CSSEditor/index.tsx` and `buttonController/index.ts`, never-mounted generic input wrappers, and build-time scripts such as the i18n maintenance utilities. No feature implementation file is among them. The background worker and popup files above are the newly measured surface.
 
@@ -36,14 +36,14 @@ Executed is not asserted: a line the suite runs is not a line the suite would no
 
 All 68 registered features have real specs. The 2026-10-19 battery program (~85 tests) closed the audit's rows:
 
-| Battery item | State after the program |
-| --- | --- |
-| Survives a full page reload | 68 / 68 (6 specs gained tests, `8bdbb877`) |
-| Survives disable then re-enable | covered, 5 written, 6 verified already covered under other wording |
-| SPA navigation behaviour | covered, 13 written (`playbackSpeedBoostGesture` already had its re-arm case) |
-| Off by default | covered, 27 instances across 16 specs, 3 verified already covered |
-| Non-target page | 23 / 23 page-scoped features; the 12 all-pages features are n/a by definition (their guard is everyFeature's every-page sweep) |
-| While-enabled config change | 25 / 25 applicable multi-key features; 14 verified already covered under other wording, 5 written (placement live-change), 2 n/a by product shape, 1 not multi-key |
+| Battery item                    | State after the program                                                                                                                                            |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Survives a full page reload     | 68 / 68 (6 specs gained tests, `8bdbb877`)                                                                                                                         |
+| Survives disable then re-enable | covered, 5 written, 6 verified already covered under other wording                                                                                                 |
+| SPA navigation behaviour        | covered, 13 written (`playbackSpeedBoostGesture` already had its re-arm case)                                                                                      |
+| Off by default                  | covered, 27 instances across 16 specs, 3 verified already covered                                                                                                  |
+| Non-target page                 | 23 / 23 page-scoped features; the 12 all-pages features are n/a by definition (their guard is everyFeature's every-page sweep)                                     |
+| While-enabled config change     | 25 / 25 applicable multi-key features; 14 verified already covered under other wording, 5 written (placement live-change), 2 n/a by product shape, 1 not multi-key |
 
 The audit's original keyword-scan denominators were too pessimistic: 20 "missing" tests already existed under other wording. The program's real output was ~60 genuinely new tests plus the correction of the denominators themselves.
 
@@ -55,15 +55,15 @@ The audit's original keyword-scan denominators were too pessimistic: 20 "missing
 
 ## Weakest feature folders (statements)
 
-| Feature | Stmts % | cov/total | Branch % | cov/total |
-| --- | --- | --- | --- | --- |
-| openTranscriptButton | 78.6% | 11/14 | 50.0% | 4/8 |
-| _registry | 81.2% | 851/1048 | 73.8% | 524/710 |
-| playlistManagementButtons | 81.3% | 191/235 | 63.5% | 73/115 |
-| pauseBackgroundPlayers | 82.6% | 38/46 | 75.0% | 18/24 |
-| defaultToOriginalAudioTrack | 83.2% | 104/125 | 81.3% | 74/91 |
-| saveToWatchLaterButton | 84.2% | 171/203 | 69.0% | 80/116 |
-| miniPlayerButton | 84.6% | 22/26 | 75.0% | 18/24 |
+| Feature                     | Stmts % | cov/total | Branch % | cov/total |
+| --------------------------- | ------- | --------- | -------- | --------- |
+| openTranscriptButton        | 78.6%   | 11/14     | 50.0%    | 4/8       |
+| _registry                   | 81.2%   | 851/1048  | 73.8%    | 524/710   |
+| playlistManagementButtons   | 81.3%   | 191/235   | 63.5%    | 73/115    |
+| pauseBackgroundPlayers      | 82.6%   | 38/46     | 75.0%    | 18/24     |
+| defaultToOriginalAudioTrack | 83.2%   | 104/125   | 81.3%    | 74/91     |
+| saveToWatchLaterButton      | 84.2%   | 171/203   | 69.0%    | 80/116    |
+| miniPlayerButton            | 84.6%   | 22/26     | 75.0%    | 18/24     |
 
 The playlistManagementButtons row is resolved: its 8/192 reading was two source versions of the file (the import reformat behind the 23367848 cherry-pick shifted every line after 27, so the cross-version union credited only the 8 statements in the stable head) and the store healed once it was wiped and rebuilt in one era; `index.ts` now reads 146/190 and the folder 81.3 %, in line with its real behaviour. `playbackSpeedBoostGesture` carried the same dual-version condition but line-aligned, and now reads 112/128 on its own. One product-side finding came out of diagnosing this: the reset-progress path in `playlistManagementButtons:380` failed when YouTube's Watch Later browse served the watched bar for over 30s after a processed feedback edit, so the spec's post-reload poll now waits 60s, matching the remove-all check's budget.
 
