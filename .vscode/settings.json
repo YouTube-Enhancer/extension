@@ -13,5 +13,8 @@
 	"js/ts.tsserver.experimental.enableProjectDiagnostics": true,
 	"oxc.fmt.configPath": ".oxfmtrc.json",
 	"oxc.fmt.disableNestedConfig": true,
-	"prettier.enable": false
+	"prettier.enable": false,
+	"[typescript]": {
+		"editor.defaultFormatter": "oxc.oxc-vscode"
+	}
 }
