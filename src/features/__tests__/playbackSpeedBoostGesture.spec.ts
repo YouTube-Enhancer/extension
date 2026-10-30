@@ -56,29 +56,35 @@ async function expectRate(page: Page, expected: number): Promise<void> {
  * querySelector, which is what readRate checks, so both sides stay on the same element by construction.
  */
 async function pressPointOnVideo(page: Page): Promise<{ x: number; y: number }> {
-	const point = await page.evaluate((selector) => {
-		const videos = Array.from(document.querySelectorAll<HTMLVideoElement>(selector));
-		for (const video of videos) {
-			const rect = video.getBoundingClientRect();
-			const { bottom, height, left, top, width } = rect;
-			const x = left + width / 2;
-			const y = top + height * 0.35;
-			if (
-				height > 0 &&
-				width > 0 &&
-				bottom > 0 &&
-				top < window.innerHeight &&
-				x >= 0 &&
-				x <= window.innerWidth &&
-				y >= 0 &&
-				y <= window.innerHeight
-			)
-				return { x, y };
-		}
-		return null;
-	}, VIDEO_SELECTOR);
-	if (!point) throw new Error("no video element has a press point in the viewport");
-	return point;
+	// The player can still be laying out when the test first looks: a zero-size or off-screen video
+	// yields no point, which used to throw on the first sample under load. Keep sampling for a few
+	// seconds before giving up; the point conditions themselves are unchanged.
+	for (let attempt = 0; attempt < 20; attempt++) {
+		const point = await page.evaluate((selector) => {
+			const videos = Array.from(document.querySelectorAll<HTMLVideoElement>(selector));
+			for (const video of videos) {
+				const rect = video.getBoundingClientRect();
+				const { bottom, height, left, top, width } = rect;
+				const x = left + width / 2;
+				const y = top + height * 0.35;
+				if (
+					height > 0 &&
+					width > 0 &&
+					bottom > 0 &&
+					top < window.innerHeight &&
+					x >= 0 &&
+					x <= window.innerWidth &&
+					y >= 0 &&
+					y <= window.innerHeight
+				)
+					return { x, y };
+			}
+			return null;
+		}, VIDEO_SELECTOR);
+		if (point) return point;
+		await page.waitForTimeout(250);
+	}
+	throw new Error("no video element has a press point in the viewport");
 }
 
 /**
