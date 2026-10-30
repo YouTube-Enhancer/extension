@@ -103,22 +103,37 @@ export async function setFeatureValue<K extends Path<configuration>>(
 			await page.waitForSelector("html[yte-ready]", { timeout: 30_000 }).catch(() => {});
 		}
 	}
-	await sendYouTubeMessage(page, {
-		action: "send_data",
-		data: { key, value },
-		source: "content",
-		type: "test_setConfigValue"
-	});
 	// Interval polling instead of Playwright's rAF default, which can stall on throttled
 	// background pages under full-suite load. 60 s (not the bare 30 s) so the every-feature
 	// sweep - ~50 sequential writes, each waiting on its feature's onEnable reconcile, whose
 	// player retries stretch under 5-worker load - does not read a legitimately slow enable
 	// as a lost signal. This is the ceiling the sweep's signal budget was raised to.
-	await page.waitForFunction(
-		() => document.documentElement.hasAttribute("yte-config-processing"),
-		undefined,
-		{ polling: 100, timeout: 60_000 }
-	);
+	// A live page can navigate between the send and the reconcile, dropping the message with no
+	// trace; that used to burn the whole budget and fail a sweep nothing was wrong with. One
+	// re-send covers it. The signal is deliberately not cleared on the retry: a slow first
+	// reconcile may still land it, and an identical value fires no storage event, so the retry
+	// only does anything when the first send was actually lost.
+	for (let send = 0; ; send++) {
+		await sendYouTubeMessage(page, {
+			action: "send_data",
+			data: { key, value },
+			source: "content",
+			type: "test_setConfigValue"
+		});
+		try {
+			await page.waitForFunction(
+				() => document.documentElement.hasAttribute("yte-config-processing"),
+				undefined,
+				{ polling: 100, timeout: 60_000 }
+			);
+			break;
+		} catch (error) {
+			if (send >= 1) throw error;
+			// A fresh document carries no stale signal; wait for the extension to re-inject so
+			// the re-send reaches a listening content script.
+			await page.waitForSelector("html[yte-ready]", { timeout: 30_000 }).catch(() => {});
+		}
+	}
 	await page.waitForTimeout(250);
 }
 /**
