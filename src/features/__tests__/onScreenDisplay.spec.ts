@@ -240,16 +240,20 @@ test.describe("onScreenDisplay", () => {
 		await setOption(page, "onScreenDisplay.hideTime", LONG_HIDE_TIME);
 		// Play, mute, captions, menu and fullscreen sit in a bar over the top of the video, in the reel that holds the
 		// player. The bar is part of the layout YouTube serves, so it has to be there; a missing bar is a failure.
-		const barHeight = await page.evaluate(() => {
-			const bar = document
-				.querySelector("#shorts-player")
-				?.closest("ytd-reel-video-renderer")
-				?.querySelector<HTMLElement>(".player-controls");
-			if (!bar) return null;
-			const style = getComputedStyle(bar);
-			return bar.offsetHeight + parseInt(style.marginTop, 10) + parseInt(style.marginBottom, 10);
-		});
-		expect(barHeight).toBeGreaterThan(0);
+		// The reel mounts its controls once the player settles, which under profiling load can land after the first
+		// sample would have read null, so the measurement is polled: absent stays a failure, late stops being one.
+		const readBarHeight = () =>
+			page.evaluate(() => {
+				const bar = document
+					.querySelector("#shorts-player")
+					?.closest("ytd-reel-video-renderer")
+					?.querySelector<HTMLElement>(".player-controls");
+				if (!bar) return null;
+				const style = getComputedStyle(bar);
+				return bar.offsetHeight + parseInt(style.marginTop, 10) + parseInt(style.marginBottom, 10);
+			});
+		await expect.poll(readBarHeight, { timeout: 15_000 }).toBeGreaterThan(0);
+		const barHeight = await readBarHeight();
 		await dispatchWheelNotches(page, shorts, "up");
 		await expect(page.locator(OSD_SELECTOR)).toBeAttached({ timeout: 10000 });
 		await expect
