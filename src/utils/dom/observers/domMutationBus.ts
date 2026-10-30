@@ -4,7 +4,10 @@
  * A single {@link MutationObserver} on `document.body` that dispatches added-node
  * mutations to subscribers by CSS selector, and attribute mutations to subscribers
  * that opt in via `attributeFilter`. Deduplicates identical selectors and supports
- * per-subscriber parent scoping.
+ * per-subscriber parent scoping. A subscriber without a `parent` is scoped to that
+ * shared `document.body` observer: records delivered by a detached root's observer
+ * go only to the subscribers that named a `parent` inside that root, so a busy frame
+ * document cannot wake every top-document subscription on the page.
  *
  * By default only the added node itself is matched against the selector. Pass
  * `deep: true` to also scan the node's descendants with `querySelectorAll`, which
@@ -131,10 +134,21 @@ function collectAttributeFilters(): string[] {
 	return [...filters].sort();
 }
 
-function deliverToSubscriber(subscriber: Subscriber, matches: Element[], selector: string): void {
-	const filteredMatches = subscriber.parent
-		? matches.filter((el) => subscriber.parent!.contains(el))
-		: matches;
+function deliverToSubscriber(
+	subscriber: Subscriber,
+	matches: Element[],
+	selector: string,
+	fromSharedRoot: boolean
+): void {
+	// A parentless subscription covers the shared observer's root (`document.body`) only: a record that
+	// arrived from a detached root belongs to the subscribers that named that root, not to everyone.
+	// Without this, a busy frame document would wake every parentless subscriber on the page.
+	let filteredMatches = matches;
+	if (subscriber.parent) {
+		filteredMatches = matches.filter((el) => subscriber.parent!.contains(el));
+	} else if (!fromSharedRoot) {
+		return;
+	}
 	if (filteredMatches.length === 0) return;
 	try {
 		subscriber.callback(filteredMatches);
@@ -173,7 +187,7 @@ function ensureObserverOptions(): void {
 		attributeFilter.some((name, i) => name !== observedAttributeFilter[i]);
 	if (observer && !filterChanged) return;
 	observer?.disconnect();
-	observer = new MutationObserver(onMutations);
+	observer = new MutationObserver((records) => onMutations(records, true));
 	observeRoot(observer, document.body);
 	for (const root of detachedRoots.keys()) {
 		const state = detachedRoots.get(root);
@@ -211,14 +225,16 @@ function observeRoot(observerInstance: MutationObserver, root: Element): void {
 }
 
 /**
- * MutationObserver callback. Attribute records deliver to attributeFilter subscribers
- * whose selector matches the mutation target. Child-list records collect added Element
- * nodes, match them against each unique selector, then deliver to child-list
- * subscribers. A `querySelectorAll` descendant scan runs only when at least one
- * subscriber for the selector opted into `deep`. Subscribers with `once: true` are
+ * MutationObserver callback. `fromSharedRoot` marks which observer produced the records: `true` for the
+ * shared observer on `document.body` (so parentless subscribers, which are scoped to the top document,
+ * receive them), `false` for a detached root's own observer (so only subscribers that named a parent
+ * inside that root receive them). Attribute records deliver to attributeFilter subscribers whose selector
+ * matches the mutation target. Child-list records collect added Element nodes, match them against each
+ * unique selector, then deliver to child-list subscribers. A `querySelectorAll` descendant scan runs only
+ * when at least one subscriber for the selector opted into `deep`. Subscribers with `once: true` are
  * removed after delivery.
  */
-function onMutations(records: MutationRecord[]): void {
+function onMutations(records: MutationRecord[], fromSharedRoot: boolean): void {
 	if (subscriberMap.size === 0) return;
 
 	const toRemove: Subscriber[] = [];
@@ -232,7 +248,7 @@ function onMutations(records: MutationRecord[]): void {
 				for (const subscriber of subscribers) {
 					if (!subscriber.attributeFilter?.includes(attributeName)) continue;
 					if (!target.matches(selector)) continue;
-					deliverToSubscriber(subscriber, [target], selector);
+					deliverToSubscriber(subscriber, [target], selector, fromSharedRoot);
 					if (subscriber.once) toRemove.push(subscriber);
 				}
 			}
@@ -276,7 +292,7 @@ function onMutations(records: MutationRecord[]): void {
 			for (const subscriber of subscribers) {
 				// Attribute subscribers are driven by attribute records, not added nodes.
 				if (subscriber.attributeFilter) continue;
-				deliverToSubscriber(subscriber, matchList, selector);
+				deliverToSubscriber(subscriber, matchList, selector, fromSharedRoot);
 				if (subscriber.once) toRemove.push(subscriber);
 			}
 		}
@@ -318,7 +334,7 @@ function retainDetachedRoot(root: Element): void {
 		existing.refCount += 1;
 		return;
 	}
-	const rootObserver = new MutationObserver(onMutations);
+	const rootObserver = new MutationObserver((records) => onMutations(records, false));
 	observeRoot(rootObserver, root);
 	detachedRoots.set(root, { observer: rootObserver, refCount: 1 });
 }
