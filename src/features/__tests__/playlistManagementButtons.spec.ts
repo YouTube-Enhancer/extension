@@ -100,8 +100,11 @@ async function expectButtonsRemoved(page: Page): Promise<void> {
 	await expect(page.locator(RESET_BUTTON_SELECTOR)).not.toBeAttached();
 }
 
-/** Fails when an item the feature targets has no remove button, and when the fixture has no items at all. */
-async function expectRemoveButtons(page: Page, timeout = 10000): Promise<void> {
+/**
+ * Fails when an item the feature targets has no remove button, and when the fixture has no items at all.
+ * The default allows for the rows rendering late under profiling load, which has crossed 10s.
+ */
+async function expectRemoveButtons(page: Page, timeout = 30000): Promise<void> {
 	await expect
 		.poll(
 			async () => {
@@ -231,6 +234,11 @@ async function scrollUntilMoreItems(page: Page, itemsBefore: number): Promise<bo
 }
 
 test.describe("playlistManagementButtons", () => {
+	// Every test here edits the same account's playlists around shared fixture videos: four of them
+	// watch the same Watch Later short to the end, and with fullyParallel a sibling's watchToTheEnd
+	// can put the watched progress back on the server while another test is asserting it cleared,
+	// which no poll budget out-waits. The whole file runs one after another instead.
+	test.describe.configure({ mode: "serial" });
 	for (const pageType of testPages) {
 		test(`remove button should appear on playlist items when enabled on ${pageType}`, async ({
 			page
@@ -317,7 +325,7 @@ test.describe("playlistManagementButtons", () => {
 
 	// Both cases below edit the account's Watch Later around the same video, so they run one after the other.
 	test.describe("Watch Later", () => {
-		test.describe.configure({ mode: "default" });
+		test.describe.configure({ mode: "serial" });
 		test(`remove all watched videos button removes the fully watched videos from Watch Later on ${playlist}`, async ({
 			page
 		}) => {
@@ -556,6 +564,8 @@ test.describe("playlistManagementButtons", () => {
 		await expect
 			.poll(async () => countPlaylistItems(page), { timeout: 10000 })
 			.toBeGreaterThan(itemsBefore);
-		await expectRemoveButtons(page, 15000);
+		// The observer's pass over the freshly rendered rows, 129 of them here, needs longer than
+		// 15s when profiling. 30 covers it without masking a genuinely stuck observer.
+		await expectRemoveButtons(page, 30000);
 	});
 });
