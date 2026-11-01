@@ -389,6 +389,15 @@ test.describe("playlistManagementButtons", () => {
 			page
 		}) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
+			// Proven cross-file interference (10-30): this passes solo in ~44s but polls out past 120s in
+			// the full suite, because sibling specs write this same account's Watch Later while the poll
+			// runs - no budget can out-wait an active writer. The standard suite therefore skips it and
+			// the solo lane runs it afterwards:
+			//   YTE_SOLO_LANE=1 pnpm exec playwright test playlistManagementButtons.spec.ts:388 --project=chromium
+			test.skip(
+				!process.env.YTE_SOLO_LANE,
+				"solo lane: cross-file Watch Later interference (run with YTE_SOLO_LANE=1 after the suite)"
+			);
 			test.setTimeout(300_000);
 			// The same self-contained set-up as above: the short video goes into Watch Later and is watched to the end, so
 			// its row carries the reset button and counts for the remove-all button.
