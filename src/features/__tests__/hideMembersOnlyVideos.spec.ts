@@ -1,6 +1,6 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
+import { test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
 
@@ -8,7 +8,8 @@ import {
 	expectBodyWithClass,
 	expectBodyWithoutClass,
 	expectElementsHidden,
-	expectElementsNotHidden
+	expectElementsNotHidden,
+	expectInjectedSelectorsToMatch
 } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
@@ -43,17 +44,6 @@ const [firstSelector] = selectors;
 /** Taken from the generated selector so the synthetic badge carries exactly the glyph the feature CSS looks for. */
 const [, memberBadgeGlyph = ""] = /path\[d="([^"]+)"\]/.exec(firstSelector) ?? [];
 
-/**
- * Fails when one of the scoped selectors matches nothing. Without it a stale synthetic markup block would make the
- * display assertions iterate over zero elements and pass without ever looking at the feature's effect.
- */
-async function expectInjectedSelectorsToMatch(page: Page): Promise<void> {
-	const unmatched = await page.evaluate(
-		(scoped) => scoped.filter((selector) => document.querySelector(selector) === null),
-		[...injectedSelectors]
-	);
-	expect(unmatched).toEqual([]);
-}
 /**
  * Members-only videos only appear for channels the account is a member of, so one synthetic item per generated
  * selector is injected instead. The trailing control element matches none of them and proves the rule stays scoped.
@@ -140,7 +130,7 @@ test.describe("hideMembersOnlyVideos", () => {
 		await navigateToPageType(page, watch);
 		await disableFeature(page, "hideMembersOnlyVideos.enabled");
 		await injectMembersOnlyMarkup(page);
-		await expectInjectedSelectorsToMatch(page);
+		await expectInjectedSelectorsToMatch(page, injectedSelectors);
 		// Baseline: nothing the feature targets is hidden before it runs, so the hidden assertion below can only be its doing.
 		await expectElementsNotHidden(page, injectedSelectors);
 		await enableFeature(page, "hideMembersOnlyVideos.enabled");
@@ -156,7 +146,7 @@ test.describe("hideMembersOnlyVideos", () => {
 		await enableFeature(page, "hideMembersOnlyVideos.enabled");
 		await expectBodyWithClass(page, bodyClass);
 		await injectMembersOnlyMarkup(page);
-		await expectInjectedSelectorsToMatch(page);
+		await expectInjectedSelectorsToMatch(page, injectedSelectors);
 		await expectElementsHidden(page, injectedSelectors);
 		// The feature scopes its whole rule to `:not(:has(yt-sponsorships-hub))`, i.e. it deliberately stops hiding on
 		// membership hub views. The generated bodyClass strips that guard, so nothing else in the spec exercises it.

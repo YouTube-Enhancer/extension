@@ -1,14 +1,12 @@
-import type { Page } from "@playwright/test";
-
 import { test } from "playwright.config";
 
 import { metadata } from "@/src/features/hidePosts/index.metadata";
 import {
+	expectBodyClassToStayAbsent,
 	expectBodyWithClass,
 	expectBodyWithoutClass,
 	expectElementsHidden,
-	expectElementsNotHidden,
-	expectToStay
+	expectElementsNotHidden
 } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
@@ -33,16 +31,6 @@ const {
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const { home, watch } = pageTypeRecord;
-
-/** A single read would sample before the feature could have added the class, so hold the expectation for a settle window. */
-async function expectBodyClassToStayAbsent(page: Page): Promise<void> {
-	await expectToStay(
-		async () =>
-			page.evaluate((className) => document.body.classList.contains(className), bodyClass),
-		false,
-		{ page }
-	);
-}
 
 test.describe("hidePosts", () => {
 	for (const pageType of testPages) {
@@ -122,6 +110,6 @@ test.describe("hidePosts", () => {
 	test(`should not hide posts on non-target page`, async ({ page }) => {
 		await navigateToPageType(page, nonTargetPage!);
 		await enableFeature(page, "hidePosts.enabled");
-		await expectBodyClassToStayAbsent(page);
+		await expectBodyClassToStayAbsent(page, bodyClass);
 	});
 });

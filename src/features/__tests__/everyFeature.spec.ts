@@ -6,6 +6,7 @@ import type { PageType } from "@/src/features/_registry/types";
 import type { configuration, Path } from "@/src/types";
 import type { FilterKeysByValueType } from "@/src/utils/_tests/types";
 
+import { watchExtensionErrors } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementSelectors } from "@/src/utils/_tests/constants";
 import { loadDefaultConfig, setOption } from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
@@ -77,16 +78,6 @@ async function enableEverythingOn(
 
 async function setEverySwitch(page: Page, switches: Switch[], enabled: boolean): Promise<void> {
 	for (const key of switches) await setOption(page, key, enabled);
-}
-
-/** Uncaught errors and unhandled rejections raised by the extension's own scripts on the page. */
-function watchExtensionErrors(page: Page): string[] {
-	const errors: string[] = [];
-	page.on("pageerror", (error) => {
-		if ((error.stack ?? "").includes("chrome-extension://"))
-			errors.push(`${error.message}\n${error.stack ?? ""}`);
-	});
-	return errors;
 }
 
 test.describe("every feature", () => {

@@ -1,14 +1,12 @@
-import type { Page } from "@playwright/test";
-
 import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/hidePlaylistRecommendationsFromHomePage/index.metadata";
 import {
+	expectBodyClassToStayAbsent,
 	expectBodyWithClass,
 	expectBodyWithoutClass,
 	expectElementsHidden,
-	expectElementsNotHidden,
-	expectToStay
+	expectElementsNotHidden
 } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
@@ -38,16 +36,6 @@ const { home, watch } = pageTypeRecord;
 // Home tiles come in the classic renderer (a#video-title-link) and the lockup layout (yt-lockup-view-model).
 const regularTileSelector =
 	'ytd-browse[page-subtype="home"] ytd-rich-item-renderer:has(a#video-title-link, yt-lockup-view-model a[href^="/watch?v="]):not(:has(yt-collection-thumbnail-view-model))';
-
-/** A single read would sample before the feature could have added the class, so hold the expectation for a settle window. */
-async function expectBodyClassToStayAbsent(page: Page): Promise<void> {
-	await expectToStay(
-		async () =>
-			page.evaluate((className) => document.body.classList.contains(className), bodyClass),
-		false,
-		{ page }
-	);
-}
 
 test.describe("hidePlaylistRecommendationsFromHomePage", () => {
 	for (const pageType of testPages) {
@@ -152,6 +140,6 @@ test.describe("hidePlaylistRecommendationsFromHomePage", () => {
 	test(`should not hide playlist recommendations on non-target page`, async ({ page }) => {
 		await navigateToPageType(page, nonTargetPage!);
 		await enableFeature(page, "hidePlaylistRecommendationsFromHomePage.enabled");
-		await expectBodyClassToStayAbsent(page);
+		await expectBodyClassToStayAbsent(page, bodyClass);
 	});
 });

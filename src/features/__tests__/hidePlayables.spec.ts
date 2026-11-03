@@ -1,6 +1,6 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
+import { test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
 
@@ -8,7 +8,8 @@ import {
 	expectBodyWithClass,
 	expectBodyWithoutClass,
 	expectElementsHidden,
-	expectElementsNotHidden
+	expectElementsNotHidden,
+	expectInjectedSelectorsToMatch
 } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
@@ -37,17 +38,6 @@ const playablesControlSelector = `#${playablesHostId} ytd-rich-section-renderer.
 /** The feature selector scoped to the injected host, so no assertion can accidentally observe YouTube's own markup. */
 const injectedSelectors = selectors.map((selector) => `#${playablesHostId} ${selector}`);
 
-/**
- * Fails when the scoped selector matches nothing. Without it a stale synthetic markup block would make the display
- * assertions iterate over zero elements and pass without ever looking at the feature's effect.
- */
-async function expectInjectedSelectorsToMatch(page: Page): Promise<void> {
-	const unmatched = await page.evaluate(
-		(scoped) => scoped.filter((selector) => document.querySelector(selector) === null),
-		[...injectedSelectors]
-	);
-	expect(unmatched).toEqual([]);
-}
 /**
  * The playables shelf is only served on some home feeds, so a synthetic one is injected next to a rich section that
  * links elsewhere. The sibling proves the rule only hits the shelf that links to /playables.
@@ -91,7 +81,7 @@ test.describe("hidePlayables", () => {
 				await expectElementsHidden(page, selectors, { requireMatch: true });
 			} else {
 				await injectPlayablesShelf(page);
-				await expectInjectedSelectorsToMatch(page);
+				await expectInjectedSelectorsToMatch(page, injectedSelectors);
 				await expectElementsHidden(page, injectedSelectors, { requireMatch: true });
 			}
 		});
@@ -106,7 +96,7 @@ test.describe("hidePlayables", () => {
 		await navigateToPageType(page, watch);
 		await disableFeature(page, "hidePlayables.enabled");
 		await injectPlayablesShelf(page);
-		await expectInjectedSelectorsToMatch(page);
+		await expectInjectedSelectorsToMatch(page, injectedSelectors);
 		// Baseline: the shelf is visible before the feature runs, so the hidden assertion below can only be its doing.
 		await expectElementsNotHidden(page, injectedSelectors);
 		await enableFeature(page, "hidePlayables.enabled");

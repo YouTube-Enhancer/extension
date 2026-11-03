@@ -9,7 +9,8 @@ import {
 	expectBodyWithClass,
 	expectBodyWithoutClass,
 	expectElementsHidden,
-	expectElementsNotHidden
+	expectElementsNotHidden,
+	expectInjectedSelectorsToMatch
 } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
@@ -48,17 +49,6 @@ const [, aiButtonGlyph = ""] =
 		selectors.find((selector) => selector.startsWith("button-view-model")) ?? ""
 	) ?? [];
 
-/**
- * Fails when one of the scoped selectors matches nothing. Without it a stale synthetic markup block would make the
- * display assertions iterate over zero elements and pass without ever looking at the feature's effect.
- */
-async function expectInjectedSelectorsToMatch(page: Page, list: readonly string[]): Promise<void> {
-	const unmatched = await page.evaluate(
-		(scoped) => scoped.filter((selector) => document.querySelector(selector) === null),
-		[...list]
-	);
-	expect(unmatched).toEqual([]);
-}
 /**
  * Computed `display` of every element matching the feature selectors, in document order. Used as a baseline so the
  * disabled state can be compared against how the page looked before the feature ever ran, instead of assuming the

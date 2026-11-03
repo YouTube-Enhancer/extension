@@ -1,13 +1,14 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
+import { test } from "playwright.config";
 
 import { metadata } from "@/src/features/hideOfficialArtistVideosFromHomePage/index.metadata";
 import {
 	expectBodyWithClass,
 	expectBodyWithoutClass,
 	expectElementsHidden,
-	expectElementsNotHidden
+	expectElementsNotHidden,
+	expectInjectedSelectorsToMatch
 } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
@@ -41,17 +42,6 @@ const [firstSelector] = selectors;
 /** Taken from the generated selector so the synthetic card carries exactly the glyph the feature CSS looks for. */
 const [, artistBadgeGlyph = ""] = /path\[d="([^"]+)"\]/.exec(firstSelector) ?? [];
 
-/**
- * Fails when the scoped selector matches nothing. Without it a stale synthetic markup block would make the display
- * assertions iterate over zero elements and pass without ever looking at the feature's effect.
- */
-async function expectInjectedSelectorsToMatch(page: Page): Promise<void> {
-	const unmatched = await page.evaluate(
-		(scoped) => scoped.filter((selector) => document.querySelector(selector) === null),
-		[...injectedSelectors]
-	);
-	expect(unmatched).toEqual([]);
-}
 /**
  * Official artist cards are only served on some home feeds, so a synthetic one is injected instead. The trailing
  * control element matches none of the selectors and proves the rule stays scoped.
@@ -155,7 +145,7 @@ test.describe("hideOfficialArtistVideosFromHomePage", () => {
 		await navigateToPageType(page, home);
 		await disableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
 		await injectOfficialArtistMarkup(page);
-		await expectInjectedSelectorsToMatch(page);
+		await expectInjectedSelectorsToMatch(page, injectedSelectors);
 		// Baseline: the card is visible before the feature runs, so the hidden assertion below can only be its doing.
 		await expectElementsNotHidden(page, injectedSelectors);
 		await enableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
@@ -174,7 +164,7 @@ test.describe("hideOfficialArtistVideosFromHomePage", () => {
 		// The generated selector is not scoped to `ytd-browse[page-subtype="home"]`, so the includePages gate is the
 		// only thing keeping an identical card visible off the home feed.
 		await injectOfficialArtistMarkup(page);
-		await expectInjectedSelectorsToMatch(page);
+		await expectInjectedSelectorsToMatch(page, injectedSelectors);
 		await expectElementsNotHidden(page, injectedSelectors);
 	});
 	test("removes the hide when SPA-navigating away from home and restores it on return", async ({

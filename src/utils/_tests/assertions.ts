@@ -28,6 +28,15 @@ export async function expectAnyMatch(
 		)
 		.toBe(true);
 }
+/** Fails once the body class appears and stays absent for the observation window. */
+export async function expectBodyClassToStayAbsent(page: Page, bodyClass: string): Promise<void> {
+	await expectToStay(
+		async () =>
+			page.evaluate((className) => document.body.classList.contains(className), bodyClass),
+		false,
+		{ page }
+	);
+}
 export async function expectBodyWithClass(
 	page: Page,
 	bodyClass: string,
@@ -159,6 +168,17 @@ export async function expectFeatureMenuItemToBeTruthy(page: Page, featureId: Fea
 	const menuItem = page.locator(`#${featureId}`);
 	await expect(menuItem).toBeAttached();
 }
+/** Fails when any of the selectors is not present on the page. */
+export async function expectInjectedSelectorsToMatch(
+	page: Page,
+	list: readonly string[]
+): Promise<void> {
+	const unmatched = await page.evaluate(
+		(scoped) => scoped.filter((selector) => document.querySelector(selector) === null),
+		[...list]
+	);
+	expect(unmatched).toEqual([]);
+}
 /** Asserts a toggle button's checked state (aria-checked) and, optionally, its title text. */
 export async function expectToggleButtonState(
 	page: Page,
@@ -170,6 +190,7 @@ export async function expectToggleButtonState(
 	await expect(button).toHaveAttribute("aria-checked", String(checked), { timeout });
 	if (title !== undefined) await expect(button).toHaveAttribute("data-title", title, { timeout });
 }
+
 /**
  * Asserts that `getter` keeps returning `expected` for the whole settle window. Use it for negative tests
  * ("X does not happen"), where a single poll would pass on its first sample before the feature could act.
@@ -189,6 +210,20 @@ export async function expectToStay(
 		await page.waitForTimeout(intervalMs);
 	} while (Date.now() < end);
 }
+
+/**
+ * Uncaught errors and unhandled rejections raised by the extension's own scripts on the page.
+ * Filters to chrome-extension:// stacks so YouTube's own page errors don't fail a test.
+ */
+export function watchExtensionErrors(page: Page): string[] {
+	const errors: string[] = [];
+	page.on("pageerror", (error) => {
+		if ((error.stack ?? "").includes("chrome-extension://"))
+			errors.push(`${error.message}\n${error.stack ?? ""}`);
+	});
+	return errors;
+}
+
 /**
  * Button placement waits on the player controls, not on player readiness, so this budget only has to ride out
  * slow renders: 45 s normally, and 60 s on a live fixture, where the stream hunt has already consumed most of
