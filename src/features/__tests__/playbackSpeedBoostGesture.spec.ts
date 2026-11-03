@@ -7,6 +7,7 @@ import { youtubePlayerMaxSpeed } from "@/src/types";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setFeatureValue } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { OSD_SELECTOR as osdSelector, readOnScreenDisplayState } from "@/src/utils/_tests/osd";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const { home, shorts, watch } = pageTypeRecord;
@@ -14,7 +15,6 @@ const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies) ?? home;
 
 const VIDEO_SELECTOR = "video.html5-main-video";
-const osdSelector = "canvas#yte-osd";
 // One speed step per 10px of horizontal displacement; ten segments at the default 0.25 step is +2.5x.
 const DEFAULT_STEP_BOOST = 2.5;
 const {
@@ -85,30 +85,6 @@ async function pressPointOnVideo(page: Page): Promise<{ x: number; y: number }> 
 		await page.waitForTimeout(250);
 	}
 	throw new Error("no video element has a press point in the viewport");
-}
-
-/**
- * Reads the on-screen display canvas: its inline position plus how many pixels were actually painted.
- * The painted count is what proves the speed display was drawn, since an empty canvas is still appended.
- */
-async function readOnScreenDisplayState(
-	page: Page
-): Promise<null | { left: string; painted: number; top: string }> {
-	return page.evaluate((selector) => {
-		const canvas = document.querySelector<HTMLCanvasElement>(selector);
-		if (!canvas) return null;
-		const context = canvas.getContext("2d");
-		if (!context) return null;
-		const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
-		let painted = 0;
-		for (let index = 3; index < data.length; index += 4) {
-			if (data[index] > 0) painted++;
-		}
-		const {
-			style: { left, top }
-		} = canvas;
-		return { left, painted, top };
-	}, osdSelector);
 }
 
 async function readPaused(page: Page): Promise<boolean> {

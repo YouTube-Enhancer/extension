@@ -8,6 +8,7 @@ import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, volume } from "@/src/utils/_tests/constants";
 import { enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { OSD_SELECTOR } from "@/src/utils/_tests/osd";
 import {
 	dispatchWheelNotches,
 	getCurrentVolume,
@@ -16,7 +17,6 @@ import {
 } from "@/src/utils/_tests/player";
 
 const { shorts, watch } = pageTypeRecord;
-const OSD_SELECTOR = "canvas#yte-osd";
 /** Long enough that a display survives the option writes and polls of a multi-step test. */
 const LONG_HIDE_TIME = 10000;
 /** The manager clamps the font size to 48..72 px and adds 15 px, so a "text" canvas is 63..87 px high. */

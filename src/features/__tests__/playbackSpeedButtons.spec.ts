@@ -18,6 +18,7 @@ import {
 } from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import { OSD_SELECTOR as osdSelector, readOnScreenDisplayState } from "@/src/utils/_tests/osd";
 import { getCurrentSpeed, setValueOnYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -30,7 +31,6 @@ const speedAdjustment = 0.25;
 const customSpeedAdjustment = 0.5;
 // getMinSpeed(0.25) - the lowest rate the buttons may reach with the default step.
 const minSpeed = 0.25;
-const osdSelector = "canvas#yte-osd";
 const increaseButtonId = "yte-feature-increasePlaybackSpeedButton-button";
 const decreaseButtonId = "yte-feature-decreasePlaybackSpeedButton-button";
 async function countSpeedButtons(page: Page): Promise<number> {
@@ -39,29 +39,6 @@ async function countSpeedButtons(page: Page): Promise<number> {
 			document.querySelectorAll(`#${increaseId}, #${decreaseId}`).length,
 		[increaseButtonId, decreaseButtonId] as const
 	);
-}
-/**
- * Reads the on-screen display canvas: its inline position plus how many pixels were actually painted.
- * The painted count is what proves the speed display was drawn, since an empty canvas is still appended.
- */
-async function readOnScreenDisplayState(
-	page: Page
-): Promise<null | { left: string; painted: number; top: string }> {
-	return page.evaluate((selector) => {
-		const canvas = document.querySelector<HTMLCanvasElement>(selector);
-		if (!canvas) return null;
-		const context = canvas.getContext("2d");
-		if (!context) return null;
-		const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
-		let painted = 0;
-		for (let index = 3; index < data.length; index += 4) {
-			if (data[index] > 0) painted++;
-		}
-		const {
-			style: { left, top }
-		} = canvas;
-		return { left, painted, top };
-	}, osdSelector);
 }
 test.describe("playbackSpeedButtons", () => {
 	for (const pageType of testPages) {

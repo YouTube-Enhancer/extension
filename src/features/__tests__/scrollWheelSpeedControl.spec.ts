@@ -16,6 +16,7 @@ import {
 	setVolume,
 	waitForScrollWheelControl
 } from "@/src/utils/_tests/player";
+import { hasPaintedPixels, OSD_SELECTOR } from "@/src/utils/_tests/osd";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 // Speed control always requires a modifier key; start at 1.0 so both increase (→1.25) and decrease (→0.75) are in range
@@ -25,7 +26,6 @@ const steps = 0.25;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 // "altKey" is the helper's default modifier, so the Alt cases are already covered by the per-page tests below.
 const modifierKeys = ["ctrlKey", "shiftKey"] as const;
-const OSD_SELECTOR = "canvas#yte-osd";
 
 async function enableSpeedControl(page: Page, initialSpeed: number) {
 	await navigateToPageType(page, watch);
@@ -35,20 +35,6 @@ async function enableSpeedControl(page: Page, initialSpeed: number) {
 	await waitForScrollWheelControl(page, "speed", true);
 	await setValueOnYouTubePlayer(page, watch, "setPlaybackRate", initialSpeed);
 	await expect.poll(async () => getCurrentSpeed(page, watch)).toBe(initialSpeed);
-}
-/** Reads the alpha channel of the on-screen display canvas and reports whether it painted anything at all. */
-async function hasPaintedPixels(page: Page) {
-	return page.evaluate((selector) => {
-		const canvas = document.querySelector<HTMLCanvasElement>(selector);
-		if (!canvas) return null;
-		const context = canvas.getContext("2d");
-		if (!context) return null;
-		const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
-		for (let index = 3; index < data.length; index += 4) {
-			if (data[index] !== 0) return true;
-		}
-		return false;
-	}, OSD_SELECTOR);
 }
 
 test.describe("scrollWheelSpeedControl", () => {
