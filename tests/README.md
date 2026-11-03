@@ -26,7 +26,7 @@ When the session exists, tests run against it: the profile lives at `playwright/
 ## Layout
 
 - `src/features/__tests__/<featureId>.spec.ts` — one spec per feature, named after the feature id. This is where you write tests.
-- `src/features/__tests__/__base__.spec.ts` — a deliberately empty template. When `playwright.config.ts` loads, `generateMissingFeatureTests()` copies it over for any registered feature that has no spec yet, so new features show up as empty spec files that trivially pass. Replace the copy with real tests.
+- `src/features/__tests__/base.spec.ts.template` — the spec template. When `playwright.config.ts` loads, `generateMissingFeatureTests()` fills it in for any registered feature that has no spec, or an empty one left from the old empty-template days, so every new feature lands with the bare-minimum contract in place: disabled in the shipped defaults, a clean load on its first target page, and no page-gate leaks. The lifecycle sequence (reload, in-page navigation, disable, re-enable) belongs to the registry-wide sweep from issue #1479, not to each spec; fill in the feature's own effect tests after that.
 - `src/features/__tests__/__generated__/` — generated selector helpers, not tests. Hide-features get their target selectors here (`hideFeatureSelectors`), so a spec never hardcodes YouTube's class names for things it only hides.
 - `tests/test-settings*.json` — deliberately broken/legacy/conflicting settings files used by `src/pages/options/Options.spec.ts`. Don't "fix" them.
 - `tests/globalSetup.ts` — the build check described above.

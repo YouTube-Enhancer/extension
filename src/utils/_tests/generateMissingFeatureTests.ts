@@ -1,21 +1,30 @@
-import { copyFileSync, existsSync, readdirSync } from "fs";
+import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "fs";
 import { dirname, isAbsolute, join, resolve } from "path";
 import { cwd } from "process";
 import { fileURLToPath } from "url";
 
+/** Replaced with the feature id in the generated spec's metadata import and enabled key. */
+const FEATURE_ID_PLACEHOLDER = "__FEATURE_ID__";
+const TEMPLATE_NAME = "base.spec.ts.template";
+
 export function generateMissingFeatureTests() {
 	const featuresDir = getFeaturesDir();
 	if (!featuresDir) return;
+	const templatePath = join(featuresDir, "__tests__", TEMPLATE_NAME);
+	if (!existsSync(templatePath)) return;
+	const template = readFileSync(templatePath, "utf8");
 	// Get the list of feature names
 	const featureNames = getFeatureNames(featuresDir);
-	// Loop through the feature names
+	// Loop through the list of feature names
 	for (const featureName of featureNames) {
 		// Check if the test file exists
 		const testFilePath = join(featuresDir, "__tests__", `${featureName}.spec.ts`);
-		// If the test file doesn't exist, create it based on the __base__.spec.ts
-		if (!existsSync(testFilePath)) {
+		// Create the spec from the template when it is missing or a zero-byte leftover that
+		// asserts nothing, so a registered feature always has a spec carrying the contract.
+		const usable = existsSync(testFilePath) && statSync(testFilePath).size > 0;
+		if (!usable) {
 			console.log("Creating test file for feature: " + featureName);
-			copyFileSync(join(featuresDir, "__tests__", "__base__.spec.ts"), testFilePath);
+			writeFileSync(testFilePath, template.replaceAll(FEATURE_ID_PLACEHOLDER, featureName));
 		}
 	}
 }

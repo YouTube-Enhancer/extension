@@ -1,0 +1,45 @@
+import { test, expect } from "playwright.config";
+
+import { metadata } from "@/src/features/__FEATURE_ID__/index.metadata";
+import { watchExtensionErrors } from "@/src/utils/_tests/assertions";
+import { enableFeature, loadDefaultConfig } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
+const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
+
+/**
+ * Bare-minimum contract, generated for every registered feature so a spec can never be
+ * missing. What it deliberately does not re-test: the enable, reload, in-page navigation,
+ * disable and re-enable sequence runs for every feature from the registry-wide lifecycle
+ * sweep (issue #1479), so only the cases the sweep cannot know about live here. What
+ * belongs on top of it: the feature's own effect on each page in `testPages` (the body
+ * class, the button, the element it hides, the config it writes) plus anything
+ * feature-specific. Adapt every case to what the feature actually does.
+ */
+test.describe("__FEATURE_ID__", () => {
+	test("is disabled in the shipped defaults", async () => {
+		expect(await loadDefaultConfig()).toMatchObject({ __FEATURE_ID__: { enabled: false } });
+	});
+
+	test(`loads ${testPages[0]} cleanly at its defaults`, async ({ page }) => {
+		const errors = watchExtensionErrors(page);
+		await navigateToPageType(page, testPages[0]);
+		await page.waitForTimeout(2000);
+		expect(errors, "the extension raised errors on the page").toEqual([]);
+	});
+
+	test("raises no errors on a non-target page", async ({ page }) => {
+		test.skip(nonTargetPage === undefined, "every page type belongs to this feature");
+		if (!nonTargetPage) return;
+		const errors = watchExtensionErrors(page);
+		await navigateToPageType(page, nonTargetPage);
+		await enableFeature(page, "__FEATURE_ID__.enabled");
+		// The page gate must keep the feature's listeners away from a page it was not built
+		// for; a leaked onEnable arms them anyway and misfires against elements that do not
+		// exist, which shows up as a page error somewhere else in the suite.
+		await page.waitForTimeout(2000);
+		expect(errors, "the extension raised errors on the page").toEqual([]);
+	});
+});
