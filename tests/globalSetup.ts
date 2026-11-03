@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "fs";
 import { join } from "path";
 import { cwd } from "process";
 
@@ -18,6 +18,20 @@ import { cwd } from "process";
  *   cannot work at all.
  */
 const E2E_MARKER = "yte-config-processing";
+/**
+ * Build inputs: a dist older than any of these is stale even when every presence
+ * check above passes. This is how a build can ship without an entire feature
+ * (sources picked up after the last build, dist still test-capable), which
+ * failed every spec for the feature in ways that looked like test bugs.
+ */
+const SOURCE_ROOTS = ["src", "public"];
+const SOURCE_FILES = [
+	"package.json",
+	"pnpm-lock.yaml",
+	"pnpm-workspace.yaml",
+	"tsconfig.json",
+	"vite.config.ts"
+];
 
 export default function ensureTestCapableBuild(): void {
 	const optionsHtml = join(cwd(), "dist", "Chrome", "src", "pages", "options", "index.html");
@@ -33,6 +47,13 @@ export default function ensureTestCapableBuild(): void {
 	const contentBundle = join(cwd(), "dist", "Chrome", "src", "pages", "content", "index.js");
 	if (!existsSync(contentBundle) || !readFileSync(contentBundle, "utf8").includes(E2E_MARKER)) {
 		buildTestDist("E2E entrypoints missing from dist/Chrome (release build)");
+		return;
+	}
+	// The oldest of the two build outputs, so a dist where only one bundle stage
+	// was rebuilt still counts as stale against newer sources.
+	const builtAt = Math.min(statSync(optionsHtml).mtimeMs, statSync(contentBundle).mtimeMs);
+	if (newestSourceMtimeMs() > builtAt) {
+		buildTestDist("sources are newer than dist/Chrome");
 	}
 }
 
@@ -43,4 +64,25 @@ function buildTestDist(reason: string): void {
 		env: { ...process.env, NODE_ENV: "development" },
 		stdio: "inherit"
 	});
+}
+
+/** Newest mtime across the build inputs (files only, not directories). */
+function newestSourceMtimeMs(): number {
+	let newest = 0;
+	const consider = (path: string): void => {
+		try {
+			const stats = statSync(path);
+			if (stats.isFile() && stats.mtimeMs > newest) newest = stats.mtimeMs;
+		} catch {
+			// A file can vanish mid-scan; its mtime is not our problem then.
+		}
+	};
+	for (const root of SOURCE_ROOTS) {
+		const dir = join(cwd(), root);
+		if (!existsSync(dir)) continue;
+		for (const entry of readdirSync(dir, { encoding: "utf8", recursive: true }))
+			consider(join(dir, entry));
+	}
+	for (const file of SOURCE_FILES) consider(join(cwd(), file));
+	return newest;
 }
