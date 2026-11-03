@@ -109,3 +109,26 @@ You don't need all of it on day one. The core battery (1–5) is the minimum for
 - Features attach listeners to `document`, some in the capture phase, so any stray click in a test can trigger something. Keep interactions minimal and always disable the feature at the end of a test.
 - User-visible strings come from the locales; assert them with the locale helpers (`localeText`) so a wording change doesn't break tests, and so locale coverage comes for free.
 - When a test fails on a real page, it's often YouTube changing, not the extension. Before fixing product code, rerun the test alone with `--workers=1` — a failure that only exists under full-suite load is a throttle or timing problem, not a regression.
+
+## Quarantine and flaky tests
+
+Some tests are quarantined or on a watch list, and the conventions for both are:
+
+**Solo lane.** `playlistManagementButtons.spec.ts:388` (the save-to-Watch-Later test) times out inside the suite because sibling specs rewrite the same account's Watch Later playlist while it polls. It skips itself unless `YTE_SOLO_LANE` is set, so it runs solo after the suite:
+
+```
+YTE_SOLO_LANE=1 pnpm exec playwright test src/features/__tests__/playlistManagementButtons.spec.ts:388 --project=chromium
+```
+
+Solo means alone in the invocation: batching it with other specs that write the same account's playlists reproduces the failure.
+
+**Flaky rotation watch list.** Failures in these get rerun alone with `--workers=1` before being treated as regressions (line numbers refer to this tree and drift; the test names are the anchor):
+
+- `playbackSpeedBoostGesture.spec.ts:108`, "dragging right boosts the speed and releasing reverts it"
+- `hidePlaylistRecommendationsFromHomePage.spec.ts:126`, "drops the hide class when SPA navigating off home and restores it on return"
+- `saveToWatchLaterButton.spec.ts:309`, "save button should be removed when navigating in-page to a non-target page"
+- `saveToWatchLaterButton.spec.ts:463`, "actions row button shows the saved state for a video already in Watch Later"
+- `everyFeature.spec.ts:244`, the live enable/disable sweep
+- `everyFeature.spec.ts:289`, the stripped-page sweep: the hard-failure watch, a 240-second timeout in the live-sweep family
+
+A failure that only shows up under full-suite load is load, not a regression: rerun it alone first.
