@@ -7,6 +7,7 @@ import { expectToStay } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { isInTheaterMode } from "@/src/utils/_tests/fullscreen";
 import {
 	navigateToPageType,
 	reloadPage,
@@ -25,14 +26,6 @@ const { watch } = pageTypeRecord;
 async function clickPlayerSizeButton(page: Page): Promise<void> {
 	await ensurePlayerControlsVisible(page, watch);
 	await page.locator("button.ytp-size-button").evaluate((el) => (el as HTMLButtonElement).click());
-}
-/** Reads YouTube's own theater layout flag, the state maximizePlayer branches on and minimizePlayer restores. */
-async function isInTheaterMode(page: Page): Promise<boolean> {
-	return await page.evaluate(() => {
-		const container =
-			document.querySelector("ytd-watch-grid") ?? document.querySelector("ytd-watch-flexy");
-		return container?.hasAttribute("theater") ?? false;
-	});
 }
 async function isPlayerMaximized(page: Page): Promise<boolean> {
 	return await page.locator("body").evaluate((body) => body.hasAttribute("yte-maximized"));

@@ -2,8 +2,6 @@ import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
-import type { Nullable, YouTubePlayerDiv } from "@/src/types";
-
 import { metadata } from "@/src/features/scrollWheelVolumeControl/index.metadata";
 import {
 	expectBodyWithClass,
@@ -19,6 +17,8 @@ import {
 	dispatchWheelNotches,
 	getCurrentSpeed,
 	getCurrentVolume,
+	isPlayerMuted,
+	mutePlayer,
 	setValueOnYouTubePlayer,
 	setVolume,
 	waitForScrollWheelControl,
@@ -72,20 +72,6 @@ async function enableVolumeControl(page: Page, stepSize = steps) {
 	await waitForScrollWheelVolumeControl(page, true);
 	await setVolume(page, volume, watch);
 	await expect.poll(async () => getCurrentVolume(page, watch)).toBe(volume);
-}
-async function isPlayerMuted(page: Page): Promise<Nullable<boolean>> {
-	return page.evaluate(async () => {
-		const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
-		if (!player?.isMuted) return null;
-		return await player.isMuted();
-	});
-}
-async function mutePlayer(page: Page): Promise<void> {
-	await page.evaluate(async () => {
-		const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
-		if (!player?.mute) return;
-		await player.mute();
-	});
 }
 test.describe("scrollWheelVolumeControl", () => {
 	for (const pageType of testPages) {

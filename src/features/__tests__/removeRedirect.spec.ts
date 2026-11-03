@@ -9,12 +9,13 @@ import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import {
+	navigateToLiveOrSkip,
 	navigateToPageType,
 	reloadPage,
 	spaNavigateToRelatedVideo
 } from "@/src/utils/_tests/navigation";
 
-const { channel_home: channelHome, live, watch } = pageTypeRecord;
+const { channel_home: channelHome, watch } = pageTypeRecord;
 
 // The feature has no page-specific branch; an explicit page set avoids running every test on all 11 page types.
 const testPages: PageType[] = [channelHome, watch];
@@ -140,21 +141,6 @@ async function measureChatRedirectAnchor(chatFrame: FrameLocator): Promise<Nulla
 	} catch {
 		// The chat frame can be between documents, which detaches the body handle; the next poll retries.
 		return null;
-	}
-}
-
-/**
- * The live fixture crawls the fixture channel for a stream that is on air right now. When the channel is dark
- * there is nothing to assert, which has to be a visible skip instead of a failure.
- */
-async function navigateToLiveOrSkip(page: Page): Promise<void> {
-	try {
-		await navigateToPageType(page, live);
-	} catch (error) {
-		test.skip(
-			true,
-			`no live stream is currently available on the fixture channel (${error instanceof Error ? error.message : String(error)})`
-		);
 	}
 }
 

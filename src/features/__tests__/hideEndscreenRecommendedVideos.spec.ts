@@ -1,9 +1,4 @@
-import type { Page } from "@playwright/test";
-
 import { test } from "playwright.config";
-
-import type { PageType } from "@/src/features/_registry/types";
-import type { YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/hideEndscreenRecommendedVideos/index.metadata";
 import {
@@ -14,7 +9,7 @@ import {
 } from "@/src/utils/_tests/assertions";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
-import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
+import { showEndScreen } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
@@ -24,19 +19,6 @@ const {
 } = hideFeatureSelectors;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
-
-async function showEndScreen(page: Page, pageType: PageType): Promise<void> {
-	const duration = (await getValueFromYouTubePlayer(page, "getDuration", pageType)) ?? 0;
-	await page.evaluate(
-		async (seconds) => {
-			const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
-			if (!player) return;
-			await player.seekTo(seconds, true);
-			await player.playVideo();
-		},
-		Math.max(0, duration - 2)
-	);
-}
 
 test.describe("hideEndscreenRecommendedVideos", () => {
 	for (const pageType of testPages) {

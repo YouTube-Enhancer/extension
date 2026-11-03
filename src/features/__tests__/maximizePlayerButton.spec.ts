@@ -20,6 +20,7 @@ import {
 	enableFeature,
 	setOption
 } from "@/src/utils/_tests/features";
+import { isInTheaterMode } from "@/src/utils/_tests/fullscreen";
 import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType, spaNavigateToHome } from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
@@ -406,12 +407,6 @@ async function getMaximizedLayoutState(page: Page) {
 		videoHeightMatchesViewport:
 			document.body.style.getPropertyValue("--yte-video-height") === `${window.innerHeight}px`
 	}));
-}
-async function isInTheaterMode(page: Page): Promise<boolean> {
-	return page.evaluate(
-		() =>
-			document.querySelector("ytd-watch-flexy, ytd-watch-grid")?.hasAttribute("theater") ?? false
-	);
 }
 /**
  * Sweeps the pointer up to the top edge of the viewport the way a real pointer travels, in steps.

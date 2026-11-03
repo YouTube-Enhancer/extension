@@ -1,7 +1,11 @@
 import type { Page } from "@playwright/test";
 
-import type { Nullable } from "@/src/types";
+import type { FeatureMenuItemId, Nullable } from "@/src/types";
 
+/** Clicks a feature-menu item by its element id, if it is rendered. */
+export async function clickOpenFeatureMenuItem(page: Page, id: FeatureMenuItemId): Promise<void> {
+	await page.evaluate((itemId) => document.getElementById(itemId)?.click(), id);
+}
 /** Returns true when at least one of the selectors currently matches an element. */
 export async function hasAnyMatch(page: Page, selectors: readonly string[]): Promise<boolean> {
 	return page.evaluate(
@@ -56,6 +60,7 @@ export async function injectDynamicContentWhenPresent(
 	} while (Date.now() < deadline);
 	return null;
 }
+
 async function injectDynamicContentIfPresent(
 	page: Page,
 	selectors: readonly string[]

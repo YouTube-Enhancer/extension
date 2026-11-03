@@ -4,6 +4,7 @@ import type { PageType } from "@/src/features/_registry/types";
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import { hasAmbientModeMenuItem } from "@/src/utils/_tests/ambient";
+import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { markLiveFixturePage, unmarkLiveFixturePage } from "@/src/utils/_tests/liveFixture";
 import {
 	ensurePlayerControlsVisible,
@@ -241,6 +242,17 @@ export async function spaNavigateBack(page: Page, pageType: PageType): Promise<v
  */
 const NOT_LIVE_OR_AD =
 	':not(:has(.ytBadgeShapeText:text-is("LIVE"))):not(:has(ytd-thumbnail-overlay-time-status-renderer[overlay-style="LIVE"])):not(:has(.ytBadgeShapeAd))';
+/** Navigates to the live fixture, skipping the test when no stream is on air. */
+export async function navigateToLiveOrSkip(page: Page): Promise<void> {
+	try {
+		await navigateToPageType(page, pageTypeRecord.live);
+	} catch (error) {
+		test.skip(
+			true,
+			`no live stream is currently available on the fixture channel (${error instanceof Error ? error.message : String(error)})`
+		);
+	}
+}
 /**
  * Single-page navigation from a feed page (home, search, subscriptions, channel videos) to the first regular
  * video it lists, so the extension's navigation hooks and includePages gate run for a watch page.
@@ -471,6 +483,7 @@ async function tryOpenLiveVideo(page: Page, video: Locator, channelUrl: string):
 	}
 	return true;
 }
+
 async function videoMeetsCapabilities(
 	page: Page,
 	requirements: FixtureCapabilities[]

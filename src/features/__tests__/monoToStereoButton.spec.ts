@@ -2,8 +2,6 @@ import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
-import type { FeatureMenuItemId } from "@/src/types";
-
 import { metadata } from "@/src/features/monoToStereoButton/index.metadata";
 import {
 	expectFeatureButtonToBeFalsy,
@@ -14,6 +12,7 @@ import {
 	expectToStay
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
+import { clickOpenFeatureMenuItem } from "@/src/utils/_tests/dom";
 import {
 	clickFeatureButton,
 	clickFeatureMenuItem,
@@ -33,14 +32,6 @@ const { watch } = pageTypeRecord;
 const onTitle = /Stereo Output$/;
 const offTitle = /^Original Audio$/;
 
-/**
- * Clicks a feature menu item that is already showing. The feature menu's default open type is "click", so
- * re-running clickFeatureMenuItem would press the menu button again and toggle the menu shut before the item
- * could be clicked.
- */
-async function clickOpenFeatureMenuItem(page: Page, id: FeatureMenuItemId): Promise<void> {
-	await page.evaluate((itemId) => document.getElementById(itemId)?.click(), id);
-}
 async function isMonoEnabled(page: Page): Promise<boolean> {
 	return await page.evaluate(() => !!window.engine?.monoEnabled);
 }

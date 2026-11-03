@@ -2,9 +2,6 @@ import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
-import type { PageType } from "@/src/features/_registry/types";
-import type { YouTubePlayerDiv } from "@/src/types";
-
 import { metadata } from "@/src/features/hideEndScreenCards/index.metadata";
 import {
 	expectBodyWithClass,
@@ -22,7 +19,7 @@ import {
 	spaNavigateBack,
 	spaNavigateToHome
 } from "@/src/utils/_tests/navigation";
-import { freezeAndGetTime, getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
+import { freezeAndGetTime, showEndScreen } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
@@ -55,19 +52,6 @@ async function hasRenderedEndScreenCard(page: Page): Promise<boolean> {
 				)
 			),
 		[...selectors]
-	);
-}
-/** Seeks to just before the end of the video so YouTube renders the end screen cards this feature targets. */
-async function showEndScreen(page: Page, pageType: PageType): Promise<void> {
-	const duration = (await getValueFromYouTubePlayer(page, "getDuration", pageType)) ?? 0;
-	await page.evaluate(
-		async (seconds) => {
-			const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
-			if (!player) return;
-			await player.seekTo(seconds, true);
-			await player.playVideo();
-		},
-		Math.max(0, duration - 2)
 	);
 }
 

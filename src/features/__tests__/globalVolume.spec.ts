@@ -1,5 +1,3 @@
-import type { Page } from "@playwright/test";
-
 import { expect, optionsTest, test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
@@ -16,7 +14,7 @@ import {
 	spaNavigateToRelatedVideo
 } from "@/src/utils/_tests/navigation";
 import { setCheckbox } from "@/src/utils/_tests/options";
-import { getCurrentVolume, setVolume } from "@/src/utils/_tests/player";
+import { getCurrentVolume, isPlayerMuted, mutePlayer, setVolume } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { home, shorts, watch } = pageTypeRecord;
@@ -39,28 +37,6 @@ const globalVolumeLabel = localeText("settings.sections.globalVolume.enable.labe
 const rememberVolumeLabel = localeText(
 	"settings.sections.miscellaneous.settings.rememberVolume.enable.label"
 );
-/** Reads the player's mute state, which no other helper exposes and which setPlayerVolume has to clear. */
-async function isPlayerMuted(page: Page): Promise<boolean | null> {
-	return await page.evaluate(async () => {
-		const player = document.querySelector<
-			HTMLDivElement & { isMuted?: () => boolean | Promise<boolean> }
-		>("div#movie_player");
-		if (!player?.isMuted) return null;
-		return await player.isMuted();
-	});
-}
-/** Mutes the player so a later assertion can tell an applied volume from an audible one. */
-async function mutePlayer(page: Page): Promise<void> {
-	await page.evaluate(async () => {
-		const player = document.querySelector<HTMLDivElement & { mute?: () => Promise<void> | void }>(
-			"div#movie_player"
-		);
-		await player?.mute?.();
-	});
-	await expect
-		.poll(async () => isPlayerMuted(page), { intervals: [200], timeout: APPLY_VOLUME_TIMEOUT })
-		.toBe(true);
-}
 test.describe("globalVolume", () => {
 	for (const pageType of testPages) {
 		test(`should set global volume to ${volume} when enabled on ${pageType}`, async ({ page }) => {

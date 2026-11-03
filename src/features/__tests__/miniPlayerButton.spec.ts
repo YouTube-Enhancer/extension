@@ -1,8 +1,4 @@
-import type { Page } from "@playwright/test";
-
 import { expect, test } from "playwright.config";
-
-import type { FeatureMenuItemId } from "@/src/types";
 
 import { metadata } from "@/src/features/miniPlayerButton/index.metadata";
 import {
@@ -13,6 +9,7 @@ import {
 	expectToggleButtonState
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
+import { clickOpenFeatureMenuItem } from "@/src/utils/_tests/dom";
 import {
 	clickFeatureButton,
 	clickFeatureMenuItem,
@@ -30,15 +27,6 @@ const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const { home, watch } = pageTypeRecord;
 const onTitle = /^Mini Player on$/;
 const offTitle = /^Mini Player off$/;
-
-/**
- * Clicks a feature menu item that is already showing. The feature menu's default open type is "click", so
- * re-running clickFeatureMenuItem would press the menu button again and toggle the menu shut before the item
- * could be clicked.
- */
-async function clickOpenFeatureMenuItem(page: Page, id: FeatureMenuItemId): Promise<void> {
-	await page.evaluate((itemId) => document.getElementById(itemId)?.click(), id);
-}
 
 test.describe("miniPlayerButton", () => {
 	for (const pageType of testPages) {

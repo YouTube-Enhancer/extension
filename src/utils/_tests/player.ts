@@ -277,6 +277,26 @@ export async function isCaptionsUnavailable(page: Page): Promise<boolean> {
 		}
 	});
 }
+/** Whether the player reports muted, or null when the API is unavailable. */
+export async function isPlayerMuted(page: Page): Promise<Nullable<boolean>> {
+	return page.evaluate(async () => {
+		const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+		if (!player?.isMuted) return null;
+		return await player.isMuted();
+	});
+}
+/** Mutes the player and waits until it reports muted. */
+export async function mutePlayer(
+	page: Page,
+	{ timeout = 20000 }: { timeout?: number } = {}
+): Promise<void> {
+	await page.evaluate(async () => {
+		const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+		if (!player?.mute) return;
+		await player.mute();
+	});
+	await expect.poll(async () => isPlayerMuted(page), { intervals: [200], timeout }).toBe(true);
+}
 export async function setValueOnYouTubePlayer<
 	P extends Page,
 	K extends YouTubePlayerSetKeys,
@@ -306,6 +326,19 @@ export async function setValueOnYouTubePlayer<
 export async function setVolume(page: Page, volume: number, pageType: PageType = "watch") {
 	await setValueOnYouTubePlayer(page, pageType, "setVolume", volume);
 }
+/** Seeks to just before the end and plays, so the end screen shows. */
+export async function showEndScreen(page: Page, pageType: PageType): Promise<void> {
+	const duration = (await getValueFromYouTubePlayer(page, "getDuration", pageType)) ?? 0;
+	await page.evaluate(
+		async (seconds) => {
+			const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
+			if (!player) return;
+			await player.seekTo(seconds, true);
+			await player.playVideo();
+		},
+		Math.max(0, duration - 2)
+	);
+}
 /**
  * Waits for the video to offer captions. YouTube hides the subtitles button, or labels it unavailable, until the
  * caption track has loaded - and again for a moment after a skipped pre-roll ad - so one sample right after
@@ -318,6 +351,7 @@ export async function waitForCaptionsAvailable(page: Page, timeout = 10000): Pro
 		.then(() => true)
 		.catch(() => false);
 }
+
 /**
  * Waits for a scroll wheel control to finish attaching (or detaching) its listeners.
  * The controller marks the body with `yte-scroll-wheel-<type>-control` while that control is active.
@@ -340,9 +374,11 @@ export async function waitForScrollWheelControl(
 		)
 		.toBe(active);
 }
+
 export async function waitForScrollWheelVolumeControl(page: Page, active: boolean): Promise<void> {
 	await waitForScrollWheelControl(page, "volume", active);
 }
+
 export async function waitForStableTime(page: Page, pageType: PageType, threshold = 150) {
 	let last = await getValueFromYouTubePlayer(page, "getCurrentTime", pageType);
 	let stableFor = 0;

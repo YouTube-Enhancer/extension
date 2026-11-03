@@ -2,6 +2,14 @@ import type { Page } from "@playwright/test";
 
 import { expect } from "playwright.config";
 
+/** Whether the watch page is in theater mode. */
+export async function isInTheaterMode(page: Page): Promise<boolean> {
+	return page.evaluate(
+		() =>
+			document.querySelector("ytd-watch-flexy, ytd-watch-grid")?.hasAttribute("theater") ?? false
+	);
+}
+
 export async function toggleFullscreen(page: Page, fullscreen: boolean): Promise<void> {
 	const isFullscreen = await page
 		.locator("ytd-app")
