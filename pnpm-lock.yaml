@@ -148,7 +148,7 @@ importers:
         version: 3.18.2(tailwindcss@3.4.19(tsx@4.23.13)(yaml@2.9.1))
       fs-extra:
         specifier: ^11.4.0
-        version: 11.4.0
+        version: 11.4.1
       get-installed-browsers:
         specifier: ^0.1.7
         version: 0.1.7
@@ -2088,8 +2088,8 @@ packages:
   fraction.js@5.3.4:
     resolution: {integrity: sha512-1X1NTtiJphryn/uLQz3whtY6jK3fTqoE3ohKs0tT+Ujr1W59oopxmoEh7Lu5p6vBaPbgoM0bzveAW4Qi5RyWDQ==}
 
-  fs-extra@11.4.0:
-    resolution: {integrity: sha512-EQsFzMUJkCKGr1ePqlYADkIUmHW1s3ZXr5Yqy6wbGrfUCphpl2maM/kyOIRA2HpP3AaFQTZXD4ldjek+nccddA==}
+  fs-extra@11.4.1:
+    resolution: {integrity: sha512-KYAb4c9BJQI6QqGKthV68OHe0badztdXJWKo0WtBA9IuCFPTKvE5ZdUBglP833aMjhaSPNO4A5j/EkzZtGlKjA==}
     engines: {node: '>=14.14'}
 
   fsevents@2.3.3:
@@ -4261,7 +4261,7 @@ snapshots:
       aggregate-error: 5.0.0
       env-ci: 11.2.0
       execa: 9.6.1
-      fs-extra: 11.4.0
+      fs-extra: 11.4.1
       lodash-es: 4.18.1
       nerf-dart: 1.0.0
       normalize-url: 9.0.1
@@ -5276,7 +5276,7 @@ snapshots:
 
   fraction.js@5.3.4: {}
 
-  fs-extra@11.4.0:
+  fs-extra@11.4.1:
     dependencies:
       graceful-fs: 4.2.11
       jsonfile: 6.2.1
