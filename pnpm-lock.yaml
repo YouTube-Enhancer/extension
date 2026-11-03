@@ -85,7 +85,7 @@ importers:
         version: 11.0.1(semantic-release@25.0.9(supports-color@10.2.2)(typescript@7.0.2))(supports-color@10.2.2)
       '@thedutchcoder/postcss-rem-to-px':
         specifier: ^0.0.2
-        version: 0.0.2(postcss@8.5.31)
+        version: 0.0.2(postcss@8.5.32)
       '@total-typescript/ts-reset':
         specifier: ^0.6.1
         version: 0.6.1
@@ -121,7 +121,7 @@ importers:
         version: 8.0.0
       autoprefixer:
         specifier: ^10.6.1
-        version: 10.6.1(postcss@8.5.31)
+        version: 10.6.1(postcss@8.5.32)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -163,10 +163,10 @@ importers:
         version: 7.0.2002
       postcss:
         specifier: ^8.5.28
-        version: 8.5.31
+        version: 8.5.32
       postcss-safe-parser:
         specifier: ^7.1.0
-        version: 7.1.0(postcss@8.5.31)
+        version: 7.1.0(postcss@8.5.32)
       recharts:
         specifier: ^3.10.1
         version: 3.10.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react-is@19.3.0)(react@19.3.0)(redux@5.0.1)
@@ -2875,8 +2875,8 @@ packages:
   postcss-value-parser@4.2.0:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
 
-  postcss@8.5.31:
-    resolution: {integrity: sha512-YUbWYCgErwnMAVkjUnYa+KlMBzGpHwiIt/DE7f0G33AuX2LH9UcTk6KgWxd3zRU+pN3u/C+Xl3EnMLM4Hea7Sg==}
+  postcss@8.5.32:
+    resolution: {integrity: sha512-LJlKCCAUFKOuZxipUdYw1NzIITEsPcgyOG9LkvRJvuKj/bRzbuRY0ARXvL0pWGpsZvn8jku+LMep2eU0seHp8g==}
     engines: {node: ^10 || ^12 || >=14}
 
   prelude-ls@1.2.1:
@@ -4260,9 +4260,9 @@ snapshots:
       '@tanstack/query-core': 5.103.1
       react: 19.3.0
 
-  '@thedutchcoder/postcss-rem-to-px@0.0.2(postcss@8.5.31)':
+  '@thedutchcoder/postcss-rem-to-px@0.0.2(postcss@8.5.32)':
     dependencies:
-      postcss: 8.5.31
+      postcss: 8.5.32
 
   '@total-typescript/ts-reset@0.6.1': {}
 
@@ -4562,13 +4562,13 @@ snapshots:
 
   async@3.2.6: {}
 
-  autoprefixer@10.6.1(postcss@8.5.31):
+  autoprefixer@10.6.1(postcss@8.5.32):
     dependencies:
       browserslist: 4.29.0
       caniuse-lite: 1.0.30001810
       fraction.js: 5.3.4
       picocolors: 1.1.1
-      postcss: 8.5.31
+      postcss: 8.5.32
       postcss-value-parser: 4.2.0
 
   b4a@1.9.0: {}
@@ -4965,7 +4965,7 @@ snapshots:
   eslint-plugin-tailwindcss@3.18.2(tailwindcss@3.4.19(tsx@4.23.13)(yaml@2.9.1)):
     dependencies:
       fast-glob: 3.3.3
-      postcss: 8.5.31
+      postcss: 8.5.32
       tailwindcss: 3.4.19(tsx@4.23.13)(yaml@2.9.1)
 
   eslint-scope@9.1.2:
@@ -5761,35 +5761,35 @@ snapshots:
       find-up: 2.1.0
       load-json-file: 4.0.0
 
-  postcss-import@15.1.0(postcss@8.5.31):
+  postcss-import@15.1.0(postcss@8.5.32):
     dependencies:
-      postcss: 8.5.31
+      postcss: 8.5.32
       postcss-value-parser: 4.2.0
       read-cache: 1.0.2
       resolve: 1.22.12
 
-  postcss-js@4.1.0(postcss@8.5.31):
+  postcss-js@4.1.0(postcss@8.5.32):
     dependencies:
       camelcase-css: 2.0.1
-      postcss: 8.5.31
+      postcss: 8.5.32
 
-  postcss-load-config@6.0.1(jiti@1.21.7)(postcss@8.5.31)(tsx@4.23.13)(yaml@2.9.1):
+  postcss-load-config@6.0.1(jiti@1.21.7)(postcss@8.5.32)(tsx@4.23.13)(yaml@2.9.1):
     dependencies:
       lilconfig: 3.1.3
     optionalDependencies:
       jiti: 1.21.7
-      postcss: 8.5.31
+      postcss: 8.5.32
       tsx: 4.23.13
       yaml: 2.9.1
 
-  postcss-nested@6.2.0(postcss@8.5.31):
+  postcss-nested@6.2.0(postcss@8.5.32):
     dependencies:
-      postcss: 8.5.31
+      postcss: 8.5.32
       postcss-selector-parser: 7.1.7
 
-  postcss-safe-parser@7.1.0(postcss@8.5.31):
+  postcss-safe-parser@7.1.0(postcss@8.5.32):
     dependencies:
-      postcss: 8.5.31
+      postcss: 8.5.32
 
   postcss-selector-parser@7.1.7:
     dependencies:
@@ -5798,7 +5798,7 @@ snapshots:
 
   postcss-value-parser@4.2.0: {}
 
-  postcss@8.5.31:
+  postcss@8.5.32:
     dependencies:
       nanoid: 3.3.20
       picocolors: 1.1.1
@@ -6205,11 +6205,11 @@ snapshots:
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.1.1
-      postcss: 8.5.31
-      postcss-import: 15.1.0(postcss@8.5.31)
-      postcss-js: 4.1.0(postcss@8.5.31)
-      postcss-load-config: 6.0.1(jiti@1.21.7)(postcss@8.5.31)(tsx@4.23.13)(yaml@2.9.1)
-      postcss-nested: 6.2.0(postcss@8.5.31)
+      postcss: 8.5.32
+      postcss-import: 15.1.0(postcss@8.5.32)
+      postcss-js: 4.1.0(postcss@8.5.32)
+      postcss-load-config: 6.0.1(jiti@1.21.7)(postcss@8.5.32)(tsx@4.23.13)(yaml@2.9.1)
+      postcss-nested: 6.2.0(postcss@8.5.32)
       postcss-selector-parser: 7.1.7
       resolve: 1.22.12
       sucrase: 3.35.1
@@ -6442,7 +6442,7 @@ snapshots:
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
-      postcss: 8.5.31
+      postcss: 8.5.32
       rolldown: 1.2.12
       tinyglobby: 0.2.17
     optionalDependencies:
