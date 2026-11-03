@@ -6,7 +6,12 @@ import { metadata } from "@/src/features/globalVolume/index.metadata";
 import { metadata as rememberVolumeMetadata } from "@/src/features/rememberVolume/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, volume } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	disableFeature,
+	enableFeature,
+	expectFeatureSilentOnNonTargetPage,
+	setOption
+} from "@/src/utils/_tests/features";
 import { localeText } from "@/src/utils/_tests/locale";
 import {
 	navigateToPageType,
@@ -264,12 +269,5 @@ optionsTest.describe("globalVolume options", () => {
 });
 
 test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
-	const errors: string[] = [];
-	page.on("pageerror", (error) => errors.push(String(error)));
-	await navigateToPageType(page, home);
-	await enableFeature(page, "globalVolume.enabled");
-	// The page gate must keep the feature's listeners away from a page it was not built for;
-	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
-	await page.waitForTimeout(2000);
-	expect(errors).toEqual([]);
+	await expectFeatureSilentOnNonTargetPage(page, "globalVolume.enabled", home);
 });

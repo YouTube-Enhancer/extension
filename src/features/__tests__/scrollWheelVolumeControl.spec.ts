@@ -9,7 +9,12 @@ import {
 	expectToStay
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord, volume } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	disableFeature,
+	enableFeature,
+	expectFeatureSilentOnNonTargetPage,
+	setOption
+} from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { pageSetup } from "@/src/utils/_tests/pageSetup";
 import {
@@ -412,12 +417,5 @@ test.describe("scrollWheelVolumeControl", () => {
 });
 
 test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
-	const errors: string[] = [];
-	page.on("pageerror", (error) => errors.push(String(error)));
-	await navigateToPageType(page, home);
-	await enableFeature(page, "scrollWheelVolumeControl.enabled");
-	// The page gate must keep the feature's listeners away from a page it was not built for;
-	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
-	await page.waitForTimeout(2000);
-	expect(errors).toEqual([]);
+	await expectFeatureSilentOnNonTargetPage(page, "scrollWheelVolumeControl.enabled", home);
 });

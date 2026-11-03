@@ -4,7 +4,11 @@ import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/shareShortener/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import {
+	disableFeature,
+	enableFeature,
+	expectFeatureSilentOnNonTargetPage
+} from "@/src/utils/_tests/features";
 import {
 	navigateToPageType,
 	reloadPage,
@@ -175,12 +179,5 @@ test.describe("shareShortener", () => {
 });
 
 test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
-	const errors: string[] = [];
-	page.on("pageerror", (error) => errors.push(String(error)));
-	await navigateToPageType(page, home);
-	await enableFeature(page, "shareShortener.enabled");
-	// The page gate must keep the feature's listeners away from a page it was not built for;
-	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
-	await page.waitForTimeout(2000);
-	expect(errors).toEqual([]);
+	await expectFeatureSilentOnNonTargetPage(page, "shareShortener.enabled", home);
 });

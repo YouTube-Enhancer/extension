@@ -7,9 +7,13 @@ import { metadata } from "@/src/features/automaticallyEnableClosedCaptions/index
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { navigateToCaptionedPage, spaNavigateToCaptionedVideo } from "@/src/utils/_tests/captions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import {
+	disableFeature,
+	enableFeature,
+	expectFeatureSilentOnNonTargetPage
+} from "@/src/utils/_tests/features";
 import { localeText } from "@/src/utils/_tests/locale";
-import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
+import { reloadPage } from "@/src/utils/_tests/navigation";
 import { setCheckbox } from "@/src/utils/_tests/options";
 import {
 	ensureCaptionsState,
@@ -238,12 +242,5 @@ optionsTest.describe("automaticallyEnableClosedCaptions options", () => {
 });
 
 test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
-	const errors: string[] = [];
-	page.on("pageerror", (error) => errors.push(String(error)));
-	await navigateToPageType(page, home);
-	await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
-	// The page gate must keep the feature's listeners away from a page it was not built for;
-	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
-	await page.waitForTimeout(2000);
-	expect(errors).toEqual([]);
+	await expectFeatureSilentOnNonTargetPage(page, "automaticallyEnableClosedCaptions.enabled", home);
 });

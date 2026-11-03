@@ -7,7 +7,12 @@ import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 import { OFFICIAL_ARTIST_BADGE_SELECTOR } from "@/src/features/videoHistory/constants";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	disableFeature,
+	enableFeature,
+	expectFeatureSilentOnNonTargetPage,
+	setOption
+} from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { pageSetup } from "@/src/utils/_tests/pageSetup";
 import { readStoredState } from "@/src/utils/_tests/storage";
@@ -323,12 +328,5 @@ test.describe("videoHistory", () => {
 });
 
 test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
-	const errors: string[] = [];
-	page.on("pageerror", (error) => errors.push(String(error)));
-	await navigateToPageType(page, home);
-	await enableFeature(page, "videoHistory.enabled");
-	// The page gate must keep the feature's listeners away from a page it was not built for;
-	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
-	await page.waitForTimeout(2000);
-	expect(errors).toEqual([]);
+	await expectFeatureSilentOnNonTargetPage(page, "videoHistory.enabled", home);
 });

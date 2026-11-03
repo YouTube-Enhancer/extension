@@ -1,5 +1,7 @@
 import type { Page } from "@playwright/test";
 
+import { expect } from "playwright.config";
+
 import type { PageType } from "@/src/features/_registry/types";
 import type {
 	ButtonPlacement,
@@ -11,8 +13,9 @@ import type {
 } from "@/src/types";
 import type { FilterKeysByValueType } from "@/src/utils/_tests/types";
 
-import { expectFeatureButtonToBeIn } from "@/src/utils/_tests/assertions";
+import { expectFeatureButtonToBeIn, watchExtensionErrors } from "@/src/utils/_tests/assertions";
 import { sendYouTubeMessage } from "@/src/utils/_tests/messaging";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import {
 	ensurePlayerControlsVisible,
 	isExecutionContextDestroyed
@@ -158,6 +161,23 @@ export async function setOption<
 	await setFeatureValue(page, id, value);
 }
 let _cachedDefaultConfig: configuration | null = null;
+/**
+ * Enables the feature on a page outside its dependencies and proves the page gate keeps it
+ * quiet there: the enable must land without an uncaught extension error and the armed
+ * feature must not misfire against elements that page does not have.
+ */
+export async function expectFeatureSilentOnNonTargetPage(
+	page: Page,
+	featureKey: Parameters<typeof enableFeature>[1],
+	pageType: PageType
+): Promise<void> {
+	const errors = watchExtensionErrors(page);
+	await navigateToPageType(page, pageType);
+	await enableFeature(page, featureKey);
+	await page.waitForTimeout(2000);
+	expect(errors, "the extension raised errors on the page").toEqual([]);
+}
+
 export async function loadDefaultConfig(): Promise<configuration> {
 	if (_cachedDefaultConfig) return _cachedDefaultConfig;
 	const vite = await import("vite");

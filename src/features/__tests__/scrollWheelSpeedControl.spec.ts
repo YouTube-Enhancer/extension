@@ -5,8 +5,14 @@ import { expect, test } from "playwright.config";
 import { metadata } from "@/src/features/scrollWheelSpeedControl/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, volume } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import {
+	disableFeature,
+	enableFeature,
+	expectFeatureSilentOnNonTargetPage,
+	setOption
+} from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { hasPaintedPixels, OSD_SELECTOR } from "@/src/utils/_tests/osd";
 import {
 	adjustWithScrollWheel,
 	dispatchWheelNotches,
@@ -16,7 +22,6 @@ import {
 	setVolume,
 	waitForScrollWheelControl
 } from "@/src/utils/_tests/player";
-import { hasPaintedPixels, OSD_SELECTOR } from "@/src/utils/_tests/osd";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 // Speed control always requires a modifier key; start at 1.0 so both increase (→1.25) and decrease (→0.75) are in range
@@ -229,12 +234,5 @@ test.describe("scrollWheelSpeedControl", () => {
 });
 
 test(`enabling on ${home}, a non-target page, raises no errors`, async ({ page }) => {
-	const errors: string[] = [];
-	page.on("pageerror", (error) => errors.push(String(error)));
-	await navigateToPageType(page, home);
-	await enableFeature(page, "scrollWheelSpeedControl.enabled");
-	// The page gate must keep the feature's listeners away from a page it was not built for;
-	// a leaked onEnable arms them anyway and misfires against elements that do not exist.
-	await page.waitForTimeout(2000);
-	expect(errors).toEqual([]);
+	await expectFeatureSilentOnNonTargetPage(page, "scrollWheelSpeedControl.enabled", home);
 });
