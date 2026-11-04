@@ -59,6 +59,11 @@
 						}
 					}
 				},
+				"keywordBlocklist": {
+					"messages": {
+						"maskedTitle": "已屏蔽的关键词"
+					}
+				},
 				"loopButton": {
 					"button": {
 						"label": "循环播放",
@@ -131,12 +136,13 @@
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToRemoveVideo": "Failed to remove video from Watch Later",
+						"failedToRemoveVideo": "从稍后观看中删除视频失败",
 						"failedToSaveVideo": "将视频保存到稍后观看失败",
-						"removeVideo": "Remove from Watch Later",
-						"removedVideo": "Removed from Watch Later",
+						"removeVideo": "从稍后再看移除",
+						"removedVideo": "已从稍后再看移除",
 						"saveVideo": "保存至稍后观看",
-						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
+						"savedVideo": "已经保存至稍后观看",
+						"unavailable": "由于YouTube的更改，保存到稍后再看按钮不可用"
 					}
 				},
 				"screenshotButton": {
@@ -161,11 +167,6 @@
 							"on": "音量提升 ({{value}} 分贝)"
 						}
 					}
-				},
-				"keywordBlocklist": {
-					"messages": {
-						"maskedTitle": "Blocked keyword"
-					}
 				}
 			}
 		},
@@ -187,6 +188,14 @@
 						"title": "重置所有设置为默认设置，点击确认按钮以保存更改",
 						"value": "重新开始"
 					}
+				},
+				"donateCta": {
+					"label": "支持",
+					"description": "YouTube Enhancer 是免费和开源的。捐赠是可选的，有助于跟上YouTube的更改。",
+					"kofi": "Ko-fi",
+					"paypal": "PayPal",
+					"cashApp": "现金应用",
+					"venmo": "Venmo"
 				},
 				"buttonPlacement": {
 					"select": {
@@ -253,7 +262,7 @@
 						"title": "功能菜单设置"
 					}
 				},
-				"iconAlt": "YouTube Enhancer Icon",
+				"iconAlt": "YouTube Enhancer 图标",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "设置导出成功",
@@ -278,13 +287,13 @@
 					"title": "语言"
 				},
 				"modifierKeys": {
-					"altKey": "Alt",
-					"ctrlKey": "Ctrl",
-					"shiftKey": "Shift"
+					"altKey": "Alt 键",
+					"ctrlKey": "Ctrl 键",
+					"shiftKey": "Shift 键"
 				},
 				"numberInput": {
-					"stepDown": "Subtract one",
-					"stepUp": "Add one"
+					"stepDown": "减少一个",
+					"stepUp": "添加一个"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "在更新时打开设置页面",
@@ -308,18 +317,10 @@
 					}
 				},
 				"select": {
-					"placeholder": "Select an option"
+					"placeholder": "选择一个选项"
 				},
 				"settingSearch": {
 					"placeholder": "搜索设置"
-				},
-				"youtubeDataApiV3Key": {
-					"getApiKeyLinkText": "您可以从这里获取一个",
-					"input": {
-						"label": "API 密钥",
-						"title": "输入您的 Youtube 数据 API V3 密钥。"
-					},
-					"title": "YouTube API V3 密钥"
 				}
 			},
 			"notifications": {
@@ -362,6 +363,17 @@
 	},
 	"settings": {
 		"sections": {
+			"customFontFamily": {
+				"enable": {
+					"label": "自定义字体家族",
+					"title": "更改整个YouTube使用的字体家族"
+				},
+				"fontFamily": {
+					"label": "字体家族",
+					"title": "要应用的 CSS 字体家族值"
+				},
+				"title": "自定义字体家族设置"
+			},
 			"customCSS": {
 				"enable": {
 					"label": "启用自定义 CSS",
@@ -373,6 +385,31 @@
 					"noProblems": "未发现问题"
 				},
 				"title": "自定义 CSS 设置"
+			},
+			"videoSeeking": {
+				"settings": {
+					"customSeekDuration": {
+						"enable": {
+							"label": "Custom seek duration",
+							"title": "Customize the video seek duration"
+						},
+						"jumpBy": {
+							"label": "Seek duration",
+							"title": "Time to seek forward or backward"
+						}
+					},
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Forward/rewind buttons",
+							"title": "Adds forward and rewind buttons to the video player"
+						},
+						"time": {
+							"label": "Forward/rewind time",
+							"title": "The amount of time to forward/rewind the video by"
+						}
+					}
+				},
+				"title": "Video seeking settings"
 			},
 			"deepDarkCSS": {
 				"enable": {
@@ -421,21 +458,6 @@
 				},
 				"title": "YouTube 暗黑模式设置"
 			},
-			"videoSeeking": {
-				"settings": {
-					"forwardRewindButtons": {
-						"enable": {
-							"label": "启用快进/快退按钮",
-							"title": "给视频播放器添加快进/快退按钮"
-						},
-						"time": {
-							"label": "快进/快退时间",
-							"title": "快进/快退视频的时间长度"
-						}
-					}
-				},
-				"title": "Video seeking settings"
-			},
 			"globalVolume": {
 				"enable": {
 					"label": "总是以此音量开始视频",
@@ -448,6 +470,25 @@
 					}
 				},
 				"title": "全局音量覆盖"
+			},
+			"hideLiveStreamChat": {
+				"enable": {
+					"label": "隐藏直播聊天",
+					"title": "隐藏直播聊天"
+				},
+				"settings": {
+					"mode": {
+						"select": {
+							"label": "何时隐藏",
+							"title": "选择是否总是隐藏聊天或只在全屏隐藏它",
+							"options": {
+								"always": "始终隐藏",
+								"fullscreen": "仅在全屏幕中隐藏"
+							}
+						}
+					}
+				},
+				"title": "直播聊天设置"
 			},
 			"miniPlayer": {
 				"button": {
@@ -554,6 +595,12 @@
 							"title": "隐藏AI功能，例如视频摘要，询问AI"
 						}
 					},
+					"hideAutoplayButton": {
+						"enable": {
+							"label": "隐藏自动播放按钮",
+							"title": "从播放器控制中隐藏自动切换按钮"
+						}
+					},
 					"hideEndScreenCards": {
 						"enable": {
 							"label": "隐藏结束界面卡片",
@@ -566,10 +613,34 @@
 							"title": "添加按钮以显示/隐藏视频末尾的卡片"
 						}
 					},
-					"hideLiveStreamChat": {
+					"sharpCorners": {
 						"enable": {
-							"label": "隐藏直播聊天",
-							"title": "隐藏直播聊天"
+							"label": "尖角",
+							"title": "移除来自YouTube元素的边框半径，让您看到一个尖锐的角度"
+						}
+					},
+					"hidePlaylistRecommendations": {
+						"enable": {
+							"label": "隐藏播放列表建议",
+							"title": "在播放列表页面隐藏推荐的视频和播放列表"
+						}
+					},
+					"hideVideoDuration": {
+						"enable": {
+							"label": "隐藏视频时长",
+							"title": "隐藏视频缩略图上的时长显示"
+						}
+					},
+					"hideFullscreenButton": {
+						"enable": {
+							"label": "隐藏全屏按钮",
+							"title": "从播放器控制中隐藏全屏按钮"
+						}
+					},
+					"hideNextButton": {
+						"enable": {
+							"label": "隐藏下一个按钮",
+							"title": "从播放器控制中隐藏下一个视频按钮"
 						}
 					},
 					"hideMembersOnlyVideos": {
@@ -618,6 +689,12 @@
 						"enable": {
 							"label": "隐藏推荐视频",
 							"title": "隐藏推荐视频的侧边栏"
+						}
+					},
+					"hideEndscreenRecommendedVideos": {
+						"enable": {
+							"label": "在结束屏幕上隐藏推荐视频",
+							"title": "隐藏显示在结束屏幕上的推荐视频"
 						}
 					},
 					"hideTranslateComment": {
@@ -762,19 +839,19 @@
 			},
 			"keywordBlocklist": {
 				"enable": {
-					"label": "Enable keyword blocklist",
-					"title": "Masks the titles and thumbnails of videos whose title contains a blocked keyword"
+					"label": "启用关键词屏蔽列表",
+					"title": "遮罩带有已屏蔽关键词的视频的标题和缩略图"
 				},
 				"settings": {
 					"keywords": {
-						"label": "Blocked keywords",
-						"title": "Videos with any of these keywords in their title get their title and thumbnail masked",
-						"add": "Add keyword",
-						"item": "Keyword",
-						"remove": "Remove keyword"
+						"label": "已屏蔽的关键词",
+						"title": "标题中带有这些关键词的视频，其标题和缩略图会被遮罩",
+						"add": "添加关键词",
+						"item": "关键词",
+						"remove": "移除关键词"
 					}
 				},
-				"title": "Keyword blocklist settings"
+				"title": "关键词屏蔽列表设置"
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -887,6 +964,14 @@
 							"title": "每次点击要更改的速度量"
 						},
 						"title": "添加按钮以增加或降低您观看的视频的播放速度"
+					},
+					"boostGesture": {
+						"label": "回放速度提升手势",
+						"select": {
+							"label": "手势速度增量",
+							"title": "每个水平拖动段要更改的速度量"
+						},
+						"title": "鼠标拖动以临时提升播放速度"
 					},
 					"speed": {
 						"select": {

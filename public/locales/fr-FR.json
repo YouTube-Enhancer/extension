@@ -59,6 +59,11 @@
 						}
 					}
 				},
+				"keywordBlocklist": {
+					"messages": {
+						"maskedTitle": "Mot-clé bloqué"
+					}
+				},
 				"loopButton": {
 					"button": {
 						"label": "Boucle",
@@ -114,29 +119,30 @@
 						"failedToRemoveVideo": "Échec de la suppression de la vidéo",
 						"markAsUnwatched": "Marquer comme non visionnée",
 						"markingAsUnwatched": "Marquage comme non visionnée…",
-						"removeAllWatchedVideo": "Remove {{count}} watched video",
-						"removeAllWatchedVideos": "Remove {{count}} watched videos",
+						"removeAllWatchedVideo": "Supprimer {{count}} vidéo regardée",
+						"removeAllWatchedVideos": "Supprimer {{count}} vidéos regardées",
 						"removeVideo": "Supprimer la vidéo",
 						"removingVideo": "Suppression de la vidéo…",
-						"removingWatchedVideos": "Removing watched videos…"
+						"removingWatchedVideos": "Suppression des vidéos regardées…"
 					}
 				},
 				"playlistReverseButton": {
 					"extras": {
 						"toggle": {
-							"off": "Normal order",
-							"on": "Reversed order"
+							"off": "Ordre normal",
+							"on": "Ordre inversé"
 						}
 					}
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToRemoveVideo": "Failed to remove video from Watch Later",
-						"failedToSaveVideo": "Échec de l'enregistrement dans À regarder plus tard",
-						"removeVideo": "Remove from Watch Later",
-						"removedVideo": "Removed from Watch Later",
-						"saveVideo": "Enregistrer dans À regarder plus tard",
-						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
+						"failedToRemoveVideo": "Échec de la suppression de la vidéo de la liste \"Regarder plus tard'",
+						"failedToSaveVideo": "Échec de l'enregistrement de la vidéo dans la liste \"Regarder plus tard\"",
+						"removeVideo": "Supprimer de la liste \"Regarder plus tard\"",
+						"removedVideo": "Supprimé de la liste \"Regarder plus tard\"",
+						"saveVideo": "Enregistrer dans la liste \"Regarder plus tard\"",
+						"savedVideo": "Enregistré dans la liste \"Regarder plus tard\"",
+						"unavailable": "Le bouton Enregistrer dans la liste \"Regarder plus tard\" n'est pas disponible en raison d'une modification de YouTube"
 					}
 				},
 				"screenshotButton": {
@@ -161,11 +167,6 @@
 							"on": "Amplification du volume ({{value}} dB)"
 						}
 					}
-				},
-				"keywordBlocklist": {
-					"messages": {
-						"maskedTitle": "Blocked keyword"
-					}
 				}
 			}
 		},
@@ -187,6 +188,14 @@
 						"title": "Réinitialise tous les paramètres par défaut, cliquez sur le bouton de confirmation pour enregistrer les modifications",
 						"value": "Réinitialiser"
 					}
+				},
+				"donateCta": {
+					"label": "Assistance",
+					"description": "YouTube Enhancer est gratuit et open source. Les dons sont facultatifs et aident à suivre les changements de YouTube.",
+					"kofi": "Ko-fi",
+					"paypal": "PayPal",
+					"cashApp": "Cash App",
+					"venmo": "Venmo"
 				},
 				"buttonPlacement": {
 					"select": {
@@ -253,7 +262,7 @@
 						"title": "Paramètres du menu des fonctionnalités"
 					}
 				},
-				"iconAlt": "YouTube Enhancer Icon",
+				"iconAlt": "Icône YouTube Enhancer",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Paramètres exportés avec succès",
@@ -280,7 +289,7 @@
 				"modifierKeys": {
 					"altKey": "Alt",
 					"ctrlKey": "Ctrl",
-					"shiftKey": "Shift"
+					"shiftKey": "Maj"
 				},
 				"numberInput": {
 					"stepDown": "Subtract one",
@@ -312,14 +321,6 @@
 				},
 				"settingSearch": {
 					"placeholder": "Rechercher un paramètre"
-				},
-				"youtubeDataApiV3Key": {
-					"getApiKeyLinkText": "Vous pouvez en obtenir une ici",
-					"input": {
-						"label": "Clé API",
-						"title": "Saisissez votre clé YouTube Data API V3."
-					},
-					"title": "Clé API YouTube V3"
 				}
 			},
 			"notifications": {
@@ -362,6 +363,17 @@
 	},
 	"settings": {
 		"sections": {
+			"customFontFamily": {
+				"enable": {
+					"label": "Custom font family",
+					"title": "Changes the font family used across YouTube"
+				},
+				"fontFamily": {
+					"label": "Font family",
+					"title": "The CSS font-family value to apply"
+				},
+				"title": "Custom font family settings"
+			},
 			"customCSS": {
 				"enable": {
 					"label": "CSS personnalisé",
@@ -373,6 +385,31 @@
 					"noProblems": "Aucun problème détecté."
 				},
 				"title": "Paramètres CSS personnalisé"
+			},
+			"videoSeeking": {
+				"settings": {
+					"customSeekDuration": {
+						"enable": {
+							"label": "Custom seek duration",
+							"title": "Customize the video seek duration"
+						},
+						"jumpBy": {
+							"label": "Seek duration",
+							"title": "Time to seek forward or backward"
+						}
+					},
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Forward/rewind buttons",
+							"title": "Adds forward and rewind buttons to the video player"
+						},
+						"time": {
+							"label": "Forward/rewind time",
+							"title": "The amount of time to forward/rewind the video by"
+						}
+					}
+				},
+				"title": "Video seeking settings"
 			},
 			"deepDarkCSS": {
 				"enable": {
@@ -421,21 +458,6 @@
 				},
 				"title": "Paramètres YouTube Deep Dark"
 			},
-			"videoSeeking": {
-				"settings": {
-					"forwardRewindButtons": {
-						"enable": {
-							"label": "Boutons Avancer/Reculer",
-							"title": "Ajoute des boutons Avancer et Reculer au lecteur vidéo"
-						},
-						"time": {
-							"label": "Durée d'avance/recul",
-							"title": "Durée du saut avant/arrière dans la vidéo"
-						}
-					}
-				},
-				"title": "Video seeking settings"
-			},
 			"globalVolume": {
 				"enable": {
 					"label": "Toujours démarrer les vidéos à ce volume",
@@ -448,6 +470,25 @@
 					}
 				},
 				"title": "Forçage du volume global"
+			},
+			"hideLiveStreamChat": {
+				"enable": {
+					"label": "Hide live stream chat",
+					"title": "Hides the live stream chat"
+				},
+				"settings": {
+					"mode": {
+						"select": {
+							"label": "When to hide",
+							"title": "Choose whether to always hide the chat or only hide it in fullscreen",
+							"options": {
+								"always": "Always hide",
+								"fullscreen": "Only hide in fullscreen"
+							}
+						}
+					}
+				},
+				"title": "Live stream chat settings"
 			},
 			"miniPlayer": {
 				"button": {
@@ -554,6 +595,12 @@
 							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
+					"hideAutoplayButton": {
+						"enable": {
+							"label": "Hide autoplay button",
+							"title": "Hides the autoplay toggle button from the player controls"
+						}
+					},
 					"hideEndScreenCards": {
 						"enable": {
 							"label": "Masquer les cartes de fin",
@@ -566,10 +613,34 @@
 							"title": "Ajoute un bouton pour afficher/masquer les cartes à la fin de la vidéo"
 						}
 					},
-					"hideLiveStreamChat": {
+					"sharpCorners": {
 						"enable": {
-							"label": "Masquer le chat en direct",
-							"title": "Masque le chat en direct"
+							"label": "Sharp corners",
+							"title": "Removes border-radius from YouTube elements for a sharp corners look"
+						}
+					},
+					"hidePlaylistRecommendations": {
+						"enable": {
+							"label": "Hide playlist recommendations",
+							"title": "Hides recommended videos and playlists on playlist pages"
+						}
+					},
+					"hideVideoDuration": {
+						"enable": {
+							"label": "Hide video duration",
+							"title": "Hides the duration overlay on video thumbnails"
+						}
+					},
+					"hideFullscreenButton": {
+						"enable": {
+							"label": "Hide fullscreen button",
+							"title": "Hides the fullscreen button from the player controls"
+						}
+					},
+					"hideNextButton": {
+						"enable": {
+							"label": "Hide next button",
+							"title": "Hides the next video button from the player controls"
 						}
 					},
 					"hideMembersOnlyVideos": {
@@ -618,6 +689,12 @@
 						"enable": {
 							"label": "Masquer les vidéos recommandées",
 							"title": "Masque la barre latérale qui recommande des vidéos"
+						}
+					},
+					"hideEndscreenRecommendedVideos": {
+						"enable": {
+							"label": "Hide recommended videos on endscreen",
+							"title": "Hides the suggested videos that appear on the endscreen"
 						}
 					},
 					"hideTranslateComment": {
@@ -688,8 +765,8 @@
 					},
 					"saveToWatchLaterButton": {
 						"enable": {
-							"label": "Activer le bouton « Enregistrer dans À regarder plus tard »",
-							"title": "Ajoute un bouton sur les vidéos de l'Accueil et des Abonnements pour les enregistrer dans la playlist « À regarder plus tard »"
+							"label": "Enable save to Watch later button",
+							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch later' playlist"
 						}
 					},
 					"shareShortener": {
@@ -887,6 +964,14 @@
 							"title": "Variation de vitesse par clic"
 						},
 						"title": "Ajoute des boutons pour augmenter ou diminuer la vitesse de lecture de la vidéo en cours"
+					},
+					"boostGesture": {
+						"label": "Playback speed boost gesture",
+						"select": {
+							"label": "Gesture speed increment",
+							"title": "Amount of speed to change for each horizontal drag segment"
+						},
+						"title": "Mouse-Drag to temporarily boost playback speed"
 					},
 					"speed": {
 						"select": {
