@@ -59,6 +59,11 @@
 						}
 					}
 				},
+				"keywordBlocklist": {
+					"messages": {
+						"maskedTitle": "Blocked keyword"
+					}
+				},
 				"loopButton": {
 					"button": {
 						"label": "Повтор",
@@ -131,12 +136,13 @@
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToRemoveVideo": "Failed to remove video from Watch Later",
-						"failedToSaveVideo": "Не вдалося зберегти відео для перегляду пізніше",
-						"removeVideo": "Remove from Watch Later",
-						"removedVideo": "Removed from Watch Later",
-						"saveVideo": "Зберегти до годинника пізніше",
-						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
+						"failedToRemoveVideo": "Failed to remove video from Watch later",
+						"failedToSaveVideo": "Failed to save video to Watch later",
+						"removeVideo": "Remove from Watch later",
+						"removedVideo": "Removed from Watch later",
+						"saveVideo": "Save to Watch later",
+						"savedVideo": "Saved to Watch later",
+						"unavailable": "Save to Watch later button is unavailable due to a YouTube change"
 					}
 				},
 				"screenshotButton": {
@@ -161,11 +167,6 @@
 							"on": "Підсилення гучності ({{value}} дБ)"
 						}
 					}
-				},
-				"keywordBlocklist": {
-					"messages": {
-						"maskedTitle": "Blocked keyword"
-					}
 				}
 			}
 		},
@@ -187,6 +188,14 @@
 						"title": "Скидає всі параметри до стандартних налаштувань, натисніть кнопку \"Підтвердити\", щоб зберегти зміни",
 						"value": "Скинути"
 					}
+				},
+				"donateCta": {
+					"label": "Support",
+					"description": "YouTube Enhancer is free and open source. Donations are optional and help keep up with YouTube's changes.",
+					"kofi": "Ko-fi",
+					"paypal": "PayPal",
+					"cashApp": "Cash App",
+					"venmo": "Venmo"
 				},
 				"buttonPlacement": {
 					"select": {
@@ -312,14 +321,6 @@
 				},
 				"settingSearch": {
 					"placeholder": "Пошук за параметром"
-				},
-				"youtubeDataApiV3Key": {
-					"getApiKeyLinkText": "Звідси ви можете отримати",
-					"input": {
-						"label": "API ключ",
-						"title": "Введіть ваш Youtube Data API V3."
-					},
-					"title": "YouTube API ключ"
 				}
 			},
 			"notifications": {
@@ -362,6 +363,17 @@
 	},
 	"settings": {
 		"sections": {
+			"customFontFamily": {
+				"enable": {
+					"label": "Custom font family",
+					"title": "Changes the font family used across YouTube"
+				},
+				"fontFamily": {
+					"label": "Font family",
+					"title": "The CSS font-family value to apply"
+				},
+				"title": "Custom font family settings"
+			},
 			"customCSS": {
 				"enable": {
 					"label": "Увімкнути користувацький CSS",
@@ -373,6 +385,31 @@
 					"noProblems": "Проблем не виявлено."
 				},
 				"title": "Користувацькі налаштування CSS"
+			},
+			"videoSeeking": {
+				"settings": {
+					"customSeekDuration": {
+						"enable": {
+							"label": "Custom seek duration",
+							"title": "Customize the video seek duration"
+						},
+						"jumpBy": {
+							"label": "Seek duration",
+							"title": "Time to seek forward or backward"
+						}
+					},
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Forward/rewind buttons",
+							"title": "Adds forward and rewind buttons to the video player"
+						},
+						"time": {
+							"label": "Forward/rewind time",
+							"title": "The amount of time to forward/rewind the video by"
+						}
+					}
+				},
+				"title": "Video seeking settings"
 			},
 			"deepDarkCSS": {
 				"enable": {
@@ -421,21 +458,6 @@
 				},
 				"title": "YouTube глибокі темні налаштування"
 			},
-			"videoSeeking": {
-				"settings": {
-					"forwardRewindButtons": {
-						"enable": {
-							"label": "Увімкнути кнопки вперед/назад",
-							"title": "Додає кнопки перемотування до відео плеєра"
-						},
-						"time": {
-							"label": "Час вперед/назад",
-							"title": "Часовий крок перемотки відео вперед/назад"
-						}
-					}
-				},
-				"title": "Video seeking settings"
-			},
 			"globalVolume": {
 				"enable": {
 					"label": "Завжди починати відео з цієї гучності",
@@ -448,6 +470,25 @@
 					}
 				},
 				"title": "Заміна гучності"
+			},
+			"hideLiveStreamChat": {
+				"enable": {
+					"label": "Hide live stream chat",
+					"title": "Hides the live stream chat"
+				},
+				"settings": {
+					"mode": {
+						"select": {
+							"label": "When to hide",
+							"title": "Choose whether to always hide the chat or only hide it in fullscreen",
+							"options": {
+								"always": "Always hide",
+								"fullscreen": "Only hide in fullscreen"
+							}
+						}
+					}
+				},
+				"title": "Live stream chat settings"
 			},
 			"miniPlayer": {
 				"button": {
@@ -554,6 +595,12 @@
 							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
+					"hideAutoplayButton": {
+						"enable": {
+							"label": "Hide autoplay button",
+							"title": "Hides the autoplay toggle button from the player controls"
+						}
+					},
 					"hideEndScreenCards": {
 						"enable": {
 							"label": "Приховати карти кінцевого екрану",
@@ -566,10 +613,34 @@
 							"title": "Додає кнопку для відображення/приховання карт в кінці відео"
 						}
 					},
-					"hideLiveStreamChat": {
+					"sharpCorners": {
 						"enable": {
-							"label": "Сховати чат у реальному часі",
-							"title": "Приховує груповий чат"
+							"label": "Sharp corners",
+							"title": "Removes border-radius from YouTube elements for a sharp corners look"
+						}
+					},
+					"hidePlaylistRecommendations": {
+						"enable": {
+							"label": "Hide playlist recommendations",
+							"title": "Hides recommended videos and playlists on playlist pages"
+						}
+					},
+					"hideVideoDuration": {
+						"enable": {
+							"label": "Hide video duration",
+							"title": "Hides the duration overlay on video thumbnails"
+						}
+					},
+					"hideFullscreenButton": {
+						"enable": {
+							"label": "Hide fullscreen button",
+							"title": "Hides the fullscreen button from the player controls"
+						}
+					},
+					"hideNextButton": {
+						"enable": {
+							"label": "Hide next button",
+							"title": "Hides the next video button from the player controls"
 						}
 					},
 					"hideMembersOnlyVideos": {
@@ -618,6 +689,12 @@
 						"enable": {
 							"label": "Приховати рекомендовані відео",
 							"title": "Приховує бічну панель, яка рекомендує відео"
+						}
+					},
+					"hideEndscreenRecommendedVideos": {
+						"enable": {
+							"label": "Hide recommended videos on endscreen",
+							"title": "Hides the suggested videos that appear on the endscreen"
 						}
 					},
 					"hideTranslateComment": {
@@ -688,8 +765,8 @@
 					},
 					"saveToWatchLaterButton": {
 						"enable": {
-							"label": "Увімкнути функцію збереження",
-							"title": "Додає кнопку до відео \"Додому та Підписки\", щоб зберегти відео в список відтворення \"Подивитися пізніше\""
+							"label": "Enable save to Watch later button",
+							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch later' playlist"
 						}
 					},
 					"shareShortener": {
@@ -887,6 +964,14 @@
 							"title": "Кількість змін, яку потрібно змінити за один клік"
 						},
 						"title": "Додає кнопки для збільшення або зменшення швидкості відтворення відео, яке ви дивитеся"
+					},
+					"boostGesture": {
+						"label": "Playback speed boost gesture",
+						"select": {
+							"label": "Gesture speed increment",
+							"title": "Amount of speed to change for each horizontal drag segment"
+						},
+						"title": "Mouse-Drag to temporarily boost playback speed"
 					},
 					"speed": {
 						"select": {

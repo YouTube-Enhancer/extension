@@ -10,9 +10,9 @@
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "Mono to Stereo",
+						"label": "Mono zu Stereo",
 						"toggle": {
-							"on": "Mono → Stereo Output",
+							"on": "Mono → Stereo Ausgabe",
 							"off": "Original-Audio"
 						}
 					}
@@ -59,6 +59,11 @@
 						}
 					}
 				},
+				"keywordBlocklist": {
+					"messages": {
+						"maskedTitle": "Blocked keyword"
+					}
+				},
 				"loopButton": {
 					"button": {
 						"label": "Schleife",
@@ -70,7 +75,7 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Maximieren",
 						"toggle": {
 							"off": "Maximieren aus",
 							"on": "Maximieren an"
@@ -114,29 +119,30 @@
 						"failedToRemoveVideo": "Fehler beim Entfernen des Videos",
 						"markAsUnwatched": "Als ungesehen markieren",
 						"markingAsUnwatched": "Als ungesehen… markieren",
-						"removeAllWatchedVideo": "Remove {{count}} watched video",
-						"removeAllWatchedVideos": "Remove {{count}} watched videos",
+						"removeAllWatchedVideo": "{{count}} gesehenes Video entfernen",
+						"removeAllWatchedVideos": "Entferne {{count}} gesehene Videos",
 						"removeVideo": "Video entfernen",
 						"removingVideo": "Video… wird entfernt",
-						"removingWatchedVideos": "Removing watched videos…"
+						"removingWatchedVideos": "Gesehene Videos werden entfernt…"
 					}
 				},
 				"playlistReverseButton": {
 					"extras": {
 						"toggle": {
-							"off": "Normal order",
-							"on": "Reversed order"
+							"off": "Normale Reihenfolge",
+							"on": "Umgekehrte Reihenfolge"
 						}
 					}
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToRemoveVideo": "Failed to remove video from Watch Later",
-						"failedToSaveVideo": "Fehler beim Speichern des Videos in Später ansehen",
-						"removeVideo": "Remove from Watch Later",
-						"removedVideo": "Removed from Watch Later",
-						"saveVideo": "Später speichern",
-						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
+						"failedToRemoveVideo": "Failed to remove video from Watch later",
+						"failedToSaveVideo": "Failed to save video to Watch later",
+						"removeVideo": "Remove from Watch later",
+						"removedVideo": "Removed from Watch later",
+						"saveVideo": "Save to Watch later",
+						"savedVideo": "Saved to Watch later",
+						"unavailable": "Save to Watch later button is unavailable due to a YouTube change"
 					}
 				},
 				"screenshotButton": {
@@ -161,11 +167,6 @@
 							"on": "Lautstärkeregelung ({{value}} dB)"
 						}
 					}
-				},
-				"keywordBlocklist": {
-					"messages": {
-						"maskedTitle": "Blocked keyword"
-					}
 				}
 			}
 		},
@@ -187,6 +188,14 @@
 						"title": "Setzt alle Einstellungen auf ihre Standardwerte zurück. Klicken Sie auf die Bestätigungs-Schaltfläche, um die Änderungen zu speichern",
 						"value": "Zurücksetzen"
 					}
+				},
+				"donateCta": {
+					"label": "Support",
+					"description": "YouTube Enhancer is free and open source. Donations are optional and help keep up with YouTube's changes.",
+					"kofi": "Ko-fi",
+					"paypal": "PayPal",
+					"cashApp": "Cash App",
+					"venmo": "Venmo"
 				},
 				"buttonPlacement": {
 					"select": {
@@ -312,14 +321,6 @@
 				},
 				"settingSearch": {
 					"placeholder": "Nach einer Einstellung suchen"
-				},
-				"youtubeDataApiV3Key": {
-					"getApiKeyLinkText": "Du kannst eine von hier erhalten",
-					"input": {
-						"label": "API Schlüssel",
-						"title": "Gib deinen YouTube Data API V3 Schlüssel ein."
-					},
-					"title": "YouTube API V3 Schlüssel"
 				}
 			},
 			"notifications": {
@@ -333,8 +334,8 @@
 						"keepFirst": "{{FEATURE}} behalten",
 						"keepSecond": "{{FEATURE}} behalten",
 						"autoQualityConflict": {
-							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
-							"selectQuality": "Quality:"
+							"description": "Die importierten Einstellungen verwenden \"Auto\"-Qualität, die entfernt wurde. Bitte wähle eine benutzerdefinierte Qualität:",
+							"selectQuality": "Qualität:"
 						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' und '{{FEATURE_B}}' können nicht den gleichen Modifikatorschlüssel verwenden.",
@@ -362,6 +363,17 @@
 	},
 	"settings": {
 		"sections": {
+			"customFontFamily": {
+				"enable": {
+					"label": "Custom font family",
+					"title": "Changes the font family used across YouTube"
+				},
+				"fontFamily": {
+					"label": "Font family",
+					"title": "The CSS font-family value to apply"
+				},
+				"title": "Custom font family settings"
+			},
 			"customCSS": {
 				"enable": {
 					"label": "Benutzerdefiniertes CSS",
@@ -373,6 +385,31 @@
 					"noProblems": "Keine Probleme gefunden."
 				},
 				"title": "Eigene CSS-Einstellungen"
+			},
+			"videoSeeking": {
+				"settings": {
+					"customSeekDuration": {
+						"enable": {
+							"label": "Custom seek duration",
+							"title": "Customize the video seek duration"
+						},
+						"jumpBy": {
+							"label": "Seek duration",
+							"title": "Time to seek forward or backward"
+						}
+					},
+					"forwardRewindButtons": {
+						"enable": {
+							"label": "Forward/rewind buttons",
+							"title": "Adds forward and rewind buttons to the video player"
+						},
+						"time": {
+							"label": "Forward/rewind time",
+							"title": "The amount of time to forward/rewind the video by"
+						}
+					}
+				},
+				"title": "Video seeking settings"
 			},
 			"deepDarkCSS": {
 				"enable": {
@@ -421,21 +458,6 @@
 				},
 				"title": "YouTube dunkle Einstellungen"
 			},
-			"videoSeeking": {
-				"settings": {
-					"forwardRewindButtons": {
-						"enable": {
-							"label": "Vorwärts/Zurückwärts-Buttons",
-							"title": "Fügt dem Videoplayer Schaltflächen vorwärts und zurück"
-						},
-						"time": {
-							"label": "Vorwärts/Rückwärtszeit",
-							"title": "Die Zeit, um das Video weiterzuleiten/zurückzusenden von"
-						}
-					}
-				},
-				"title": "Video seeking settings"
-			},
 			"globalVolume": {
 				"enable": {
 					"label": "Videos mit dieser Lautstärke immer starten",
@@ -448,6 +470,25 @@
 					}
 				},
 				"title": "Globale Lautstärke Überschreibung"
+			},
+			"hideLiveStreamChat": {
+				"enable": {
+					"label": "Hide live stream chat",
+					"title": "Hides the live stream chat"
+				},
+				"settings": {
+					"mode": {
+						"select": {
+							"label": "When to hide",
+							"title": "Choose whether to always hide the chat or only hide it in fullscreen",
+							"options": {
+								"always": "Always hide",
+								"fullscreen": "Only hide in fullscreen"
+							}
+						}
+					}
+				},
+				"title": "Live stream chat settings"
 			},
 			"miniPlayer": {
 				"button": {
@@ -550,8 +591,14 @@
 					},
 					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Hide AI",
-							"title": "Hides AI-powered features, such as video summaries and Ask AI"
+							"label": "KI verstecken",
+							"title": "Versteckt KI-basierte Funktionen, wie Videozusammenfassungen und \"Frag-KI\""
+						}
+					},
+					"hideAutoplayButton": {
+						"enable": {
+							"label": "Hide autoplay button",
+							"title": "Hides the autoplay toggle button from the player controls"
 						}
 					},
 					"hideEndScreenCards": {
@@ -566,10 +613,34 @@
 							"title": "Fügt einen Button hinzu, um die Karten am Ende des Videos anzuzeigen/auszublenden"
 						}
 					},
-					"hideLiveStreamChat": {
+					"sharpCorners": {
 						"enable": {
-							"label": "Live-Stream-Chat ausblenden",
-							"title": "Versteckt den Live-Stream Chat"
+							"label": "Sharp corners",
+							"title": "Removes border-radius from YouTube elements for a sharp corners look"
+						}
+					},
+					"hidePlaylistRecommendations": {
+						"enable": {
+							"label": "Hide playlist recommendations",
+							"title": "Hides recommended videos and playlists on playlist pages"
+						}
+					},
+					"hideVideoDuration": {
+						"enable": {
+							"label": "Hide video duration",
+							"title": "Hides the duration overlay on video thumbnails"
+						}
+					},
+					"hideFullscreenButton": {
+						"enable": {
+							"label": "Hide fullscreen button",
+							"title": "Hides the fullscreen button from the player controls"
+						}
+					},
+					"hideNextButton": {
+						"enable": {
+							"label": "Hide next button",
+							"title": "Hides the next video button from the player controls"
 						}
 					},
 					"hideMembersOnlyVideos": {
@@ -620,6 +691,12 @@
 							"title": "Versteckt die Seitenleiste, die Videos empfiehlt"
 						}
 					},
+					"hideEndscreenRecommendedVideos": {
+						"enable": {
+							"label": "Hide recommended videos on endscreen",
+							"title": "Hides the suggested videos that appear on the endscreen"
+						}
+					},
 					"hideTranslateComment": {
 						"enable": {
 							"label": "Übersetzungs-Kommentar-Button ausblenden",
@@ -658,8 +735,8 @@
 					},
 					"playlistReverseButton": {
 						"enable": {
-							"label": "Reverse playlist button",
-							"title": "Adds a button to reverse the order of videos in playlists"
+							"label": "Playlist-Button umkehren",
+							"title": "Fügt einen Button hinzu, der die Reihenfolge von Videos in Playlists umkehrt"
 						}
 					},
 					"remainingTime": {
@@ -688,8 +765,8 @@
 					},
 					"saveToWatchLaterButton": {
 						"enable": {
-							"label": "\"Später speichern\"-Button aktivieren",
-							"title": "Fügt einen Button zu Home- und Abonnementvideos hinzu, um das Video zur \"Später beobachten\"-Wiedergabeliste zu speichern"
+							"label": "Enable save to Watch later button",
+							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch later' playlist"
 						}
 					},
 					"shareShortener": {
@@ -755,8 +832,8 @@
 						"title": "Entfernt Kurzvideos von Empfehlungen auf Beobachtungsseiten"
 					},
 					"subscriptions": {
-						"label": "Hide on Subscriptions feed",
-						"title": "Removes the Shorts section from the Subscriptions feed"
+						"label": "Im 'Abonnement-Feed' ausblenden",
+						"title": "Entfernt den Abschnitt Shorts aus dem \"Abonnement-Feed\""
 					}
 				}
 			},
@@ -842,18 +919,18 @@
 				"settings": {
 					"fpsPreference": {
 						"select": {
-							"label": "Frame rate preference",
+							"label": "Bildwiederholrate Einstellungen",
 							"options": {
-								"default": "Default",
-								"higher": "Higher FPS",
-								"lower": "Lower FPS"
+								"default": "Standard",
+								"higher": "Höhere FPS",
+								"lower": "Niedrigere FPS"
 							},
-							"title": "Prefer higher or lower frame rate when multiple formats are available"
+							"title": "Höhere oder niedrigere Bildwiederholrate bevorzugen, wenn mehrere Formate verfügbar sind"
 						}
 					},
 					"preferPremium": {
-						"label": "Prefer Premium enhanced bitrate",
-						"title": "Use Premium itags (356/721) when available. Requires YouTube Premium."
+						"label": "Premium-verbesserte Bitrate bevorzugen",
+						"title": "Nutze Premium itags (356/721) wenn verfügbar. Benötigt YouTube Premium."
 					},
 					"quality": {
 						"select": {
@@ -888,6 +965,14 @@
 						},
 						"title": "Fügt Schaltflächen hinzu, um die Wiedergabegeschwindigkeit des Videos zu erhöhen oder zu verringern"
 					},
+					"boostGesture": {
+						"label": "Playback speed boost gesture",
+						"select": {
+							"label": "Gesture speed increment",
+							"title": "Amount of speed to change for each horizontal drag segment"
+						},
+						"title": "Mouse-Drag to temporarily boost playback speed"
+					},
 					"speed": {
 						"select": {
 							"label": "Video Geschwindigkeit",
@@ -895,14 +980,14 @@
 						}
 					},
 					"channelSpeeds": {
-						"add": "Add",
-						"channelId": "Channel ID",
-						"getChannelIdFromLink": "Get ID from link",
-						"label": "Per-channel playback speed",
-						"pasteLinkPlaceholder": "youtube.com/@channel or video link",
-						"remove": "Remove",
-						"speed": "Speed",
-						"title": "Sets a specific playback speed for videos from a channel"
+						"add": "Hinzufügen",
+						"channelId": "Kanal-ID",
+						"getChannelIdFromLink": "ID von Link holen",
+						"label": "Wiedergabegeschwindigkeit je Kanal",
+						"pasteLinkPlaceholder": "youtube.com/@channel oder Video-Link",
+						"remove": "Entfernen",
+						"speed": "Geschwindigkeit",
+						"title": "Legt eine bestimmte Wiedergabegeschwindigkeit für Videos eines Kanals fest"
 					}
 				},
 				"title": "Wiedergabegeschwindigkeit Einstellungen"
@@ -948,8 +1033,8 @@
 					},
 					"removeAllWatchedVideosButton": {
 						"enable": {
-							"label": "Remove all watched videos button",
-							"title": "Adds a button to remove all watched videos from the playlist"
+							"label": "Alle angesehenen Videos entfernen Button",
+							"title": "Fügt einen Button hinzu, um alle angesehenen Videos aus der Wiedergabeliste zu entfernen"
 						}
 					}
 				},
@@ -963,22 +1048,22 @@
 				"settings": {
 					"dateFormat": {
 						"select": {
-							"label": "Date format",
+							"label": "Datumsformat",
 							"options": {
-								"date": "YYYY-MM-DD",
-								"dateTime": "YYYY-MM-DD_HH-MM-SS",
-								"dayMonthYear": "DD-MM-YYYY",
-								"iso": "ISO (YYYY-MM-DDTHH-MM-SS-mmmZ)"
+								"date": "JJJJ-MM-TT",
+								"dateTime": "JJJJ-MM-TT_HH-MM-SS",
+								"dayMonthYear": "TT-MM-JJJJ",
+								"iso": "ISO (JJJJ-MM-DDTHH-MM-SS-mmmZ)"
 							},
-							"title": "The format used for the {date} placeholder"
+							"title": "Das für den {date} Platzhalter verwendete Format"
 						}
 					},
 					"filename": {
-						"error": "Unknown placeholder(s):",
-						"hint": "Placeholders whose value can't be determined (e.g. no chapter at that moment) are replaced with empty text. If the file name would end up empty, the default name is used.",
-						"label": "Screenshot file name template",
-						"placeholdersLabel": "Available placeholders:",
-						"title": "The template used to name the screenshot file"
+						"error": "Unbekannte(r) Platzhalter:",
+						"hint": "Platzhalter, deren Wert nicht bestimmt werden kann (z.B. zu diesem Zeitpunkt kein Kapitel) werden durch einen leeren Text ersetzt. Wenn der Dateiname leer ist, wird der Standardname verwendet.",
+						"label": "Namensvorlage für Screenshot-Datei",
+						"placeholdersLabel": "Verfügbare Platzhalter:",
+						"title": "Die Vorlage, um die Screenshot-Datei zu benennen"
 					},
 					"format": {
 						"label": "Screenshot-Format",
@@ -997,24 +1082,24 @@
 					},
 					"timestampFormat": {
 						"select": {
-							"label": "Video timestamp format",
+							"label": "Video-Zeitstempel-Format",
 							"options": {
 								"auto": "MM-SS or HH-MM-SS",
 								"hhmmss": "HH-MM-SS",
 								"mmss": "MM-SS"
 							},
-							"title": "The format used for the {video timestamp} placeholder"
+							"title": "Das für den {date} Platzhalter verwendete Format"
 						}
 					},
 					"timestampSeparator": {
 						"select": {
-							"label": "Timestamp separator",
+							"label": "Zeitstempel-Trennzeichen",
 							"options": {
 								"auto": "Auto",
-								"colon": "Colon (MM:SS)",
-								"hyphen": "Hyphen (MM-SS)"
+								"colon": "Doppelpunkt (MM:SS)",
+								"hyphen": "Bindestrich (MM-SS)"
 							},
-							"title": "The separator used in the {video timestamp} placeholder. Colons aren't allowed in file names on Windows, so Auto uses hyphens there."
+							"title": "Das Trennzeichen, das im {video timestamp} Platzhalter verwendet wird. Doppelpunkte sind in Dateinamen unter Windows nicht zulässig, daher verwendet es dort automatisch Bindestriche."
 						}
 					}
 				},
@@ -1035,7 +1120,7 @@
 					},
 					"modifierKey": {
 						"select": {
-							"label": "Modifier key",
+							"label": "Anpassungstaste",
 							"title": "Die zu verwendende Modifikator-Taste"
 						}
 					}
@@ -1091,16 +1176,16 @@
 			},
 			"videosPerRow": {
 				"enable": {
-					"label": "Videos per row",
-					"title": "Changes the number of videos displayed per row on YouTube feeds"
+					"label": "Videos pro Zeile",
+					"title": "Ändert die Anzahl der Videos, die pro Zeile in YouTube Feeds angezeigt werden"
 				},
 				"settings": {
 					"count": {
-						"label": "Number of videos per row",
-						"title": "The number of videos to show per row on the subscription, home, and channel video pages"
+						"label": "Anzahl der Videos pro Zeile",
+						"title": "Die Anzahl der Videos, die pro Zeile auf den Abonnement-, Home- und Kanalseiten angezeigt werden sollen"
 					}
 				},
-				"title": "Videos per row settings"
+				"title": "Videos pro Zeile Einstellungen"
 			},
 			"volumeBoost": {
 				"enable": {
