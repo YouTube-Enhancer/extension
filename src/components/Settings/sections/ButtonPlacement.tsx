@@ -11,7 +11,7 @@ import {
 	fullscreenPlacements,
 	type Path
 } from "@/src/types";
-import { isButtonSelectDisabled } from "@/src/utils/settings";
+import { getButtonSelectDisabledReason, isButtonSelectDisabled } from "@/src/utils/settings";
 
 export default function ButtonPlacementSection() {
 	const {
@@ -72,9 +72,12 @@ export default function ButtonPlacementSection() {
 				const fullscreenValuePath = getFullscreenPlacementPath(buttonName);
 
 				const disabled = isButtonSelectDisabled(buttonName, settings);
-				const tooltip = t(
-					(translations) => translations.pages.options.extras.buttonPlacement.select.title,
-					{
+				// A disabled select explains which toggle gates it instead of describing a placement
+				// the user cannot change, matching how every other setting reports its reason.
+				const disabledReason = getButtonSelectDisabledReason(buttonName, settings, t);
+				const tooltip =
+					disabledReason ??
+					t((translations) => translations.pages.options.extras.buttonPlacement.select.title, {
 						BUTTON_NAME: label.toLowerCase(),
 						PLACEMENT: t(
 							(translations) =>
@@ -82,21 +85,22 @@ export default function ButtonPlacementSection() {
 									getSelectedOption(valuePath)
 								].placement
 						)
-					}
-				);
-				const fullscreenTooltip = t(
-					(translations) =>
-						translations.pages.options.extras.buttonPlacement.select.fullscreenTitle,
-					{
-						BUTTON_NAME: label.toLowerCase(),
-						PLACEMENT: t(
-							(translations) =>
-								translations.pages.options.extras.buttonPlacement.select.options[
-									getSelectedOption(fullscreenValuePath)
-								].placement
-						)
-					}
-				);
+					});
+				const fullscreenTooltip =
+					disabledReason ??
+					t(
+						(translations) =>
+							translations.pages.options.extras.buttonPlacement.select.fullscreenTitle,
+						{
+							BUTTON_NAME: label.toLowerCase(),
+							PLACEMENT: t(
+								(translations) =>
+									translations.pages.options.extras.buttonPlacement.select.options[
+										getSelectedOption(fullscreenValuePath)
+									].placement
+							)
+						}
+					);
 				return (
 					<div className="mx-2 mb-3" key={buttonName}>
 						<div className="mb-1 text-sm font-medium">{label}</div>
