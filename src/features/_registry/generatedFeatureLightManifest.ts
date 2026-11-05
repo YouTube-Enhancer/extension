@@ -34,6 +34,9 @@ export const featureLightManifest = {
 		automaticTheaterMode: {
 			enabled: false
 		},
+		autoTransferFocus: {
+			enabled: false
+		},
 		blockNumberKeySeeking: {
 			enabled: false
 		},
@@ -347,6 +350,7 @@ export const featureLightManifest = {
 		}
 	} as Partial<Record<FeatureKeys, unknown>>,
 	featureIds: [
+		"autoTransferFocus",
 		"automaticTheaterMode",
 		"automaticallyDisableAmbientMode",
 		"automaticallyDisableAutoPlay",
