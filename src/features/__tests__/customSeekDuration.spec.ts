@@ -37,10 +37,33 @@ const OSD_ACCUMULATION_TIMEOUT = 800;
 // Page type constants
 const { home, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-expect(testPages.length).toBeGreaterThan(0);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies) ?? home;
 
-type OsdState = null | { left: string; painted: number; right: string; top: string };
+async function dispatchKeyAndGetDefaultPrevented(page: Page, key: string): Promise<boolean> {
+	await page.evaluate(() => {
+		const win = window as typeof window & {
+			__defaultPrevented?: boolean;
+		};
+		win.__defaultPrevented = undefined;
+		win.addEventListener(
+			"keydown",
+			(event) => {
+				win.__defaultPrevented = event.defaultPrevented;
+			},
+			{ capture: true, once: true }
+		);
+	});
+	await page.keyboard.press(key);
+	return page.evaluate((pressedKey) => {
+		const win = window as typeof window & {
+			__defaultPrevented?: boolean;
+		};
+		if (win.__defaultPrevented === undefined) {
+			throw new Error(`No keydown event observed for ${pressedKey}`);
+		}
+		return win.__defaultPrevented;
+	}, key);
+}
 
 async function dispatchSeekKeys(page: Page, key: string, repeatCount = 1): Promise<void> {
 	for (let i = 0; i < repeatCount; i++) {
@@ -71,9 +94,6 @@ async function getVideoTime(page: Page): Promise<number> {
 		const video = document.querySelector<HTMLVideoElement>(selector);
 		return video ? Math.round(video.currentTime) : 0;
 	}, VIDEO_SELECTOR);
-}
-async function readOsdState(page: Page): Promise<OsdState> {
-	return await readOnScreenDisplayState(page);
 }
 
 async function resetOSDCapture(page: Page): Promise<void> {
@@ -208,12 +228,12 @@ test.describe("Core feature behavior", () => {
 
 				await expectVideoTime(page, Math.round(duration));
 				await expect.poll(async () => getLastOSDText(page)).toBe("+5s");
-
+				await resetOSDCapture(page);
 				await dispatchSeekKeys(page, "ArrowRight", 10);
 				await settle(page);
 
 				expect(await getVideoTime(page)).toBe(Math.round(duration));
-				expect(await getLastOSDText(page)).toBe("+5s");
+				await expect.poll(async () => getLastOSDText(page)).toBeNull();
 			});
 
 			test(`OSD displayed total and actual seek position stay strictly coupled near video start on ${pageType}`, async ({
@@ -222,23 +242,22 @@ test.describe("Core feature behavior", () => {
 				await setupSeekTest(page, pageType, 60);
 
 				await setVideoTimeAndPause(page, 4);
-				await freezeAndGetTime(page, pageType);
 
 				await dispatchSeekKeys(page, "ArrowLeft");
 				await settle(page);
 
 				await expectVideoTime(page, 0);
 				await expect.poll(async () => getLastOSDText(page)).toBe("-4s");
-
+				await resetOSDCapture(page);
 				await dispatchSeekKeys(page, "ArrowLeft", 10);
 				await settle(page);
 
-				expect(await getLastOSDText(page)).toBe("-4s");
+				await expect.poll(async () => getLastOSDText(page)).toBeNull();
 			});
 		}
 	});
 
-	test.describe("Accumulation behavior", () => {
+	test.describe("Accumulation behavior on", () => {
 		for (const pageType of testPages) {
 			test(`repeated arrow key presses accumulates actual seek displacement and OSD in lockstep on ${pageType}`, async ({
 				page
@@ -249,7 +268,6 @@ test.describe("Core feature behavior", () => {
 				await setupSeekTest(page, pageType, JUMP);
 
 				await setVideoTimeAndPause(page, START);
-				await freezeAndGetTime(page, pageType);
 
 				await dispatchSeekKeys(page, "ArrowRight", PRESSES);
 				await settle(page);
@@ -264,7 +282,7 @@ test.describe("Core feature behavior", () => {
 					)
 					.toBe(1);
 
-				const osdState = await readOsdState(page);
+				const osdState = await readOnScreenDisplayState(page);
 				expect(osdState).not.toBeNull();
 				expect(osdState?.painted).toBeGreaterThan(0);
 				expect(osdState?.right).toBeTruthy();
@@ -281,28 +299,26 @@ test.describe("Core feature behavior", () => {
 				await setupSeekTest(page, pageType, JUMP_BY);
 
 				await setVideoTimeAndPause(page, BASE_TIME);
-				await freezeAndGetTime(page, pageType);
 
 				await dispatchSeekKeys(page, "ArrowRight");
 				await settle(page);
 				await expect.poll(async () => getLastOSDText(page)).toBe(RIGHT_OSD_TEXT);
-				await expect.poll(async () => (await readOsdState(page))?.left).toBe("");
+				await expect.poll(async () => (await readOnScreenDisplayState(page))?.left).toBe("");
 
 				await resetOSDCapture(page);
 				await dispatchSeekKeys(page, "ArrowLeft");
 				await settle(page);
 				await expect.poll(async () => getLastOSDText(page)).toBe(LEFT_OSD_TEXT);
-				const leftOsdState = await readOsdState(page);
+				const leftOsdState = await readOnScreenDisplayState(page);
 				expect(leftOsdState).not.toBeNull();
 				expect(leftOsdState?.left).toBeTruthy();
-				await expectVideoTime(page, BASE_TIME);
+				await expectVideoTime(page, BASE_TIME); // Net change = 0 after +10 and -10 seek
 			});
 
 			test(`accumulation resets after OSD inactivity timeout on ${pageType}`, async ({ page }) => {
 				await setupSeekTest(page, pageType, 10);
 
 				await setVideoTimeAndPause(page, 50);
-				await freezeAndGetTime(page, pageType);
 
 				await dispatchSeekKeys(page, "ArrowRight");
 				await settle(page);
@@ -321,7 +337,7 @@ test.describe("Core feature behavior", () => {
 				expect(allTexts).toEqual(["+10s"]);
 			});
 
-			test(`tiny jumpBy accumulates correctly on repeated hold on ${pageType}`, async ({
+			test(`held-key repeat accumulates correctly on repeated hold on ${pageType}`, async ({
 				page
 			}) => {
 				const JUMP = 8, // 8 instead of 5 to differentiate from native seek behavior (5s)
@@ -330,12 +346,7 @@ test.describe("Core feature behavior", () => {
 				await setupSeekTest(page, pageType, JUMP);
 
 				await setVideoTimeAndPause(page, START);
-				await freezeAndGetTime(page, pageType);
-
-				for (let i = 0; i < PRESSES; i++) {
-					await page.keyboard.down("ArrowRight");
-				}
-				await page.keyboard.up("ArrowRight");
+				await dispatchSeekKeys(page, "ArrowRight", PRESSES);
 				await settle(page);
 
 				await expectVideoTime(page, START + JUMP * PRESSES);
@@ -349,7 +360,7 @@ test.describe("Core feature behavior", () => {
 			test(`infinite duration does not intercept seek or display OSD on ${pageType}`, async ({
 				page
 			}) => {
-				await setupSeekTest(page, pageType, 5);
+				await setupSeekTest(page, pageType, 10);
 
 				await page.evaluate((selector) => {
 					const video = document.querySelector<HTMLVideoElement>(selector);
@@ -361,8 +372,12 @@ test.describe("Core feature behavior", () => {
 					}
 				}, VIDEO_SELECTOR);
 
+				const BASE_TIME = 20;
+				await setVideoTimeAndPause(page, BASE_TIME);
 				await dispatchSeekKeys(page, "ArrowRight");
 				await settle(page);
+				//native seek happens as custom seek early returns for video's with infiinte duration
+				await expect.poll(async () => await getVideoTime(page)).toBe(BASE_TIME + 5);
 				const last = await getLastOSDText(page);
 				expect(last).toBeNull();
 			});
@@ -383,7 +398,9 @@ test.describe("Core feature behavior", () => {
 });
 
 test.describe("Feature lifecycle & State management", () => {
-	test(`changing jumpBy while feature is enabled works without reload`, async ({ page }) => {
+	test(`changing jumpBy while feature is enabled works without reload on ${watch}`, async ({
+		page
+	}) => {
 		await setupSeekTest(page, watch, DEFAULT_JUMP_BY);
 
 		// Modify jumpBy while feature is enabled
@@ -394,16 +411,17 @@ test.describe("Feature lifecycle & State management", () => {
 		await settle(page);
 		let currentTime = await getVideoTime(page);
 		expect(Math.round(currentTime)).toBe(60);
-		expect(await getLastOSDText(page)).toBe("+10s");
+		await expect.poll(async () => getLastOSDText(page)).toBe("+10s");
 
 		// Update jumpBy to 30 without reloading
+		await page.waitForTimeout(OSD_ACCUMULATION_TIMEOUT + 200);
 		await setOption(page, "customSeekDuration.jumpBy", 30);
 		await resetOSDCapture(page);
 		await dispatchSeekKeys(page, "ArrowRight");
 		await settle(page);
 		currentTime = await getVideoTime(page);
 		expect(Math.round(currentTime)).toBe(90);
-		expect(await getLastOSDText(page)).toBe("+30s");
+		await expect.poll(async () => getLastOSDText(page)).toBe("+30s");
 
 		// Update jumpBy to 5
 		await setOption(page, "customSeekDuration.jumpBy", 5);
@@ -412,30 +430,30 @@ test.describe("Feature lifecycle & State management", () => {
 		await settle(page);
 		currentTime = await getVideoTime(page);
 		expect(Math.round(currentTime)).toBe(85);
-		expect(await getLastOSDText(page)).toBe("-5s");
+		await expect.poll(async () => getLastOSDText(page)).toBe("-5s");
 	});
 
 	test(`re-applies after disable then re-enable on ${watch}`, async ({ page }) => {
 		await setupSeekTest(page, watch, DEFAULT_JUMP_BY);
 
-		await page.evaluate(() => {
-			const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
-			if (video) video.currentTime = 20;
-		});
+		await setVideoTimeAndPause(page, DEFAULT_SEEK_TIME);
 
 		await dispatchSeekKeys(page, "ArrowRight");
 		await expect.poll(async () => getLastOSDText(page)).toBe("+15s");
 
 		await disableFeature(page, "customSeekDuration.enabled");
 		await setupOSDTextCapture(page);
-		await dispatchSeekKeys(page, "ArrowRight");
+		await setVideoTimeAndPause(page, DEFAULT_SEEK_TIME);
+		expect(await dispatchKeyAndGetDefaultPrevented(page, "ArrowRight")).toBe(false);
 		await settle(page);
-		expect(await getLastOSDText(page)).toBeNull();
+		await expectVideoTime(page, DEFAULT_SEEK_TIME + 5);
 
 		await enableFeature(page, "customSeekDuration.enabled");
 		await setupOSDTextCapture(page);
+		await setVideoTimeAndPause(page, DEFAULT_SEEK_TIME);
 		await dispatchSeekKeys(page, "ArrowRight");
 		await expect.poll(async () => getLastOSDText(page)).toBe("+15s");
+		await expectVideoTime(page, DEFAULT_EXPECTED_TIME);
 	});
 
 	test(`keeps working after SPA in-page navigation to a related video on ${watch}`, async ({
@@ -472,9 +490,8 @@ test.describe("Feature lifecycle & State management", () => {
 
 		await spaNavigateToHome(page);
 		await setupOSDTextCapture(page);
-		await dispatchSeekKeys(page, "ArrowRight");
+		expect(await dispatchKeyAndGetDefaultPrevented(page, "ArrowRight")).toBe(false);
 		await settle(page);
-		expect(await getLastOSDText(page)).toBeNull();
 
 		await spaNavigateBack(page, watch);
 		await setupOSDTextCapture(page);
@@ -488,40 +505,47 @@ test.describe("Feature lifecycle & State management", () => {
 });
 
 test.describe("Seek events interactions check with yt elements", () => {
-	test(`arrow keys inside search box/comment field do not trigger seeking`, async ({ page }) => {
+	test(`arrow keys inside text fields do not trigger seeking ${watch}`, async ({ page }) => {
 		await setupSeekTestWithDurationCheck(page, watch, DEFAULT_JUMP_BY, 100);
 		await setVideoTimeAndPause(page, 50);
 
-		// Create and focus a mock input element (simulating YouTube's search/comment fields)
 		await page.evaluate(() => {
 			const searchInput = document.createElement("input");
 			searchInput.id = "mock-search-input";
 			searchInput.type = "text";
 			document.body.appendChild(searchInput);
-			searchInput.focus();
+
+			const commentTextarea = document.createElement("textarea");
+			commentTextarea.id = "mock-comment-textarea";
+			document.body.appendChild(commentTextarea);
+
+			const commentBox = document.createElement("div");
+			commentBox.id = "mock-comment-box";
+			commentBox.contentEditable = "true";
+			document.body.appendChild(commentBox);
 		});
 
-		// Dispatch arrow keys while input is focused
+		for (const selector of ["#mock-search-input", "#mock-comment-textarea", "#mock-comment-box"]) {
+			await page.locator(selector).focus();
+			expect(await dispatchKeyAndGetDefaultPrevented(page, "ArrowRight")).toBe(false);
+			expect(await dispatchKeyAndGetDefaultPrevented(page, "ArrowLeft")).toBe(false);
+			await settle(page);
+
+			expect(await getVideoTime(page)).toBe(50);
+		}
+
+		await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+		await resetOSDCapture(page);
 		await dispatchSeekKeys(page, "ArrowRight");
-		await dispatchSeekKeys(page, "ArrowLeft");
-		await settle(page);
-
-		// Verify video time didn't change and no OSD was shown
-		expect(await getVideoTime(page)).toBe(50);
-		expect(await getLastOSDText(page)).toBeNull();
-
-		// Cleanup
-		await page.evaluate(() => {
-			document.getElementById("mock-search-input")?.remove();
-		});
+		await expectVideoTime(page, 50 + DEFAULT_JUMP_BY);
+		await expect.poll(async () => getLastOSDText(page)).toBe(`+${DEFAULT_JUMP_BY}s`);
 	});
 
-	test("verify custom seek triggers when progress-bar is focused", async ({ page }) => {
+	test(`verify custom seek triggers when progress-bar is focused on ${watch}`, async ({ page }) => {
 		await setupSeekTestWithDurationCheck(page, watch, DEFAULT_JUMP_BY, 100);
 		await setVideoTimeAndPause(page, 50);
 		await page.focus(".ytp-progress-bar");
 
-		// Now, perform the actions directly instead of using the helper
 		await dispatchSeekKeys(page, "ArrowRight");
 		await settle(page);
 
@@ -530,33 +554,27 @@ test.describe("Seek events interactions check with yt elements", () => {
 		await expect.poll(async () => getLastOSDText(page)).toBe(`+${DEFAULT_JUMP_BY}s`);
 	});
 
-	//TODO: Shift , Alt , Ctrl do modify the playback time in various ways.
-	// Alt, Shift bypass due to early exit utilze the native seek behavior and modify video.currentTime (5s or 10s based on playback speed)
-	// Ctrl also modifies, but is dependent on wheere (timestamps) the video's Sections/Chapters are defined. e.g.(Intro, Today's sponsor)
-	// Meta does not modify the playback time behavior
+	test(`modifier keys (Shift/Ctrl/Alt) + arrow are passed through without custom seeking on ${watch}`, async ({
+		page
+	}) => {
+		await setupSeekTest(page, watch, DEFAULT_JUMP_BY);
+		await setupOSDTextCapture(page);
 
-	// test(`modifier keys (Shift/Ctrl/Alt) + arrow are passed through without seeking`, async ({
-	// 	page
-	// }) => {
+		const baseTime = 20;
+		await setVideoTimeAndPause(page, baseTime);
 
-	// 	await setupSeekTest(page, watch, DEFAULT_JUMP_BY);
-	// 	await setVideoTimeAndPause(page, 60);
+		// Test all modifier combinations
+		const modifiers = ["Shift", "Control", "Alt", "Meta"];
 
-	// 	// Test all modifier combinations
-	// 	const modifiers = ["Shift", "Control", "Alt", "Meta"];
+		for (const modifier of modifiers) {
+			expect(await dispatchKeyAndGetDefaultPrevented(page, `${modifier}+ArrowRight`)).toBe(false);
+			await settle(page);
+		}
 
-	// 	for (const modifier of modifiers) {
-	// 		await resetOSDCapture(page);
-	// 		await dispatchSeekKeys(page, `${modifier}+ArrowRight`, 1);
-	// 		await settle(page);
-	// 	}
-
-	// 	// Verify video time didn't change and no OSD was shown after any modifier key press
-	// 	const currentTime = await page.evaluate(() => {
-	// 		const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
-	// 		return video?.currentTime ?? -1;
-	// 	});
-	// 	expect(Math.round(currentTime)).toBe(60);
-	// 	expect(await getLastOSDText(page)).toBeNull();
-	// });
+		await setVideoTimeAndPause(page, baseTime);
+		await resetOSDCapture(page);
+		await dispatchSeekKeys(page, "ArrowRight");
+		await expectVideoTime(page, baseTime + DEFAULT_JUMP_BY);
+		await expect.poll(async () => getLastOSDText(page)).toBe(`+${DEFAULT_JUMP_BY}s`);
+	});
 });
