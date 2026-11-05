@@ -34,7 +34,7 @@ export async function hasPaintedPixels(page: Page) {
 /** Position and painted-pixel count of the OSD canvas, or null when it is not attached. */
 export async function readOnScreenDisplayState(
 	page: Page
-): Promise<null | { left: string; painted: number; top: string }> {
+): Promise<null | { left: string; painted: number; right: string; top: string }> {
 	return page.evaluate((selector) => {
 		const canvas = document.querySelector<HTMLCanvasElement>(selector);
 		if (!canvas) return null;
@@ -46,9 +46,9 @@ export async function readOnScreenDisplayState(
 			if (data[index] > 0) painted++;
 		}
 		const {
-			style: { left, top }
+			style: { left, right, top }
 		} = canvas;
-		return { left, painted, top };
+		return { left, painted, right, top };
 	}, OSD_SELECTOR);
 }
 
