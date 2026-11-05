@@ -14,7 +14,7 @@ let { jumpBy: jumpByTime } = featureConfigManager.getLastOr(
 );
 
 const { id: customSeekId } = metadata;
-const OSD_ACCUMULATION_TIMEOUT = 800;
+export const OSD_ACCUMULATION_TIMEOUT = 800;
 
 function addKeyListener() {
 	eventManager.addEventListener(document, "keydown", blockNativeSeek, customSeekId, true);
