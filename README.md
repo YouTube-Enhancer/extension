@@ -34,11 +34,12 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
 <!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->
 
-## 🎛️ Features • 80 features
+## 🎛️ Features • 81 features
 
 <details>
-<summary>Miscellaneous • 48 features (1 settings)</summary>
+<summary>Miscellaneous • 49 features (1 settings)</summary>
 
+- **Auto Transfer Focus To Play/pause Button**: After seeking, moves focus from the progress bar to the play/pause button so arrow keys adjust volume again
 - **Automatic Theater Mode**: Automatically enables theater mode when you load a video
 - **Automatically Disable Ambient Mode**: Automatically disables ambient mode when you load a video
 - **Automatically Disable Autoplay**: Automatically disables autoplay when you load a video

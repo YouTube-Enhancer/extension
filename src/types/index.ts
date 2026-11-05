@@ -256,6 +256,7 @@ export type configuration = {
 	automaticallyMaximizePlayer: { enabled: boolean };
 	automaticallyShowMoreVideosOnEndScreen: { enabled: boolean };
 	automaticTheaterMode: { enabled: boolean };
+	autoTransferFocus: { enabled: boolean };
 	blockNumberKeySeeking: { enabled: boolean };
 	copyTimestampUrlButton: {
 		button: {

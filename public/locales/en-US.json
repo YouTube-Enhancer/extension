@@ -565,6 +565,12 @@
 							"title": "Automatically shows more videos on end screen when you load a video"
 						}
 					},
+					"autoTransferFocus": {
+						"enable": {
+							"label": "Auto transfer focus to play/pause button",
+							"title": "After seeking, moves focus from the progress bar to the play/pause button so arrow keys adjust volume again"
+						}
+					},
 					"blockNumberKeySeeking": {
 						"enable": {
 							"label": "Block number key seeking",
