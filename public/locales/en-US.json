@@ -773,7 +773,7 @@
 					"saveToWatchLaterButton": {
 						"enable": {
 							"label": "Enable save to Watch later button",
-							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch later' playlist"
+							"title": "Adds a button to videos on Home, Search, Subscriptions, and Watch pages to save them to the 'Watch later' playlist"
 						}
 					},
 					"shareShortener": {
