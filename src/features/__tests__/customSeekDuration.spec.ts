@@ -42,26 +42,29 @@ const nonTargetPage = resolveNonTargetPage(metadata.dependencies) ?? home;
 async function dispatchKeyAndGetDefaultPrevented(page: Page, key: string): Promise<boolean> {
 	await page.evaluate(() => {
 		const win = window as typeof window & {
-			__defaultPrevented?: boolean;
+			__lastKeydownEvent?: KeyboardEvent;
 		};
-		win.__defaultPrevented = undefined;
+		win.__lastKeydownEvent = undefined;
 		win.addEventListener(
 			"keydown",
 			(event) => {
-				win.__defaultPrevented = event.defaultPrevented;
+				win.__lastKeydownEvent = event;
 			},
-			{ once: true } // Listen in bubble phase - runs after feature's document capture listener
+			{ capture: true, once: true }
 		);
 	});
 	await page.keyboard.press(key);
 	return page.evaluate((pressedKey) => {
 		const win = window as typeof window & {
-			__defaultPrevented?: boolean;
+			__lastKeydownEvent?: KeyboardEvent;
 		};
-		if (win.__defaultPrevented === undefined) {
+		const { __lastKeydownEvent: event } = win;
+		win.__lastKeydownEvent = undefined;
+		if (!event) {
 			throw new Error(`No keydown event observed for ${pressedKey}`);
 		}
-		return win.__defaultPrevented;
+		const { defaultPrevented } = event;
+		return defaultPrevented;
 	}, key);
 }
 
