@@ -6,7 +6,10 @@ import type { YtLockupViewModelElement } from "@/src/utils/dom/nativeComponents"
 
 import {
 	LOCKUP_MENU_WRAPPER_SELECTOR,
-	LOCKUP_SELECTOR
+	LOCKUP_SELECTOR,
+	SEARCH_MENU_SLOT_SELECTOR,
+	SEARCH_ROW_SELECTOR,
+	SEARCH_ROW_THUMBNAIL_SELECTOR
 } from "@/src/features/saveToWatchLaterButton/constants";
 import { metadata } from "@/src/features/saveToWatchLaterButton/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
@@ -49,7 +52,7 @@ const REMOVED_TOAST_TEXT = localeText(
 const SAVED_TOAST_TEXT = localeText(
 	"pages.content.features.saveToWatchLaterButton.extras.savedVideo"
 );
-const { home, watch } = pageTypeRecord;
+const { home, search, watch } = pageTypeRecord;
 
 async function clickActionsRowButton(page: Page): Promise<void> {
 	await page.locator(`${ACTIONS_ROW_BUTTON_SELECTOR} button`).first().click();
@@ -168,6 +171,34 @@ async function readLockupStats(page: Page) {
 			containerSelector: HOME_CONTAINER_SELECTOR,
 			lockupSelector: LOCKUP_SELECTOR,
 			menuWrapperSelector: LOCKUP_MENU_WRAPPER_SELECTOR
+		}
+	);
+}
+
+/** Returns the video ids of the first `limit` search rows that carry a save button. */
+async function readSearchRowVideoIds(page: Page, limit: number): Promise<string[]> {
+	return page.evaluate(
+		({ buttonClass, limit, rowSelector, thumbnailSelector }) => {
+			const ids: string[] = [];
+			for (const row of document.querySelectorAll(rowSelector)) {
+				if (ids.length >= limit) break;
+				if (!row.querySelector(`.${buttonClass}`)) continue;
+				const { data } = row as { data?: { videoId?: unknown } };
+				const fromData = typeof data?.videoId === "string" ? data.videoId : "";
+				const href =
+					row.querySelector<HTMLAnchorElement>(thumbnailSelector)?.getAttribute("href") ?? "";
+				const fromHref = new URLSearchParams(href.split("?")[1] ?? "").get("v") ?? "";
+				// Same fallback the feature uses, and video ids have exactly 11 characters.
+				const id = fromData || fromHref;
+				if (/^[\w-]{11}$/.test(id) && !ids.includes(id)) ids.push(id);
+			}
+			return ids;
+		},
+		{
+			buttonClass: BUTTON_CLASS,
+			limit,
+			rowSelector: SEARCH_ROW_SELECTOR,
+			thumbnailSelector: SEARCH_ROW_THUMBNAIL_SELECTOR
 		}
 	);
 }
@@ -293,8 +324,9 @@ test.describe("saveToWatchLaterButton", () => {
 			.toBe(1);
 	});
 
-	// The load-time path branches only on `onWatchPage`; subscriptions only repeats the home page-type interpolation.
-	for (const pageType of [home, watch] as const) {
+	// The load-time path branches three ways now: watch, search's list container, and the browse page-subtype
+	// interpolation. Subscriptions repeats the home shape, so only those three get the reload pass.
+	for (const pageType of [home, search, watch] as const) {
 		test(`save button should persist after full page reload on ${pageType}`, async ({ page }) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
 			await navigateToPageType(page, pageType);
@@ -539,7 +571,7 @@ test.describe("saveToWatchLaterButton", () => {
 			await cardButton.click();
 			let savedByThisTest = true;
 			try {
-				// markLockupSaved is the only thing stopping the next observer pass from re-adding the button, and
+				// markRowSaved is the only thing stopping the next observer pass from re-adding the button, and
 				// the card itself has to stay put, so a vanished card cannot pass this for the wrong reason.
 				await expect(cardButton).not.toBeAttached({ timeout: 10000 });
 				await expectToStay(
@@ -651,5 +683,86 @@ test.describe("saveToWatchLaterButton", () => {
 				)
 				.toEqual({ grew: true, saveableMissingButton: 0 });
 		});
+	});
+});
+
+test.describe("search rows", () => {
+	test("places the save button inside the search row's action menu slot", async ({ page }) => {
+		test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
+		await navigateToPageType(page, search);
+		await enableFeature(page, "saveToWatchLaterButton.enabled");
+		const slot = page.locator(SEARCH_MENU_SLOT_SELECTOR).first();
+		await expect(slot.locator(BUTTON_SELECTOR).first()).toBeAttached({ timeout: 10000 });
+		// A button loose in the row means the slot selector drifted and the product is putting it in the wrong place.
+		const outside = await page.evaluate(
+			({ buttonClass, slotSelector }) =>
+				[...document.querySelectorAll(`.${buttonClass}`)].filter(
+					(button) => !button.closest(slotSelector)
+				).length,
+			{ buttonClass: BUTTON_CLASS, slotSelector: SEARCH_MENU_SLOT_SELECTOR }
+		);
+		expect(outside, "save buttons outside a search row menu slot").toBe(0);
+	});
+
+	test("clicking a search row save button saves the video and removes that row's button for good", async ({
+		page
+	}) => {
+		test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
+		test.setTimeout(240_000);
+		await navigateToPageType(page, search);
+		await enableFeature(page, "saveToWatchLaterButton.enabled");
+		await expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached({ timeout: 10000 });
+		// Same account discipline as the feed cards: only a video whose membership resolves to a definite
+		// false may be used, and the video is removed again no matter where an assertion fails.
+		const candidateIds = await readSearchRowVideoIds(page, 3);
+		expect(
+			candidateIds.length,
+			"no search row with a save button and a readable video id"
+		).toBeGreaterThan(0);
+		let videoId: null | string = null;
+		for (const candidateId of candidateIds) {
+			if ((await readWatchLaterMembership(page, candidateId)) !== false) continue;
+			videoId = candidateId;
+			break;
+		}
+		test.skip(
+			videoId === null,
+			"no search row resolved to a video that is not already in the user's Watch Later list"
+		);
+		const row = page
+			.locator(SEARCH_ROW_SELECTOR)
+			.filter({ has: page.locator(`a#thumbnail[href*="v=${videoId}"]`) });
+		const rowButton = row.locator(BUTTON_SELECTOR);
+		await expect(rowButton).toBeVisible();
+		await rowButton.click();
+		let savedByThisTest = true;
+		try {
+			await expect(rowButton).not.toBeAttached({ timeout: 10000 });
+			await expectToStay(
+				async () => ({ buttons: await rowButton.count(), rows: await row.count() }),
+				{ buttons: 0, rows: 1 },
+				{ page }
+			);
+			// Only the saved row lost its button: its neighbours keep theirs.
+			await expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached();
+			await expect
+				.poll(async () => readWatchLaterMembership(page, videoId!), {
+					intervals: [5000],
+					timeout: 90000
+				})
+				.toBe(true);
+			await navigateToPage(page, `https://www.youtube.com/watch?v=${videoId!}`);
+			await waitForExtensionReady(page);
+			await expect(page.locator(ACTIONS_ROW_BUTTON_SELECTOR)).toBeAttached({ timeout: 15000 });
+			await expect.poll(async () => readActionsRowIcon(page), { timeout: 30000 }).toBe(SAVED_ICON);
+			await clickActionsRowButton(page);
+			await expect
+				.poll(async () => readActionsRowIcon(page), { timeout: 15000 })
+				.toBe(UNSAVED_ICON);
+			await expectRemovedToast(page);
+			savedByThisTest = false;
+		} finally {
+			if (savedByThisTest) await removeFromWatchLater(page, videoId!);
+		}
 	});
 });
