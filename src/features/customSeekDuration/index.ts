@@ -6,6 +6,7 @@ import { featureConfigManager } from "@/src/features/_registry/featureConfigMana
 import { clamp } from "@/src/utils/math";
 import { getOSDConfig, showOSD } from "@/src/utils/osd";
 
+import { OSD_ACCUMULATION_TIMEOUT } from "./constants";
 import { metadata } from "./index.metadata";
 
 let { jumpBy: jumpByTime } = featureConfigManager.getLastOr(
@@ -14,7 +15,6 @@ let { jumpBy: jumpByTime } = featureConfigManager.getLastOr(
 );
 
 const { id: customSeekId } = metadata;
-export const OSD_ACCUMULATION_TIMEOUT = 800;
 
 function addKeyListener() {
 	eventManager.addEventListener(document, "keydown", blockNativeSeek, customSeekId, true);
