@@ -4,7 +4,7 @@ import { expect, test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
 
-import { OSD_ACCUMULATION_TIMEOUT } from "@/src/features/customSeekDuration/index";
+import { OSD_ACCUMULATION_TIMEOUT } from "@/src/features/customSeekDuration/constants";
 import { metadata } from "@/src/features/customSeekDuration/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import {
