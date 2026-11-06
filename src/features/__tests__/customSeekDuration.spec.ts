@@ -4,6 +4,7 @@ import { expect, test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
 
+// import { OSD_ACCUMULATION_TIMEOUT } from "@/src/features/customSeekDuration/index";
 import { metadata } from "@/src/features/customSeekDuration/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import {
@@ -33,7 +34,6 @@ const DEFAULT_SEEK_TIME = 20;
 const DEFAULT_JUMP_BY = 15;
 const DEFAULT_EXPECTED_TIME = DEFAULT_SEEK_TIME + DEFAULT_JUMP_BY;
 const OSD_ACCUMULATION_TIMEOUT = 800;
-
 // Page type constants
 const { home, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -50,7 +50,7 @@ async function dispatchKeyAndGetDefaultPrevented(page: Page, key: string): Promi
 			(event) => {
 				win.__defaultPrevented = event.defaultPrevented;
 			},
-			{ capture: true, once: true }
+			{ once: true } // Listen in bubble phase - runs after feature's document capture listener
 		);
 	});
 	await page.keyboard.press(key);
@@ -257,7 +257,7 @@ test.describe("Core feature behavior", () => {
 		}
 	});
 
-	test.describe("Accumulation behavior on", () => {
+	test.describe("Accumulation behavior", () => {
 		for (const pageType of testPages) {
 			test(`repeated arrow key presses accumulates actual seek displacement and OSD in lockstep on ${pageType}`, async ({
 				page
@@ -337,7 +337,7 @@ test.describe("Core feature behavior", () => {
 				expect(allTexts).toEqual(["+10s"]);
 			});
 
-			test(`held-key repeat accumulates correctly on repeated hold on ${pageType}`, async ({
+			test(`multiple sequential arrow key presses accumulate correctly on ${pageType}`, async ({
 				page
 			}) => {
 				const JUMP = 8, // 8 instead of 5 to differentiate from native seek behavior (5s)
@@ -376,7 +376,7 @@ test.describe("Core feature behavior", () => {
 				await setVideoTimeAndPause(page, BASE_TIME);
 				await dispatchSeekKeys(page, "ArrowRight");
 				await settle(page);
-				//native seek happens as custom seek early returns for video's with infiinte duration
+				//native seek happens as custom seek early returns for video's with infinte duration
 				await expect.poll(async () => await getVideoTime(page)).toBe(BASE_TIME + 5);
 				const last = await getLastOSDText(page);
 				expect(last).toBeNull();
@@ -397,7 +397,7 @@ test.describe("Core feature behavior", () => {
 	});
 });
 
-test.describe("Feature lifecycle & State management", () => {
+test.describe("Feature Lifecycle and State Management", () => {
 	test(`changing jumpBy while feature is enabled works without reload on ${watch}`, async ({
 		page
 	}) => {
@@ -409,8 +409,7 @@ test.describe("Feature lifecycle & State management", () => {
 		await setVideoTimeAndPause(page, 50);
 		await dispatchSeekKeys(page, "ArrowRight");
 		await settle(page);
-		let currentTime = await getVideoTime(page);
-		expect(Math.round(currentTime)).toBe(60);
+		await expectVideoTime(page, 60);
 		await expect.poll(async () => getLastOSDText(page)).toBe("+10s");
 
 		// Update jumpBy to 30 without reloading
@@ -419,8 +418,7 @@ test.describe("Feature lifecycle & State management", () => {
 		await resetOSDCapture(page);
 		await dispatchSeekKeys(page, "ArrowRight");
 		await settle(page);
-		currentTime = await getVideoTime(page);
-		expect(Math.round(currentTime)).toBe(90);
+		await expectVideoTime(page, 90);
 		await expect.poll(async () => getLastOSDText(page)).toBe("+30s");
 
 		// Update jumpBy to 5
@@ -428,8 +426,7 @@ test.describe("Feature lifecycle & State management", () => {
 		await resetOSDCapture(page);
 		await dispatchSeekKeys(page, "ArrowLeft");
 		await settle(page);
-		currentTime = await getVideoTime(page);
-		expect(Math.round(currentTime)).toBe(85);
+		await expectVideoTime(page, 85);
 		await expect.poll(async () => getLastOSDText(page)).toBe("-5s");
 	});
 
@@ -502,10 +499,21 @@ test.describe("Feature lifecycle & State management", () => {
 	test(`enabling on ${nonTargetPage}, a non-target page, raises no errors`, async ({ page }) => {
 		await expectFeatureSilentOnNonTargetPage(page, "customSeekDuration.enabled", nonTargetPage);
 	});
+
+	test(`feature enabled intercepts arrow keys and prevents default on ${watch}`, async ({
+		page
+	}) => {
+		await setupSeekTest(page, watch, DEFAULT_JUMP_BY);
+		await setVideoTimeAndPause(page, DEFAULT_SEEK_TIME);
+		// Verify that when the feature is enabled, it properly calls preventDefault()
+		expect(await dispatchKeyAndGetDefaultPrevented(page, "ArrowRight")).toBe(true);
+		await settle(page);
+		await expectVideoTime(page, DEFAULT_EXPECTED_TIME);
+	});
 });
 
-test.describe("Seek events interactions check with yt elements", () => {
-	test(`arrow keys inside text fields do not trigger seeking ${watch}`, async ({ page }) => {
+test.describe("Seek event interactions with YouTube elements", () => {
+	test(`arrow keys inside text fields do not trigger seeking on ${watch}`, async ({ page }) => {
 		await setupSeekTestWithDurationCheck(page, watch, DEFAULT_JUMP_BY, 100);
 		await setVideoTimeAndPause(page, 50);
 
