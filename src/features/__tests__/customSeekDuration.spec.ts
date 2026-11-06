@@ -4,7 +4,7 @@ import { expect, test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
 
-// import { OSD_ACCUMULATION_TIMEOUT } from "@/src/features/customSeekDuration/index";
+import { OSD_ACCUMULATION_TIMEOUT } from "@/src/features/customSeekDuration/index";
 import { metadata } from "@/src/features/customSeekDuration/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import {
@@ -33,7 +33,6 @@ const PLAYER_SELECTOR = "div#movie_player";
 const DEFAULT_SEEK_TIME = 20;
 const DEFAULT_JUMP_BY = 15;
 const DEFAULT_EXPECTED_TIME = DEFAULT_SEEK_TIME + DEFAULT_JUMP_BY;
-const OSD_ACCUMULATION_TIMEOUT = 800;
 // Page type constants
 const { home, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -379,7 +378,7 @@ test.describe("Core feature behavior", () => {
 				await setVideoTimeAndPause(page, BASE_TIME);
 				await dispatchSeekKeys(page, "ArrowRight");
 				await settle(page);
-				//native seek happens as custom seek early returns for video's with infinte duration
+				//native seek happens as custom seek early returns for video's with infinite duration
 				await expect.poll(async () => await getVideoTime(page)).toBe(BASE_TIME + 5);
 				const last = await getLastOSDText(page);
 				expect(last).toBeNull();
