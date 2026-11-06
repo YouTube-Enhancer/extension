@@ -18,15 +18,19 @@ import { getCurrentPageType, getCurrentVideoId } from "@/src/utils/url";
 
 import {
 	addLockupButtons,
+	addSearchRowButtons,
 	createRowButtonController,
-	markLockupSaved,
-	resetCardState
+	markRowSaved,
+	readSearchRowVideoId,
+	resetRowState
 } from "./buttons";
 import {
 	ACTIONS_ROW_SELECTOR,
 	BUTTON_CLASS,
 	IGNORED_MUTATION_ROOTS,
 	LOCKUP_SELECTOR,
+	SEARCH_MENU_SLOT_SELECTOR,
+	SEARCH_ROW_SELECTOR,
 	WATCH_CONTAINER_SELECTOR
 } from "./constants";
 import { metadata } from "./index.metadata";
@@ -66,9 +70,12 @@ async function setupSaveToWatchLaterButtons() {
 	if (!isCurrent()) return;
 
 	const onWatchPage = pageType === "watch";
+	// The results list of a search page does not carry the page subtype the generic selector keys on.
 	const containerSelector = onWatchPage
 		? WATCH_CONTAINER_SELECTOR
-		: `ytd-two-column-browse-results-renderer[page-subtype='${pageType}']`;
+		: pageType === "search"
+			? "ytd-section-list-renderer"
+			: `ytd-two-column-browse-results-renderer[page-subtype='${pageType}']`;
 	const rowButtons = createRowButtonController(isCurrent);
 
 	/**
@@ -83,14 +90,16 @@ async function setupSaveToWatchLaterButtons() {
 		if (!host) return;
 
 		// The actions-row button toggles. The card buttons save and go away.
-		const lockup = host.closest(LOCKUP_SELECTOR);
-		if (!lockup) {
+		const row = host.closest(`${LOCKUP_SELECTOR}, ${SEARCH_ROW_SELECTOR}`);
+		if (!row) {
 			const videoId = getCurrentVideoId();
 			if (videoId) rowButtons.toggle(host, videoId);
 			return;
 		}
 
-		const videoId = readLockupData(lockup)?.contentId;
+		const videoId = row.matches(SEARCH_ROW_SELECTOR)
+			? readSearchRowVideoId(row)
+			: readLockupData(row)?.contentId;
 		if (!videoId) return;
 		performPlaylistEdit({
 			host,
@@ -100,7 +109,7 @@ async function setupSaveToWatchLaterButtons() {
 				 * Removing the button is a mutation, and the next observer pass would add it back. Mark the video as
 				 * saved first so the passes skip it.
 				 */
-				markLockupSaved(lockup);
+				markRowSaved(row);
 				host.remove();
 				// The Innertube edit raises no native toast, so confirm the save here.
 				showSnackbar(
@@ -120,6 +129,7 @@ async function setupSaveToWatchLaterButtons() {
 	function addButtons(container: Element) {
 		if (!isCurrent()) return;
 		addLockupButtons(container);
+		if (pageType === "search") addSearchRowButtons(container);
 		if (onWatchPage) void rowButtons.ensureButton();
 	}
 
@@ -130,7 +140,7 @@ async function setupSaveToWatchLaterButtons() {
 	if (!videosUnsubscribeBus) {
 		let passScheduled = false;
 		videosUnsubscribeBus = subscribeToDomMutations(
-			`${LOCKUP_SELECTOR}, ${ACTIONS_ROW_SELECTOR}`,
+			`${LOCKUP_SELECTOR}, ${SEARCH_ROW_SELECTOR}, ${SEARCH_MENU_SLOT_SELECTOR}, ${ACTIONS_ROW_SELECTOR}`,
 			(elements) => {
 				const relevant = elements.some((element) => !element.closest(IGNORED_MUTATION_ROOTS));
 				if (!relevant || passScheduled) return;
@@ -172,7 +182,7 @@ export default createFeature({
 		document.querySelectorAll(`.${BUTTON_CLASS}`).forEach((saveButton) => {
 			saveButton.remove();
 		});
-		resetCardState();
+		resetRowState();
 		inFlightSaves.clear();
 		warnedUnavailable = false;
 	},
