@@ -130,5 +130,6 @@ Solo means alone in the invocation: batching it with other specs that write the 
 - `saveToWatchLaterButton.spec.ts:463`, "actions row button shows the saved state for a video already in Watch Later"
 - `everyFeature.spec.ts:244`, the live enable/disable sweep
 - `everyFeature.spec.ts:289`, the stripped-page sweep: the hard-failure watch, a 240-second timeout in the live-sweep family
+- `pauseBackgroundPlayers.spec.ts:61`, the live pause test: `expectPlayerState` timeouts on live pages under load; failed once solo as flaky and once in the full suite
 
 A failure that only shows up under full-suite load is load, not a regression: rerun it alone first.
