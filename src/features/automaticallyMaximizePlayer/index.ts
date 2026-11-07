@@ -1,8 +1,8 @@
+import type { configuration } from "@/src/types";
+
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { maximizePlayer, minimizePlayer } from "@/src/features/maximizePlayerButton/utils";
-
-import type { configuration } from "@/src/types";
 
 import { metadata } from "./index.metadata";
 

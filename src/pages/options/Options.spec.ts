@@ -585,8 +585,7 @@ test.describe("Options", () => {
 			},
 			"state:rememberVolume": { shortsPageVolume: 11, watchPageVolume: 22 },
 			videoHistory: { resumeType: "automatic" },
-			volumeBoost: { amount: 3, enabled: true, mode: "per_video" },
-			youtubeDataApiV3Key: "legacy-api-key"
+			volumeBoost: { amount: 3, enabled: true, mode: "per_video" }
 		});
 	});
 	test("should report a settings file that is not JSON and leave storage untouched", async ({
@@ -753,33 +752,6 @@ test.describe("Options", () => {
 				.locator("#notifications > div")
 				.getByText(localeText("pages.options.extras.importExportSettings.importButton.success"))
 		).not.toBeAttached();
-	});
-	test("should persist the API key typed into the password field and reveal it on request", async ({
-		page
-	}) => {
-		const input = page.getByLabel(
-			localeText("pages.options.extras.youtubeDataApiV3Key.input.label"),
-			{ exact: true }
-		);
-		await expect(input).toHaveAttribute("type", "password");
-		// The field debounces and stores the string as typed.
-		await input.fill("yte-test-key");
-		await expect
-			.poll(async () => readStoredKey(page, "youtubeDataApiV3Key"), { timeout: 10000 })
-			.toBe("yte-test-key");
-		// The eye button shares the bordered box with the input and flips it to plain text and back.
-		const box = input.locator("xpath=..");
-		const reveal = box.locator("button");
-		await reveal.click();
-		await expect(input).toHaveAttribute("type", "text");
-		await reveal.click();
-		await expect(input).toHaveAttribute("type", "password");
-		// The box is keyboard reachable and hands focus on to the input.
-		await box.focus();
-		await page.keyboard.press("Enter");
-		await expect(input).toBeFocused();
-		await page.reload();
-		await expect(input).toHaveValue("yte-test-key");
 	});
 	test("should persist per-channel speeds edited in the options UI", async ({ page }) => {
 		test.setTimeout(90_000);

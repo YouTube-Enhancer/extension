@@ -110,10 +110,6 @@ class FeaturePerformanceTracker {
 
 		return enabled;
 	}
-	/** Toggle stack trace capture. Off by default even in DEV_MODE to avoid ~345 Error allocations per page load. */
-	setCaptureStackTraces(capture: boolean): void {
-		this.captureStackTraces = capture;
-	}
 	logSummary(str?: string) {
 		const { enabled, metrics } = this;
 
@@ -178,11 +174,6 @@ class FeaturePerformanceTracker {
 			}
 		});
 		console.warn(`[FeaturePerf] Error in ${String(id)} during ${operation}:`, error);
-	}
-
-	/** Toggle stack trace capture. Off by default even in DEV_MODE to avoid ~345 Error allocations per page load. */
-	setCaptureStackTraces(capture: boolean): void {
-		this.captureStackTraces = capture;
 	}
 
 	async track<T>(
