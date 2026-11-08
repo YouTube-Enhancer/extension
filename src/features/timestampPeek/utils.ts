@@ -2,9 +2,11 @@ import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { suspendMiniPlayerOverlay } from "@/src/features/miniPlayer";
+import { delay } from "@/src/utils/async";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 import { timestampElementSelector } from "@/src/utils/dom/selectors";
+import { clamp } from "@/src/utils/math";
 
 const timestampsWithListeners = new Set<HTMLElement>();
 const CLICK_GRACE_MS = 450;
@@ -307,11 +309,13 @@ function positionOverlay(element: HTMLElement, overlay: HTMLElement) {
 	const { offsetWidth: overlayWidth } = overlay;
 	const { offsetHeight: overlayHeight } = overlay;
 	let x = left + width / 2 - overlayWidth / 2;
-	x = Math.min(Math.max(x, margin), window.innerWidth - overlayWidth - margin);
+	x = clamp(x, margin, window.innerWidth - overlayWidth - margin);
 	const above = top - overlayHeight - margin;
 	const below = bottom + margin;
 	const y = above >= margin || below + overlayHeight > window.innerHeight ? above : below;
-	overlay.style.transform = `translate(${x}px, ${Math.max(margin, Math.min(y, window.innerHeight - overlayHeight - margin))}px)`;
+	// The upper bound is floored at `margin` so a taller-than-viewport overlay pins to the top edge.
+	const maxY = Math.max(margin, window.innerHeight - overlayHeight - margin);
+	overlay.style.transform = `translate(${x}px, ${clamp(y, margin, maxY)}px)`;
 }
 
 function positionShieldBetween(timestampEl: HTMLElement, overlay: HTMLElement) {
@@ -407,5 +411,5 @@ async function seekVideo(video: HTMLVideoElement, time: number) {
 		video.addEventListener("seeked", () => resolve(), { once: true });
 	});
 	video.currentTime = target;
-	await Promise.race([seeked, new Promise<void>((resolve) => setTimeout(resolve, 200))]);
+	await Promise.race([seeked, delay(200)]);
 }
