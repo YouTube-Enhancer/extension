@@ -6,6 +6,7 @@ import { resolve } from "path";
 import { manifestV3, manifestV3Firefox } from "@/src/manifest";
 import terminalColorLog from "@/src/utils/logging";
 import { type Browser, browsers, outDir } from "@/src/utils/plugins/utils";
+import { unique } from "@/src/utils/string";
 
 export type GenerateManifestsOptions = {
 	/** Folder whose top-level `*.js` files are listed as web-accessible chunks. Defaults to the temp build output. */
@@ -62,7 +63,7 @@ function writeManifest(
 			if (typeof entry === "string") return entry;
 			return {
 				...entry,
-				resources: [...new Set([...(entry.resources ?? []), ...chunkScriptPaths])]
+				resources: unique([...(entry.resources ?? []), ...chunkScriptPaths])
 			};
 		})
 	};
