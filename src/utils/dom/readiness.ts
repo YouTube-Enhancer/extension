@@ -2,6 +2,7 @@ import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
+import { delay } from "@/src/utils/async";
 import { waitForElement } from "@/src/utils/dom/wait";
 
 /**
@@ -109,7 +110,7 @@ export async function refineLiveFlagFromPlayer(options?: {
 			attempt < 12 && urlVideoId && playerData?.video_id !== urlVideoId;
 			attempt++
 		) {
-			await new Promise((resolve) => setTimeout(resolve, 200));
+			await delay(200);
 			playerData = await player.getVideoData();
 		}
 		return Boolean(playerData?.isLive && (!urlVideoId || playerData.video_id === urlVideoId));
