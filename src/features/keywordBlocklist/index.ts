@@ -3,6 +3,7 @@ import "./index.css";
 import type { configuration, Nullable } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { createTrailingThrottle } from "@/src/utils/async";
 import {
 	subscribeToDomMutations,
 	type UnsubscribeFromDomMutations
@@ -66,7 +67,6 @@ let hasKeywords = false;
 let maskedTitleText = "";
 let unsubscribeContainerBus: Nullable<UnsubscribeFromDomMutations> = null;
 let unsubscribeAttributeBus: Nullable<UnsubscribeFromDomMutations> = null;
-let scanHandle: Nullable<number> = null;
 let fallbackScanHandle: Nullable<number> = null;
 
 // Any element that is, or lives inside, a video container. Used to scope bus subscriptions
@@ -104,7 +104,7 @@ export default createFeature({
 		);
 	},
 	onNavigate: () => {
-		if (unsubscribeContainerBus) scheduleScan();
+		if (unsubscribeContainerBus) scanThrottle.schedule();
 	}
 });
 
@@ -341,23 +341,23 @@ function scan() {
 	}
 }
 
-function scheduleScan() {
-	// Throttle rather than debounce: a steady stream of mutations must not postpone the scan forever.
-	if (scanHandle !== null) return;
-	scanHandle = window.setTimeout(() => {
-		scanHandle = null;
-		scan();
-	}, SCAN_THROTTLE_MS);
-}
+// Throttle rather than debounce: a steady stream of mutations must not postpone the scan forever.
+const scanThrottle = createTrailingThrottle(scan, SCAN_THROTTLE_MS);
 
 function startObserving() {
 	if (unsubscribeContainerBus) return;
-	unsubscribeContainerBus = subscribeToDomMutations(observedSelector, () => scheduleScan());
-	unsubscribeAttributeBus = subscribeToDomMutations(observedSelector, () => scheduleScan(), {
-		attributeFilter: ["src", "srcset", "style"]
-	});
+	unsubscribeContainerBus = subscribeToDomMutations(observedSelector, () =>
+		scanThrottle.schedule()
+	);
+	unsubscribeAttributeBus = subscribeToDomMutations(
+		observedSelector,
+		() => scanThrottle.schedule(),
+		{
+			attributeFilter: ["src", "srcset", "style"]
+		}
+	);
 	document.addEventListener("mouseover", handleDocumentMouseOver, true);
-	fallbackScanHandle = window.setInterval(scheduleScan, FALLBACK_SCAN_INTERVAL_MS);
+	fallbackScanHandle = window.setInterval(() => scanThrottle.schedule(), FALLBACK_SCAN_INTERVAL_MS);
 }
 
 function stopObserving() {
@@ -367,10 +367,7 @@ function stopObserving() {
 	unsubscribeAttributeBus = null;
 	document.removeEventListener("mouseover", handleDocumentMouseOver, true);
 	document.body.classList.remove(HOVER_BLOCKED_CLASS);
-	if (scanHandle !== null) {
-		window.clearTimeout(scanHandle);
-		scanHandle = null;
-	}
+	scanThrottle.cancel();
 	if (fallbackScanHandle !== null) {
 		window.clearInterval(fallbackScanHandle);
 		fallbackScanHandle = null;
@@ -386,7 +383,7 @@ function syncConfig(config: KeywordBlocklistConfiguration) {
 function syncObserving() {
 	if (hasKeywords) {
 		startObserving();
-		scheduleScan();
+		scanThrottle.schedule();
 	} else {
 		stopObserving();
 		restoreAll();
