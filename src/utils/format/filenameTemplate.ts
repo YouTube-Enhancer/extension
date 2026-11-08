@@ -1,5 +1,6 @@
 import type { Nullable } from "@/src/types";
 
+import { padDatePart } from "./date";
 import { formatVideoTimestamp, type VideoTimestampFormat } from "./time";
 
 export const screenshotFilenamePlaceholders = [
@@ -50,8 +51,6 @@ export type ScreenshotTimestampFormat = (typeof screenshotTimestampFormats)[numb
 
 export const screenshotTimestampSeparators = ["auto", "colon", "hyphen"] as const;
 export type ScreenshotTimestampSeparator = (typeof screenshotTimestampSeparators)[number];
-
-const padDatePart = (value: number) => value.toString().padStart(2, "0");
 
 /**
  * Returns the `{...}` tokens (and stray braces) in a template that are not valid placeholders.
