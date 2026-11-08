@@ -4,9 +4,14 @@ import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { getPagePlayerElement, whenReady } from "@/src/utils/dom/readiness";
+import {
+	documentVolumeBucket,
+	restorePersistedVolume,
+	seedPersistedVolume
+} from "@/src/utils/player/persistedVolume";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
-import { metadata } from "./index.metadata";
+import { initialState, metadata } from "./index.metadata";
 import { resetVolumeChangeListener, setupVolumeChangeListener } from "./utils";
 
 /**
@@ -76,27 +81,62 @@ async function restoreVolume(stateAPI: FeatureStateAPI<"rememberVolume">) {
 	await listenerAttached;
 }
 
+/**
+ * Puts the remembered level for this document's page type into YouTube's store, where the next
+ * player reads it at construction. A remembered 0 means "nothing to force" - the same read
+ * `rememberedVolumeForCurrentPage` gives it - so any seed left by an earlier value is handed back
+ * instead, and the player boots at YouTube's own level.
+ *
+ * The lifecycle hooks seed as well as `document_start` because the turn-on can arrive on a page
+ * the gate excludes (the home feed), where `onEnable` never runs and the in-page navigation to the
+ * next video never re-runs `document_start`.
+ */
+function seedRememberedVolume(stateAPI: FeatureStateAPI<"rememberVolume">): void {
+	const bucket = documentVolumeBucket(stateAPI.getState());
+	if (bucket) seedPersistedVolume(bucket);
+	else restorePersistedVolume();
+}
+
 export default createFeature({
 	...metadata,
-	onDisable: () => {
+	onConfigChange: (config, stateAPI) => {
+		if (config.enabled) {
+			seedRememberedVolume(stateAPI);
+			return;
+		}
+		/**
+		 * A turn-off is the one path that always reaches here - the page gate can keep `onDisable`
+		 * from ever running (the feature is already inactive when the config lands) - so the store
+		 * has to be handed back here while we still know what was in it.
+		 */
+		resetVolumeChangeListener();
+		restorePersistedVolume();
+	},
+	onDisable: (config) => {
 		// Listener removal is a disposer (registered in onEnable); the tracking reset stays here so the
 		// next enable re-attaches a fresh listener.
 		resetVolumeChangeListener();
+		/**
+		 * A page-gate exit (watch -> home) also runs this hook, with the feature still configured
+		 * on. Restoring there would wipe the seed the next video boots from and re-open the loud
+		 * start, so only a real turn-off hands YouTube's own value back.
+		 */
+		if (config.enabled) return;
+		restorePersistedVolume();
 	},
 	onEnable: async (_, stateAPI) => {
 		registry.on("rememberVolume", "events", () =>
 			eventManager.removeEventListeners("rememberVolume")
 		);
+		seedRememberedVolume(stateAPI);
 		await restoreVolume(stateAPI);
 		queueVolumeReapply(stateAPI);
 	},
 	onNavigate: async (_, stateAPI) => {
+		seedRememberedVolume(stateAPI);
 		await restoreVolume(stateAPI);
 		queueVolumeReapply(stateAPI);
 	},
 	persistState: true,
-	state: {
-		shortsPageVolume: 25,
-		watchPageVolume: 25
-	}
+	state: { ...initialState }
 });
