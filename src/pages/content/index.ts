@@ -121,7 +121,17 @@ const scopeStateForPage = (state: StoredFeatureState): StoredFeatureState => {
 	if (!history) return state;
 	const storageEntries = history.storage ?? {};
 	const videoId = getCurrentVideoId();
-	const scopedStorage = videoId ? { [videoId]: storageEntries[videoId] } : {};
+	/**
+	 * A video with no stored entry must scope to an empty record. Building
+	 * `{ [videoId]: storageEntries[videoId] }` anyway yields `{ [videoId]: undefined }`, and that
+	 * key survives the structured clone across the bridge, so the record schema rejects it with
+	 * invalid_type at that key - failing hydration for every watch page whose video is not yet in
+	 * the history. The entry is validated here for the same reason the write boundary is: an
+	 * invalid stored entry would otherwise reach the page and fail the same parse.
+	 */
+	const entry = videoId ? storageEntries[videoId] : undefined;
+	const scopedStorage =
+		videoId && entry && isValidVideoHistoryEntry(entry) ? { [videoId]: entry } : {};
 	return { ...state, videoHistory: { ...history, storage: scopedStorage } };
 };
 /**
