@@ -8,12 +8,13 @@ import type { Author, Brand, Nullable, VideoId, YouTubePlayerDiv } from "@/src/t
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { formatTime } from "@/src/features/remainingTime/utils";
 import { requestStoredVideoEntry, setVideoHistory } from "@/src/features/videoHistory/utils";
+import { delay } from "@/src/utils/async";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { whenReady } from "@/src/utils/dom/readiness";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
+import { formatVideoTimestamp } from "@/src/utils/format/time";
 import { browserColorLog } from "@/src/utils/logging";
 import { round } from "@/src/utils/math";
 import { isWatchPage } from "@/src/utils/url";
@@ -140,7 +141,7 @@ function createResumePrompt(
 		hidePrompt();
 		browserColorLog(
 			window.i18nextInstance.t((translations) => translations.messages.resumingVideo, {
-				VIDEO_TIME: formatTime(videoHistoryEntry.timestamp)
+				VIDEO_TIME: formatVideoTimestamp(videoHistoryEntry.timestamp)
 			}),
 			"FgGreen"
 		);
@@ -382,7 +383,7 @@ async function waitForOwnerRow(author: string, timeout: number): Promise<boolean
 				?.textContent?.replace(/\s+/g, " ")
 				.trim() ?? "";
 		if (author && channelName.includes(author)) return true;
-		await new Promise((resolve) => setTimeout(resolve, 100));
+		await delay(100);
 	}
 	return false;
 }
@@ -398,6 +399,6 @@ async function waitForPlayerVideoData(playerContainer: YouTubePlayerDiv, timeout
 			Date.now() - start >= timeout
 		)
 			return data;
-		await new Promise((resolve) => setTimeout(resolve, 200));
+		await delay(200);
 	}
 }

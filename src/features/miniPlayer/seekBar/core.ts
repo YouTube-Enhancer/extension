@@ -75,15 +75,6 @@ export function computeSeekWindow({
 	} catch {}
 	return null;
 }
-export function formatTime(seconds: number): string {
-	const s = Math.max(0, Math.floor(seconds));
-	const hh = Math.floor(s / 3600);
-	const mm = Math.floor((s % 3600) / 60);
-	const ss = s % 60;
-	return hh > 0
-		? `${hh}:${String(mm).padStart(2, "0")}:${String(ss).padStart(2, "0")}`
-		: `${mm}:${String(ss).padStart(2, "0")}`;
-}
 export function isBarHidden({ controlsVisible, forced, scrubbing }: BarVisibilityInput): boolean {
 	return !controlsVisible && !forced && !scrubbing;
 }

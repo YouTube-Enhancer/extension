@@ -2,13 +2,13 @@ import type { Nullable } from "@/src/types";
 
 import { MINI_SEEK_BAR_CLASS } from "@/src/features/miniPlayer/constants";
 import { subscribeToDomMutations } from "@/src/utils/dom/observers/domMutationBus";
+import { formatVideoTimestamp } from "@/src/utils/format/time";
 import { clamp } from "@/src/utils/math";
 
 import type { StoryboardRenderer, StoryboardSheet } from "./core";
 
 import {
 	computeSeekWindow,
-	formatTime,
 	isBarHidden,
 	parseStoryboardSheet,
 	ratioToTime,
@@ -135,7 +135,7 @@ export function attachMiniSeekBar({
 		const window = seekWindow();
 		if (!window) return;
 		const hoveredTime = ratioToTime(window, hoverRatio);
-		previewTimestamp.textContent = formatTime(hoveredTime);
+		previewTimestamp.textContent = formatVideoTimestamp(hoveredTime);
 		const minX = PREVIEW_EDGE_CLAMP_PX / 2;
 		const maxX = bounds.width - PREVIEW_EDGE_CLAMP_PX / 2;
 		previewBox.style.left = `${clamp(hoverOffsetX, minX, maxX)}px`;
