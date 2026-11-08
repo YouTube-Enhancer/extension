@@ -16,6 +16,7 @@ import {
 	fullscreenPlacements,
 	type Nullable
 } from "@/src/types";
+import { delay } from "@/src/utils/async";
 import { sendDevToolsMessage } from "@/src/utils/messaging/devtools";
 
 type ButtonConfig = {
@@ -45,7 +46,7 @@ export default function ButtonPlacementSetting({ config }: { config: configurati
 			addNotification("error", () => "Failed to save");
 		},
 		onSuccess: async () => {
-			await new Promise((resolve) => setTimeout(resolve, 100));
+			await delay(100);
 			void queryClient.invalidateQueries({ queryKey: ["devtools", "coreConfig"] });
 			addNotification("success", () => "Saved");
 		}
