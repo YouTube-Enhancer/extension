@@ -80,8 +80,14 @@ chrome.runtime.onMessage.addListener(
 			 * DevTools requests originate from the extension's own devtools pages. A tab sender
 			 * means the message was relayed from page context, which is not an authorized source:
 			 * the page-controlled fields (source, type) are not authentication.
+			 *
+			 * devtools_invalidate_cache is the exception: development mode sends it from the
+			 * content script itself when a config key changes, so a tab sender here is that
+			 * listener rather than the page, and no window-message bridge forwards this type
+			 * for a relay to copy. Its handler only broadcasts a cache invalidation, nothing
+			 * that writes.
 			 */
-			if (sender.tab) return false;
+			if (sender.tab && type !== "devtools_invalidate_cache") return false;
 			const { requestId, tabId } = message;
 			if (type === "devtools_invalidate_cache") {
 				const data = message;
