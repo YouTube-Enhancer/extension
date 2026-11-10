@@ -25,11 +25,10 @@ import {
 	readOnScreenDisplayState,
 	setupOSDTextCapture
 } from "@/src/utils/_tests/osd";
-import { freezeAndGetTime } from "@/src/utils/_tests/player";
+import { freezeAndGetTime, seekTo } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const VIDEO_SELECTOR = "video.html5-main-video";
-const PLAYER_SELECTOR = "div#movie_player";
 const DEFAULT_SEEK_TIME = 20;
 const DEFAULT_JUMP_BY = 15;
 const DEFAULT_EXPECTED_TIME = DEFAULT_SEEK_TIME + DEFAULT_JUMP_BY;
@@ -162,42 +161,10 @@ async function setupSeekTestWithDurationCheck(
  * @param seconds The number of seconds to set the video time to.
  */
 async function setVideoTimeAndPause(page: Page, seconds: number): Promise<void> {
-	await page.evaluate(
-		async ({ playerSelector, seekTime, videoSelector }) => {
-			const video = document.querySelector<HTMLVideoElement>(videoSelector);
-			video?.pause();
-			const player = document.querySelector<
-				HTMLElement & { seekTo?: (s: number, a: boolean) => Promise<void> | void }
-			>(playerSelector);
-			if (player?.seekTo) {
-				await player.seekTo(seekTime, true);
-				return;
-			}
-			if (video) {
-				if (video.readyState < 1) {
-					return new Promise<void>((resolve) => {
-						video.addEventListener(
-							"loadedmetadata",
-							() => {
-								video.currentTime = seekTime;
-								resolve();
-							},
-							{ once: true }
-						);
-					});
-				}
-				video.currentTime = seekTime;
-			}
-		},
-		{ playerSelector: PLAYER_SELECTOR, seekTime: seconds, videoSelector: VIDEO_SELECTOR }
-	);
-	await page.waitForFunction(
-		({ seekTime, videoSelector }) => {
-			const video = document.querySelector<HTMLVideoElement>(videoSelector);
-			return video !== null && !video.seeking && Math.abs(video.currentTime - seekTime) < 0.25;
-		},
-		{ seekTime: seconds, videoSelector: VIDEO_SELECTOR }
-	);
+	await page.evaluate((videoSelector) => {
+		document.querySelector<HTMLVideoElement>(videoSelector)?.pause();
+	}, VIDEO_SELECTOR);
+	await seekTo(page, seconds);
 }
 
 test.describe("Core feature behavior", () => {

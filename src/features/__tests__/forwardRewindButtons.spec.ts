@@ -3,7 +3,7 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
-import type { ButtonPlacement, YouTubePlayerDiv } from "@/src/types";
+import type { ButtonPlacement } from "@/src/types";
 
 import { metadata } from "@/src/features/forwardRewindButtons/index.metadata";
 import {
@@ -23,7 +23,7 @@ import {
 } from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-import { freezeAndGetTime, getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
+import { freezeAndGetTime, getValueFromYouTubePlayer, seekTo } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -45,10 +45,7 @@ export async function expectSeekDelta(
 			? "yte-feature-forwardButton-button"
 			: "yte-feature-rewindButton-button";
 	// Seek to a known position first: navigation leaves the player near 0, where a rewind clamps and the delta is meaningless.
-	await page.evaluate(async (seconds) => {
-		const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
-		await player?.seekTo(seconds, true);
-	}, baseline);
+	await seekTo(page, baseline);
 	await expect
 		.poll(async () => getValueFromYouTubePlayer(page, "getCurrentTime", pageType), {
 			intervals: [200],

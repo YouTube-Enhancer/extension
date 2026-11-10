@@ -297,6 +297,46 @@ export async function mutePlayer(
 	});
 	await expect.poll(async () => isPlayerMuted(page), { intervals: [200], timeout }).toBe(true);
 }
+/**
+ * Seeks to `seconds` and resolves once the video has arrived: the seek flag has cleared and the
+ * playhead sits within a quarter second of the target. Goes through the YouTube player API when the
+ * element offers it, falling back to the video element when it does not (or metadata has not loaded).
+ */
+export async function seekTo(page: Page, seconds: number): Promise<void> {
+	await page.evaluate(
+		async ({ seekTime, videoSelector }) => {
+			const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+			if (player?.seekTo) {
+				await player.seekTo(seekTime, true);
+				return;
+			}
+			const video = document.querySelector<HTMLVideoElement>(videoSelector);
+			if (!video) return;
+			if (video.readyState < 1) {
+				await new Promise<void>((resolve) => {
+					video.addEventListener(
+						"loadedmetadata",
+						() => {
+							video.currentTime = seekTime;
+							resolve();
+						},
+						{ once: true }
+					);
+				});
+				return;
+			}
+			video.currentTime = seekTime;
+		},
+		{ seekTime: seconds, videoSelector: "video.html5-main-video" }
+	);
+	await page.waitForFunction(
+		({ seekTime, videoSelector }) => {
+			const video = document.querySelector<HTMLVideoElement>(videoSelector);
+			return video !== null && !video.seeking && Math.abs(video.currentTime - seekTime) < 0.25;
+		},
+		{ seekTime: seconds, videoSelector: "video.html5-main-video" }
+	);
+}
 export async function setValueOnYouTubePlayer<
 	P extends Page,
 	K extends YouTubePlayerSetKeys,
