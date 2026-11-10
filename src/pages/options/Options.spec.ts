@@ -209,8 +209,8 @@ test.describe("Options", () => {
 		await expect
 			.poll(async () => readHideTime(page))
 			.toBe(defaultConfiguration.onScreenDisplay.hideTime);
-		// Clearing resets the configuration only; feature state must survive it.
-		expect(await readRememberVolumeState(page)).toEqual(SEEDED_STATE);
+		// Clearing resets the configuration and erases every registered feature-state key.
+		expect(await readRememberVolumeState(page)).toBeUndefined();
 	});
 	test("should reset data", async ({ page }) => {
 		const defaultConfiguration = await loadDefaultConfig();
