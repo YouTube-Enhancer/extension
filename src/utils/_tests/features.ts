@@ -21,6 +21,8 @@ import {
 	isExecutionContextDestroyed
 } from "@/src/utils/_tests/pageSetup";
 
+export type Switch = FilterKeysByValueType<configuration, boolean>;
+
 export async function clickFeatureButton(
 	page: Page,
 	pageType: PageType,
@@ -52,6 +54,26 @@ export async function clickFeatureMenuItem(
 	const item = page.locator(`#${featureId}`);
 	await item.waitFor({ state: "visible" });
 	await item.click();
+}
+/** Every configuration path whose last segment `matches`, found by walking the defaults. */
+export function collectPaths(
+	node: unknown,
+	matches: (key: string) => boolean,
+	prefix = "",
+	out: Path<configuration>[] = []
+): Path<configuration>[] {
+	if (typeof node !== "object" || node === null) return out;
+	for (const [key, value] of Object.entries(node)) {
+		const path = prefix ? `${prefix}.${key}` : key;
+		if (matches(key) && typeof value !== "object") out.push(path as Path<configuration>);
+		else collectPaths(value, matches, path, out);
+	}
+	return out;
+}
+
+/** Every `enabled` switch in the configuration or feature defaults, features and their buttons alike. */
+export function collectSwitches(defaults: unknown, prefix = ""): Switch[] {
+	return collectPaths(defaults, (key) => key === "enabled", prefix) as Switch[];
 }
 /**
  * Disables a feature in the extension configuration.
