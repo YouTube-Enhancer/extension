@@ -4,12 +4,15 @@ yt-lockup-view-model:has(.yte-save-to-watch-later-button) .ytLockupMetadataViewM
 	display: flex;
 }
 
-/* 65px keeps the title clear of the two buttons. */
+/* 65px keeps the title clear of the two buttons. Hosts with MoveLockupOverflowMenuTo* pull the
+   overflow menu out of the text column and YouTube returns the title padding to 0 there, so the
+   clearance must not apply either: it squished the watch sidebar's 148px titles (issue #1416). */
 yt-lockup-view-model:has(.yte-save-to-watch-later-button)
-	.ytLockupMetadataViewModelHasMenuButton
-	.ytLockupMetadataViewModelTextContainer:has(
-		+ .ytLockupMetadataViewModelMenuButton:not(.ytLockupMetadataViewModelBottomRight)
+	.ytLockupMetadataViewModelHasMenuButton:not(
+		.ytLockupMetadataViewModelMoveLockupOverflowMenuToBottomRight,
+		.ytLockupMetadataViewModelMoveLockupOverflowMenuToTopRight
 	)
+	.ytLockupMetadataViewModelTextContainer:has(+ .ytLockupMetadataViewModelMenuButton)
 	.ytLockupMetadataViewModelTitle {
 	padding-right: 65px;
 }
