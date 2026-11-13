@@ -3,12 +3,16 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
-import type { configuration, Path } from "@/src/types";
-import type { FilterKeysByValueType } from "@/src/utils/_tests/types";
 
 import { watchExtensionErrors } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementSelectors } from "@/src/utils/_tests/constants";
-import { loadDefaultConfig, setOption } from "@/src/utils/_tests/features";
+import {
+	collectPaths,
+	collectSwitches,
+	loadDefaultConfig,
+	setOption,
+	type Switch
+} from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import {
 	navigateToPageType,
@@ -25,7 +29,6 @@ import {
  * the extension throwing. They reach the guards a healthy page never trips one feature at a time: a player that is
  * not there, a page a feature is not meant for, a teardown while another feature still holds the element.
  */
-type Switch = FilterKeysByValueType<configuration, boolean>;
 const {
 	channel_home,
 	channel_posts,
@@ -41,27 +44,6 @@ const {
 } = pageTypeRecord;
 /** How long the features get to finish their retry loops before the page is changed or the switches read back. */
 const SETTLE_MS = 15_000;
-
-/** Every configuration path whose last segment `matches`, found by walking the defaults. */
-function collectPaths(
-	node: unknown,
-	matches: (key: string) => boolean,
-	prefix = "",
-	out: Path<configuration>[] = []
-): Path<configuration>[] {
-	if (typeof node !== "object" || node === null) return out;
-	for (const [key, value] of Object.entries(node)) {
-		const path = prefix ? `${prefix}.${key}` : key;
-		if (matches(key) && typeof value !== "object") out.push(path as Path<configuration>);
-		else collectPaths(value, matches, path, out);
-	}
-	return out;
-}
-
-/** Every `enabled` switch in the configuration, features and their buttons alike. */
-function collectSwitches(defaults: configuration): Switch[] {
-	return collectPaths(defaults, (key) => key === "enabled") as Switch[];
-}
 
 async function enableEverythingOn(
 	page: Page,
