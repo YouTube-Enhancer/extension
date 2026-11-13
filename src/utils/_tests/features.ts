@@ -1,5 +1,7 @@
 import type { Page } from "@playwright/test";
 
+import { randomUUID } from "crypto";
+
 import type { PageType } from "@/src/features/_registry/types";
 import type {
 	ButtonPlacement,
@@ -116,9 +118,9 @@ export async function setFeatureValue<K extends Path<configuration>>(
 	// metadata's min/max/step on every user edit, so a write that skips that check would park
 	// invalid config in storage and blame the product for whatever the spec asserts next.
 	validateNumbers(pathValueObject(key, value), await numberConstraints());
-	// Clear the signal so the wait observes this write's processing cycle. The embedded
-	// script sets it after reconciling a featureUpdate; the content script sets it when
-	// the write produced nothing to reconcile (an identical value fires no storage event).
+	// Clear the signal so the wait observes this write's acknowledgement cycle. The embedded
+	// script sets it to this write's nonce after reconciling a featureUpdate; the content
+	// script sets it when the write produced nothing to reconcile (an identical value).
 	// A live page can navigate mid-sweep (YouTube's reload storms), which destroys this
 	// evaluate's execution context. Re-establish the re-injected document and re-send the
 	// write rather than failing a long sequential sweep on a page that may navigate under
@@ -138,34 +140,53 @@ export async function setFeatureValue<K extends Path<configuration>>(
 	// background pages under full-suite load. 60 s (not the bare 30 s) so the every-feature
 	// sweep - ~50 sequential writes, each waiting on its feature's onEnable reconcile, whose
 	// player retries stretch under 5-worker load - does not read a legitimately slow enable
-	// as a lost signal. This is the ceiling the sweep's signal budget was raised to.
-	// A live page can navigate between the send and the reconcile, dropping the message with no
-	// trace; that used to burn the whole budget and fail a sweep nothing was wrong with. One
-	// re-send covers it. The signal is deliberately not cleared on the retry: a slow first
-	// reconcile may still land it, and an identical value fires no storage event, so the retry
-	// only does anything when the first send was actually lost.
+	// as a lost write. Each write carries a nonce and the acknowledgement is that nonce on
+	// yte-config-processing: the embedded script sets it after reconciling this write's
+	// featureUpdate, the content script sets it when there was nothing to reconcile, and the
+	// content script answers `failed:<nonce>` when it could not forward the write at all. A
+	// lost message is covered by one re-send carrying the same nonce, so whichever attempt
+	// lands answers for it; a write that is never acknowledged fails with the key's name
+	// instead of surfacing later as a mystery. A live page can navigate between the send and
+	// the reconcile, dropping the message with no trace; that is what the re-send is for.
+	const nonce = randomUUID();
 	for (let send = 0; ; send++) {
-		await sendYouTubeMessage(page, {
-			action: "send_data",
-			data: { key, value },
-			source: "content",
-			type: "test_setConfigValue"
-		});
 		try {
-			await page.waitForFunction(
-				() => document.documentElement.hasAttribute("yte-config-processing"),
-				undefined,
+			await sendYouTubeMessage(page, {
+				action: "send_data",
+				data: { key, nonce, value },
+				source: "content",
+				type: "test_setConfigValue"
+			});
+			const handle = await page.waitForFunction(
+				(expected) => {
+					const signal = document.documentElement.getAttribute("yte-config-processing");
+					if (signal === expected) return "acknowledged";
+					if (signal === `failed:${expected}`) return "rejected";
+					return null;
+				},
+				nonce,
 				{ polling: 100, timeout: 60_000 }
 			);
-			break;
+			if ((await handle.jsonValue()) === "acknowledged") break;
+			throw new Error(
+				"the content script could not forward the write (it is not ready to accept one)"
+			);
 		} catch (error) {
-			if (send >= 1) throw error;
+			if (send >= 1) {
+				throw new Error(
+					`the config write for "${key}" was never acknowledged: ${
+						error instanceof Error ? error.message : String(error)
+					}`
+				);
+			}
 			// A fresh document carries no stale signal; wait for the extension to re-inject so
 			// the re-send reaches a listening content script.
 			await page.waitForSelector("html[yte-ready]", { timeout: 30_000 }).catch(() => {});
 		}
 	}
-	await page.waitForTimeout(250);
+	// No settle timer follows: the acknowledgement now arrives only after the write has
+	// reconciled (or provably had nothing to reconcile), which is what the old 250 ms
+	// was approximating.
 }
 /**
  * Sets a configuration option for the extension.

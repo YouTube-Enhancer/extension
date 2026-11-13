@@ -375,44 +375,58 @@ const onWindowMessage = (event: MessageEvent) => {
 						 * The write only reaches the embedded script through the storage listener
 						 * that forwards it. On a freshly (re)loaded document (YouTube's error
 						 * watcher, reload storms) that listener may not be attached yet: the
-						 * write would fire no change event, dispatch no featureUpdate, and the
-						 * fallback signal below would report success for a write nothing ever
-						 * reconciled - the feature stays disabled while the test moves on.
-						 * Wait for the embedded instance and attach forwarding first.
+						 * write would fire no change event and dispatch no featureUpdate, so the
+						 * wait for this write's acknowledgement would never resolve. Wait for
+						 * the embedded instance and attach forwarding first; when it never comes,
+						 * answer with a failed acknowledgement so the waiting write fails fast by
+						 * name instead of timing out.
 						 */
+						const {
+							data: { key, nonce, value }
+						} = message;
+						const acknowledge = (state: "failed" | "ok") => {
+							document.documentElement.setAttribute(
+								"yte-config-processing",
+								state === "ok" ? nonce : `failed:${nonce}`
+							);
+						};
 						if (!storageForwardingEnabled) {
 							const ready = await waitForReady(30_000);
-							if (ready) enableStorageForwarding();
+							if (!ready) {
+								acknowledge("failed");
+								break;
+							}
+							enableStorageForwarding();
 						}
-						const {
-							data: { key, value }
-						} = message;
 						const config = await storage.local.get();
 						const keys = key.split(".");
 						let current = config;
 						for (const segment of keys.slice(0, -1)) {
 							current = current[segment] as Record<string, unknown>;
 						}
-						current[keys.at(-1)!] = value;
+						const leafKey = keys.at(-1)!;
+						const { [leafKey]: previous } = current;
+						current[leafKey] = value;
+						// An identical value fires no storage event and needs no reconcile, so it is
+						// acknowledged explicitly instead of waiting out a grace timer.
+						if (JSON.stringify(previous) === JSON.stringify(value)) {
+							acknowledge("ok");
+							break;
+						}
+						pendingTestWriteNonce = nonce;
 						const dispatchedBefore = dispatchedFeatureUpdates;
 						const settled = new Promise<void>((resolve) => {
 							testConfigWriteSettled = resolve;
 						});
 						await storage.local.set(config);
-						// An identical value fires no storage event, so storageChangeHandler never
-						// runs; treat the write as settled after a short grace period.
-						const fallback = setTimeout(() => {
-							testConfigWriteSettled?.();
-							testConfigWriteSettled = null;
-						}, 250);
 						await settled;
-						clearTimeout(fallback);
-						// featureUpdates are reconciled by the embedded script, which signals
-						// completion itself. When the write dispatched none there is nothing to
-						// reconcile, so the signal is set here.
+						// featureUpdates are reconciled by the embedded script, which acknowledges with
+						// this write's nonce itself. When the write dispatched none there is nothing to
+						// reconcile, so the acknowledgement is set here.
 						if (dispatchedFeatureUpdates === dispatchedBefore) {
-							document.documentElement.setAttribute("yte-config-processing", "");
+							acknowledge("ok");
 						}
+						pendingTestWriteNonce = null;
 						break;
 					}
 				}
@@ -561,6 +575,8 @@ function emitPathEvent<P extends keyof typeof changeHandlers>({
 }
 /** Feature updates dispatched to the embedded script; lets the test config-write handler detect writes that produced nothing to reconcile. */
 let dispatchedFeatureUpdates = 0;
+/** The in-flight test write's acknowledgement nonce; rides the featureUpdate so the embedded script answers for that write. */
+let pendingTestWriteNonce: null | string = null;
 /** Resolves the in-flight test_setConfigValue write once storage has settled. */
 let testConfigWriteSettled: (() => void) | null = null;
 const storageChangeHandler = async (changes: StorageChanges<unknown>, areaName: string) => {
@@ -598,7 +614,8 @@ const storageChangeHandler = async (changes: StorageChanges<unknown>, areaName: 
 			sendExtensionOnlyMessage("featureUpdate", {
 				config,
 				enabled: resolveEnabled(config),
-				id: feature
+				id: feature,
+				...(pendingTestWriteNonce ? { nonce: pendingTestWriteNonce } : {})
 			});
 			if (DEV_MODE) dispatchedFeatureUpdates += 1;
 		}

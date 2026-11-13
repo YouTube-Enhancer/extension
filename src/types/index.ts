@@ -482,6 +482,8 @@ export type ContentSendOnlyMessageMappings = {
 		"test_setConfigValue",
 		{
 			key: Path<configuration>;
+			/** Per-write acknowledgement token: the reply is this nonce on yte-config-processing. */
+			nonce: string;
 			value: PathValue<configuration, Path<configuration>>;
 		}
 	>;
@@ -577,7 +579,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	>;
 	featureUpdate: DataResponseMessage<
 		"featureUpdate",
-		{ config: configuration[FeatureKeys]; enabled: boolean; id: FeatureKeys }
+		{ config: configuration[FeatureKeys]; enabled: boolean; id: FeatureKeys; nonce?: string }
 	>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	onScreenDisplayConfigChange: DataResponseMessage<

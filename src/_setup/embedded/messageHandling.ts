@@ -31,9 +31,12 @@ async function routeMessage(message: ExtensionSendOnlyMessages | Messages["respo
 			try {
 				await registry.reconcileFeature(message.data.id, message.data.config, message.data.enabled);
 			} finally {
-				// Signal to E2E tests that this feature update cycle is complete. Compiled
-				// out of release builds, where DEV_MODE is statically false.
-				if (DEV_MODE) document.documentElement.setAttribute("yte-config-processing", "");
+				// Acknowledge this write's reconcile by its nonce, so only the write that
+				// caused this update is the one reported as settled. Compiled out of
+				// release builds, where DEV_MODE is statically false.
+				if (DEV_MODE) {
+					document.documentElement.setAttribute("yte-config-processing", message.data.nonce ?? "");
+				}
 			}
 			break;
 		case "languageChange":
