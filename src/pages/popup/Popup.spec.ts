@@ -34,15 +34,12 @@ async function readFeatureEnabled(page: Page, feature: string) {
 test.describe("popup page", () => {
 	test("the popup entry renders the settings surface", async ({ context, page }) => {
 		const origin = await extensionOrigin(context);
-		const pageErrors: string[] = [];
-		page.on("pageerror", (error) => pageErrors.push(String(error)));
 		await page.goto(`${origin}/src/pages/popup/index.html`);
 		await expect(page).toHaveURL(/\/src\/pages\/popup\/index\.html/);
 		const scrollWheelLabel = localeText("settings.sections.scrollWheelVolumeControl.enable.label");
 		await expect(page.getByLabel(scrollWheelLabel, { exact: true })).toBeAttached({
 			timeout: 30000
 		});
-		await expect.poll(() => pageErrors, { timeout: 2000 }).toEqual([]);
 	});
 	test("a toggle in the popup writes through to storage", async ({ context, page }) => {
 		const origin = await extensionOrigin(context);

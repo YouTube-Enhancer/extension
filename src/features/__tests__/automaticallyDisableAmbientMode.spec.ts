@@ -426,8 +426,6 @@ test.describe("automaticallyDisableAmbientMode", () => {
 		test(`should leave the sheet closed and the popups usable after acting on ${shorts}`, async ({
 			page
 		}) => {
-			const errors: string[] = [];
-			page.on("pageerror", (error) => errors.push(error.message));
 			await useDarkTheme(page);
 			await navigateToPageType(page, shorts, ["ambientMode"]);
 			test.skip(
@@ -451,7 +449,6 @@ test.describe("automaticallyDisableAmbientMode", () => {
 			// The sheet still opens and closes for the user.
 			await readShortsAmbientState(page);
 			await expect(page.locator(shortsOpenSheetSelector)).toHaveCount(0);
-			expect(errors, "the page raised errors").toEqual([]);
 		});
 	});
 });

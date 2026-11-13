@@ -1,7 +1,6 @@
 import type { Page } from "@playwright/test";
 
 import { metadata } from "@/src/features/autoTransferFocus/index.metadata";
-import { watchExtensionErrors } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { disableFeature, enableFeature, loadDefaultConfig } from "@/src/utils/_tests/features";
 import { navigateToLiveOrSkip, navigateToPageType } from "@/src/utils/_tests/navigation";
@@ -10,7 +9,7 @@ import {
 	resolveNonTargetPage,
 	resolvePageTypes
 } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import { expect, test, watchExtensionErrors } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);

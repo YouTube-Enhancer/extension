@@ -9,7 +9,6 @@
 
 import type { PageType } from "@/src/features/_registry/types";
 
-import { watchExtensionErrors } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import {
 	collectSwitches,
@@ -29,7 +28,7 @@ import {
 import { readStoredOptions } from "@/src/utils/_tests/storage";
 import { loginRequiredPages, resolvePageTypes } from "@/src/utils/_tests/utils";
 import { getPathValue } from "@/src/utils/misc";
-import { expect, test } from "@/tests/harness";
+import { expect, test, watchExtensionErrors } from "@/tests/harness";
 
 type PageBatch = {
 	batchIndex: number;

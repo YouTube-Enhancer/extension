@@ -213,19 +213,6 @@ export async function expectToStay(
 }
 
 /**
- * Uncaught errors and unhandled rejections raised by the extension's own scripts on the page.
- * Filters to chrome-extension:// stacks so YouTube's own page errors don't fail a test.
- */
-export function watchExtensionErrors(page: Page): string[] {
-	const errors: string[] = [];
-	page.on("pageerror", (error) => {
-		if ((error.stack ?? "").includes("chrome-extension://"))
-			errors.push(`${error.message}\n${error.stack ?? ""}`);
-	});
-	return errors;
-}
-
-/**
  * Button placement waits on the player controls, not on player readiness, so this budget only has to ride out
  * slow renders: 45 s normally, and 60 s on a live fixture, where the stream hunt has already consumed most of
  * the test's budget before placement can start and, under the full suite, sibling workers running their own

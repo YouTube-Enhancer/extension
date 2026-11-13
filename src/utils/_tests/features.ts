@@ -12,7 +12,7 @@ import type {
 import type { FilterKeysByValueType } from "@/src/utils/_tests/types";
 import type { ConstraintTree } from "@/src/validation/types";
 
-import { expectFeatureButtonToBeIn, watchExtensionErrors } from "@/src/utils/_tests/assertions";
+import { expectFeatureButtonToBeIn } from "@/src/utils/_tests/assertions";
 import { sendYouTubeMessage } from "@/src/utils/_tests/messaging";
 import { loadAllFeatureMetadata } from "@/src/utils/_tests/metadata";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
@@ -21,7 +21,7 @@ import {
 	isExecutionContextDestroyed
 } from "@/src/utils/_tests/pageSetup";
 import { buildNumberConstraints, validateNumbers } from "@/src/validation/rules";
-import { expect } from "@/tests/harness";
+import { expect, watchExtensionErrors } from "@/tests/harness";
 
 export type Switch = FilterKeysByValueType<configuration, boolean>;
 

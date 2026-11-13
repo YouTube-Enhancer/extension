@@ -12,6 +12,16 @@ import {
 	saveCoverage,
 	startCoverage
 } from "./coverage";
+import { assertNoExtensionErrors, watchContextExtensionErrors } from "./errors";
+
+export { watchExtensionErrors } from "./errors";
+
+type ContextOptions = {
+	ignoreExtensionErrors: boolean;
+	label: string;
+	titlePath: string;
+	trackExtraPages: boolean;
+};
 
 type Fixtures = {
 	context: BrowserContext;
@@ -23,20 +33,24 @@ type OptionsFixtures = Fixtures & {
 };
 
 /**
- * The shared half of both context fixtures: launch the extension context, hand it to the test, then
- * tear down open pages, coverage, the context, and its temp profile in one order. The caller decides
- * whether pages the test opens itself get recorded: the page fixture tracks them here, while the
- * options fixture records its options page inline in its own page fixture.
+ * The shared half of both context fixtures: launch the extension context, hand it to the test,
+ * then tear down open pages, coverage, the context, and its temp profile in one order. The caller
+ * decides whether pages the test opens itself get recorded: the page fixture tracks them here,
+ * while the options fixture records its options page inline in its own page fixture. Every test
+ * also gets an always-on extension-error collector whose teardown assertion fails the test
+ * unless it declares test.use({ ignoreExtensionErrors: true }).
  */
 async function useExtensionContext(
 	browserName: string,
-	label: string,
-	trackExtraPages: boolean,
+	options: ContextOptions,
 	use: (context: BrowserContext) => Promise<void>
 ): Promise<void> {
 	const { context, userDataDir } = await createExtensionContext(browserName);
-	const closeExtraPages = trackExtraPages ? recordExtraPages(context, label) : async () => {};
-	const flushWorker = attachWorkerCoverage(context, label);
+	const closeExtraPages = options.trackExtraPages
+		? recordExtraPages(context, options.label)
+		: async () => {};
+	const flushWorker = attachWorkerCoverage(context, options.label);
+	const extensionErrors = watchContextExtensionErrors(context);
 	try {
 		await use(context);
 	} finally {
@@ -44,13 +58,24 @@ async function useExtensionContext(
 		await flushWorker();
 		await context.close();
 		await rm(userDataDir, { force: true, recursive: true });
+		if (!options.ignoreExtensionErrors) assertNoExtensionErrors(extensionErrors, options.titlePath);
 	}
 }
 
-export const test = base.extend<Fixtures>({
-	context: async ({ browserName }, use, testInfo) => {
-		await useExtensionContext(browserName, `${testInfo.testId}-${testInfo.retry}`, true, use);
+export const test = base.extend<Fixtures, { ignoreExtensionErrors: boolean }>({
+	context: async ({ browserName, ignoreExtensionErrors }, use, testInfo) => {
+		await useExtensionContext(
+			browserName,
+			{
+				ignoreExtensionErrors,
+				label: `${testInfo.testId}-${testInfo.retry}`,
+				titlePath: testInfo.titlePath.join(" > "),
+				trackExtraPages: true
+			},
+			use
+		);
 	},
+	ignoreExtensionErrors: [false, { option: true, scope: "worker" }],
 	page: async ({ context }, use, testInfo) => {
 		const page = await getPrimaryPage(context);
 		await startCoverage(page);
@@ -60,10 +85,20 @@ export const test = base.extend<Fixtures>({
 	}
 });
 
-export const optionsTest = base.extend<OptionsFixtures>({
-	context: async ({ browserName }, use, testInfo) => {
-		await useExtensionContext(browserName, `${testInfo.testId}-${testInfo.retry}`, false, use);
+export const optionsTest = base.extend<OptionsFixtures, { ignoreExtensionErrors: boolean }>({
+	context: async ({ browserName, ignoreExtensionErrors }, use, testInfo) => {
+		await useExtensionContext(
+			browserName,
+			{
+				ignoreExtensionErrors,
+				label: `${testInfo.testId}-${testInfo.retry}`,
+				titlePath: testInfo.titlePath.join(" > "),
+				trackExtraPages: false
+			},
+			use
+		);
 	},
+	ignoreExtensionErrors: [false, { option: true, scope: "worker" }],
 
 	page: async ({ context }, use, testInfo) => {
 		const origin = await getExtensionOrigin(context);
