@@ -1,13 +1,22 @@
+import type { Page } from "@playwright/test";
+
 import { metadata } from "@/src/features/hideAutoplayButton/index.metadata";
 import {
 	expectBodyWithClass,
 	expectBodyWithoutClass,
 	expectElementsHidden
 } from "@/src/utils/_tests/assertions";
-import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { test } from "@/tests/harness";
+import {
+	test,
+	verifyDefaults,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -30,54 +39,36 @@ const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
  * recurring load flake. Keying on the body class removes the dependency on YouTube's playback state.
  */
 test.describe("hideAutoplayButton", () => {
+	const assertOn = async (page: Page) => {
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		await expectElementsHidden(page, selectors);
+	};
+	const assertOff = (page: Page) => expectBodyWithoutClass(page, bodyClass);
+	const subject = { assertOff, assertOn };
+
 	for (const pageType of testPages) {
 		test(`hides autoplay button on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hideAutoplayButton.enabled");
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
+			await assertOn(page);
 		});
 		test(`does not hide autoplay button by default on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await expectBodyWithoutClass(page, bodyClass);
+			await verifyDefaults(page, pageType, subject);
 		});
 		test(`persists after full page reload on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideAutoplayButton.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
+			await verifyReloadPersistence(page, pageType, "hideAutoplayButton", subject);
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideAutoplayButton.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await disableFeature(page, "hideAutoplayButton.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await enableFeature(page, "hideAutoplayButton.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
+			await verifyReEnableCycle(page, pageType, "hideAutoplayButton", subject);
 		});
 		test(`hides autoplay button after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideAutoplayButton.enabled");
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			// A genuine in-page navigation to another watch page, so the includePages gate runs through
-			// the navigation manager instead of a fresh document load re-running onEnable. The body
-			// class is the feature's whole effect; expectElementsHidden is deliberately not repeated
-			// because YouTube hides .ytp-autonav-toggle itself once playback starts (see above).
-			await spaNavigateToRelatedVideo(page);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+			await verifyNavigationPersistence(page, pageType, "hideAutoplayButton", subject, (navPage) =>
+				spaNavigateToRelatedVideo(navPage)
+			);
 		});
 	}
 
 	test(`should not hide autoplay button on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "hideAutoplayButton.enabled");
-		await expectBodyWithoutClass(page, bodyClass);
+		await verifyNonTargetSilence(page, nonTargetPage!, "hideAutoplayButton", subject);
 	});
 });
