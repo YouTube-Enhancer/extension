@@ -3,6 +3,8 @@ import type { BrowserContext, Page } from "@playwright/test";
 import { test as base } from "@playwright/test";
 import { rm } from "fs/promises";
 
+import { stopErrorWatcher } from "@/src/utils/_tests/errorWatcher";
+
 import { createExtensionContext, getExtensionOrigin, getPrimaryPage } from "./context";
 import {
 	attachWorkerCoverage,
@@ -82,6 +84,7 @@ export const test = base.extend<Fixtures, { ignoreExtensionErrors: boolean }>({
 		recordNavigations(page);
 		await use(page);
 		await saveCoverage(page, `${testInfo.testId}-${testInfo.retry}`);
+		stopErrorWatcher(page);
 	}
 });
 
@@ -117,6 +120,7 @@ export const optionsTest = base.extend<OptionsFixtures, { ignoreExtensionErrors:
 			if (COVERAGE_DIR) await existingOptionsPage.reload({ waitUntil: "domcontentloaded" });
 			await use(existingOptionsPage);
 			await saveCoverage(existingOptionsPage, `${testInfo.testId}-${testInfo.retry}`);
+			stopErrorWatcher(existingOptionsPage);
 			return;
 		}
 
@@ -126,6 +130,7 @@ export const optionsTest = base.extend<OptionsFixtures, { ignoreExtensionErrors:
 		await page.goto(`${origin}/src/pages/options/index.html`, { waitUntil: "domcontentloaded" });
 		await use(page);
 		await saveCoverage(page, `${testInfo.testId}-${testInfo.retry}`);
+		stopErrorWatcher(page);
 	}
 });
 

@@ -3,6 +3,7 @@ import type { Page } from "@playwright/test";
 import type { PageType } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
+import { armErrorWatcher } from "@/src/utils/_tests/errorWatcher";
 import { expect } from "@/tests/harness";
 
 const YOUTUBE_AD_SELECTORS = {
@@ -153,17 +154,17 @@ async function getErrorReason(page: Page): Promise<null | string> {
 	return reason?.trim() || null;
 }
 
-const pagesWithErrorWatch = new WeakSet<Page>();
 async function handleYoutubeErrors(page: Page): Promise<void> {
 	await dismissContentWarning(page);
-	// pageSetup runs on every navigation; keep a single background watcher per page.
-	if (pagesWithErrorWatch.has(page)) return;
-	pagesWithErrorWatch.add(page);
+	// pageSetup runs on every navigation; keep a single background watcher per page, armed once
+	// until the harness stops it at teardown (see errorWatcher).
+	const watcher = armErrorWatcher(page);
+	if (!watcher) return;
 	let lastReload = 0;
 	const reloadCooldown = 30_000;
 	const pollInterval = 5_000;
 	const checkForErrors = async (): Promise<void> => {
-		if (page.isClosed()) return;
+		if (watcher.stopped || page.isClosed()) return;
 		try {
 			await dismissContentWarning(page);
 			if (await isAdShowing(page)) return;
@@ -172,6 +173,7 @@ async function handleYoutubeErrors(page: Page): Promise<void> {
 			const now = Date.now();
 			if (now - lastReload < reloadCooldown) return;
 			lastReload = now;
+			watcher.reloads += 1;
 			await page.reload({
 				waitUntil: "domcontentloaded"
 			});
@@ -187,7 +189,7 @@ async function handleYoutubeErrors(page: Page): Promise<void> {
 	};
 	await checkForErrors();
 	void (async () => {
-		while (!page.isClosed()) {
+		while (!watcher.stopped && !page.isClosed()) {
 			await checkForErrors();
 			if (page.isClosed()) {
 				break;
@@ -223,7 +225,7 @@ export async function handleYoutubePromos(page: Page): Promise<void> {
 			`
 		});
 	} catch (e) {
-		if (e instanceof Error && e.message.includes("Execution context was destroyed")) return;
+		if (isExecutionContextDestroyed(e)) return;
 		throw e;
 	}
 }
@@ -246,7 +248,7 @@ async function handleYoutubeSuggestedActions(page: Page): Promise<void> {
 			`
 		});
 	} catch (e) {
-		if (e instanceof Error && e.message.includes("Execution context was destroyed")) return;
+		if (isExecutionContextDestroyed(e)) return;
 		throw e;
 	}
 }
