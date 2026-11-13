@@ -28,7 +28,7 @@ import { pageSetup } from "@/src/utils/_tests/pageSetup";
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { readStoredOptions, readStoredState } from "@/src/utils/_tests/storage";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import { expect, test, verifyNonTargetSilence } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const playlistRequirements: FixtureCapabilities[] = ["playlistLength", "playlistManagementButtons"];
@@ -924,9 +924,10 @@ test.describe("playlistReverseButton", () => {
 });
 
 test(`reverse button should not appear on ${home}, a non-target page`, async ({ page }) => {
-	await navigateToPageType(page, home);
-	await enableFeature(page, "playlistReverseButton.enabled");
 	// Home has no playlist panel at all; a leaked page gate would still arm the panel observer
 	// that injects the button.
-	await expect(page.locator(`#${REVERSE_BUTTON_ID}`)).not.toBeAttached();
+	await verifyNonTargetSilence(page, home, "playlistReverseButton", {
+		assertOff: (assertPage: Page) =>
+			expect(assertPage.locator(`#${REVERSE_BUTTON_ID}`)).not.toBeAttached()
+	});
 });

@@ -21,7 +21,7 @@ import {
 	waitForCaptionsAvailable
 } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, optionsTest, test } from "@/tests/harness";
+import { expect, optionsTest, test, verifyNavigationPersistence } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { home, watch } = pageTypeRecord;
@@ -60,6 +60,15 @@ async function skipUnlessCaptionsCanStartOff(page: Page) {
 }
 
 test.describe("automaticallyEnableClosedCaptions", () => {
+	const assertOn = (page: Page) => expectCaptionsEnabled(page);
+	const subject = {
+		assertOn,
+		setup: async (page: Page) => {
+			test.skip(!(await waitForCaptionsAvailable(page)), "this video offers no captions");
+			test.skip(!(await ensureCaptionsState(page, false)), "captions could not be turned off");
+		}
+	};
+
 	for (const pageType of testPages) {
 		test(`enables captions on ${pageType}`, async ({ page }) => {
 			await navigateToCaptionedPage(page, pageType);
@@ -209,17 +218,18 @@ test.describe("automaticallyEnableClosedCaptions", () => {
 			page
 		});
 	});
+	// Captions are left on: YouTube carries that choice into the next video, so onNavigate has to keep them on
+	// rather than click the button again.
 	test(`keeps captions enabled after an in-page navigation to another video on ${watch}`, async ({
 		page
 	}) => {
-		await navigateToCaptionedPage(page, watch);
-		test.skip(!(await ensureCaptionsState(page, false)), "captions could not be turned off");
-		await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
-		await expectCaptionsEnabled(page);
-		// Captions are left on: YouTube carries that choice into the next video, so onNavigate has to keep them on
-		// rather than click the button again.
-		await spaNavigateToCaptionedVideo(page);
-		await expectCaptionsEnabled(page);
+		await verifyNavigationPersistence(
+			page,
+			watch,
+			"automaticallyEnableClosedCaptions",
+			subject,
+			(navPage) => spaNavigateToCaptionedVideo(navPage)
+		);
 	});
 });
 optionsTest.describe("automaticallyEnableClosedCaptions options", () => {

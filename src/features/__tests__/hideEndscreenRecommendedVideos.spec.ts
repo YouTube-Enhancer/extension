@@ -1,3 +1,7 @@
+import type { Page } from "@playwright/test";
+
+import type { PageType } from "@/src/features/_registry/types";
+
 import { metadata } from "@/src/features/hideEndscreenRecommendedVideos/index.metadata";
 import {
 	expectBodyWithClass,
@@ -9,7 +13,13 @@ import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { showEndScreen } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { test } from "@/tests/harness";
+import {
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -20,6 +30,20 @@ const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 
 test.describe("hideEndscreenRecommendedVideos", () => {
+	const assertOn = async (page: Page) => {
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+	};
+	const assertOff = async (page: Page) => {
+		await expectBodyWithoutClass(page, bodyClass);
+	};
+	const subject = { assertOff, assertOn };
+	// The reload/re-enable legs prove the hidden-elements effect too, which needs a rendered end screen first.
+	const assertOnWithEndScreen = (pageType: PageType) => async (page: Page) => {
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		await showEndScreen(page, pageType);
+		await expectElementsHidden(page, selectors, { requireMatch: true });
+	};
+
 	for (const pageType of testPages) {
 		test(`hides endscreen recommended videos on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -50,42 +74,33 @@ test.describe("hideEndscreenRecommendedVideos", () => {
 			await expectElementsNotHidden(page, selectors, { requireMatch: true });
 		});
 		test(`persists after full page reload on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideEndscreenRecommendedVideos.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await showEndScreen(page, pageType);
-			await expectElementsHidden(page, selectors, { requireMatch: true });
+			await verifyReloadPersistence(page, pageType, "hideEndscreenRecommendedVideos", {
+				...subject,
+				assertOn: assertOnWithEndScreen(pageType)
+			});
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideEndscreenRecommendedVideos.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await disableFeature(page, "hideEndscreenRecommendedVideos.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await enableFeature(page, "hideEndscreenRecommendedVideos.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await showEndScreen(page, pageType);
-			await expectElementsHidden(page, selectors, { requireMatch: true });
+			await verifyReEnableCycle(page, pageType, "hideEndscreenRecommendedVideos", {
+				...subject,
+				assertOn: assertOnWithEndScreen(pageType)
+			});
 		});
 		test(`hides endscreen recommended videos after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideEndscreenRecommendedVideos.enabled");
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 			// A genuine in-page navigation to another watch page, so the includePages gate runs through
 			// the navigation manager instead of a fresh document load re-running onEnable. The body
 			// class is the feature's whole effect; the hidden-elements assertion is not repeated because
 			// the end screen of the new video may never render (the by-default case skips in that state).
-			await spaNavigateToRelatedVideo(page);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"hideEndscreenRecommendedVideos",
+				subject,
+				(navPage) => spaNavigateToRelatedVideo(navPage)
+			);
 		});
 	}
 
 	test(`should not hide endscreen recommended videos on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "hideEndscreenRecommendedVideos.enabled");
-		await expectBodyWithoutClass(page, bodyClass);
+		await verifyNonTargetSilence(page, nonTargetPage!, "hideEndscreenRecommendedVideos", subject);
 	});
 });

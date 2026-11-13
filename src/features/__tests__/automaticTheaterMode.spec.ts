@@ -8,13 +8,9 @@ import {
 	enableFeature,
 	expectFeatureSilentOnNonTargetPage
 } from "@/src/utils/_tests/features";
-import {
-	navigateToPageType,
-	reloadPage,
-	spaNavigateToRelatedVideo
-} from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import { expect, test, verifyReEnableCycle, verifyReloadPersistence } from "@/tests/harness";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
 const { home, watch } = pageTypeRecord;
@@ -56,6 +52,8 @@ async function isTheaterMode(page: Page): Promise<boolean> {
 }
 
 test.describe("automaticTheaterMode", () => {
+	const subject = { assertOff: expectNotTheaterMode, assertOn: expectTheaterMode };
+
 	for (const pageType of testPages) {
 		test(`theater mode should be enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -103,21 +101,11 @@ test.describe("automaticTheaterMode", () => {
 	test(`theater mode should re-apply after disable then re-enable on ${watch}`, async ({
 		page
 	}) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "automaticTheaterMode.enabled");
-		await expectTheaterMode(page);
-		await disableFeature(page, "automaticTheaterMode.enabled");
-		await expectNotTheaterMode(page);
-		await enableFeature(page, "automaticTheaterMode.enabled");
-		await expectTheaterMode(page);
+		await verifyReEnableCycle(page, watch, "automaticTheaterMode", subject);
 	});
 	// Watch only: the init path has no live-vs-VOD branch, and on live the post-reload navigateToPageType re-runs channel discovery and discards the reloaded page.
 	test(`theater mode should persist after full page reload on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "automaticTheaterMode.enabled");
-		await expectTheaterMode(page);
-		await reloadPage(page, watch);
-		await expectTheaterMode(page);
+		await verifyReloadPersistence(page, watch, "automaticTheaterMode", subject);
 	});
 
 	// Watch only: makeTheaterTask has no page branch, and the early return is what this case pins down.

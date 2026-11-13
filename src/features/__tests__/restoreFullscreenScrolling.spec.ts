@@ -1,10 +1,12 @@
+import type { Page } from "@playwright/test";
+
 import { metadata } from "@/src/features/restoreFullscreenScrolling/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import { expect, test, verifyNonTargetSilence } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
@@ -22,6 +24,18 @@ const COLUMNS_SELECTOR = "#columns.ytd-watch-flexy";
 const POLL_TIMEOUT_MS = 40_000 * 3 + 10_000;
 
 test.describe("restoreFullscreenScrolling", () => {
+	const assertOff = async (page: Page) => {
+		// ytd-watch-flexy does not exist on the non-target fixture, and not.toHaveClass on a missing element
+		// fails rather than passing - toHaveCount(0) is the assertion that actually expresses "never marked".
+		await expect(
+			page.locator("ytd-watch-flexy.yte-ytd-watch-flexy-restore-fullscreen-scrolling")
+		).toHaveCount(0);
+		await expect(page.locator("ytd-app")).not.toHaveClass(
+			/yte-ytd-app-restore-fullscreen-scrolling/
+		);
+	};
+	const subject = { assertOff };
+
 	for (const pageType of testPages) {
 		test(`should restore fullscreen scrolling classes after navigation on ${pageType}`, async ({
 			page
@@ -130,15 +144,6 @@ test.describe("restoreFullscreenScrolling", () => {
 	test(`should not add restore fullscreen scrolling classes on non-target page`, async ({
 		page
 	}) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "restoreFullscreenScrolling.enabled");
-		// ytd-watch-flexy does not exist on the non-target fixture, and not.toHaveClass on a missing element
-		// fails rather than passing - toHaveCount(0) is the assertion that actually expresses "never marked".
-		await expect(
-			page.locator("ytd-watch-flexy.yte-ytd-watch-flexy-restore-fullscreen-scrolling")
-		).toHaveCount(0);
-		await expect(page.locator("ytd-app")).not.toHaveClass(
-			/yte-ytd-app-restore-fullscreen-scrolling/
-		);
+		await verifyNonTargetSilence(page, nonTargetPage!, "restoreFullscreenScrolling", subject);
 	});
 });

@@ -19,7 +19,7 @@ import {
 import { setCheckbox } from "@/src/utils/_tests/options";
 import { getCurrentVolume, isPlayerMuted, mutePlayer, setVolume } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, optionsTest, test } from "@/tests/harness";
+import { expect, optionsTest, test, verifyReEnableCycle } from "@/tests/harness";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { home, shorts, watch } = pageTypeRecord;
 // live takes exactly the same `isWatchPage() || isLivePage() -> #movie_player` branch as watch (index.ts:12), so it adds no coverage while each navigateToPageType(live) re-runs the channel scan with a 120 s budget.
@@ -58,33 +58,33 @@ test.describe("globalVolume", () => {
 
 	for (const pageType of nonLiveTestPages) {
 		test(`re-applies volume after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await setOption(page, "globalVolume.volume", volume);
-			const original = await getCurrentVolume(page, pageType);
-			expect(original).not.toBeNull();
-			await enableFeature(page, "globalVolume.enabled");
-			await expect
-				.poll(async () => getCurrentVolume(page, pageType), {
-					intervals: [200],
-					timeout: APPLY_VOLUME_TIMEOUT
-				})
-				.toBe(volume);
-			await disableFeature(page, "globalVolume.enabled");
-			// restorePlayerVolume puts back the exact volume captured before the feature ran, so assert that value
-			// instead of "anything but the configured one", which also passes when getCurrentVolume returns null.
-			await expect
-				.poll(async () => getCurrentVolume(page, pageType), {
-					intervals: [200],
-					timeout: APPLY_VOLUME_TIMEOUT
-				})
-				.toBe(original);
-			await enableFeature(page, "globalVolume.enabled");
-			await expect
-				.poll(async () => getCurrentVolume(page, pageType), {
-					intervals: [200],
-					timeout: APPLY_VOLUME_TIMEOUT
-				})
-				.toBe(volume);
+			// Captured before the feature runs, so the off-assert can compare against the volume it restores.
+			let original: null | number = null;
+			await verifyReEnableCycle(page, pageType, "globalVolume", {
+				assertOff: async (assertPage) => {
+					// restorePlayerVolume puts back the exact volume captured before the feature ran, so assert that value
+					// instead of "anything but the configured one", which also passes when getCurrentVolume returns null.
+					await expect
+						.poll(async () => getCurrentVolume(assertPage, pageType), {
+							intervals: [200],
+							timeout: APPLY_VOLUME_TIMEOUT
+						})
+						.toBe(original);
+				},
+				assertOn: async (assertPage) => {
+					await expect
+						.poll(async () => getCurrentVolume(assertPage, pageType), {
+							intervals: [200],
+							timeout: APPLY_VOLUME_TIMEOUT
+						})
+						.toBe(volume);
+				},
+				setup: async (setupPage) => {
+					await setOption(setupPage, "globalVolume.volume", volume);
+					original = await getCurrentVolume(setupPage, pageType);
+					expect(original).not.toBeNull();
+				}
+			});
 		});
 		// On live this would not test a reload at all: the post-reload navigateToPageType re-runs the channel scan and opens another live video.
 		test(`persists volume after full page reload on ${pageType}`, async ({ page }) => {

@@ -22,7 +22,15 @@ import {
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 import { ensureInWatchLater, watchToTheEnd } from "@/src/utils/_tests/watchLater";
 import { THUMBNAIL_PROGRESS_BAR_SELECTORS } from "@/src/utils/video";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyDefaults,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 // The rows the feature adds buttons to: its own item selector narrowed to rows with a duration overlay, as index.ts does.
@@ -238,6 +246,24 @@ test.describe("playlistManagementButtons", () => {
 	// can put the watched progress back on the server while another test is asserting it cleared,
 	// which no poll budget out-waits. The whole file runs one after another instead.
 	test.describe.configure({ mode: "serial" });
+	const assertOff = async (page: Page) => {
+		await expect(page.locator(REMOVE_BUTTON_SELECTOR)).not.toBeAttached();
+		await expect(page.locator(RESET_BUTTON_SELECTOR)).not.toBeAttached();
+		await expect(page.locator(REMOVE_ALL_BUTTON_SELECTOR)).not.toBeAttached();
+	};
+	const assertOn = async (page: Page) => {
+		await expectRemoveButtons(page);
+		await expectResetButtons(page, 15000);
+	};
+	const enableButtons = async (page: Page) => {
+		await enableFeature(page, "playlistManagementButtons.removeButton.enabled");
+		await enableFeature(page, "playlistManagementButtons.resetButton.enabled");
+	};
+	const disableButtons = async (page: Page) => {
+		await disableFeature(page, "playlistManagementButtons.removeButton.enabled");
+		await disableFeature(page, "playlistManagementButtons.resetButton.enabled");
+	};
+	const subject = { assertOff, assertOn, disable: disableButtons, enable: enableButtons };
 	for (const pageType of testPages) {
 		test(`remove button should appear on playlist items when enabled on ${pageType}`, async ({
 			page
@@ -261,12 +287,12 @@ test.describe("playlistManagementButtons", () => {
 
 		test(`management buttons should not appear by default on ${pageType}`, async ({ page }) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
-			await navigateToPageType(page, pageType, ["playlistManagementButtons"]);
 			// Fresh page with the shipped defaults, before any enable: none of the three
 			// sub-toggle buttons may be placed on the playlist rows or the chip bar header.
-			await expect(page.locator(REMOVE_BUTTON_SELECTOR)).not.toBeAttached();
-			await expect(page.locator(RESET_BUTTON_SELECTOR)).not.toBeAttached();
-			await expect(page.locator(REMOVE_ALL_BUTTON_SELECTOR)).not.toBeAttached();
+			await verifyDefaults(page, pageType, {
+				...subject,
+				requirements: ["playlistManagementButtons"]
+			});
 		});
 
 		test(`buttons should re-appear after disable then re-enable on ${pageType}`, async ({
@@ -274,34 +300,21 @@ test.describe("playlistManagementButtons", () => {
 		}) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
 			test.setTimeout(180_000);
-			await navigateToPageType(page, pageType, ["playlistManagementButtons"]);
-			await ensureWatchedPlaylistItem(page);
-			await enableFeature(page, "playlistManagementButtons.removeButton.enabled");
-			await enableFeature(page, "playlistManagementButtons.resetButton.enabled");
-			await expectRemoveButtons(page);
-			await expectResetButtons(page);
-			await disableFeature(page, "playlistManagementButtons.removeButton.enabled");
-			await disableFeature(page, "playlistManagementButtons.resetButton.enabled");
-			await expectButtonsRemoved(page);
-			await enableFeature(page, "playlistManagementButtons.removeButton.enabled");
-			await enableFeature(page, "playlistManagementButtons.resetButton.enabled");
-			await expectRemoveButtons(page);
-			await expectResetButtons(page, 15000);
+			await verifyReEnableCycle(page, pageType, "playlistManagementButtons", {
+				...subject,
+				requirements: ["playlistManagementButtons"],
+				setup: ensureWatchedPlaylistItem
+			});
 		});
 
 		test(`buttons should persist after full page reload on ${pageType}`, async ({ page }) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
 			test.setTimeout(180_000);
-			await navigateToPageType(page, pageType, ["playlistManagementButtons"]);
-			await ensureWatchedPlaylistItem(page);
-			await enableFeature(page, "playlistManagementButtons.removeButton.enabled");
-			await enableFeature(page, "playlistManagementButtons.resetButton.enabled");
-			await expectRemoveButtons(page);
-			await expectResetButtons(page);
-			await page.reload();
-			await navigateToPageType(page, pageType, ["playlistManagementButtons"]);
-			await expectRemoveButtons(page);
-			await expectResetButtons(page);
+			await verifyReloadPersistence(page, pageType, "playlistManagementButtons", {
+				...subject,
+				requirements: ["playlistManagementButtons"],
+				setup: ensureWatchedPlaylistItem
+			});
 		});
 
 		// Remove buttons only: the reset buttons need a watched fixture item, which the navigation case
@@ -309,16 +322,24 @@ test.describe("playlistManagementButtons", () => {
 		test(`buttons should re-appear after navigation on ${pageType}`, async ({ page }) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
 			test.setTimeout(180_000);
-			await navigateToPageType(page, pageType, ["playlistManagementButtons"]);
-			await enableFeature(page, "playlistManagementButtons.removeButton.enabled");
-			await expectRemoveButtons(page);
-			// In-page hops, so the includePages gate runs through the navigation manager's yt-navigate
-			// listeners instead of a fresh document load: leaving the playlist takes the buttons with
-			// the disable path, and returning has to rebuild them through onEnable/onNavigate.
-			await spaNavigateToHome(page);
-			await expectButtonsRemoved(page);
-			await spaNavigateBack(page, pageType);
-			await expectRemoveButtons(page, 15000);
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"playlistManagementButtons",
+				{
+					...subject,
+					assertOn: (assertPage: Page) => expectRemoveButtons(assertPage),
+					enable: async (enablePage: Page) => {
+						await enableFeature(enablePage, "playlistManagementButtons.removeButton.enabled");
+					},
+					requirements: ["playlistManagementButtons"]
+				},
+				async (navPage, navPageType) => {
+					await spaNavigateToHome(navPage);
+					await expectButtonsRemoved(navPage);
+					await spaNavigateBack(navPage, navPageType);
+				}
+			);
 		});
 	}
 
@@ -526,15 +547,16 @@ test.describe("playlistManagementButtons", () => {
 			.toBe(100);
 	});
 	test(`management buttons should not appear on ${watch}, a non-target page`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "playlistManagementButtons.removeButton.enabled");
-		await enableFeature(page, "playlistManagementButtons.resetButton.enabled");
-		await enableFeature(page, "playlistManagementButtons.removeAllButton.enabled");
 		// Watch pages have no playlist panel; a leaked gate would still try to inject the
 		// row buttons through the mutation observers.
-		await expect(page.locator(RESET_BUTTON_SELECTOR)).not.toBeAttached();
-		await expect(page.locator(REMOVE_BUTTON_SELECTOR)).not.toBeAttached();
-		await expect(page.locator(REMOVE_ALL_BUTTON_SELECTOR)).not.toBeAttached();
+		await verifyNonTargetSilence(page, watch, "playlistManagementButtons", {
+			...subject,
+			enable: async (enablePage: Page) => {
+				await enableFeature(enablePage, "playlistManagementButtons.removeButton.enabled");
+				await enableFeature(enablePage, "playlistManagementButtons.resetButton.enabled");
+				await enableFeature(enablePage, "playlistManagementButtons.removeAllButton.enabled");
+			}
+		});
 	});
 
 	test(`disabling only the remove button should keep the reset buttons on ${playlist}`, async ({

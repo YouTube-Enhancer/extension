@@ -1,3 +1,5 @@
+import type { Page } from "@playwright/test";
+
 import { metadata } from "@/src/features/miniPlayerButton/index.metadata";
 import {
 	expectFeatureButtonToBeFalsy,
@@ -18,7 +20,14 @@ import {
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const { below, left, right } = placementRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -28,6 +37,21 @@ const onTitle = /^Mini Player on$/;
 const offTitle = /^Mini Player off$/;
 
 test.describe("miniPlayerButton", () => {
+	const assertOn = (page: Page) =>
+		expectFeatureButtonToBeTruthy(page, "yte-feature-miniPlayerButton-button");
+	const assertOff = (page: Page) =>
+		expectFeatureButtonToBeFalsy(page, "yte-feature-miniPlayerButton-button");
+	// This feature's switch lives at `<featureId>.button.enabled`, not the `<featureId>.enabled` the
+	// battery defaults to, so both legs of the cycle come from here.
+	const enable = (page: Page) => enableFeature(page, "miniPlayerButton.button.enabled");
+	const disable = (page: Page) => disableFeature(page, "miniPlayerButton.button.enabled");
+	const subject = { assertOff, assertOn, disable, enable };
+	/** The enable sequence for the lifecycle cases: they also pin the placement the button is observed at. */
+	const enablePlaced = async (page: Page) => {
+		await enable(page);
+		await setOption(page, "miniPlayerButton.button.placement", right);
+	};
+
 	for (const pageType of testPages) {
 		test(`mini player button should be present on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -53,43 +77,36 @@ test.describe("miniPlayerButton", () => {
 
 	// The button lifecycle below has no live-specific branch and the live fixture costs up to 120 s, so it runs on watch only.
 	test(`mini player button should persist after navigation on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "miniPlayerButton.button.enabled");
-		await setOption(page, "miniPlayerButton.button.placement", right);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-miniPlayerButton-button");
-		await navigateToPageType(page, home);
-		await navigateToPageType(page, watch);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-miniPlayerButton-button");
+		await verifyNavigationPersistence(
+			page,
+			watch,
+			"miniPlayerButton",
+			{ ...subject, enable: enablePlaced },
+			async (navPage) => {
+				await navigateToPageType(navPage, home);
+				await navigateToPageType(navPage, watch);
+			}
+		);
 	});
 
 	test(`mini player button should re-appear after disable then re-enable on ${watch}`, async ({
 		page
 	}) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "miniPlayerButton.button.enabled");
-		await setOption(page, "miniPlayerButton.button.placement", right);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-miniPlayerButton-button");
-		await disableFeature(page, "miniPlayerButton.button.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-miniPlayerButton-button");
-		await enableFeature(page, "miniPlayerButton.button.enabled");
-		await setOption(page, "miniPlayerButton.button.placement", right);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-miniPlayerButton-button");
+		await verifyReEnableCycle(page, watch, "miniPlayerButton", {
+			...subject,
+			enable: enablePlaced
+		});
 	});
 
 	test(`mini player button should persist after full page reload`, async ({ page }) => {
-		await navigateToPageType(page, testPages[0]);
-		await enableFeature(page, "miniPlayerButton.button.enabled");
-		await setOption(page, "miniPlayerButton.button.placement", right);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-miniPlayerButton-button");
-		await page.reload();
-		await navigateToPageType(page, testPages[0]);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-miniPlayerButton-button");
+		await verifyReloadPersistence(page, testPages[0], "miniPlayerButton", {
+			...subject,
+			enable: enablePlaced
+		});
 	});
 
 	test(`should not create mini player button on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "miniPlayerButton.button.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-miniPlayerButton-button");
+		await verifyNonTargetSilence(page, nonTargetPage!, "miniPlayerButton", subject);
 	});
 
 	// navigateToPageType is a document load, so this cannot observe cleanup across an in-page navigation; it pins

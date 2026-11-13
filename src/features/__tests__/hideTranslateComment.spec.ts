@@ -22,7 +22,13 @@ import {
 	resolveNonTargetPage,
 	resolvePageTypes
 } from "@/src/utils/_tests/utils";
-import { test } from "@/tests/harness";
+import {
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -51,6 +57,16 @@ async function injectTranslateButton(page: Page): Promise<void> {
 }
 
 test.describe("hideTranslateComment", () => {
+	const assertOn = async (page: Page) => {
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		await expectElementsHidden(page, selectors);
+	};
+	const assertOff = async (page: Page) => {
+		await expectBodyWithoutClass(page, bodyClass);
+		await expectElementsNotHidden(page, selectors);
+	};
+	const subject = { assertOff, assertOn };
+
 	for (const pageType of testPages) {
 		test(`hides translate comment button on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -70,34 +86,19 @@ test.describe("hideTranslateComment", () => {
 			});
 		});
 		test(`hides translate comment after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideTranslateComment.enabled");
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			// A genuine in-page navigation, so featureOrchestrator.updateFeatureOnNavigation runs instead of a fresh document load.
-			await spaNavigateToRelatedVideo(page);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"hideTranslateComment",
+				subject,
+				(navPage) => spaNavigateToRelatedVideo(navPage)
+			);
 		});
 		test(`persists hide after full page reload on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideTranslateComment.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
+			await verifyReloadPersistence(page, pageType, "hideTranslateComment", subject);
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideTranslateComment.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await disableFeature(page, "hideTranslateComment.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await expectElementsNotHidden(page, selectors);
-			await enableFeature(page, "hideTranslateComment.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
+			await verifyReEnableCycle(page, pageType, "hideTranslateComment", subject);
 		});
 	}
 
@@ -131,9 +132,6 @@ test.describe("hideTranslateComment", () => {
 		await expectElementsHidden(page, selectors, { requireMatch: true });
 	});
 	test(`should not hide translate comment on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "hideTranslateComment.enabled");
-		await expectBodyWithoutClass(page, bodyClass);
-		await expectElementsNotHidden(page, selectors);
+		await verifyNonTargetSilence(page, nonTargetPage!, "hideTranslateComment", subject);
 	});
 });

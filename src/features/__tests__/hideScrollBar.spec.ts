@@ -4,7 +4,7 @@ import type { PageType } from "@/src/features/_registry/types";
 
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { enableFeature } from "@/src/utils/_tests/features";
 import {
 	navigateToPageType,
 	reloadPage,
@@ -12,7 +12,7 @@ import {
 	spaNavigateToHome
 } from "@/src/utils/_tests/navigation";
 import { loginRequiredPages } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import { expect, test, verifyDefaults, verifyReEnableCycle } from "@/tests/harness";
 
 // The feature has no page-specific branch; an explicit page set avoids running every test on all 11 page types.
 const testPages: PageType[] = ["watch"];
@@ -58,6 +58,10 @@ async function forceOverflow(page: Page): Promise<void> {
 }
 
 test.describe("hideScrollBar", () => {
+	const assertOn = expectScrollbarHidden;
+	const assertOff = expectScrollbarVisible;
+	const subject = { assertOff, assertOn, setup: forceOverflow };
+
 	for (const pageType of testPages) {
 		test(`scrollbar should be hidden on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -66,9 +70,7 @@ test.describe("hideScrollBar", () => {
 			await expectScrollbarHidden(page);
 		});
 		test(`does not hide the scrollbar by default on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await forceOverflow(page);
-			await expectScrollbarVisible(page);
+			await verifyDefaults(page, pageType, subject);
 		});
 		test(`persists scrollbar hide after full page reload on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -82,14 +84,7 @@ test.describe("hideScrollBar", () => {
 		test(`re-applies scrollbar hide after disable then re-enable on ${pageType}`, async ({
 			page
 		}) => {
-			await navigateToPageType(page, pageType);
-			await forceOverflow(page);
-			await enableFeature(page, "hideScrollBar.enabled");
-			await expectScrollbarHidden(page);
-			await disableFeature(page, "hideScrollBar.enabled");
-			await expectScrollbarVisible(page);
-			await enableFeature(page, "hideScrollBar.enabled");
-			await expectScrollbarHidden(page);
+			await verifyReEnableCycle(page, pageType, "hideScrollBar", subject);
 		});
 	}
 

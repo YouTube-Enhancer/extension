@@ -1,3 +1,5 @@
+import type { Page } from "@playwright/test";
+
 import { metadata } from "@/src/features/hidePaidPromotionBanner/index.metadata";
 import {
 	expectBodyWithClass,
@@ -13,7 +15,13 @@ import {
 	spaNavigateToRelatedVideo
 } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { test } from "@/tests/harness";
+import {
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -26,6 +34,13 @@ const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const { watch } = pageTypeRecord;
 
 test.describe("hidePaidPromotionBanner", () => {
+	const assertOn = async (page: Page) => {
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		await expectElementsHidden(page, selectors);
+	};
+	const assertOff = (page: Page) => expectBodyWithoutClass(page, bodyClass);
+	const subject = { assertOff, assertOn };
+
 	for (const pageType of testPages) {
 		test(`shows paid promotion banner when disabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -33,36 +48,21 @@ test.describe("hidePaidPromotionBanner", () => {
 			await expectBodyWithoutClass(page, bodyClass);
 		});
 		test(`hides elements after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hidePaidPromotionBanner.enabled");
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
 			// A real in-page navigation, so the extension's navigation hooks run instead of a fresh document load
 			// (which the reload test already covers).
-			await spaNavigateToRelatedVideo(page);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"hidePaidPromotionBanner",
+				subject,
+				(navPage) => spaNavigateToRelatedVideo(navPage)
+			);
 		});
 		test(`persists hide after full page reload on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hidePaidPromotionBanner.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
+			await verifyReloadPersistence(page, pageType, "hidePaidPromotionBanner", subject);
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hidePaidPromotionBanner.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await disableFeature(page, "hidePaidPromotionBanner.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await enableFeature(page, "hidePaidPromotionBanner.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
+			await verifyReEnableCycle(page, pageType, "hidePaidPromotionBanner", subject);
 		});
 	}
 
@@ -82,8 +82,6 @@ test.describe("hidePaidPromotionBanner", () => {
 	});
 
 	test(`should not hide paid promotion banner on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "hidePaidPromotionBanner.enabled");
-		await expectBodyWithoutClass(page, bodyClass);
+		await verifyNonTargetSilence(page, nonTargetPage!, "hidePaidPromotionBanner", subject);
 	});
 });

@@ -21,12 +21,28 @@ import {
 import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReloadPersistence
+} from "@/tests/harness";
 const { left, menu, right } = placementRecord;
 const { home, live, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 test.describe("loopButton", () => {
+	const assertOn = (page: Page) =>
+		expectFeatureButtonToBeTruthy(page, "yte-feature-loopButton-button");
+	const assertOff = (page: Page) =>
+		expectFeatureButtonToBeFalsy(page, "yte-feature-loopButton-button");
+	const subject = { assertOff, assertOn };
+	const enableWithPlacement = async (page: Page) => {
+		await enableFeature(page, "loopButton.button.enabled");
+		await setOption(page, "loopButton.button.placement", left);
+	};
+
 	for (const pageType of testPages) {
 		test("loop button should be disabled", async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -100,29 +116,27 @@ test.describe("loopButton", () => {
 			await expect(page.locator("#yte-feature-loopButton-button")).toHaveCount(1);
 		});
 		test("loop button should persist after navigation", async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "loopButton.button.enabled");
-			await setOption(page, "loopButton.button.placement", left);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-loopButton-button");
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-loopButton-button");
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"loopButton.button",
+				{ ...subject, enable: enableWithPlacement },
+				async (navPage) => {
+					await navigateToPageType(navPage, home);
+					await navigateToPageType(navPage, pageType);
+				}
+			);
 		});
 		test("loop button should persist after full page reload", async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "loopButton.button.enabled");
-			await setOption(page, "loopButton.button.placement", left);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-loopButton-button");
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-loopButton-button");
+			await verifyReloadPersistence(page, pageType, "loopButton.button", {
+				...subject,
+				enable: enableWithPlacement
+			});
 		});
 	}
 
 	test(`should not create loop button on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "loopButton.button.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-loopButton-button");
+		await verifyNonTargetSilence(page, nonTargetPage!, "loopButton.button", subject);
 	});
 
 	test.describe("button placement", () => {

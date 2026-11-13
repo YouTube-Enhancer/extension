@@ -10,16 +10,19 @@ import {
 	expectElementsNotHidden
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { enableFeature, setOption } from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
-import {
-	navigateToPageType,
-	reloadPage,
-	waitForExtensionReady
-} from "@/src/utils/_tests/navigation";
+import { navigateToPageType, waitForExtensionReady } from "@/src/utils/_tests/navigation";
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -82,6 +85,16 @@ async function spaNavigateToRelatedVod(page: Page): Promise<void> {
 }
 
 test.describe("hideLiveStreamChat", () => {
+	const assertOn = async (page: Page) => {
+		await expectBodyWithClass(page, bodyClass, { timeout: LIVE_APPLY_TIMEOUT });
+		await expectElementsHidden(page, selectors);
+	};
+	const assertOff = async (page: Page) => {
+		await expectBodyWithoutClass(page, bodyClass);
+		await expectElementsNotHidden(page, selectors, { mode: "any" });
+	};
+	const subject = { assertOff, assertOn };
+
 	test(`hides live stream chat on ${live}`, async ({ page }) => {
 		// Live hunt plus a worst-case 130 s apply wait (pre-roll ads) have to fit.
 		test.setTimeout(300_000);
@@ -93,41 +106,26 @@ test.describe("hideLiveStreamChat", () => {
 	test(`hides live stream chat after navigation on ${live}`, async ({ page }) => {
 		// Live hunt plus a worst-case 130 s apply wait (pre-roll ads) have to fit.
 		test.setTimeout(300_000);
-		await navigateToPageType(page, live);
-		await enableFeature(page, "hideLiveStreamChat.enabled");
-		await expectBodyWithClass(page, bodyClass, { timeout: LIVE_APPLY_TIMEOUT });
-		await expectElementsHidden(page, selectors);
-		await navigateToPageType(page, home);
-		// home is in neither includePages entry, so leaving both must drop the class through the disable path.
-		await expectBodyWithoutClass(page, bodyClass);
-		await navigateToPageType(page, live);
-		await expectBodyWithClass(page, bodyClass, { timeout: LIVE_APPLY_TIMEOUT });
-		await expectElementsHidden(page, selectors);
+		await verifyNavigationPersistence(
+			page,
+			live,
+			"hideLiveStreamChat",
+			subject,
+			async (navPage) => {
+				await navigateToPageType(navPage, home);
+				await navigateToPageType(navPage, live);
+			}
+		);
 	});
 	test(`persists hide after full page reload on ${live}`, async ({ page }) => {
 		// Live hunt plus a worst-case 130 s apply wait (pre-roll ads) have to fit.
 		test.setTimeout(300_000);
-		await navigateToPageType(page, live);
-		await enableFeature(page, "hideLiveStreamChat.enabled");
-		await expectBodyWithClass(page, bodyClass, { timeout: LIVE_APPLY_TIMEOUT });
-		await expectElementsHidden(page, selectors);
-		await reloadPage(page, live);
-		await expectBodyWithClass(page, bodyClass, { timeout: LIVE_APPLY_TIMEOUT });
-		await expectElementsHidden(page, selectors);
+		await verifyReloadPersistence(page, live, "hideLiveStreamChat", subject);
 	});
 	test(`re-applies after disable then re-enable on ${live}`, async ({ page }) => {
 		// Live hunt plus a worst-case 130 s apply wait (pre-roll ads) have to fit.
 		test.setTimeout(300_000);
-		await navigateToPageType(page, live);
-		await enableFeature(page, "hideLiveStreamChat.enabled");
-		await expectBodyWithClass(page, bodyClass, { timeout: LIVE_APPLY_TIMEOUT });
-		await expectElementsHidden(page, selectors);
-		await disableFeature(page, "hideLiveStreamChat.enabled");
-		await expectBodyWithoutClass(page, bodyClass);
-		await expectElementsNotHidden(page, selectors, { mode: "any" });
-		await enableFeature(page, "hideLiveStreamChat.enabled");
-		await expectBodyWithClass(page, bodyClass, { timeout: LIVE_APPLY_TIMEOUT });
-		await expectElementsHidden(page, selectors);
+		await verifyReEnableCycle(page, live, "hideLiveStreamChat", subject);
 	});
 	test(`switches between always and fullscreen modes on ${live}`, async ({ page }) => {
 		// Live hunt plus a worst-case 130 s apply wait (pre-roll ads) have to fit.
@@ -188,8 +186,11 @@ test.describe("hideLiveStreamChat", () => {
 	});
 
 	test(`should not add body class on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "hideLiveStreamChat.enabled");
-		await expectBodyWithoutClass(page, bodyClass);
+		await verifyNonTargetSilence(page, nonTargetPage!, "hideLiveStreamChat", {
+			...subject,
+			assertOff: async (assertPage) => {
+				await expectBodyWithoutClass(assertPage, bodyClass);
+			}
+		});
 	});
 });

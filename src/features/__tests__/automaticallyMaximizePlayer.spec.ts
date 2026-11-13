@@ -8,14 +8,20 @@ import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { isInTheaterMode } from "@/src/utils/_tests/fullscreen";
 import {
 	navigateToPageType,
-	reloadPage,
 	spaNavigateBack,
 	spaNavigateToHome,
 	spaNavigateToRelatedVideo
 } from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
@@ -37,6 +43,14 @@ async function setTheaterMode(page: Page, desired: boolean): Promise<void> {
 }
 
 test.describe("automaticallyMaximizePlayer", () => {
+	const assertOn = async (page: Page) => {
+		await expect.poll(async () => await isPlayerMaximized(page), { timeout: 30000 }).toBeTruthy();
+	};
+	const assertOff = async (page: Page) => {
+		await expect.poll(async () => await isPlayerMaximized(page)).toBeFalsy();
+	};
+	const subject = { assertOff, assertOn };
+
 	for (const pageType of testPages) {
 		test(`player should automatically maximize on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -48,42 +62,37 @@ test.describe("automaticallyMaximizePlayer", () => {
 		test(`player should re-maximize after disable then re-enable on ${pageType}`, async ({
 			page
 		}) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "automaticallyMaximizePlayer.enabled");
-			await expect.poll(async () => await isPlayerMaximized(page), { timeout: 30000 }).toBeTruthy();
-			await disableFeature(page, "automaticallyMaximizePlayer.enabled");
-			await expect.poll(async () => await isPlayerMaximized(page)).toBeFalsy();
-			await enableFeature(page, "automaticallyMaximizePlayer.enabled");
-			await expect.poll(async () => await isPlayerMaximized(page), { timeout: 30000 }).toBeTruthy();
+			await verifyReEnableCycle(page, pageType, "automaticallyMaximizePlayer", subject);
 		});
 	}
 
 	// Watch only: there is no page branch in automaticallyMaximizePlayer/index.ts, and the live variant costs two full live-video hunts plus a home load.
+	// A real single-page navigation: navigateStartHandler drops yte-maximized, so only onNavigate can put it back.
 	test(`player should maximize after navigation on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "automaticallyMaximizePlayer.enabled");
-		await expect.poll(async () => await isPlayerMaximized(page), { timeout: 30000 }).toBeTruthy();
-		// A real single-page navigation: navigateStartHandler drops yte-maximized, so only onNavigate can put it back.
-		await spaNavigateToRelatedVideo(page);
-		await expect.poll(async () => await isPlayerMaximized(page), { timeout: 30000 }).toBeTruthy();
+		await verifyNavigationPersistence(
+			page,
+			watch,
+			"automaticallyMaximizePlayer",
+			subject,
+			(navPage) => spaNavigateToRelatedVideo(navPage)
+		);
 	});
 	// Watch only: on live the reload is immediately discarded because navigateToPageType re-enters the live branch and opens a live video again.
 	test(`player should maximize after full page reload on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "automaticallyMaximizePlayer.enabled");
-		await expect.poll(async () => await isPlayerMaximized(page), { timeout: 30000 }).toBeTruthy();
-		await reloadPage(page, watch);
-		await expect.poll(async () => await isPlayerMaximized(page), { timeout: 30000 }).toBeTruthy();
+		await verifyReloadPersistence(page, watch, "automaticallyMaximizePlayer", subject);
 	});
 
+	// The maximize task retries for up to 45 s, so a single poll would sample long before a gating regression could show.
 	test(`should not maximize player on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "automaticallyMaximizePlayer.enabled");
-		// The maximize task retries for up to 45 s, so a single poll would sample long before a gating regression could show.
-		await expectToStay(async () => isPlayerMaximized(page), false, {
-			durationMs: 5000,
-			intervalMs: 500,
-			page
+		await verifyNonTargetSilence(page, nonTargetPage!, "automaticallyMaximizePlayer", {
+			...subject,
+			assertOff: async (page) => {
+				await expectToStay(async () => isPlayerMaximized(page), false, {
+					durationMs: 5000,
+					intervalMs: 500,
+					page
+				});
+			}
 		});
 	});
 

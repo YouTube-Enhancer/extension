@@ -1,3 +1,5 @@
+import type { Page } from "@playwright/test";
+
 import { metadata } from "@/src/features/automaticallyDisableClosedCaptions/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { navigateToCaptionedPage, spaNavigateToCaptionedVideo } from "@/src/utils/_tests/captions";
@@ -17,7 +19,13 @@ import {
 	waitForCaptionsAvailable
 } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, optionsTest, test } from "@/tests/harness";
+import {
+	expect,
+	optionsTest,
+	test,
+	verifyDefaults,
+	verifyNavigationPersistence
+} from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { home, watch } = pageTypeRecord;
@@ -32,6 +40,17 @@ const autoEnableLabel = localeText(
 );
 
 test.describe("automaticallyDisableClosedCaptions", () => {
+	const assertOn = async (page: Page) => {
+		await expectStableCaptionsState(page, false, { timeout: disableTimeout });
+	};
+	const subject = {
+		assertOn,
+		setup: async (page: Page) => {
+			test.skip(!(await waitForCaptionsAvailable(page)), "this video offers no captions");
+			test.skip(!(await ensureCaptionsState(page, true)), "captions could not be turned on");
+		}
+	};
+
 	for (const pageType of testPages) {
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
 			await navigateToCaptionedPage(page, pageType);
@@ -49,15 +68,17 @@ test.describe("automaticallyDisableClosedCaptions", () => {
 	// start and the captions the viewer turned on have to stay on. Watch only: the feature has no
 	// live/VOD branch and the live fixture costs up to 120 s.
 	test(`does not disable captions by default on ${watch}`, async ({ page }) => {
-		await navigateToCaptionedPage(page, watch);
-		test.skip(!(await waitForCaptionsAvailable(page)), "this video offers no captions");
-		test.skip(!(await ensureCaptionsState(page, true)), "captions could not be turned on");
 		// The disable retry outlasts this window by a wide margin (60 s), so a feature that
 		// shipped enabled would be caught clicking the captions off here.
-		await expectToStay(async () => getCaptionsState(page), true, {
-			durationMs: 5000,
-			intervalMs: 500,
-			page
+		await verifyDefaults(page, watch, {
+			...subject,
+			assertOff: async (page) => {
+				await expectToStay(async () => getCaptionsState(page), true, {
+					durationMs: 5000,
+					intervalMs: 500,
+					page
+				});
+			}
 		});
 	});
 
@@ -126,17 +147,18 @@ test.describe("automaticallyDisableClosedCaptions", () => {
 			page
 		});
 	});
+	// Captions are left off on purpose: YouTube carries that choice into the next video, so onNavigate has to keep
+	// them off instead of clicking the button again.
 	test(`keeps captions disabled after an in-page navigation to another video on ${watch}`, async ({
 		page
 	}) => {
-		await navigateToCaptionedPage(page, watch);
-		test.skip(!(await ensureCaptionsState(page, true)), "captions could not be turned on");
-		await enableFeature(page, "automaticallyDisableClosedCaptions.enabled");
-		await expectStableCaptionsState(page, false, { timeout: disableTimeout });
-		// Captions are left off on purpose: YouTube carries that choice into the next video, so onNavigate has to keep
-		// them off instead of clicking the button again.
-		await spaNavigateToCaptionedVideo(page);
-		await expectStableCaptionsState(page, false, { timeout: disableTimeout });
+		await verifyNavigationPersistence(
+			page,
+			watch,
+			"automaticallyDisableClosedCaptions",
+			subject,
+			(navPage) => spaNavigateToCaptionedVideo(navPage)
+		);
 	});
 });
 optionsTest.describe("automaticallyDisableClosedCaptions options", () => {

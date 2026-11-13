@@ -8,7 +8,13 @@ import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType, waitForExtensionReady } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const pageTypes = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
@@ -106,6 +112,17 @@ async function waitForPlaylist(page: Page, pageType: string): Promise<void> {
 }
 
 test.describe("playlistLength", () => {
+	const assertOff = (page: Page) => expectUIHidden(page);
+	const assertOn = (page: Page) => expectUIVisible(page);
+	const subject = {
+		assertOff,
+		assertOn,
+		enable: async (page: Page) => {
+			await disableFeature(page, "playlistLength.enabled");
+			await enableFeature(page, "playlistLength.enabled");
+		},
+		setup: waitForPlaylist
+	};
 	for (const pageType of pageTypes) {
 		test(`should render UI when enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType, ["playlistLength"]);
@@ -118,23 +135,16 @@ test.describe("playlistLength", () => {
 			await expectUIHidden(page);
 		});
 		test(`should re-enable UI after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType, ["playlistLength"]);
-			await enablePlaylistLength(page, pageType);
-			await expectUIVisible(page);
-			await disableFeature(page, "playlistLength.enabled");
-			await expectUIHidden(page);
-			await enableFeature(page, "playlistLength.enabled");
-			await expectUIVisible(page);
+			await verifyReEnableCycle(page, pageType, "playlistLength", {
+				...subject,
+				requirements: ["playlistLength"]
+			});
 		});
 		test(`should persist UI after full page reload on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType, ["playlistLength"]);
-			await enablePlaylistLength(page, pageType);
-			await expectUIVisible(page);
-			await page.reload();
-			// navigateToPageType only performs the readiness/ads wait here; re-enabling would replace the
-			// reloaded state with a fresh onEnable and hide a broken reload path.
-			await navigateToPageType(page, pageType, ["playlistLength"]);
-			await expectUIVisible(page);
+			await verifyReloadPersistence(page, pageType, "playlistLength", {
+				...subject,
+				requirements: ["playlistLength"]
+			});
 		});
 	}
 	test("should update UI when playback rate changes (watch only behavior)", async ({ page }) => {
@@ -263,9 +273,6 @@ test.describe("playlistLength", () => {
 	});
 
 	test("should not render UI on non-target page", async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await disableFeature(page, "playlistLength.enabled");
-		await enableFeature(page, "playlistLength.enabled");
-		await expect(page.locator(UI.root)).toHaveCount(0);
+		await verifyNonTargetSilence(page, nonTargetPage!, "playlistLength", subject);
 	});
 });

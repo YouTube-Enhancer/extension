@@ -9,7 +9,13 @@ import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
 import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
@@ -91,6 +97,16 @@ async function turnOffAutoPlay(page: Page): Promise<void> {
 }
 
 test.describe("automaticallyShowMoreVideosOnEndScreen", () => {
+	const assertOn = async (page: Page) => {
+		await expectBodyWithClass(page, "yte-show-html5-endscreen", { timeout: 15000 });
+		await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid", { timeout: 15000 });
+	};
+	const assertOff = async (page: Page) => {
+		await expectBodyWithoutClass(page, "yte-show-html5-endscreen");
+		await expectBodyWithoutClass(page, "yte-hide-ytp-fullscreen-grid");
+	};
+	const subject = { assertOff, assertOn };
+
 	for (const pageType of testPages) {
 		test(`should add show more videos classes on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -117,33 +133,25 @@ test.describe("automaticallyShowMoreVideosOnEndScreen", () => {
 		test(`persists show more videos classes after full page reload on ${pageType}`, async ({
 			page
 		}) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
-			await expectBodyWithClass(page, "yte-show-html5-endscreen");
-			await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid");
-			await reloadPage(page, pageType);
-			await expectBodyWithClass(page, "yte-show-html5-endscreen", { timeout: 15000 });
-			await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid", { timeout: 15000 });
+			await verifyReloadPersistence(
+				page,
+				pageType,
+				"automaticallyShowMoreVideosOnEndScreen",
+				subject
+			);
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
-			await expectBodyWithClass(page, "yte-show-html5-endscreen");
-			await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid");
-			await disableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
-			await expectBodyWithoutClass(page, "yte-show-html5-endscreen");
-			await expectBodyWithoutClass(page, "yte-hide-ytp-fullscreen-grid");
-			await enableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
-			await expectBodyWithClass(page, "yte-show-html5-endscreen");
-			await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid");
+			await verifyReEnableCycle(page, pageType, "automaticallyShowMoreVideosOnEndScreen", subject);
 		});
 	}
 
 	test(`should not add show more videos classes on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
-		await expectBodyWithoutClass(page, "yte-show-html5-endscreen");
-		await expectBodyWithoutClass(page, "yte-hide-ytp-fullscreen-grid");
+		await verifyNonTargetSilence(
+			page,
+			nonTargetPage!,
+			"automaticallyShowMoreVideosOnEndScreen",
+			subject
+		);
 	});
 
 	// Watch only: the CSS rule is keyed on #movie_player.ended-mode, which only exists on a watch page.

@@ -7,13 +7,15 @@ import {
 	enableFeature,
 	expectFeatureSilentOnNonTargetPage
 } from "@/src/utils/_tests/features";
-import {
-	navigateToPageType,
-	reloadPage,
-	spaNavigateToFirstVideo
-} from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToFirstVideo } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyDefaults,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 // A live stream is a /watch document and neither index.ts nor utils.ts has a live/VOD branch, so the live case
 // duplicates watch while raising the test budget to 120 s and burning a channel crawl.
@@ -77,6 +79,21 @@ async function openShareDialog(page: Page, pageType: string, index = 0): Promise
 }
 
 test.describe("shareShortener", () => {
+	const assertOn = async (page: Page) => {
+		await openShareDialog(page, watch);
+		await expectShareUrlWithoutParams(page);
+	};
+	const assertOff = (page: Page) =>
+		expect.poll(async () => await getShareUrl(page)).toMatch(SHARE_PARAM_REGEXP);
+	const setup = async (page: Page) => {
+		await openShareDialog(page, watch);
+	};
+	const disable = async (page: Page) => {
+		await closeShareDialog(page);
+		await disableFeature(page, "shareShortener.enabled");
+	};
+	const subject = { assertOn };
+
 	for (const pageType of pageTypes) {
 		test(`should remove share params when enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -94,31 +111,15 @@ test.describe("shareShortener", () => {
 	// Fresh page with the shipped defaults, before any enable: no observer may rewrite the URL
 	// YouTube puts in the dialog, so its tracking params have to survive untouched.
 	test(`should preserve share params by default on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await openShareDialog(page, watch);
-		await expect.poll(async () => await getShareUrl(page)).toMatch(SHARE_PARAM_REGEXP);
+		await verifyDefaults(page, watch, { ...subject, assertOff, setup });
 	});
 	// The lifecycle cases below only run removeObserver + setupShareShortener, which have no page-specific code
 	// path, so they run on watch only; the per-page dialog behaviour is covered by the two tests above.
 	test(`re-applies after disable then re-enable on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "shareShortener.enabled");
-		await openShareDialog(page, watch);
-		await expectShareUrlWithoutParams(page);
-		await closeShareDialog(page);
-		await disableFeature(page, "shareShortener.enabled");
-		await enableFeature(page, "shareShortener.enabled");
-		await openShareDialog(page, watch);
-		await expectShareUrlWithoutParams(page);
+		await verifyReEnableCycle(page, watch, "shareShortener", { ...subject, disable });
 	});
 	test(`persists after full page reload on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "shareShortener.enabled");
-		await openShareDialog(page, watch);
-		await expectShareUrlWithoutParams(page);
-		await reloadPage(page, watch);
-		await openShareDialog(page, watch);
-		await expectShareUrlWithoutParams(page);
+		await verifyReloadPersistence(page, watch, "shareShortener", subject);
 	});
 	// cleanSearchPage only runs on /results, and it is the one branch of the feature that never touches the
 	// share dialog.

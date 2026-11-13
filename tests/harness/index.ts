@@ -17,6 +17,7 @@ import {
 import { assertNoExtensionErrors, watchContextExtensionErrors } from "./errors";
 
 export { watchExtensionErrors } from "./errors";
+export * from "./lifecycle";
 
 type ContextOptions = {
 	ignoreExtensionErrors: boolean;

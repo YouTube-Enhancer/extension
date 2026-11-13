@@ -21,7 +21,15 @@ import {
 } from "@/src/utils/_tests/navigation";
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyDefaults,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const { left } = placementRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -41,6 +49,21 @@ async function isTranscriptPanelExpanded(page: Page): Promise<boolean> {
 	);
 }
 test.describe("openTranscriptButton", () => {
+	const assertOn = (page: Page) =>
+		expectFeatureButtonToBeTruthy(page, "yte-feature-openTranscriptButton-button");
+	const assertOff = (page: Page) =>
+		expectFeatureButtonToBeFalsy(page, "yte-feature-openTranscriptButton-button");
+	// This feature's switch lives at `<featureId>.button.enabled`, not the `<featureId>.enabled` the
+	// battery defaults to, so both legs of the cycle come from here.
+	const enable = (page: Page) => enableFeature(page, "openTranscriptButton.button.enabled");
+	const disable = (page: Page) => disableFeature(page, "openTranscriptButton.button.enabled");
+	const subject = { assertOff, assertOn, disable, enable };
+	/** The enable sequence for the lifecycle cases: they also pin the placement the button is observed at. */
+	const enablePlaced = async (page: Page) => {
+		await enable(page);
+		await setOption(page, "openTranscriptButton.button.placement", left);
+	};
+
 	for (const pageType of testPages) {
 		test("open transcript button should be enabled", async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -61,47 +84,39 @@ test.describe("openTranscriptButton", () => {
 			).toHaveAttribute("visibility", "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED", { timeout: 10000 });
 		});
 		test(`transcript button should not appear by default on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
 			// Fresh page with the shipped defaults, before any enable: the button must not be placed.
-			await expectFeatureButtonToBeFalsy(page, "yte-feature-openTranscriptButton-button");
+			await verifyDefaults(page, pageType, subject);
 		});
 		test("transcript button should persist after navigation", async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "openTranscriptButton.button.enabled");
-			await setOption(page, "openTranscriptButton.button.placement", left);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-openTranscriptButton-button");
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-openTranscriptButton-button");
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"openTranscriptButton",
+				{ ...subject, enable: enablePlaced },
+				async (navPage) => {
+					await navigateToPageType(navPage, home);
+					await navigateToPageType(navPage, pageType);
+				}
+			);
 		});
 		test("transcript button should re-appear after disable then re-enable", async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "openTranscriptButton.button.enabled");
-			await setOption(page, "openTranscriptButton.button.placement", left);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-openTranscriptButton-button");
-			await disableFeature(page, "openTranscriptButton.button.enabled");
-			await expectFeatureButtonToBeFalsy(page, "yte-feature-openTranscriptButton-button");
-			await enableFeature(page, "openTranscriptButton.button.enabled");
-			await setOption(page, "openTranscriptButton.button.placement", left);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-openTranscriptButton-button");
+			await verifyReEnableCycle(page, pageType, "openTranscriptButton", {
+				...subject,
+				enable: enablePlaced
+			});
 		});
 	}
 
 	test("transcript button should not appear on a non-target page", async ({ page }) => {
-		await navigateToPageType(page, home);
-		await enableFeature(page, "openTranscriptButton.button.enabled");
 		// Home carries no transcript button container; if the page gate leaked, the button
 		// controller would still try to place one and this would see it.
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-openTranscriptButton-button");
+		await verifyNonTargetSilence(page, home, "openTranscriptButton", subject);
 	});
 	test("transcript button should persist after full page reload", async ({ page }) => {
-		await navigateToPageType(page, testPages[0]);
-		await enableFeature(page, "openTranscriptButton.button.enabled");
-		await setOption(page, "openTranscriptButton.button.placement", left);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-openTranscriptButton-button");
-		await page.reload();
-		await navigateToPageType(page, testPages[0]);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-openTranscriptButton-button");
+		await verifyReloadPersistence(page, testPages[0], "openTranscriptButton", {
+			...subject,
+			enable: enablePlaced
+		});
 	});
 
 	test("transcript should open when clicking the feature menu item", async ({ page }) => {

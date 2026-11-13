@@ -19,7 +19,14 @@ import {
 } from "@/src/utils/_tests/navigation";
 import { freezeAndGetTime, showEndScreen } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -55,6 +62,16 @@ async function hasRenderedEndScreenCard(page: Page): Promise<boolean> {
 }
 
 test.describe("hideEndScreenCards", () => {
+	const assertOn = async (page: Page) => {
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		await expectElementsHidden(page, selectors);
+	};
+	const assertOff = async (page: Page) => {
+		await expectBodyWithoutClass(page, bodyClass);
+		await expectElementsNotHidden(page, selectors);
+	};
+	const subject = { assertOff, assertOn };
+
 	for (const pageType of testPages) {
 		test(`hides end screen cards on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType, ["endScreenCards"]);
@@ -66,26 +83,27 @@ test.describe("hideEndScreenCards", () => {
 			await expectElementsHidden(page, selectors, { requireMatch: true });
 		});
 		test(`hides end screen cards after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType, ["endScreenCards"]);
-			await enableFeature(page, "hideEndScreenCards.enabled");
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
-			await navigateToPageType(page, home);
-			// The feature only includes watch, so leaving it must drop the class again.
-			await expectBodyWithoutClass(page, bodyClass);
-			await navigateToPageType(page, pageType, ["endScreenCards"]);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"hideEndScreenCards",
+				{ ...subject, requirements: ["endScreenCards"] },
+				async (navPage) => {
+					await navigateToPageType(navPage, home);
+					// The feature only includes watch, so leaving it must drop the class again.
+					await expectBodyWithoutClass(navPage, bodyClass);
+					await navigateToPageType(navPage, pageType, ["endScreenCards"]);
+				}
+			);
 		});
 		test(`hides end screen cards on re-enable after disable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType, ["endScreenCards"]);
-			await enableFeature(page, "hideEndScreenCards.enabled");
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await disableFeature(page, "hideEndScreenCards.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await enableFeature(page, "hideEndScreenCards.enabled");
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
+			await verifyReEnableCycle(page, pageType, "hideEndScreenCards", {
+				...subject,
+				// The cycle only ever observed the body class after disabling: the end screen
+				// itself renders near the video's end, so not-hidden is not knowable here.
+				assertOff: (offPage: Page) => expectBodyWithoutClass(offPage, bodyClass),
+				requirements: ["endScreenCards"]
+			});
 		});
 	}
 
@@ -109,15 +127,18 @@ test.describe("hideEndScreenCards", () => {
 	test("removes the hide when SPA-navigating away from watch and restores it on return", async ({
 		page
 	}) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "hideEndScreenCards.enabled");
-		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 		// In-page hops, so the includePages gate runs through the navigation manager's yt-navigate listeners
 		// instead of the fresh document load every other navigation test in this spec performs.
-		await spaNavigateToHome(page);
-		await expectBodyWithoutClass(page, bodyClass, { timeout: 15000 });
-		await spaNavigateBack(page, "watch");
-		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		await verifyNavigationPersistence(
+			page,
+			watch,
+			"hideEndScreenCards",
+			subject,
+			async (navPage) => {
+				await spaNavigateToHome(navPage);
+				await spaNavigateBack(navPage, "watch");
+			}
+		);
 	});
 
 	test("swaps the button icon and title when the setting is toggled live on watch", async ({
@@ -163,21 +184,14 @@ test.describe("hideEndScreenCards", () => {
 	});
 
 	test(`persists hide after full page reload on target pages`, async ({ page }) => {
-		await navigateToPageType(page, testPages[0], ["endScreenCards"]);
-		await enableFeature(page, "hideEndScreenCards.enabled");
-		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-		await expectElementsHidden(page, selectors);
-		await page.reload();
-		await navigateToPageType(page, testPages[0], ["endScreenCards"]);
-		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-		await expectElementsHidden(page, selectors);
+		await verifyReloadPersistence(page, testPages[0], "hideEndScreenCards", {
+			...subject,
+			requirements: ["endScreenCards"]
+		});
 	});
 
 	test(`should not hide end screen cards on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "hideEndScreenCards.enabled");
-		await expectBodyWithoutClass(page, bodyClass);
-		await expectElementsNotHidden(page, selectors);
+		await verifyNonTargetSilence(page, nonTargetPage!, "hideEndScreenCards", subject);
 	});
 
 	test.describe("feature conflicts", () => {

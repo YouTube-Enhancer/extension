@@ -13,14 +13,20 @@ import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import {
 	clickFeatureButton,
 	clickFeatureMenuItem,
-	disableFeature,
 	enableFeature,
 	setOption
 } from "@/src/utils/_tests/features";
 import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const { left } = placementRecord;
@@ -64,6 +70,16 @@ async function freezeAndReadVideoInfo(page: Page) {
 	});
 }
 test.describe("screenshotButton", () => {
+	const assertOn = (page: Page) =>
+		expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
+	const assertOff = (page: Page) =>
+		expectFeatureButtonToBeFalsy(page, "yte-feature-screenshotButton-button");
+	const subject = { assertOff, assertOn };
+	const enable = async (page: Page) => {
+		await enableFeature(page, "screenshotButton.button.enabled");
+		await setOption(page, "screenshotButton.button.placement", left);
+	};
+
 	for (const pageType of testPages) {
 		test(`should take a screenshot and save as file on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -81,13 +97,7 @@ test.describe("screenshotButton", () => {
 	// The remaining screenshot and lifecycle paths are page-agnostic and the live fixture costs up to 120 s,
 	// so they run on watch only; live stays covered by the save-as-file smoke case above.
 	test(`the button should re-appear after a full page reload on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "screenshotButton.button.enabled");
-		await setOption(page, "screenshotButton.button.placement", left);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
-		await page.reload();
-		await navigateToPageType(page, watch);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
+		await verifyReloadPersistence(page, watch, "screenshotButton.button", { ...subject, enable });
 	});
 
 	test(`should take a screenshot and copy it to the clipboard on ${watch}`, async ({ page }) => {
@@ -344,32 +354,25 @@ test.describe("screenshotButton", () => {
 	});
 
 	test(`screenshot button should persist after navigation on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "screenshotButton.button.enabled");
-		await setOption(page, "screenshotButton.button.placement", left);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
-		await navigateToPageType(page, home);
-		await navigateToPageType(page, watch);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
+		await verifyNavigationPersistence(
+			page,
+			watch,
+			"screenshotButton.button",
+			{ ...subject, enable },
+			async (navPage) => {
+				await navigateToPageType(navPage, home);
+				await navigateToPageType(navPage, watch);
+			}
+		);
 	});
 
 	test(`screenshot button should re-appear after disable then re-enable on ${watch}`, async ({
 		page
 	}) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "screenshotButton.button.enabled");
-		await setOption(page, "screenshotButton.button.placement", left);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
-		await disableFeature(page, "screenshotButton.button.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-screenshotButton-button");
-		await enableFeature(page, "screenshotButton.button.enabled");
-		await setOption(page, "screenshotButton.button.placement", left);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
+		await verifyReEnableCycle(page, watch, "screenshotButton.button", { ...subject, enable });
 	});
 
 	test(`should not create screenshot button on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "screenshotButton.button.enabled");
-		await expect(page.locator("#yte-feature-screenshotButton-button")).not.toBeAttached();
+		await verifyNonTargetSilence(page, nonTargetPage!, "screenshotButton.button", subject);
 	});
 });

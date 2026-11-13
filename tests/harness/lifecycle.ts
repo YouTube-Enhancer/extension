@@ -33,17 +33,38 @@ export type LifecycleSubject = {
 	disable?: (page: Page) => Promise<void>;
 	/** Turns the feature on; defaults to enabling `${featureId}.enabled`. */
 	enable?: (page: Page) => Promise<void>;
+	/**
+	 * Fixture capability requirements for the initial navigation, so the step lands on the same
+	 * fixture the spec always navigated to (e.g. ["playlistManagementButtons"] picks the playlist
+	 * that offers those rows rather than the first playlist in the table).
+	 */
+	requirements?: import("@/src/utils/_tests/capabilities").FixtureCapabilities[];
 	/** Per-test setup after the initial navigation: option values, timeouts, prerequisites. */
 	setup?: (page: Page, pageType: PageType) => Promise<void>;
 };
 
+/** A subject whose enable and disable sequences are mandatory: the persistence sweep drives multi-key batches. */
+export type ToggleSubject = LifecycleSubject &
+	Required<Pick<LifecycleSubject, "disable" | "enable">>;
+
 /** The initial navigation a lifecycle test makes: the live page hunts a stream (or skips), everything else loads its fixture. */
-export async function enterPage(page: Page, pageType: PageType): Promise<void> {
+export async function enterPage(
+	page: Page,
+	pageType: PageType,
+	requirements?: import("@/src/utils/_tests/capabilities").FixtureCapabilities[]
+): Promise<void> {
 	if (pageType === "live") {
+		// A requirements-carrying live entry hunts for a stream demonstrating them (and fails
+		// when none is on air, as the spec always did); without requirements the live page
+		// skips when the channel has nothing on air.
+		if (requirements?.length) {
+			await navigateToPageType(page, pageType, requirements);
+			return;
+		}
 		await navigateToLiveOrSkip(page);
 		return;
 	}
-	await navigateToPageType(page, pageType);
+	await navigateToPageType(page, pageType, requirements ?? []);
 }
 
 /**
@@ -51,13 +72,19 @@ export async function enterPage(page: Page, pageType: PageType): Promise<void> {
  * self-heals a redirect back onto the fixture), except on live, where renavigating would hunt a
  * different stream and discard the reloaded document - reloadPage keeps the same stream.
  */
-export async function reloadAndSettle(page: Page, pageType: PageType): Promise<void> {
+export async function reloadAndSettle(
+	page: Page,
+	pageType: PageType,
+	requirements?: import("@/src/utils/_tests/capabilities").FixtureCapabilities[]
+): Promise<void> {
 	if (pageType === "live") {
 		await reloadPage(page, pageType);
 		return;
 	}
 	await page.reload();
-	await navigateToPageType(page, pageType);
+	// The requirements ride the renavigate too: without them the fixture table picks its first
+	// entry, which is not necessarily the page the spec loaded before the reload.
+	await navigateToPageType(page, pageType, requirements ?? []);
 }
 
 /** Loads the page and checks the feature's off-state observable. */
@@ -66,7 +93,7 @@ export async function verifyDefaults(
 	pageType: PageType,
 	subject: LifecycleSubject
 ): Promise<void> {
-	await enterPage(page, pageType);
+	await enterPage(page, pageType, subject.requirements);
 	await subject.setup?.(page, pageType);
 	if (subject.assertOff) await subject.assertOff(page);
 }
@@ -87,7 +114,7 @@ export async function verifyNavigationPersistence(
 	navigate: (page: Page, pageType: PageType) => Promise<void>
 ): Promise<void> {
 	const { enable } = subjectFor(subject, featureId);
-	await enterPage(page, pageType);
+	await enterPage(page, pageType, subject.requirements);
 	await subject.setup?.(page, pageType);
 	await enable(page);
 	await expectOn(subject, page);
@@ -110,6 +137,34 @@ export async function verifyNonTargetSilence(
 	else await page.waitForTimeout(2000);
 }
 
+/**
+ * The full persistence contract the registry-wide sweep exercises: enable (then enable again for
+ * idempotency), full reload, SPA navigation, disable (then disable again), asserting the observable
+ * after every step. The batch battery and its isolated per-feature triage fallback share this one
+ * implementation; the sweep keeps its batching and retry structure around it.
+ */
+export async function verifyPersistenceCycle(
+	page: Page,
+	pageType: PageType,
+	subject: ToggleSubject,
+	navigate: (page: Page, pageType: PageType) => Promise<void>
+): Promise<void> {
+	await enterPage(page, pageType, subject.requirements);
+	await subject.setup?.(page, pageType);
+	await subject.enable(page);
+	await expectOn(subject, page);
+	await subject.enable(page);
+	await expectOn(subject, page);
+	await reloadAndSettle(page, pageType, subject.requirements);
+	await expectOn(subject, page);
+	await navigate(page, pageType);
+	await expectOn(subject, page);
+	await subject.disable(page);
+	if (subject.assertOff) await subject.assertOff(page);
+	await subject.disable(page);
+	if (subject.assertOff) await subject.assertOff(page);
+}
+
 /** Enable, observe, disable, observe off, re-enable, observe on again. */
 export async function verifyReEnableCycle(
 	page: Page,
@@ -118,7 +173,7 @@ export async function verifyReEnableCycle(
 	subject: LifecycleSubject
 ): Promise<void> {
 	const { disable, enable } = subjectFor(subject, featureId);
-	await enterPage(page, pageType);
+	await enterPage(page, pageType, subject.requirements);
 	await subject.setup?.(page, pageType);
 	await enable(page);
 	await expectOn(subject, page);
@@ -136,11 +191,11 @@ export async function verifyReloadPersistence(
 	subject: LifecycleSubject
 ): Promise<void> {
 	const { enable } = subjectFor(subject, featureId);
-	await enterPage(page, pageType);
+	await enterPage(page, pageType, subject.requirements);
 	await subject.setup?.(page, pageType);
 	await enable(page);
 	await expectOn(subject, page);
-	await reloadAndSettle(page, pageType);
+	await reloadAndSettle(page, pageType, subject.requirements);
 	await expectOn(subject, page);
 }
 

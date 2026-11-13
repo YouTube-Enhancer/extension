@@ -1,3 +1,5 @@
+import type { Page } from "@playwright/test";
+
 import { metadata } from "@/src/features/hideSidebarRecommendedVideos/index.metadata";
 import {
 	expectBodyWithClass,
@@ -8,7 +10,7 @@ import {
 } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { enableFeature } from "@/src/utils/_tests/features";
 import {
 	navigateToPageType,
 	spaNavigateBack,
@@ -19,7 +21,13 @@ import {
 	resolveNonTargetPage,
 	resolvePageTypes
 } from "@/src/utils/_tests/utils";
-import { test } from "@/tests/harness";
+import {
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -32,38 +40,35 @@ const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const { home, live, watch } = pageTypeRecord;
 
 test.describe("hideSidebarRecommendedVideos", () => {
+	const assertOn = async (page: Page) => {
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		await expectElementsHidden(page, selectors);
+	};
+	const assertOff = async (page: Page) => {
+		await expectBodyWithoutClass(page, bodyClass);
+		await expectElementsNotHidden(page, selectors, { mode: "any" });
+	};
+	const assertOffClassOnly = (page: Page) => expectBodyWithoutClass(page, bodyClass);
+	const subject = { assertOff, assertOn };
+
 	for (const pageType of testPages) {
 		test(`hides elements after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideSidebarRecommendedVideos.enabled");
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"hideSidebarRecommendedVideos",
+				subject,
+				async (navPage) => {
+					await navigateToPageType(navPage, home);
+					await navigateToPageType(navPage, pageType);
+				}
+			);
 		});
 		test(`persists hide after full page reload on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideSidebarRecommendedVideos.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
+			await verifyReloadPersistence(page, pageType, "hideSidebarRecommendedVideos", subject);
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideSidebarRecommendedVideos.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await disableFeature(page, "hideSidebarRecommendedVideos.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await expectElementsNotHidden(page, selectors, { mode: "any" });
-			await enableFeature(page, "hideSidebarRecommendedVideos.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
+			await verifyReEnableCycle(page, pageType, "hideSidebarRecommendedVideos", subject);
 		});
 	}
 
@@ -99,10 +104,11 @@ test.describe("hideSidebarRecommendedVideos", () => {
 		await expectElementsNotHidden(page, selectors);
 	});
 	test(`should not hide sidebar recommended videos on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "hideSidebarRecommendedVideos.enabled");
 		// The feature hides through the body class alone, and a channel page can carry hidden watch-layout sidebars
 		// in its DOM, so the absent class is the whole assertion here.
-		await expectBodyWithoutClass(page, bodyClass);
+		await verifyNonTargetSilence(page, nonTargetPage!, "hideSidebarRecommendedVideos", {
+			...subject,
+			assertOff: assertOffClassOnly
+		});
 	});
 });

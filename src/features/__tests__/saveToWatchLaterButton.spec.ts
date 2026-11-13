@@ -13,7 +13,7 @@ import { metadata } from "@/src/features/saveToWatchLaterButton/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { enableFeature } from "@/src/utils/_tests/features";
 import { localeText } from "@/src/utils/_tests/locale";
 import {
 	navigateToPage,
@@ -32,7 +32,13 @@ import {
 	settleActionsRowIcon,
 	WATCH_LATER_UNSAVED_ICON as UNSAVED_ICON
 } from "@/src/utils/_tests/watchLater";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyDefaults,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
@@ -278,6 +284,11 @@ async function withoutCommandPipeline(page: Page): Promise<void> {
 }
 
 test.describe("saveToWatchLaterButton", () => {
+	const assertOn = (page: Page) =>
+		expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached({ timeout: 10000 });
+	const assertOff = (page: Page) => expect(page.locator(BUTTON_SELECTOR)).not.toBeAttached();
+	const subject = { assertOff, assertOn };
+
 	for (const pageType of testPages) {
 		test(`save button should appear when enabled on ${pageType}`, async ({ page }) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
@@ -288,23 +299,16 @@ test.describe("saveToWatchLaterButton", () => {
 
 		test(`save button should not appear by default on ${pageType}`, async ({ page }) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
-			await navigateToPageType(page, pageType);
 			// Fresh page with the shipped defaults, before any enable: the feature puts its class
 			// on every button it renders, card and actions row alike, so none may be attached.
-			await expect(page.locator(BUTTON_SELECTOR)).not.toBeAttached();
+			await verifyDefaults(page, pageType, subject);
 		});
 
 		test(`save button should re-appear after disable then re-enable on ${pageType}`, async ({
 			page
 		}) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "saveToWatchLaterButton.enabled");
-			await expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached({ timeout: 10000 });
-			await disableFeature(page, "saveToWatchLaterButton.enabled");
-			await expect(page.locator(BUTTON_SELECTOR)).not.toBeAttached();
-			await enableFeature(page, "saveToWatchLaterButton.enabled");
-			await expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached({ timeout: 10000 });
+			await verifyReEnableCycle(page, pageType, "saveToWatchLaterButton", subject);
 		});
 	}
 
@@ -328,12 +332,7 @@ test.describe("saveToWatchLaterButton", () => {
 	for (const pageType of [home, search, watch] as const) {
 		test(`save button should persist after full page reload on ${pageType}`, async ({ page }) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "saveToWatchLaterButton.enabled");
-			await expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached({ timeout: 10000 });
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached({ timeout: 10000 });
+			await verifyReloadPersistence(page, pageType, "saveToWatchLaterButton", subject);
 		});
 	}
 

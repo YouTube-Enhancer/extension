@@ -21,7 +21,7 @@ import { getClosestQuality, getValueFromYouTubePlayer } from "@/src/utils/_tests
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { lookupItag } from "@/src/utils/player/itagDb";
-import { expect, test } from "@/tests/harness";
+import { expect, test, verifyReEnableCycle, verifyReloadPersistence } from "@/tests/harness";
 const { home, live, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
@@ -120,6 +120,18 @@ function resolveFpsCandidate(formats: QualityFormat[]) {
 	return null;
 }
 test.describe("playerQuality", () => {
+	const assertOn = async (page: Page) => {
+		const closestQuality = await getClosestQuality(page, watch, qualityLevel, fallbackStrategy);
+		if (!closestQuality) return;
+		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
+	};
+	const subject = {
+		assertOn,
+		setup: async (page: Page) => {
+			await setOption(page, "playerQuality.quality", qualityLevel);
+			await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
+		}
+	};
 	for (const pageType of testPages) {
 		test(`should set quality to closest on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -163,32 +175,10 @@ test.describe("playerQuality", () => {
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
 	});
 	test(`re-applies quality after disable then re-enable on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await setOption(page, "playerQuality.quality", qualityLevel);
-		await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
-		await enableFeature(page, "playerQuality.enabled");
-		const closestQuality = await getClosestQuality(page, watch, qualityLevel, fallbackStrategy);
-		if (!closestQuality) return;
-		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
-		await disableFeature(page, "playerQuality.enabled");
-		await enableFeature(page, "playerQuality.enabled");
-		const closestQuality2 = await getClosestQuality(page, watch, qualityLevel, fallbackStrategy);
-		if (!closestQuality2) return;
-		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality2);
+		await verifyReEnableCycle(page, watch, "playerQuality", subject);
 	});
 	test(`persists quality after full page reload on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await setOption(page, "playerQuality.quality", qualityLevel);
-		await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
-		await enableFeature(page, "playerQuality.enabled");
-		const closestQuality = await getClosestQuality(page, watch, qualityLevel, fallbackStrategy);
-		if (!closestQuality) return;
-		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
-		await page.reload();
-		await navigateToPageType(page, watch);
-		const closestQuality2 = await getClosestQuality(page, watch, qualityLevel, fallbackStrategy);
-		if (!closestQuality2) return;
-		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality2);
+		await verifyReloadPersistence(page, watch, "playerQuality", subject);
 	});
 	test(`restores quality setting after disable on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);

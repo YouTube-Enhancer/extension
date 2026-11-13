@@ -14,7 +14,6 @@ import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import {
 	clickFeatureButton,
 	clickFeatureMenuItem,
-	disableFeature,
 	enableFeature,
 	setOption
 } from "@/src/utils/_tests/features";
@@ -23,7 +22,14 @@ import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType, spaNavigateToHome } from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const maximizeOffTitle = localeText(
@@ -33,6 +39,21 @@ const maximizeOnTitle = localeText("pages.content.features.maximizePlayerButton.
 const { left, menu, right } = placementRecord;
 const { home, watch } = pageTypeRecord;
 test.describe("maximizePlayerButton", () => {
+	const assertOn = (page: Page) =>
+		expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+	const assertOff = async (page: Page) => {
+		await expectFeatureButtonToBeFalsy(page, "yte-feature-maximizePlayerButton-button");
+		await expectFeatureMenuItemToBeFalsy(page, "yte-feature-maximizePlayerButton-menuitem");
+	};
+	const setup = async (page: Page) => {
+		await setOption(page, "maximizePlayerButton.button.placement", left);
+	};
+	const enableWithPlacement = async (page: Page) => {
+		await enableFeature(page, "maximizePlayerButton.button.enabled");
+		await setOption(page, "maximizePlayerButton.button.placement", left);
+	};
+	const subject = { assertOff, assertOn, setup };
+
 	for (const pageType of testPages) {
 		test(`maximize player button should be enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -51,13 +72,16 @@ test.describe("maximizePlayerButton", () => {
 		test(`maximize player button should persist after navigation on ${pageType}`, async ({
 			page
 		}) => {
-			await navigateToPageType(page, pageType);
-			await setOption(page, "maximizePlayerButton.button.placement", left);
-			await enableFeature(page, "maximizePlayerButton.button.enabled");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"maximizePlayerButton.button",
+				subject,
+				async (navPage) => {
+					await navigateToPageType(navPage, home);
+					await navigateToPageType(navPage, pageType);
+				}
+			);
 		});
 	}
 
@@ -77,34 +101,19 @@ test.describe("maximizePlayerButton", () => {
 	test(`maximize player button should re-appear after disable then re-enable on watch`, async ({
 		page
 	}) => {
-		await navigateToPageType(page, watch);
-		await setOption(page, "maximizePlayerButton.button.placement", left);
-		await enableFeature(page, "maximizePlayerButton.button.enabled");
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
-		await disableFeature(page, "maximizePlayerButton.button.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-maximizePlayerButton-button");
-		await enableFeature(page, "maximizePlayerButton.button.enabled");
-		await setOption(page, "maximizePlayerButton.button.placement", left);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+		await verifyReEnableCycle(page, watch, "maximizePlayerButton.button", {
+			...subject,
+			enable: enableWithPlacement
+		});
 	});
 
 	test(`maximize player button should persist after full page reload`, async ({ page }) => {
-		await navigateToPageType(page, testPages[0]);
-		await setOption(page, "maximizePlayerButton.button.placement", left);
-		await enableFeature(page, "maximizePlayerButton.button.enabled");
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
-		await page.reload();
-		await navigateToPageType(page, testPages[0]);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+		await verifyReloadPersistence(page, testPages[0], "maximizePlayerButton.button", subject);
 	});
 
 	test(`should not create maximize player button on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
 		// The default placement is the feature menu, which never creates a button element: pin it to the player controls.
-		await setOption(page, "maximizePlayerButton.button.placement", left);
-		await enableFeature(page, "maximizePlayerButton.button.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-maximizePlayerButton-button");
-		await expectFeatureMenuItemToBeFalsy(page, "yte-feature-maximizePlayerButton-menuitem");
+		await verifyNonTargetSilence(page, nonTargetPage!, "maximizePlayerButton.button", subject);
 	});
 
 	test("clicking the maximize feature menu item should maximize and restore the player on watch", async ({

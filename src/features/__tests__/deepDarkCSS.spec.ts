@@ -10,7 +10,13 @@ import {
 	DEEP_DARK_COLORS_ATTRIBUTE,
 	DEEP_DARK_PRESET_ATTRIBUTE
 } from "@/src/utils/deep-dark-theme/dom";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const { shorts, watch } = pageTypeRecord;
 const { below } = placementRecord;
@@ -25,6 +31,17 @@ async function getHtmlBackgroundColor(page: Page): Promise<string> {
 }
 
 test.describe("deepDarkCSS", () => {
+	// The sheet count is the feature's whole observable: enable appends exactly one <style>, disable removes it.
+	const assertOn = (page: Page) =>
+		expect
+			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 15000 })
+			.toBe(1);
+	const assertOff = (page: Page) =>
+		expect
+			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 5000 })
+			.toBe(0);
+	const subject = { assertOff, assertOn };
+
 	// The feature only appends/removes a <style> in document.head and has no page-specific branch, so one non-watch shell is enough.
 	test("should inject deep dark CSS on shorts", async ({ page }) => {
 		await navigateToPageType(page, shorts);
@@ -34,46 +51,19 @@ test.describe("deepDarkCSS", () => {
 			.toBe(1);
 	});
 	test("should work on re-enable after disable on watch", async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect
-			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 })
-			.toBe(1);
-		await disableFeature(page, "deepDarkCSS.enabled");
-		await expect
-			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 5000 })
-			.toBe(0);
-		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect
-			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 })
-			.toBe(1);
+		await verifyReEnableCycle(page, watch, "deepDarkCSS", subject);
 	});
 	test("persists deep dark CSS after full page reload on watch", async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect
-			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 })
-			.toBe(1);
-		await page.reload();
-		await navigateToPageType(page, watch);
-		await expect
-			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 15000 })
-			.toBe(1);
+		await verifyReloadPersistence(page, watch, "deepDarkCSS", subject);
 	});
 	// All pages: the feature declares no includePages, so the case is the effect surviving an SPA
 	// navigation rather than re-arm on a new page type.
 	test("deep dark CSS persists after navigation on watch", async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect
-			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 })
-			.toBe(1);
-		// A genuine in-page navigation to another video; the style tag lives in document.head, which
-		// the navigation keeps, so the assertion observes what the navigation produced.
-		await spaNavigateToRelatedVideo(page);
-		await expect
-			.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 15000 })
-			.toBe(1);
+		await verifyNavigationPersistence(page, watch, "deepDarkCSS", subject, async (navPage) => {
+			// A genuine in-page navigation to another video; the style tag lives in document.head, which
+			// the navigation keeps, so the assertion observes what the navigation produced.
+			await spaNavigateToRelatedVideo(navPage);
+		});
 	});
 	test("applies every bundled preset on watch", async ({ page }) => {
 		test.setTimeout(180_000);

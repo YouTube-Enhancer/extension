@@ -26,7 +26,14 @@ import { WHEEL_DELTA_PER_NOTCH } from "@/src/utils/_tests/player";
 import { readStoredOptions } from "@/src/utils/_tests/storage";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 import { clampDb, dbToLinear } from "@/src/utils/misc";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 const { right } = placementRecord;
 const { shorts, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -100,6 +107,19 @@ async function wheelOverVolumeBoostButton(
 }
 test.describe("volumeBoost", () => {
 	test.describe("volumeBoost (global)", () => {
+		const assertOn = async (page: Page) => {
+			await expectVolumeBoostEnabled(page, true);
+			await expectVolumeBoostAmount(page, 10);
+		};
+		const assertOff = async (page: Page) => {
+			await expectVolumeBoostEnabled(page, false);
+		};
+		const enable = async (page: Page) => {
+			await enableFeature(page, "volumeBoost.enabled");
+			await setOption(page, "volumeBoost.mode", "global");
+			await setOption(page, "volumeBoost.amount", 10);
+		};
+		const subject = { assertOff, assertOn, enable };
 		for (const pageType of testPages) {
 			test(`should set global volume boost to 10 on ${pageType}`, async ({ page }) => {
 				await navigateToPageType(page, pageType);
@@ -116,34 +136,13 @@ test.describe("volumeBoost", () => {
 		test(`should re-apply global volume boost after disable then re-enable on ${watch}`, async ({
 			page
 		}) => {
-			await navigateToPageType(page, watch);
-			await enableFeature(page, "volumeBoost.enabled");
-			await setOption(page, "volumeBoost.mode", "global");
-			await setOption(page, "volumeBoost.amount", 10);
-			await expectVolumeBoostEnabled(page, true);
-			await expectVolumeBoostAmount(page, 10);
-			await disableFeature(page, "volumeBoost.enabled");
-			await expectVolumeBoostEnabled(page, false);
-			await enableFeature(page, "volumeBoost.enabled");
-			await setOption(page, "volumeBoost.mode", "global");
-			await setOption(page, "volumeBoost.amount", 10);
-			await expectVolumeBoostEnabled(page, true);
-			await expectVolumeBoostAmount(page, 10);
+			await verifyReEnableCycle(page, watch, "volumeBoost", subject);
 		});
 
 		test(`should persist global volume boost after full page reload on ${watch}`, async ({
 			page
 		}) => {
-			await navigateToPageType(page, watch);
-			await enableFeature(page, "volumeBoost.enabled");
-			await setOption(page, "volumeBoost.mode", "global");
-			await setOption(page, "volumeBoost.amount", 10);
-			await expectVolumeBoostEnabled(page, true);
-			await expectVolumeBoostAmount(page, 10);
-			await page.reload();
-			await navigateToPageType(page, watch);
-			await expectVolumeBoostEnabled(page, true);
-			await expectVolumeBoostAmount(page, 10);
+			await verifyReloadPersistence(page, watch, "volumeBoost", subject);
 		});
 
 		// Left on the shipped defaults on purpose: shouldRender only asks for the button in per_video mode, and
@@ -172,6 +171,17 @@ test.describe("volumeBoost", () => {
 	});
 	const buttonTestPages = testPages.filter((p) => p !== "shorts");
 	test.describe("volumeBoost (button)", () => {
+		const assertOn = async (page: Page) => {
+			await expectVolumeBoostAmount(page, 10);
+		};
+		const enable = async (page: Page) => {
+			await enableFeature(page, "volumeBoost.enabled");
+			await setOption(page, "volumeBoost.mode", "per_video");
+			await setOption(page, "volumeBoost.amount", 10);
+			await setOption(page, "volumeBoost.button.placement", right);
+			await clickFeatureButton(page, watch, "yte-feature-volumeBoostButton-button", right);
+		};
+		const subject = { assertOn, enable };
 		for (const pageType of buttonTestPages) {
 			test(`button should be enabled on ${pageType}`, async ({ page }) => {
 				await navigateToPageType(page, pageType);
@@ -356,16 +366,10 @@ test.describe("volumeBoost", () => {
 		test(`should re-apply the boost after an in-page navigation to another video on ${watch}`, async ({
 			page
 		}) => {
-			await navigateToPageType(page, watch);
-			await enableFeature(page, "volumeBoost.enabled");
-			await setOption(page, "volumeBoost.mode", "per_video");
-			await setOption(page, "volumeBoost.amount", 10);
-			await setOption(page, "volumeBoost.button.placement", right);
-			await clickFeatureButton(page, watch, "yte-feature-volumeBoostButton-button", right);
-			await expectVolumeBoostAmount(page, 10);
 			// A single-page navigation swaps the video element, so onNavigate has to rebuild the engine and re-boost it.
-			await spaNavigateToRelatedVideo(page);
-			await expectVolumeBoostAmount(page, 10);
+			await verifyNavigationPersistence(page, watch, "volumeBoost", subject, (navPage) =>
+				spaNavigateToRelatedVideo(navPage)
+			);
 		});
 
 		// The feature menu is watch-only and the below_player container is built for the watch layout, so
@@ -403,13 +407,18 @@ test.describe("volumeBoost", () => {
 	});
 
 	test(`should not create volume boost button on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "volumeBoost.enabled");
 		// per_video mode plus a placement is what makes shouldRender ask for the button at all, so only the page
 		// gate can keep it away here.
-		await setOption(page, "volumeBoost.mode", "per_video");
-		await setOption(page, "volumeBoost.button.placement", right);
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-volumeBoostButton-button");
+		await verifyNonTargetSilence(page, nonTargetPage!, "volumeBoost", {
+			assertOff: async (page) => {
+				await expectFeatureButtonToBeFalsy(page, "yte-feature-volumeBoostButton-button");
+			},
+			enable: async (page) => {
+				await enableFeature(page, "volumeBoost.enabled");
+				await setOption(page, "volumeBoost.mode", "per_video");
+				await setOption(page, "volumeBoost.button.placement", right);
+			}
+		});
 	});
 
 	test.describe("audio engine", () => {

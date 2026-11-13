@@ -19,7 +19,13 @@ import {
 	spaNavigateToHome
 } from "@/src/utils/_tests/navigation";
 import { loginRequiredPages, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { test } from "@/tests/harness";
+import {
+	test,
+	verifyDefaults,
+	verifyNavigationPersistence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -103,6 +109,17 @@ test.describe("hideShorts", () => {
 		// yt-tab-shape[tab-title="Shorts"] is structurally part of the channel tab bar, so at least one selector always matches there.
 		const hiddenMode = subFeature === "channel" ? "any" : "all";
 		test.describe(`${config}`, () => {
+			const featureId = config.replace(/\.enabled$/, "");
+			const assertOn = async (pageObj: Page) => {
+				await expectBodyWithClass(pageObj, bodyClass, { timeout: 15000 });
+				await expectElementsHidden(pageObj, selectors);
+			};
+			const assertOff = async (pageObj: Page) => {
+				await expectBodyWithoutClass(pageObj, bodyClass);
+				await expectElementsNotHidden(pageObj, selectors);
+			};
+			const subject = { assertOff, assertOn };
+
 			test(`hides on ${page}`, async ({ page: pageObj }) => {
 				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
 				await navigateToPageType(pageObj, page);
@@ -114,50 +131,29 @@ test.describe("hideShorts", () => {
 				page: pageObj
 			}) => {
 				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
-				await navigateToPageType(pageObj, page);
 				// Fresh page with the shipped defaults: the section class must never reach the body.
-				await expectBodyWithoutClass(pageObj, bodyClass);
+				await verifyDefaults(pageObj, page, subject);
 			});
 			test(`${subFeature} hiding should persist after navigation on ${page}`, async ({
 				page: pageObj
 			}) => {
 				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
-				await navigateToPageType(pageObj, page);
-				await enableFeature(pageObj, config);
-				await expectBodyWithClass(pageObj, bodyClass);
-				await expectElementsHidden(pageObj, selectors);
-				await navigateToPageType(pageObj, intermediatePage);
-				await navigateToPageType(pageObj, page);
-				await expectBodyWithClass(pageObj, bodyClass);
-				await expectElementsHidden(pageObj, selectors);
+				await verifyNavigationPersistence(pageObj, page, featureId, subject, async (navPage) => {
+					await navigateToPageType(navPage, intermediatePage);
+					await navigateToPageType(navPage, page);
+				});
 			});
 			test(`${subFeature} hiding should work on re-enable after disable on ${page}`, async ({
 				page: pageObj
 			}) => {
 				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
-				await navigateToPageType(pageObj, page);
-				await enableFeature(pageObj, config);
-				await expectBodyWithClass(pageObj, bodyClass);
-				await expectElementsHidden(pageObj, selectors);
-				await disableFeature(pageObj, config);
-				await expectBodyWithoutClass(pageObj, bodyClass);
-				await expectElementsNotHidden(pageObj, selectors);
-				await enableFeature(pageObj, config);
-				await expectBodyWithClass(pageObj, bodyClass);
-				await expectElementsHidden(pageObj, selectors);
+				await verifyReEnableCycle(pageObj, page, featureId, subject);
 			});
 			test(`${subFeature} hiding should persist after full page reload on ${page}`, async ({
 				page: pageObj
 			}) => {
 				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
-				await navigateToPageType(pageObj, page);
-				await enableFeature(pageObj, config);
-				await expectBodyWithClass(pageObj, bodyClass);
-				await expectElementsHidden(pageObj, selectors);
-				await pageObj.reload();
-				await navigateToPageType(pageObj, page);
-				await expectBodyWithClass(pageObj, bodyClass, { timeout: 15000 });
-				await expectElementsHidden(pageObj, selectors);
+				await verifyReloadPersistence(pageObj, page, featureId, subject);
 			});
 			if (subFeature === "videos") {
 				// Hiding is a static body-class CSS rule with no observer, so one sub-feature covers dynamically added content.

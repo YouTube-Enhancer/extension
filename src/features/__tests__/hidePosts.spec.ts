@@ -1,3 +1,5 @@
+import type { Page } from "@playwright/test";
+
 import { metadata } from "@/src/features/hidePosts/index.metadata";
 import {
 	expectBodyClassToStayAbsent,
@@ -8,7 +10,7 @@ import {
 } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { enableFeature } from "@/src/utils/_tests/features";
 import {
 	navigateToPageType,
 	spaNavigateToFirstVideo,
@@ -19,7 +21,12 @@ import {
 	resolveNonTargetPage,
 	resolvePageTypes
 } from "@/src/utils/_tests/utils";
-import { test } from "@/tests/harness";
+import {
+	test,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -32,6 +39,17 @@ const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const { home, watch } = pageTypeRecord;
 
 test.describe("hidePosts", () => {
+	const assertOn = async (page: Page) => {
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		await expectElementsHidden(page, selectors);
+	};
+	const assertOff = async (page: Page) => {
+		await expectBodyWithoutClass(page, bodyClass);
+		await expectElementsNotHidden(page, selectors);
+		await expectBodyClassToStayAbsent(page, bodyClass);
+	};
+	const subject = { assertOff, assertOn };
+
 	for (const pageType of testPages) {
 		test(`hides posts section on ${pageType}`, async ({ page }) => {
 			test.skip(
@@ -65,30 +83,14 @@ test.describe("hidePosts", () => {
 				!hasAuthState() && loginRequiredPages.includes(pageType),
 				`${pageType} requires login`
 			);
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hidePosts.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
+			await verifyReloadPersistence(page, pageType, "hidePosts", subject);
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
 			test.skip(
 				!hasAuthState() && loginRequiredPages.includes(pageType),
 				`${pageType} requires login`
 			);
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hidePosts.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await disableFeature(page, "hidePosts.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await expectElementsNotHidden(page, selectors);
-			await enableFeature(page, "hidePosts.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
+			await verifyReEnableCycle(page, pageType, "hidePosts", subject);
 		});
 	}
 
@@ -107,8 +109,6 @@ test.describe("hidePosts", () => {
 		await expectElementsHidden(page, selectors);
 	});
 	test(`should not hide posts on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "hidePosts.enabled");
-		await expectBodyClassToStayAbsent(page, bodyClass);
+		await verifyNonTargetSilence(page, nonTargetPage!, "hidePosts", subject);
 	});
 });

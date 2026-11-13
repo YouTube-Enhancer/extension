@@ -1,3 +1,5 @@
+import type { Page } from "@playwright/test";
+
 import { metadata } from "@/src/features/hidePlaylistRecommendations/index.metadata";
 import {
 	expectBodyWithClass,
@@ -5,14 +7,19 @@ import {
 	expectElementsHidden
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { enableFeature } from "@/src/utils/_tests/features";
 import {
 	navigateToPageType,
 	spaNavigateBack,
 	spaNavigateToHome
 } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-import { test } from "@/tests/harness";
+import {
+	test,
+	verifyDefaults,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -24,6 +31,10 @@ const {
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
 test.describe("hidePlaylistRecommendations", () => {
+	const assertOn = (page: Page) => expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+	const assertOff = (page: Page) => expectBodyWithoutClass(page, bodyClass);
+	const subject = { assertOff, assertOn };
+
 	for (const pageType of testPages) {
 		test(`hides playlist recommendations on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -32,16 +43,10 @@ test.describe("hidePlaylistRecommendations", () => {
 			await expectElementsHidden(page, selectors);
 		});
 		test(`does not have body class by default on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await expectBodyWithoutClass(page, bodyClass);
+			await verifyDefaults(page, pageType, subject);
 		});
 		test(`persists after full page reload on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hidePlaylistRecommendations.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+			await verifyReloadPersistence(page, pageType, "hidePlaylistRecommendations", subject);
 		});
 		test(`should not hide playlist recommendations on ${watch}`, async ({ page }) => {
 			await navigateToPageType(page, watch);
@@ -51,13 +56,7 @@ test.describe("hidePlaylistRecommendations", () => {
 			await expectBodyWithoutClass(page, bodyClass, { timeout: 15000 });
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hidePlaylistRecommendations.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await disableFeature(page, "hidePlaylistRecommendations.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await enableFeature(page, "hidePlaylistRecommendations.enabled");
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+			await verifyReEnableCycle(page, pageType, "hidePlaylistRecommendations", subject);
 		});
 		test(`hides playlist recommendations after navigation on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);

@@ -18,9 +18,6 @@ import {
 } from "@/src/utils/_tests/features";
 import { loadAllFeatureMetadata } from "@/src/utils/_tests/metadata";
 import {
-	navigateToLiveOrSkip,
-	navigateToPageType,
-	reloadPage,
 	spaNavigateToFirstVideo,
 	spaNavigateToHome,
 	spaNavigateToRelatedVideo
@@ -28,7 +25,7 @@ import {
 import { readStoredOptions } from "@/src/utils/_tests/storage";
 import { loginRequiredPages, resolvePageTypes } from "@/src/utils/_tests/utils";
 import { getPathValue } from "@/src/utils/misc";
-import { expect, test, watchExtensionErrors } from "@/tests/harness";
+import { expect, test, verifyPersistenceCycle, watchExtensionErrors } from "@/tests/harness";
 
 type PageBatch = {
 	batchIndex: number;
@@ -115,39 +112,22 @@ function resolveTargetPage(includePages?: readonly PageType[]): PageType {
  */
 async function runIsolatedFeatureBattery(
 	page: Parameters<typeof readStoredOptions>[0],
-	feature: SweepFeature,
-	errors: string[]
+	feature: SweepFeature
 ) {
-	if (feature.targetPageType === "live") {
-		await navigateToLiveOrSkip(page);
-	} else {
-		await navigateToPageType(page, feature.targetPageType);
-	}
-
-	// Initial Enable (0 -> 1)
-	await toggleFeatures(page, [feature], enableFeature);
-	await expectStoredFlags(page, feature.enabledKeys, true);
-
-	// Idempotent Enable (1 -> 1)
-	await toggleFeatures(page, [feature], enableFeature);
-	await expectStoredFlags(page, feature.enabledKeys, true);
-
-	// Page Reload persistence
-	await reloadPage(page, feature.targetPageType);
-	await expectStoredFlags(page, feature.enabledKeys, true);
-
-	// SPA Navigation persistence
-	await performSpaNavigation(page, feature.targetPageType);
-	await expectStoredFlags(page, feature.enabledKeys, true);
-
-	// Initial Disable (1 -> 0)
-	await toggleFeatures(page, [feature], disableFeature);
-	await expectStoredFlags(page, feature.enabledKeys, false);
-
-	// Idempotent Disable (0 -> 0)
-	await toggleFeatures(page, [feature], disableFeature);
-	await expectStoredFlags(page, feature.enabledKeys, false);
-
+	// The isolated fallback keeps its own per-feature error window: the harness's collector is
+	// batch-level, while triage needs the failure attributed to exactly this feature.
+	const errors = watchExtensionErrors(page);
+	await verifyPersistenceCycle(
+		page,
+		feature.targetPageType,
+		{
+			assertOff: (target) => expectStoredFlags(target, feature.enabledKeys, false),
+			assertOn: (target) => expectStoredFlags(target, feature.enabledKeys, true),
+			disable: (target) => toggleFeatures(target, [feature], disableFeature),
+			enable: (target) => toggleFeatures(target, [feature], enableFeature)
+		},
+		(target, pageType) => performSpaNavigation(target, pageType)
+	);
 	expect(errors, `No errors expected for feature ${feature.id}`).toEqual([]);
 }
 
@@ -224,40 +204,18 @@ test.describe("feature configuration persistence sweep", () => {
 				`${batch.targetPageType} requires login`
 			);
 
-			// Extension error listener survives page reloads on stable page types
 			if (testInfo.retry === 0) {
-				const errors = watchExtensionErrors(page);
-
-				// Initial Navigation
-				if (batch.targetPageType === "live") {
-					await navigateToLiveOrSkip(page);
-				} else {
-					await navigateToPageType(page, batch.targetPageType);
-				}
-
-				// Initial Enable (0 -> 1)
-				await toggleFeatures(page, batch.features, enableFeature);
-				await expectAllStoredFlags(page, batch.features, true);
-
-				// Idempotent Enable (1 -> 1)
-				await toggleFeatures(page, batch.features, enableFeature);
-				await expectAllStoredFlags(page, batch.features, true);
-
-				await reloadPage(page, batch.targetPageType);
-				await expectAllStoredFlags(page, batch.features, true);
-
-				await performSpaNavigation(page, batch.targetPageType);
-				await expectAllStoredFlags(page, batch.features, true);
-
-				// Initial Disable (1 -> 0)
-				await toggleFeatures(page, batch.features, disableFeature);
-				await expectAllStoredFlags(page, batch.features, false);
-
-				// Idempotent Disable (0 -> 0)
-				await toggleFeatures(page, batch.features, disableFeature);
-				await expectAllStoredFlags(page, batch.features, false);
-
-				expect(errors, `No errors expected for batch ${batchTitle}`).toEqual([]);
+				await verifyPersistenceCycle(
+					page,
+					batch.targetPageType,
+					{
+						assertOff: (target) => expectAllStoredFlags(target, batch.features, false),
+						assertOn: (target) => expectAllStoredFlags(target, batch.features, true),
+						disable: (target) => toggleFeatures(target, batch.features, disableFeature),
+						enable: (target) => toggleFeatures(target, batch.features, enableFeature)
+					},
+					(target, pageType) => performSpaNavigation(target, pageType)
+				);
 			} else {
 				// RETRY #1+: ISOLATED PER-FEATURE TRIAGE FALLBACK
 				test.setTimeout(300_000); // The retry triage can outlive the default timeout of 120secs under failed scenarios.
@@ -265,13 +223,10 @@ test.describe("feature configuration persistence sweep", () => {
 					`[Retry #${testInfo.retry}] Batch failed on previous attempt. Running isolated triage for ${batchTitle}...`
 				);
 
-				const errors = watchExtensionErrors(page);
-
 				for (const feature of batch.features) {
 					await test.step(`isolate: ${feature.id}`, async () => {
-						errors.length = 0;
 						try {
-							await runIsolatedFeatureBattery(page, feature, errors);
+							await runIsolatedFeatureBattery(page, feature);
 						} catch (error) {
 							expect
 								.soft(

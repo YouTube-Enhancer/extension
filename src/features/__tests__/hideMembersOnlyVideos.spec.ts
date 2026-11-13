@@ -18,7 +18,13 @@ import {
 	spaNavigateToHome
 } from "@/src/utils/_tests/navigation";
 import { loginRequiredPages } from "@/src/utils/_tests/utils";
-import { test } from "@/tests/harness";
+import {
+	test,
+	verifyDefaults,
+	verifyNavigationPersistence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -80,6 +86,16 @@ async function injectMembersOnlyMarkup(page: Page): Promise<void> {
 }
 
 test.describe("hideMembersOnlyVideos", () => {
+	const assertOn = async (page: Page) => {
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		await expectElementsHidden(page, selectors);
+	};
+	const assertOff = async (page: Page) => {
+		await expectBodyWithoutClass(page, bodyClass);
+		await expectElementsNotHidden(page, selectors);
+	};
+	const subject = { assertOff, assertOn };
+
 	for (const pageType of testPages) {
 		test(`hides members only videos on ${pageType}`, async ({ page }) => {
 			test.skip(
@@ -96,30 +112,24 @@ test.describe("hideMembersOnlyVideos", () => {
 	// Fresh page with the shipped defaults, before any enable: the body class must never reach
 	// the page, which is what would make the generated rule hide anything at all.
 	test(`does not hide members only videos by default on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await expectBodyWithoutClass(page, bodyClass);
+		await verifyDefaults(page, watch, subject);
 	});
 
 	for (const pageType of transitionPages) {
 		test(`hides elements after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideMembersOnlyVideos.enabled");
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"hideMembersOnlyVideos",
+				subject,
+				async (navPage) => {
+					await navigateToPageType(navPage, home);
+					await navigateToPageType(navPage, pageType);
+				}
+			);
 		});
 		test(`persists hide after full page reload on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideMembersOnlyVideos.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
+			await verifyReloadPersistence(page, pageType, "hideMembersOnlyVideos", subject);
 		});
 	}
 
@@ -171,15 +181,6 @@ test.describe("hideMembersOnlyVideos", () => {
 	});
 
 	test("re-applies after disable then re-enable on watch", async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "hideMembersOnlyVideos.enabled");
-		await expectBodyWithClass(page, bodyClass);
-		await expectElementsHidden(page, selectors);
-		await disableFeature(page, "hideMembersOnlyVideos.enabled");
-		await expectBodyWithoutClass(page, bodyClass);
-		await expectElementsNotHidden(page, selectors);
-		await enableFeature(page, "hideMembersOnlyVideos.enabled");
-		await expectBodyWithClass(page, bodyClass);
-		await expectElementsHidden(page, selectors);
+		await verifyReEnableCycle(page, watch, "hideMembersOnlyVideos", subject);
 	});
 });

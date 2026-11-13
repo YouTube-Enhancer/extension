@@ -7,7 +7,7 @@ import { disableFeature, enableFeature, setFeatureValue } from "@/src/utils/_tes
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { OSD_SELECTOR as osdSelector, readOnScreenDisplayState } from "@/src/utils/_tests/osd";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import { expect, test, verifyDefaults } from "@/tests/harness";
 
 const { home, shorts, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -103,6 +103,19 @@ async function readRate(page: Page): Promise<number> {
 }
 
 test.describe("playbackSpeedBoostGesture", () => {
+	// With the feature off nothing may arm, so the observable is a full drag that has to leave the
+	// rate exactly where it started.
+	const assertOff = async (page: Page) => {
+		const baseline = await readRate(page);
+		const { x, y } = await pressPointOnVideo(page);
+		await page.mouse.move(x, y);
+		await page.mouse.down();
+		await page.mouse.move(x + 300, y, { steps: 15 });
+		await expect.poll(() => readRate(page), { timeout: 2000 }).toBe(baseline);
+		await page.mouse.up();
+	};
+	const subject = { assertOff };
+
 	for (const pageType of testPages) {
 		test(`dragging right boosts the speed and releasing reverts it on ${pageType}`, async ({
 			page
@@ -144,15 +157,7 @@ test.describe("playbackSpeedBoostGesture", () => {
 		});
 	}
 	test(`does nothing by default on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-
-		const baseline = await readRate(page);
-		const { x, y } = await pressPointOnVideo(page);
-		await page.mouse.move(x, y);
-		await page.mouse.down();
-		await page.mouse.move(x + 300, y, { steps: 15 });
-		await expect.poll(() => readRate(page), { timeout: 2000 }).toBe(baseline);
-		await page.mouse.up();
+		await verifyDefaults(page, watch, subject);
 	});
 	test(`does not change speed or show OSD without movement on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);

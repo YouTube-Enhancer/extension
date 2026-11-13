@@ -19,7 +19,14 @@ import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_test
 import { OSD_SELECTOR as osdSelector, readOnScreenDisplayState } from "@/src/utils/_tests/osd";
 import { getCurrentSpeed, setValueOnYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const { live, watch } = pageTypeRecord;
@@ -40,6 +47,24 @@ async function countSpeedButtons(page: Page): Promise<number> {
 	);
 }
 test.describe("playbackSpeedButtons", () => {
+	const assertOn = async (page: Page) => {
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
+	};
+	const assertOff = async (page: Page) => {
+		await expectFeatureButtonToBeFalsy(page, "yte-feature-increasePlaybackSpeedButton-button");
+		await expectFeatureButtonToBeFalsy(page, "yte-feature-decreasePlaybackSpeedButton-button");
+	};
+	// This feature's switch lives at `<featureId>.button.enabled`, not the `<featureId>.enabled` the
+	// battery defaults to, so both legs of the cycle come from here.
+	const enable = (page: Page) => enableFeature(page, "playbackSpeedButtons.button.enabled");
+	const disable = (page: Page) => disableFeature(page, "playbackSpeedButtons.button.enabled");
+	const subject = { assertOff, assertOn, disable, enable };
+	/** The placement the button cases pin before they enable; only they need it, so it rides per test. */
+	const setup = async (page: Page) => {
+		await setOption(page, "playbackSpeedButtons.button.placement", left);
+	};
+
 	for (const pageType of testPages) {
 		test(`increase speed button should increase playback speed on ${pageType}`, async ({
 			page
@@ -84,49 +109,33 @@ test.describe("playbackSpeedButtons", () => {
 		test(`speed buttons should re-appear after disable then re-enable on ${pageType}`, async ({
 			page
 		}) => {
-			await navigateToPageType(page, pageType);
-			await setOption(page, "playbackSpeedButtons.button.placement", left);
-			await enableFeature(page, "playbackSpeedButtons.button.enabled");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
-			await disableFeature(page, "playbackSpeedButtons.button.enabled");
-			await expectFeatureButtonToBeFalsy(page, "yte-feature-increasePlaybackSpeedButton-button");
-			await expectFeatureButtonToBeFalsy(page, "yte-feature-decreasePlaybackSpeedButton-button");
-			await enableFeature(page, "playbackSpeedButtons.button.enabled");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
+			await verifyReEnableCycle(page, pageType, "playbackSpeedButtons", {
+				...subject,
+				setup
+			});
 		});
 		test(`speed buttons should re-appear after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await setOption(page, "playbackSpeedButtons.button.placement", left);
-			await enableFeature(page, "playbackSpeedButtons.button.enabled");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
 			// A genuine in-page navigation to another watch page: the navigation replaces the player the
 			// buttons live in, so the placement pass has to re-add them without a fresh document load.
-			await spaNavigateToRelatedVideo(page);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"playbackSpeedButtons",
+				{ ...subject, setup },
+				(navPage) => spaNavigateToRelatedVideo(navPage)
+			);
 		});
 	}
 
 	test(`speed buttons should persist after full page reload`, async ({ page }) => {
-		await navigateToPageType(page, testPages[0]);
-		await setOption(page, "playbackSpeedButtons.button.placement", left);
-		await enableFeature(page, "playbackSpeedButtons.button.enabled");
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
-		await page.reload();
-		await navigateToPageType(page, testPages[0]);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
+		await verifyReloadPersistence(page, testPages[0], "playbackSpeedButtons", {
+			...subject,
+			setup
+		});
 	});
 
 	test(`should not create speed buttons on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "playbackSpeedButtons.button.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-increasePlaybackSpeedButton-button");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-decreasePlaybackSpeedButton-button");
+		await verifyNonTargetSilence(page, nonTargetPage!, "playbackSpeedButtons", subject);
 	});
 
 	// The only page where the isLive guard in addPlaybackSpeedButton can run at all: a live /watch URL is

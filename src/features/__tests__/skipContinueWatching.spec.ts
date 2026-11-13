@@ -6,7 +6,7 @@ import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import { expect, test, verifyReEnableCycle, verifyReloadPersistence } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { live, watch } = pageTypeRecord;
@@ -51,6 +51,19 @@ async function getHandler(page: Page): Promise<null | string> {
 }
 
 test.describe("skipContinueWatching", () => {
+	// Captured after the initial navigation and before the first enable: both assertions measure the
+	// patch against the handler YouTube itself installed.
+	let original: null | string = null;
+	const assertOn = async (page: Page) => {
+		await expectHandlerReplaced(page, original);
+	};
+	const assertOff = async (page: Page) => {
+		await expectHandlerRestored(page, original);
+	};
+	const setup = async (page: Page) => {
+		original = await getHandler(page);
+	};
+	const subject = { assertOff, assertOn, setup };
 	for (const pageType of testPages) {
 		test(`should not patch when disabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -59,26 +72,12 @@ test.describe("skipContinueWatching", () => {
 			await expectHandlerRestored(page, original);
 		});
 		test(`should re-patch after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			const original = await getHandler(page);
-			await enableFeature(page, "skipContinueWatching.enabled");
-			await expectHandlerReplaced(page, original);
-			await disableFeature(page, "skipContinueWatching.enabled");
-			await expectHandlerRestored(page, original);
-			await enableFeature(page, "skipContinueWatching.enabled");
-			await expectHandlerReplaced(page, original);
+			await verifyReEnableCycle(page, pageType, "skipContinueWatching", subject);
 		});
 		test(`should persist after full page reload on ${pageType}`, async ({ page }) => {
-			test.setTimeout(120_000);
-			await navigateToPageType(page, pageType);
-			const original = await getHandler(page);
-			await enableFeature(page, "skipContinueWatching.enabled");
-			await expectHandlerReplaced(page, original);
-			await page.reload();
-			await navigateToPageType(page, pageType);
 			// No disable/enable round trip: after a reload YouTube reinstalls its own handler, so this only
 			// passes when the feature re-patched on its own.
-			await expectHandlerReplaced(page, original);
+			await verifyReloadPersistence(page, pageType, "skipContinueWatching", subject);
 		});
 	}
 

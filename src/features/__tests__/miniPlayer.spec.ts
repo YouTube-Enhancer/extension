@@ -23,14 +23,16 @@ import {
 	enableFeature,
 	setOption
 } from "@/src/utils/_tests/features";
-import {
-	navigateToPageType,
-	reloadPage,
-	spaNavigateToRelatedVideo
-} from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { readStoredState } from "@/src/utils/_tests/storage";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const { home, live, watch } = pageTypeRecord;
 const { right } = placementRecord;
@@ -140,6 +142,14 @@ async function toggleMiniPlayerFromButton(page: Page): Promise<void> {
 }
 
 test.describe("miniPlayer", () => {
+	const assertOn = async (page: Page) => {
+		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
+	};
+	const assertOff = async (page: Page) => {
+		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).not.toBeAttached();
+	};
+	const subject = { assertOff, assertOn };
+
 	for (const pageType of testPages) {
 		// A live stream's player takes longer to settle than a video's, and the registry only enables page-gated
 		// features once it has read the player, so the sentinel arrives later there.
@@ -172,27 +182,15 @@ test.describe("miniPlayer", () => {
 
 	// Watch only: onEnable/onDisable have no live-vs-watch branch (the sentinel is inserted before any page-dependent lookup) and live stays covered by the create-sentinel smoke test.
 	test(`should re-create sentinel after disable then re-enable on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "miniPlayer.enabled");
-		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
-		await disableFeature(page, "miniPlayer.enabled");
-		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).not.toBeAttached();
-		await enableFeature(page, "miniPlayer.enabled");
-		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
+		await verifyReEnableCycle(page, watch, "miniPlayer", subject);
 	});
 	// Watch only: on watch the post-reload navigateToPageType skips the goto so the assertion really follows the reload; on live it navigates away again.
 	test(`should persist sentinel after full page reload on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "miniPlayer.enabled");
-		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
-		await reloadPage(page, watch);
-		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).toBeAttached({ timeout: 30000 });
+		await verifyReloadPersistence(page, watch, "miniPlayer", subject);
 	});
 
 	test(`should not create sentinel element on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "miniPlayer.enabled");
-		await expect(page.locator(`#${MINI_PLAYER_SENTINEL_ID}`)).not.toBeAttached();
+		await verifyNonTargetSilence(page, nonTargetPage!, "miniPlayer", subject);
 	});
 	// navigateToPageType(nonTargetPage) is a document load, so this cannot observe cleanup across a navigation; it
 	// checks the includePages gate on a fresh load while the feature is already enabled.

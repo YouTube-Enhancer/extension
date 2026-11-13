@@ -21,7 +21,14 @@ import {
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
@@ -36,6 +43,21 @@ async function isMonoEnabled(page: Page): Promise<boolean> {
 }
 
 test.describe("monoToStereoButton", () => {
+	const assertOn = (page: Page) =>
+		expectFeatureButtonToBeTruthy(page, "yte-feature-monoToStereoButton-button");
+	const assertOff = (page: Page) =>
+		expectFeatureButtonToBeFalsy(page, "yte-feature-monoToStereoButton-button");
+	// This feature's switch lives at `<featureId>.button.enabled`, not the `<featureId>.enabled` the
+	// battery defaults to, so both legs of the cycle come from here.
+	const enable = (page: Page) => enableFeature(page, "monoToStereoButton.button.enabled");
+	const disable = (page: Page) => disableFeature(page, "monoToStereoButton.button.enabled");
+	const subject = { assertOff, assertOn, disable, enable };
+	/** The enable sequence for the lifecycle cases: they also pin the placement the button is observed at. */
+	const enablePlaced = async (page: Page) => {
+		await enable(page);
+		await setOption(page, "monoToStereoButton.button.placement", right);
+	};
+
 	for (const pageType of testPages) {
 		test(`audio should switch to stereo on click on ${pageType}`, async ({ page }) => {
 			// The channel splitter reads channel 0 whatever the source is, so a mono source is not required on
@@ -67,38 +89,33 @@ test.describe("monoToStereoButton", () => {
 	});
 
 	test(`button should re-appear after disable then re-enable on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch, ["monoAudio"]);
-		await enableFeature(page, "monoToStereoButton.button.enabled");
-		await setOption(page, "monoToStereoButton.button.placement", right);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-monoToStereoButton-button");
-		await disableFeature(page, "monoToStereoButton.button.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-monoToStereoButton-button");
-		await enableFeature(page, "monoToStereoButton.button.enabled");
-		await setOption(page, "monoToStereoButton.button.placement", right);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-monoToStereoButton-button");
+		await verifyReEnableCycle(page, watch, "monoToStereoButton", {
+			...subject,
+			enable: enablePlaced,
+			requirements: ["monoAudio"]
+		});
 	});
 
 	test(`button should persist after full page reload`, async ({ page }) => {
-		await navigateToPageType(page, testPages[0], ["monoAudio"]);
-		await enableFeature(page, "monoToStereoButton.button.enabled");
-		await setOption(page, "monoToStereoButton.button.placement", right);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-monoToStereoButton-button");
-		await page.reload();
-		await navigateToPageType(page, testPages[0], ["monoAudio"]);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-monoToStereoButton-button");
+		await verifyReloadPersistence(page, testPages[0], "monoToStereoButton", {
+			...subject,
+			enable: enablePlaced,
+			requirements: ["monoAudio"]
+		});
 	});
 
 	// Neither the button lifecycle nor the toggle branches on live vs VOD, and the live fixture costs
 	// up to 120 s, so the navigation case runs on watch only.
 	test(`button should re-appear after navigation on ${watch}`, async ({ page }) => {
-		await navigateToPageType(page, watch, ["monoAudio"]);
-		await enableFeature(page, "monoToStereoButton.button.enabled");
-		await setOption(page, "monoToStereoButton.button.placement", right);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-monoToStereoButton-button");
 		// A genuine in-page navigation to another video: the button lives inside the player, which the
 		// navigation rebuilds, so the placement pass has to put it back without a fresh document load.
-		await spaNavigateToRelatedVideo(page);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-monoToStereoButton-button");
+		await verifyNavigationPersistence(
+			page,
+			watch,
+			"monoToStereoButton",
+			{ ...subject, enable: enablePlaced, requirements: ["monoAudio"] },
+			(navPage) => spaNavigateToRelatedVideo(navPage)
+		);
 	});
 
 	test(`applies live changes to the button placement while enabled on ${watch}`, async ({
@@ -115,9 +132,7 @@ test.describe("monoToStereoButton", () => {
 	});
 
 	test(`should not create mono to stereo button on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "monoToStereoButton.button.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-monoToStereoButton-button");
+		await verifyNonTargetSilence(page, nonTargetPage!, "monoToStereoButton", subject);
 	});
 
 	// The label swap is the only bespoke UI this feature owns and the only proof that the listener's

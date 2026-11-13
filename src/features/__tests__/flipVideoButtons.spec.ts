@@ -18,7 +18,14 @@ import {
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const { left, menu, right } = placementRecord;
 const { home, watch } = pageTypeRecord;
@@ -26,6 +33,34 @@ const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 
 test.describe("flipVideoButtons", () => {
+	const assertOn = async (page: Page) => {
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoHorizontalButton-button");
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoVerticalButton-button");
+		await expectFeatureButtonToBeIn(page, "yte-feature-flipVideoHorizontalButton-button", right);
+		await expectFeatureButtonToBeIn(page, "yte-feature-flipVideoVerticalButton-button", right);
+	};
+	const assertOff = async (page: Page) => {
+		await expectFeatureButtonToBeFalsy(page, "yte-feature-flipVideoHorizontalButton-button");
+		await expectFeatureButtonToBeFalsy(page, "yte-feature-flipVideoVerticalButton-button");
+	};
+	// Both buttons come up together with their placement, so one enable/disable pair drives the pair.
+	const enable = async (page: Page) => {
+		await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
+		await setOption(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.placement", right);
+		await enableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
+		await setOption(page, "flipVideoButtons.buttons.flipVideoVerticalButton.placement", right);
+	};
+	// The non-target case only arms the switches: there is no placement to care about off the target pages.
+	const enableButtonsOnly = async (page: Page) => {
+		await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
+		await enableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
+	};
+	const disable = async (page: Page) => {
+		await disableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
+		await disableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
+	};
+	const subject = { assertOff, assertOn, disable, enable };
+
 	for (const pageType of testPages) {
 		test.describe("flipVideoHorizontalButton", () => {
 			test(`horizontal flip button should be present on ${pageType}`, async ({ page }) => {
@@ -53,62 +88,26 @@ test.describe("flipVideoButtons", () => {
 
 	// Load-time re-add is page-independent (framework hard navigation), so this only runs on watch.
 	test("flip buttons should persist after navigation on watch", async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
-		await setOption(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.placement", right);
-		await enableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
-		await setOption(page, "flipVideoButtons.buttons.flipVideoVerticalButton.placement", right);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoHorizontalButton-button");
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoVerticalButton-button");
-		await navigateToPageType(page, home);
-		await navigateToPageType(page, watch);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoHorizontalButton-button");
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoVerticalButton-button");
-		await expectFeatureButtonToBeIn(page, "yte-feature-flipVideoHorizontalButton-button", right);
-		await expectFeatureButtonToBeIn(page, "yte-feature-flipVideoVerticalButton-button", right);
+		await verifyNavigationPersistence(page, watch, "flipVideoButtons", subject, async (navPage) => {
+			await navigateToPageType(navPage, home);
+			await navigateToPageType(navPage, watch);
+		});
 	});
 
 	// Enable/disable handling lives in featureButtonManager and is page-independent, so this only runs on watch.
 	test("flip buttons should re-appear after disable then re-enable on watch", async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
-		await setOption(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.placement", right);
-		await enableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
-		await setOption(page, "flipVideoButtons.buttons.flipVideoVerticalButton.placement", right);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoHorizontalButton-button");
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoVerticalButton-button");
-		await disableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
-		await disableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-flipVideoHorizontalButton-button");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-flipVideoVerticalButton-button");
-		await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
-		await setOption(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.placement", right);
-		await enableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
-		await setOption(page, "flipVideoButtons.buttons.flipVideoVerticalButton.placement", right);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoHorizontalButton-button");
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoVerticalButton-button");
+		await verifyReEnableCycle(page, watch, "flipVideoButtons", subject);
 	});
 
 	test(`flip buttons should persist after full page reload`, async ({ page }) => {
-		await navigateToPageType(page, testPages[0]);
-		await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
-		await setOption(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.placement", right);
-		await enableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
-		await setOption(page, "flipVideoButtons.buttons.flipVideoVerticalButton.placement", right);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoHorizontalButton-button");
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoVerticalButton-button");
-		await page.reload();
-		await navigateToPageType(page, testPages[0]);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoHorizontalButton-button");
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoVerticalButton-button");
+		await verifyReloadPersistence(page, testPages[0], "flipVideoButtons", subject);
 	});
 
 	test(`should not create flip video buttons on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
-		await enableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-flipVideoHorizontalButton-button");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-flipVideoVerticalButton-button");
+		await verifyNonTargetSilence(page, nonTargetPage!, "flipVideoButtons", {
+			...subject,
+			enable: enableButtonsOnly
+		});
 	});
 
 	test.describe("button placement", () => {

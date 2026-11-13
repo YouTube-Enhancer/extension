@@ -8,7 +8,7 @@ import {
 } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import { expect, test, verifyReEnableCycle } from "@/tests/harness";
 const { home, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const SETTINGS_MENU_SELECTOR = ".ytp-settings-menu:not(#yte-feature-menu)";
@@ -53,6 +53,16 @@ async function hoverUntilSettingsOpen(page: Parameters<typeof enableFeature>[0])
 }
 
 test.describe("openYouTubeSettingsOnHover", () => {
+	// Observing the feature means hovering the settings button: the menu opening is the on-state.
+	const assertOn = async (page: Parameters<typeof enableFeature>[0]) => {
+		await page.locator(".ytp-settings-button").dispatchEvent("mouseenter");
+		await expect(page.locator(SETTINGS_MENU_SELECTOR)).toBeVisible({ timeout: 10000 });
+	};
+	const setup = async (page: Parameters<typeof enableFeature>[0]) => {
+		await forcePlayerVisible(page);
+	};
+	const subject = { assertOn, setup };
+
 	for (const pageType of testPages) {
 		test(`youtube settings should open on hover when enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -207,17 +217,7 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
 	});
 	test("re-applies after disable then re-enable on watch", async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
-		await forcePlayerVisible(page);
-		await page.locator(".ytp-settings-button").dispatchEvent("mouseenter");
-		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
-		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
-		await disableFeature(page, "openYouTubeSettingsOnHover.enabled");
-		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
-		await forcePlayerVisible(page);
-		await page.locator(".ytp-settings-button").dispatchEvent("mouseenter");
-		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
+		await verifyReEnableCycle(page, watch, "openYouTubeSettingsOnHover", subject);
 	});
 	test("persists after full page reload on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);

@@ -16,12 +16,16 @@ import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import {
 	navigateToLiveOrSkip,
 	navigateToPageType,
-	reloadPage,
 	spaNavigateBack,
 	spaNavigateToHome
 } from "@/src/utils/_tests/navigation";
 import { loginRequiredPages, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -177,6 +181,12 @@ async function measureChatBannerDisplay(
 }
 
 test.describe("hideArtificialIntelligence", () => {
+	const assertOn = async (page: Page) => {
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		await expectElementsHidden(page, selectors);
+	};
+	const subject = { assertOn };
+
 	for (const pageType of testPages) {
 		test(`hides AI elements on ${pageType}`, async ({ page }) => {
 			test.skip(
@@ -249,14 +259,16 @@ test.describe("hideArtificialIntelligence", () => {
 	// onEnable/onDisable only add/remove a body class and there is no onNavigate hook or page-specific branch,
 	// so the navigation, reload and toggle cycles are exercised on watch only instead of on all 11 pages.
 	test("hides elements after navigation on watch", async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "hideArtificialIntelligence.enabled");
-		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-		await expectElementsHidden(page, selectors);
-		await navigateToPageType(page, home);
-		await navigateToPageType(page, watch);
-		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-		await expectElementsHidden(page, selectors);
+		await verifyNavigationPersistence(
+			page,
+			watch,
+			"hideArtificialIntelligence",
+			subject,
+			async (navPage) => {
+				await navigateToPageType(navPage, home);
+				await navigateToPageType(navPage, watch);
+			}
+		);
 	});
 	test("keeps the hide across in-page navigation to home and back on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
@@ -270,13 +282,7 @@ test.describe("hideArtificialIntelligence", () => {
 		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 	});
 	test("persists hide after full page reload on watch", async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await enableFeature(page, "hideArtificialIntelligence.enabled");
-		await expectBodyWithClass(page, bodyClass);
-		await expectElementsHidden(page, selectors);
-		await reloadPage(page, watch);
-		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-		await expectElementsHidden(page, selectors);
+		await verifyReloadPersistence(page, watch, "hideArtificialIntelligence", subject);
 	});
 	test("re-applies after disable then re-enable on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);

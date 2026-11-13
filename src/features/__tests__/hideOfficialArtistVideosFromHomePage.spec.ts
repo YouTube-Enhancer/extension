@@ -21,7 +21,7 @@ import {
 	resolveNonTargetPage,
 	resolvePageTypes
 } from "@/src/utils/_tests/utils";
-import { test } from "@/tests/harness";
+import { test, verifyReEnableCycle, verifyReloadPersistence } from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -68,6 +68,16 @@ async function injectOfficialArtistMarkup(page: Page): Promise<void> {
 }
 
 test.describe("hideOfficialArtistVideosFromHomePage", () => {
+	const assertOn = async (page: Page) => {
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		await expectElementsHidden(page, selectors);
+	};
+	const assertOff = async (page: Page) => {
+		await expectBodyWithoutClass(page, bodyClass);
+		await expectElementsNotHidden(page, selectors);
+	};
+	const subject = { assertOff, assertOn };
+
 	for (const pageType of testPages) {
 		test(`adds the hide class on ${pageType}`, async ({ page }) => {
 			test.skip(
@@ -110,30 +120,19 @@ test.describe("hideOfficialArtistVideosFromHomePage", () => {
 				!hasAuthState() && loginRequiredPages.includes(pageType),
 				`${pageType} requires login`
 			);
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
+			await verifyReloadPersistence(
+				page,
+				pageType,
+				"hideOfficialArtistVideosFromHomePage",
+				subject
+			);
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
 			test.skip(
 				!hasAuthState() && loginRequiredPages.includes(pageType),
 				`${pageType} requires login`
 			);
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await disableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await expectElementsNotHidden(page, selectors);
-			await enableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
+			await verifyReEnableCycle(page, pageType, "hideOfficialArtistVideosFromHomePage", subject);
 		});
 	}
 

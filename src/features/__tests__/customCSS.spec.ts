@@ -5,8 +5,14 @@ import type { PageType } from "@/src/features/_registry/types";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
-import { expect, test } from "@/tests/harness";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import {
+	expect,
+	test,
+	verifyDefaults,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const { home, search, watch } = pageTypeRecord;
 
@@ -32,6 +38,17 @@ async function injectProbeElement(page: Page): Promise<void> {
 }
 
 test.describe("customCSS", () => {
+	const assertOn = (page: Page) => expect(page.locator("#yte-custom-css")).toBeAttached();
+	const assertOff = (page: Page) => expect(page.locator("#yte-custom-css")).not.toBeAttached();
+	const subject = { assertOff, assertOn };
+	// The configured code has to be stored before the enable injects it.
+	const setup = async (page: Page) => {
+		await setOption(page, "customCSS.code", "body { background: red !important; }");
+	};
+	// Defaults: a fresh page must not carry the style element yet, and must not gain one during the observation window.
+	const assertDefaultsOff = (page: Page) =>
+		expectToStay(async () => page.locator("#yte-custom-css").count(), 0, { page });
+
 	for (const pageType of testPages) {
 		test(`should inject custom CSS on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -42,8 +59,7 @@ test.describe("customCSS", () => {
 	}
 	// Fresh page with the shipped defaults, before any enable: no style element may exist yet.
 	test("does not inject custom CSS by default on watch", async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await expectToStay(async () => page.locator("#yte-custom-css").count(), 0, { page });
+		await verifyDefaults(page, watch, { ...subject, assertOff: assertDefaultsOff });
 	});
 	test("should update custom CSS content on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
@@ -69,14 +85,7 @@ test.describe("customCSS", () => {
 			.toBe("body { background: red !important; }");
 	});
 	test("re-applies after disable then re-enable on watch", async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await setOption(page, "customCSS.code", "body { background: red !important; }");
-		await enableFeature(page, "customCSS.enabled");
-		await expect(page.locator("#yte-custom-css")).toBeAttached();
-		await disableFeature(page, "customCSS.enabled");
-		await expect(page.locator("#yte-custom-css")).not.toBeAttached();
-		await enableFeature(page, "customCSS.enabled");
-		await expect(page.locator("#yte-custom-css")).toBeAttached();
+		await verifyReEnableCycle(page, watch, "customCSS", { ...subject, setup });
 	});
 	test("injects the configured code and the rule takes effect on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
@@ -99,11 +108,6 @@ test.describe("customCSS", () => {
 		await expect(page.locator(`#${probeId}`)).toBeVisible();
 	});
 	test("persists custom CSS after full page reload on watch", async ({ page }) => {
-		await navigateToPageType(page, watch);
-		await setOption(page, "customCSS.code", "body { background: red !important; }");
-		await enableFeature(page, "customCSS.enabled");
-		await expect(page.locator("#yte-custom-css")).toBeAttached();
-		await reloadPage(page, watch);
-		await expect(page.locator("#yte-custom-css")).toBeAttached({ timeout: 15000 });
+		await verifyReloadPersistence(page, watch, "customCSS", { ...subject, setup });
 	});
 });

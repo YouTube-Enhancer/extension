@@ -164,7 +164,7 @@ const capabilityChecks: Record<FixtureCapabilities, CapabilityCheck> = {
 		// YouTube's chip bar header; regular playlists no longer render it and Watch Later still does.
 		try {
 			await expect
-				.poll(() => page.locator(CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR).count(), { timeout: 10_000 })
+				.poll(() => page.locator(CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR).count(), { timeout: 30_000 })
 				.toBeGreaterThan(0);
 			return null;
 		} catch {
@@ -225,7 +225,9 @@ const capabilityChecks: Record<FixtureCapabilities, CapabilityCheck> = {
 						page
 							.locator(`${PLAYLIST_ITEM_SELECTOR}:has(ytd-thumbnail-overlay-time-status-renderer)`)
 							.count(),
-					{ timeout: 10_000 }
+					// The spec's own remove-button polls wait 30s for these rows after the same
+					// navigation; a shorter capability window turns their tolerated latency into a skip.
+					{ timeout: 30_000 }
 				)
 				.toBeGreaterThan(0);
 			return null;

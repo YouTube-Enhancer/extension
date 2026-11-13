@@ -19,7 +19,7 @@ import {
 	spaNavigateToRelatedVideo,
 	waitForExtensionReady
 } from "@/src/utils/_tests/navigation";
-import { expect, test, watchExtensionErrors } from "@/tests/harness";
+import { expect, test } from "@/tests/harness";
 
 /**
  * Every feature at once. The per-feature specs prove each feature does its job; these cases prove that the whole
@@ -43,17 +43,13 @@ const {
 /** How long the features get to finish their retry loops before the page is changed or the switches read back. */
 const SETTLE_MS = 15_000;
 
-async function enableEverythingOn(
-	page: Page,
-	pageType: PageType
-): Promise<{ errors: string[]; switches: Switch[] }> {
+async function enableEverythingOn(page: Page, pageType: PageType): Promise<{ switches: Switch[] }> {
 	const switches = collectSwitches(await loadDefaultConfig());
 	expect(switches.length).toBeGreaterThan(50);
 	await navigateToPageType(page, pageType);
-	const errors = watchExtensionErrors(page);
 	await setEverySwitch(page, switches, true);
 	await page.waitForTimeout(SETTLE_MS);
-	return { errors, switches };
+	return { switches };
 }
 
 async function setEverySwitch(page: Page, switches: Switch[], enabled: boolean): Promise<void> {
@@ -74,7 +70,7 @@ test.describe("every feature", () => {
 		page
 	}) => {
 		test.setTimeout(300_000);
-		const { errors, switches } = await enableEverythingOn(page, watch);
+		const { switches } = await enableEverythingOn(page, watch);
 		await waitForExtensionReady(page);
 		// Home has no player: every player-bound feature has to stand down, and the page-gated ones have to disable.
 		await spaNavigateToHome(page);
@@ -83,22 +79,19 @@ test.describe("every feature", () => {
 		await page.waitForTimeout(SETTLE_MS);
 		await setEverySwitch(page, switches, false);
 		await page.waitForTimeout(SETTLE_MS);
-		expect(errors, "the extension raised errors on the page").toEqual([]);
 		await expect(page.locator("div#movie_player")).toBeAttached();
 	});
 	test(`every feature enabled on ${shorts} and disabled again`, async ({ page }) => {
 		test.setTimeout(240_000);
-		const { errors, switches } = await enableEverythingOn(page, shorts);
+		const { switches } = await enableEverythingOn(page, shorts);
 		await setEverySwitch(page, switches, false);
 		await page.waitForTimeout(SETTLE_MS);
-		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
 	test(`every feature enabled on ${playlist} and disabled again`, async ({ page }) => {
 		test.setTimeout(240_000);
-		const { errors, switches } = await enableEverythingOn(page, playlist);
+		const { switches } = await enableEverythingOn(page, playlist);
 		await setEverySwitch(page, switches, false);
 		await page.waitForTimeout(SETTLE_MS);
-		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
 	test(`every feature enabled on a ${watch} page whose player is gone`, async ({ page }) => {
 		test.setTimeout(240_000);
@@ -106,13 +99,11 @@ test.describe("every feature", () => {
 		// The features find the player by waiting for it; with the element removed every one of them has to give up
 		// cleanly instead of throwing on a null it did not expect.
 		await page.evaluate(() => document.querySelector("div#movie_player")?.remove());
-		const errors = watchExtensionErrors(page);
 		const switches = collectSwitches(await loadDefaultConfig());
 		await setEverySwitch(page, switches, true);
 		await page.waitForTimeout(SETTLE_MS * 2);
 		await setEverySwitch(page, switches, false);
 		await page.waitForTimeout(SETTLE_MS);
-		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
 	test(`every feature enabled on a ${watch} page without player controls, below-player host and owner row`, async ({
 		page
@@ -132,13 +123,11 @@ test.describe("every feature", () => {
 				document.querySelector(selector)?.remove();
 			}
 		});
-		const errors = watchExtensionErrors(page);
 		const switches = collectSwitches(await loadDefaultConfig());
 		await setEverySwitch(page, switches, true);
 		await page.waitForTimeout(SETTLE_MS * 2);
 		await setEverySwitch(page, switches, false);
 		await page.waitForTimeout(SETTLE_MS);
-		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
 	test(`every button placed below the player, then in the feature menu, then in fullscreen with every feature enabled on ${watch}`, async ({
 		page
@@ -148,7 +137,7 @@ test.describe("every feature", () => {
 		const placements = collectPaths(defaults, (key) => key === "placement");
 		const fullscreenPlacements = collectPaths(defaults, (key) => key === "fullscreenPlacement");
 		expect(placements.length).toBeGreaterThan(10);
-		const { errors, switches } = await enableEverythingOn(page, watch);
+		const { switches } = await enableEverythingOn(page, watch);
 		for (const key of placements) await setOption(page, key, "below_player");
 		await page.waitForTimeout(SETTLE_MS);
 		await expect(page.locator(placementSelectors.below_player)).toBeAttached();
@@ -174,7 +163,6 @@ test.describe("every feature", () => {
 		await page.waitForTimeout(5000);
 		await setEverySwitch(page, switches, false);
 		await page.waitForTimeout(SETTLE_MS);
-		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
 	test(`every feature enabled survives a reload, theater mode and a related-video navigation on ${watch}`, async ({
 		page
@@ -183,7 +171,6 @@ test.describe("every feature", () => {
 		const { switches } = await enableEverythingOn(page, watch);
 		// A load with everything already on takes the registry's enable-all path instead of one enable at a time.
 		await reloadPage(page, watch);
-		const errors = watchExtensionErrors(page);
 		await page.waitForTimeout(SETTLE_MS);
 		await page
 			.locator("button.ytp-size-button")
@@ -197,13 +184,12 @@ test.describe("every feature", () => {
 		await page.waitForTimeout(SETTLE_MS);
 		await setEverySwitch(page, switches, false);
 		await page.waitForTimeout(SETTLE_MS);
-		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
 	test("every feature enabled across the feed and channel pages by full loads", async ({
 		page
 	}) => {
 		test.setTimeout(420_000);
-		const { errors, switches } = await enableEverythingOn(page, home);
+		const { switches } = await enableEverythingOn(page, home);
 		// Each load starts the whole set on a page of that type; the channel tabs include the two the page-type
 		// detector only learned on 2026-09-07.
 		for (const pageType of [
@@ -219,15 +205,13 @@ test.describe("every feature", () => {
 		}
 		await setEverySwitch(page, switches, false);
 		await page.waitForTimeout(SETTLE_MS / 2);
-		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
 	test(`every feature enabled on ${live} and disabled again`, async ({ page }) => {
 		test.setTimeout(360_000);
 		// A live watch page is its own page type: the live-only features start here and the watch-only ones stand down.
-		const { errors, switches } = await enableEverythingOn(page, live);
+		const { switches } = await enableEverythingOn(page, live);
 		await setEverySwitch(page, switches, false);
 		await page.waitForTimeout(SETTLE_MS);
-		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
 	for (const { pageType, removed } of [
 		{
@@ -276,13 +260,11 @@ test.describe("every feature", () => {
 				for (const selector of selectors)
 					document.querySelectorAll(selector).forEach((element) => element.remove());
 			}, removed);
-			const errors = watchExtensionErrors(page);
 			const switches = collectSwitches(await loadDefaultConfig());
 			await setEverySwitch(page, switches, true);
 			await page.waitForTimeout(SETTLE_MS * 2);
 			await setEverySwitch(page, switches, false);
 			await page.waitForTimeout(SETTLE_MS);
-			expect(errors, "the extension raised errors on the page").toEqual([]);
 		});
 	}
 	test(`every feature enabled on ${watch} treats a player without its ready class as absent`, async ({
@@ -295,13 +277,11 @@ test.describe("every feature", () => {
 		await page.evaluate(() => {
 			document.querySelector("#movie_player")?.classList.remove("html5-video-player");
 		});
-		const errors = watchExtensionErrors(page);
 		const switches = collectSwitches(await loadDefaultConfig());
 		await setEverySwitch(page, switches, true);
 		await page.waitForTimeout(SETTLE_MS * 2);
 		await setEverySwitch(page, switches, false);
 		await page.waitForTimeout(SETTLE_MS);
-		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
 	test(`every feature enabled on ${watch} survives secondary content that appears only after enable`, async ({
 		page
@@ -317,7 +297,6 @@ test.describe("every feature", () => {
 					.querySelectorAll(selector)
 					.forEach((element) => (element as HTMLElement).style.setProperty("display", "none"));
 		});
-		const errors = watchExtensionErrors(page);
 		const switches = collectSwitches(await loadDefaultConfig());
 		await setEverySwitch(page, switches, true);
 		await page.evaluate(() => {
@@ -329,6 +308,5 @@ test.describe("every feature", () => {
 		await page.waitForTimeout(SETTLE_MS * 2);
 		await setEverySwitch(page, switches, false);
 		await page.waitForTimeout(SETTLE_MS);
-		expect(errors, "the extension raised errors on the page").toEqual([]);
 	});
 });

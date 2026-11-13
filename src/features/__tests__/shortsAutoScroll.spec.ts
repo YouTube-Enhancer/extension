@@ -8,12 +8,11 @@ import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import {
 	navigateToPageType,
-	reloadPage,
 	spaNavigateToHome,
 	waitForExtensionReady
 } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import { expect, test, verifyNonTargetSilence, verifyReloadPersistence } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { shorts, watch } = pageTypeRecord;
@@ -94,15 +93,20 @@ async function spaNavigateBackToShorts(page: Page): Promise<void> {
 	await expect(page.locator("#shorts-player video")).toBeAttached({ timeout: 30_000 });
 }
 test(`enabling on ${watch}, a non-target page, leaves the player alone`, async ({ page }) => {
-	await navigateToPageType(page, watch);
-	await enableFeature(page, "shortsAutoScroll.enabled");
 	// The feature has no marker on watch; the honest guard is that arming its listeners against
 	// a page with no shorts feed neither throws nor disturbs the watch player. The context
 	// fixture's error collector fails the test if the arming threw.
-	await page.waitForTimeout(2000);
+	await verifyNonTargetSilence(page, watch, "shortsAutoScroll");
 });
 
 test.describe("shortsAutoScroll", () => {
+	const assertOn = async (page: Page) => {
+		const initialId = getShortId(page.url());
+		await seekToEnd(page);
+		await expectAutoScroll(page, initialId);
+	};
+	const subject = { assertOn };
+
 	for (const pageType of testPages) {
 		test(`should automatically scroll when enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -151,17 +155,7 @@ test.describe("shortsAutoScroll", () => {
 			await expectAutoScroll(page, secondId);
 		});
 		test(`should persist auto-scroll after full page reload on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "shortsAutoScroll.enabled");
-			const initialId = getShortId(page.url());
-			await seekToEnd(page);
-			await expectAutoScroll(page, initialId);
-			// The URL is the advanced short now, so navigateToPageType would goto the fixture and discard the
-			// reloaded document; reloadPage keeps it and waits for the extension and player instead.
-			await reloadPage(page, pageType);
-			const newId = getShortId(page.url());
-			await seekToEnd(page);
-			await expectAutoScroll(page, newId);
+			await verifyReloadPersistence(page, pageType, "shortsAutoScroll", subject);
 		});
 	}
 

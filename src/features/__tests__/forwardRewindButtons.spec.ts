@@ -15,7 +15,6 @@ import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import {
 	clickFeatureButton,
 	clickFeatureMenuItem,
-	disableFeature,
 	enableFeature,
 	setOption
 } from "@/src/utils/_tests/features";
@@ -23,7 +22,14 @@ import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { freezeAndGetTime, getValueFromYouTubePlayer, seekTo } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
@@ -85,6 +91,20 @@ export async function expectSeekDelta(
 	expect(delta).toBeLessThanOrEqual(expectedDelta + tolerance);
 }
 test.describe("forwardRewindButtons", () => {
+	const assertOn = async (page: Page) => {
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-forwardButton-button");
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-rewindButton-button");
+	};
+	const assertOff = async (page: Page) => {
+		await expectFeatureButtonToBeFalsy(page, "yte-feature-forwardButton-button");
+		await expectFeatureButtonToBeFalsy(page, "yte-feature-rewindButton-button");
+	};
+	const subject = { assertOff, assertOn };
+	// The original bodies wrote the placement before enabling, so the battery runs it as setup.
+	const placementSetup = async (page: Page) => {
+		await setOption(page, "forwardRewindButtons.button.placement", left);
+	};
+
 	for (const pageType of testPages) {
 		test(`rewind button seeks backward on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -101,46 +121,36 @@ test.describe("forwardRewindButtons", () => {
 			await expectSeekDelta(page, pageType, "forward", time);
 		});
 		test(`forward button should persist after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await setOption(page, "forwardRewindButtons.button.placement", left);
-			await enableFeature(page, "forwardRewindButtons.button.enabled");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-forwardButton-button");
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-forwardButton-button");
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"forwardRewindButtons",
+				{ ...subject, setup: placementSetup },
+				async (navPage) => {
+					await navigateToPageType(navPage, home);
+					await navigateToPageType(navPage, pageType);
+				}
+			);
 		});
 		test(`forward and rewind buttons should re-appear after disable then re-enable on ${pageType}`, async ({
 			page
 		}) => {
-			await navigateToPageType(page, pageType);
-			await setOption(page, "forwardRewindButtons.button.placement", left);
-			await enableFeature(page, "forwardRewindButtons.button.enabled");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-forwardButton-button");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-rewindButton-button");
-			await disableFeature(page, "forwardRewindButtons.button.enabled");
-			await expectFeatureButtonToBeFalsy(page, "yte-feature-forwardButton-button");
-			await expectFeatureButtonToBeFalsy(page, "yte-feature-rewindButton-button");
-			await enableFeature(page, "forwardRewindButtons.button.enabled");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-forwardButton-button");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-rewindButton-button");
+			await verifyReEnableCycle(page, pageType, "forwardRewindButtons", {
+				...subject,
+				setup: placementSetup
+			});
 		});
 	}
 
 	test(`forward button should persist after full page reload`, async ({ page }) => {
-		await navigateToPageType(page, testPages[0]);
-		await setOption(page, "forwardRewindButtons.button.placement", left);
-		await enableFeature(page, "forwardRewindButtons.button.enabled");
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-forwardButton-button");
-		await page.reload();
-		await navigateToPageType(page, testPages[0]);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-forwardButton-button");
+		await verifyReloadPersistence(page, testPages[0], "forwardRewindButtons", {
+			...subject,
+			setup: placementSetup
+		});
 	});
 
 	test(`should not create forward rewind buttons on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "forwardRewindButtons.button.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-forwardButton-button");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-rewindButton-button");
+		await verifyNonTargetSilence(page, nonTargetPage!, "forwardRewindButtons", subject);
 	});
 
 	test("rewind button should still seek after the button placement is changed while enabled on watch", async ({

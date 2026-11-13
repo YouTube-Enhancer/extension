@@ -1,3 +1,5 @@
+import type { Page } from "@playwright/test";
+
 import { metadata } from "@/src/features/hideEndScreenCardsButton/index.metadata";
 import {
 	expectBodyWithClass,
@@ -19,7 +21,13 @@ import {
 import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const hideLabel = localeText("pages.content.features.hideEndScreenCardsButton.button.toggle.off");
 const showLabel = localeText("pages.content.features.hideEndScreenCardsButton.button.toggle.on");
@@ -30,6 +38,19 @@ const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 
 test.describe("hideEndScreenCardsButton", () => {
+	const assertOn = async (page: Page) => {
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-hideEndScreenCardsButton-button");
+	};
+	const assertOff = async (page: Page) => {
+		await expectFeatureButtonToBeFalsy(page, "yte-feature-hideEndScreenCardsButton-button");
+	};
+	const subject = { assertOff, assertOn };
+	// The original enable sequence turned the button on first and set the placement right after, so the step runs it there.
+	const enableWithPlacement = async (page: Page) => {
+		await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
+		await setOption(page, "hideEndScreenCardsButton.button.placement", right);
+	};
+
 	for (const pageType of testPages) {
 		test(`button toggles hideEndScreenCards on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -64,32 +85,22 @@ test.describe("hideEndScreenCardsButton", () => {
 		test(`button should re-appear after disable then re-enable on ${pageType}`, async ({
 			page
 		}) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
-			await setOption(page, "hideEndScreenCardsButton.button.placement", right);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-hideEndScreenCardsButton-button");
-			await disableFeature(page, "hideEndScreenCardsButton.button.enabled");
-			await expectFeatureButtonToBeFalsy(page, "yte-feature-hideEndScreenCardsButton-button");
-			await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
-			await setOption(page, "hideEndScreenCardsButton.button.placement", right);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-hideEndScreenCardsButton-button");
+			await verifyReEnableCycle(page, pageType, "hideEndScreenCardsButton", {
+				...subject,
+				enable: enableWithPlacement
+			});
 		});
 	}
 
 	test(`button should persist after full page reload`, async ({ page }) => {
-		await navigateToPageType(page, testPages[0]);
-		await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
-		await setOption(page, "hideEndScreenCardsButton.button.placement", right);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-hideEndScreenCardsButton-button");
-		await page.reload();
-		await navigateToPageType(page, testPages[0]);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-hideEndScreenCardsButton-button");
+		await verifyReloadPersistence(page, testPages[0], "hideEndScreenCardsButton", {
+			...subject,
+			enable: enableWithPlacement
+		});
 	});
 
 	test(`should not create button on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-hideEndScreenCardsButton-button");
+		await verifyNonTargetSilence(page, nonTargetPage!, "hideEndScreenCardsButton", subject);
 	});
 
 	test("clicking the hide end screen cards menu item should hide the end screen cards on watch", async ({

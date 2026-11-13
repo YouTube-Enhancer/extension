@@ -11,7 +11,6 @@ import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import {
 	clickFeatureButton,
 	clickFeatureMenuItem,
-	disableFeature,
 	enableFeature,
 	setOption
 } from "@/src/utils/_tests/features";
@@ -19,7 +18,14 @@ import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_test
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 import { freezeAndGetTime, waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
@@ -32,6 +38,23 @@ async function getClipboardText(page: Page): Promise<string> {
 }
 
 test.describe("copyTimestampUrlButton", () => {
+	const assertOn = (page: Page) =>
+		expectFeatureButtonToBeTruthy(page, "yte-feature-copyTimestampUrlButton-button");
+	const assertOff = (page: Page) =>
+		expectFeatureButtonToBeFalsy(page, "yte-feature-copyTimestampUrlButton-button");
+	// The button's placement is written alongside the switch at every enable, as the tests did.
+	const enable = async (page: Page) => {
+		await enableFeature(page, "copyTimestampUrlButton.button.enabled");
+		await setOption(page, "copyTimestampUrlButton.button.placement", left);
+	};
+	// Off the target page there is no button to place, so only the switch is armed.
+	const enableButtonOnly = (page: Page) =>
+		enableFeature(page, "copyTimestampUrlButton.button.enabled");
+	const subject = { assertOff, assertOn, enable };
+	const setup = async (page: Page) => {
+		await setOption(page, "copyTimestampUrlButton.button.placement", left);
+	};
+
 	for (const pageType of testPages) {
 		test(`copy timestamp url button should copy timestamp url on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -73,37 +96,32 @@ test.describe("copyTimestampUrlButton", () => {
 		test(`copy timestamp url button should persist after navigation on ${pageType}`, async ({
 			page
 		}) => {
-			await navigateToPageType(page, pageType);
-			await setOption(page, "copyTimestampUrlButton.button.placement", left);
-			await enableFeature(page, "copyTimestampUrlButton.button.enabled");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-copyTimestampUrlButton-button");
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-copyTimestampUrlButton-button");
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"copyTimestampUrlButton",
+				{ ...subject, setup },
+				async (navPage) => {
+					await navigateToPageType(navPage, home);
+					await navigateToPageType(navPage, pageType);
+				}
+			);
 		});
 		test(`copy timestamp url button should re-appear after disable then re-enable on ${pageType}`, async ({
 			page
 		}) => {
-			await navigateToPageType(page, pageType);
-			await setOption(page, "copyTimestampUrlButton.button.placement", left);
-			await enableFeature(page, "copyTimestampUrlButton.button.enabled");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-copyTimestampUrlButton-button");
-			await disableFeature(page, "copyTimestampUrlButton.button.enabled");
-			await expectFeatureButtonToBeFalsy(page, "yte-feature-copyTimestampUrlButton-button");
-			await enableFeature(page, "copyTimestampUrlButton.button.enabled");
-			await setOption(page, "copyTimestampUrlButton.button.placement", left);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-copyTimestampUrlButton-button");
+			await verifyReEnableCycle(page, pageType, "copyTimestampUrlButton", {
+				...subject,
+				setup
+			});
 		});
 	}
 
 	test(`copy timestamp url button should persist after full page reload`, async ({ page }) => {
-		await navigateToPageType(page, testPages[0]);
-		await setOption(page, "copyTimestampUrlButton.button.placement", left);
-		await enableFeature(page, "copyTimestampUrlButton.button.enabled");
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-copyTimestampUrlButton-button");
-		await page.reload();
-		await navigateToPageType(page, testPages[0]);
-		await expectFeatureButtonToBeTruthy(page, "yte-feature-copyTimestampUrlButton-button");
+		await verifyReloadPersistence(page, testPages[0], "copyTimestampUrlButton", {
+			...subject,
+			setup
+		});
 	});
 
 	test("copy timestamp url button should copy the timestamp url from the feature menu item on watch", async ({
@@ -198,8 +216,9 @@ test.describe("copyTimestampUrlButton", () => {
 	});
 
 	test(`copy timestamp url button should not be present on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "copyTimestampUrlButton.button.enabled");
-		await expectFeatureButtonToBeFalsy(page, "yte-feature-copyTimestampUrlButton-button");
+		await verifyNonTargetSilence(page, nonTargetPage!, "copyTimestampUrlButton", {
+			...subject,
+			enable: enableButtonOnly
+		});
 	});
 });

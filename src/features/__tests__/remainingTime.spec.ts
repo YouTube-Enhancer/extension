@@ -8,7 +8,13 @@ import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { setValueOnYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-import { expect, test } from "@/tests/harness";
+import {
+	expect,
+	test,
+	verifyNavigationPersistence,
+	verifyNonTargetSilence,
+	verifyReloadPersistence
+} from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
@@ -54,6 +60,11 @@ async function readRemainingSeconds(page: Page): Promise<Nullable<number>> {
 }
 
 test.describe("remainingTime", () => {
+	const assertOff = (page: Page) =>
+		expect(page.locator("span#ytp-time-remaining")).not.toBeAttached();
+	const assertOn = (page: Page) =>
+		expect(page.locator(REMAINING_TIME_SELECTOR)).toBeAttached({ timeout: 10000 });
+	const subject = { assertOff, assertOn };
 	for (const pageType of testPages) {
 		test(`remaining time should be displayed on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -66,12 +77,7 @@ test.describe("remainingTime", () => {
 				.toMatch(REMAINING_TIME_TEXT);
 		});
 		test(`remaining time should survive a full page reload on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "remainingTime.enabled");
-			await expect(page.locator(REMAINING_TIME_SELECTOR)).toBeAttached();
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expect(page.locator(REMAINING_TIME_SELECTOR)).toBeAttached({ timeout: 10000 });
+			await verifyReloadPersistence(page, pageType, "remainingTime", subject);
 		});
 		test(`remaining time shouldn't be displayed on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -80,13 +86,16 @@ test.describe("remainingTime", () => {
 			await expect(remainingTimeElement).not.toBeAttached();
 		});
 		test(`remaining time should persist after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "remainingTime.enabled");
-			await expect(page.locator("span#ytp-time-remaining")).toBeAttached();
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			// No disable/enable round trip: the assertion has to observe what the navigation produced.
-			await expect(page.locator("span#ytp-time-remaining")).toBeAttached({ timeout: 10000 });
+			await verifyNavigationPersistence(
+				page,
+				pageType,
+				"remainingTime",
+				subject,
+				async (navPage, navPageType) => {
+					await navigateToPageType(navPage, home);
+					await navigateToPageType(navPage, navPageType);
+				}
+			);
 		});
 	}
 
@@ -189,8 +198,6 @@ test.describe("remainingTime", () => {
 	});
 
 	test(`should not display remaining time on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "remainingTime.enabled");
-		await expect(page.locator("span#ytp-time-remaining")).not.toBeAttached();
+		await verifyNonTargetSilence(page, nonTargetPage!, "remainingTime", subject);
 	});
 });
