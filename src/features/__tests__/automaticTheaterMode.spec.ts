@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/automaticTheaterMode/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
@@ -16,6 +14,7 @@ import {
 	spaNavigateToRelatedVideo
 } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
 const { home, watch } = pageTypeRecord;

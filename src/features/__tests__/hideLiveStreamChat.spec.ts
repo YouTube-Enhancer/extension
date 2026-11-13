@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/hideLiveStreamChat/index.metadata";
@@ -21,6 +19,7 @@ import {
 } from "@/src/utils/_tests/navigation";
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 

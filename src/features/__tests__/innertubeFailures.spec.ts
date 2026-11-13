@@ -1,12 +1,11 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import { REMOVE_BUTTON_CLASS } from "@/src/features/playlistManagementButtons/constants";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { enableFeature, setFeatureValue } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { expect, test } from "@/tests/harness";
 
 const { playlist } = pageTypeRecord;
 

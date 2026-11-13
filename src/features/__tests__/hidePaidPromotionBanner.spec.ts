@@ -1,5 +1,3 @@
-import { test } from "playwright.config";
-
 import { metadata } from "@/src/features/hidePaidPromotionBanner/index.metadata";
 import {
 	expectBodyWithClass,
@@ -15,6 +13,7 @@ import {
 	spaNavigateToRelatedVideo
 } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { test } from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 

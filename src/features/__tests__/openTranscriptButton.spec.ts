@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/openTranscriptButton/index.metadata";
 import {
 	expectFeatureButtonToBeFalsy,
@@ -23,6 +21,7 @@ import {
 } from "@/src/utils/_tests/navigation";
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 const { left } = placementRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);

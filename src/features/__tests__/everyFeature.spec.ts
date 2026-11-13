@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 
 import { watchExtensionErrors } from "@/src/utils/_tests/assertions";
@@ -22,6 +20,7 @@ import {
 	spaNavigateToRelatedVideo,
 	waitForExtensionReady
 } from "@/src/utils/_tests/navigation";
+import { expect, test } from "@/tests/harness";
 
 /**
  * Every feature at once. The per-feature specs prove each feature does its job; these cases prove that the whole

@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/scrollWheelSpeedControl/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, volume } from "@/src/utils/_tests/constants";
@@ -23,6 +21,7 @@ import {
 	waitForScrollWheelControl
 } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 // Speed control always requires a modifier key; start at 1.0 so both increase (→1.25) and decrease (→0.75) are in range
 const { home, watch } = pageTypeRecord;

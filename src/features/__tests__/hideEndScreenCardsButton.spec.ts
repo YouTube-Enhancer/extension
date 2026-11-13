@@ -1,5 +1,3 @@
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/hideEndScreenCardsButton/index.metadata";
 import {
 	expectBodyWithClass,
@@ -21,6 +19,7 @@ import {
 import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 const hideLabel = localeText("pages.content.features.hideEndScreenCardsButton.button.toggle.off");
 const showLabel = localeText("pages.content.features.hideEndScreenCardsButton.button.toggle.on");

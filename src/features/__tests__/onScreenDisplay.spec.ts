@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 
 import { expectToStay } from "@/src/utils/_tests/assertions";
@@ -15,6 +13,7 @@ import {
 	setVolume,
 	waitForScrollWheelVolumeControl
 } from "@/src/utils/_tests/player";
+import { expect, test } from "@/tests/harness";
 
 const { shorts, watch } = pageTypeRecord;
 /** Long enough that a display survives the option writes and polls of a multi-step test. */

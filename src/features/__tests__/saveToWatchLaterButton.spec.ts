@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { YtLockupViewModelElement } from "@/src/utils/dom/nativeComponents";
 
 import {
@@ -34,6 +32,7 @@ import {
 	settleActionsRowIcon,
 	WATCH_LATER_UNSAVED_ICON as UNSAVED_ICON
 } from "@/src/utils/_tests/watchLater";
+import { expect, test } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 

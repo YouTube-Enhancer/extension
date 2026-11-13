@@ -1,10 +1,9 @@
-import { test } from "playwright.config";
-
 import type { pageTypeRecord } from "@/src/utils/_tests/constants";
 
 import { expectBodyWithClass, expectBodyWithoutClass } from "@/src/utils/_tests/assertions";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import { test } from "@/tests/harness";
 
 const bodyClass = "yte-sharp-corners";
 const testPages: (keyof typeof pageTypeRecord)[] = ["watch", "home"];

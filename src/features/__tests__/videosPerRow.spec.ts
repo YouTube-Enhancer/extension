@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 
 import { expectBodyWithClass, expectBodyWithoutClass } from "@/src/utils/_tests/assertions";
@@ -12,6 +10,7 @@ import {
 	reloadPage,
 	spaNavigateToRelatedVideo
 } from "@/src/utils/_tests/navigation";
+import { expect, test } from "@/tests/harness";
 
 const { channel_videos: channelVideos, watch } = pageTypeRecord;
 

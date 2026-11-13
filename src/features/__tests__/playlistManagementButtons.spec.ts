@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import {
 	CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR,
 	PLAYLIST_ITEM_SELECTOR as FEATURE_ITEM_SELECTOR,
@@ -24,6 +22,7 @@ import {
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 import { ensureInWatchLater, watchToTheEnd } from "@/src/utils/_tests/watchLater";
 import { THUMBNAIL_PROGRESS_BAR_SELECTORS } from "@/src/utils/video";
+import { expect, test } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 // The rows the feature adds buttons to: its own item selector narrowed to rows with a duration overlay, as index.ts does.

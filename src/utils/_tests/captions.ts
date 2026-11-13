@@ -1,11 +1,10 @@
 import type { Page } from "@playwright/test";
 
-import { test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { waitForCaptionsAvailable } from "@/src/utils/_tests/player";
+import { test } from "@/tests/harness";
 
 /**
  * Navigates to the page type's captions fixture and skips when it offers no captions. On live the hunt walks the

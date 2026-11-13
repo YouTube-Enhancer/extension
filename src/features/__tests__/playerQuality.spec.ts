@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
@@ -23,6 +21,7 @@ import { getClosestQuality, getValueFromYouTubePlayer } from "@/src/utils/_tests
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { lookupItag } from "@/src/utils/player/itagDb";
+import { expect, test } from "@/tests/harness";
 const { home, live, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 

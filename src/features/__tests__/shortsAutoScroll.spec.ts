@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/shortsAutoScroll/index.metadata";
@@ -15,6 +13,7 @@ import {
 	waitForExtensionReady
 } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { shorts, watch } = pageTypeRecord;

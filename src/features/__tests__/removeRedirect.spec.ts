@@ -1,7 +1,5 @@
 import type { FrameLocator, Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
@@ -14,6 +12,7 @@ import {
 	reloadPage,
 	spaNavigateToRelatedVideo
 } from "@/src/utils/_tests/navigation";
+import { expect, test } from "@/tests/harness";
 
 const { channel_home: channelHome, watch } = pageTypeRecord;
 

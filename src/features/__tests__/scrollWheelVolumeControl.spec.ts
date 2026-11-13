@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/scrollWheelVolumeControl/index.metadata";
 import {
 	expectBodyWithClass,
@@ -32,6 +30,7 @@ import {
 	WHEEL_DELTA_PER_NOTCH
 } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 const { home, shorts, watch } = pageTypeRecord;
 const { right } = placementRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);

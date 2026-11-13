@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/playerSpeed/index.metadata";
@@ -13,6 +11,7 @@ import { getCurrentSpeed } from "@/src/utils/_tests/player";
 import { readStoredState } from "@/src/utils/_tests/storage";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
+import { expect, test } from "@/tests/harness";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 // No code branches on the speed value (resolveEffectiveSpeed forwards it unchanged), so one speed per page is enough.
 const speed = 2;

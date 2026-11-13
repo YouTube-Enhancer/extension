@@ -1,13 +1,12 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
+import { expect, test } from "@/tests/harness";
 
 const { home, search, watch } = pageTypeRecord;
 

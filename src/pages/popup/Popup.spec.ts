@@ -1,9 +1,8 @@
 import type { BrowserContext, Page } from "@playwright/test";
 
-import { expect, optionsTest as test } from "playwright.config";
-
 import { localeText } from "@/src/utils/_tests/locale";
 import { setCheckbox } from "@/src/utils/_tests/options";
+import { expect, optionsTest as test } from "@/tests/harness";
 
 // The popup is the shared Settings surface under its own entry bundle: these cases exist to put
 // that bundle on the coverage record and to prove the popup entry boots the surface on its own,

@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/automaticallyMaximizePlayer/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
@@ -17,6 +15,7 @@ import {
 } from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);

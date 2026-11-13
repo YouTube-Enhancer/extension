@@ -1,5 +1,3 @@
-import { expect, optionsTest, test } from "playwright.config";
-
 import { metadata } from "@/src/features/automaticallyDisableClosedCaptions/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { navigateToCaptionedPage, spaNavigateToCaptionedVideo } from "@/src/utils/_tests/captions";
@@ -19,6 +17,7 @@ import {
 	waitForCaptionsAvailable
 } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, optionsTest, test } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { home, watch } = pageTypeRecord;

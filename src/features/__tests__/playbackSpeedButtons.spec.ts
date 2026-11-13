@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/playbackSpeedButtons/index.metadata";
 import {
 	expectFeatureButtonToBeFalsy,
@@ -21,6 +19,7 @@ import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_test
 import { OSD_SELECTOR as osdSelector, readOnScreenDisplayState } from "@/src/utils/_tests/osd";
 import { getCurrentSpeed, setValueOnYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const { live, watch } = pageTypeRecord;

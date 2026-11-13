@@ -1,7 +1,9 @@
-import { expect, type Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
 
 import type { PageType } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
+
+import { expect } from "@/tests/harness";
 
 const YOUTUBE_AD_SELECTORS = {
 	adCount:

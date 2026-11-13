@@ -1,8 +1,6 @@
 import type { Page } from "@playwright/test";
 import type { YouTubePlayer } from "youtube-player/dist/types";
 
-import { expect } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 import type {
 	PlayerQualityFallbackStrategy,
@@ -21,6 +19,7 @@ import { enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { clamp } from "@/src/utils/math";
 import { chooseClosestQuality } from "@/src/utils/player/quality";
+import { expect } from "@/tests/harness";
 
 /**
  * Pixel delta of a single mouse wheel notch. The scroll wheel controller's stepper normalises

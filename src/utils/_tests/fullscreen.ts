@@ -1,6 +1,6 @@
 import type { Page } from "@playwright/test";
 
-import { expect } from "playwright.config";
+import { expect } from "@/tests/harness";
 
 /** Whether the watch page is in theater mode. */
 export async function isInTheaterMode(page: Page): Promise<boolean> {

@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 
 import { hasAuthState } from "@/src/utils/_tests/auth";
@@ -14,6 +12,7 @@ import {
 	spaNavigateToHome
 } from "@/src/utils/_tests/navigation";
 import { loginRequiredPages } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 // The feature has no page-specific branch; an explicit page set avoids running every test on all 11 page types.
 const testPages: PageType[] = ["watch"];

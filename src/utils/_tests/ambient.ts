@@ -1,4 +1,4 @@
-import { errors, expect, type Page } from "@playwright/test";
+import { errors, type Page } from "@playwright/test";
 
 import {
 	ambientModePathSelectors,
@@ -9,6 +9,7 @@ import {
 	shortsSheetItemSelector
 } from "@/src/features/automaticallyDisableAmbientMode/constants";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
+import { expect } from "@/tests/harness";
 
 export { settingsPanelMenuSelector, shortsOpenSheetSelector };
 /** The feature's own watch page entries, legacy and modern player layout. */

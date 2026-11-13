@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { OFFICIAL_ARTIST_BADGE_SELECTOR } from "@/src/features/videoHistory/constants";
@@ -16,6 +14,7 @@ import {
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { pageSetup } from "@/src/utils/_tests/pageSetup";
 import { readStoredState } from "@/src/utils/_tests/storage";
+import { expect, test } from "@/tests/harness";
 const { home, watch } = pageTypeRecord;
 
 type VideoHistoryEntry = { id: string; status: string; timestamp: number };

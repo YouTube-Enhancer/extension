@@ -1,5 +1,3 @@
-import { test } from "playwright.config";
-
 import { metadata } from "@/src/features/hidePlaylistRecommendations/index.metadata";
 import {
 	expectBodyWithClass,
@@ -14,6 +12,7 @@ import {
 	spaNavigateToHome
 } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { test } from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 

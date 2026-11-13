@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { FeatureKeys } from "@/src/features/_registry/types";
 
 import {
@@ -22,6 +20,7 @@ import {
 import { listFeatureButtons, loadAllFeatureMetadata } from "@/src/utils/_tests/metadata";
 import { navigateToPageType, waitForExtensionReady } from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
+import { expect, test } from "@/tests/harness";
 
 const { below, left, menu, right } = placementRecord;
 const { home, shorts, watch } = pageTypeRecord;

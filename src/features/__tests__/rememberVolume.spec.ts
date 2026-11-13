@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 
 import { metadata } from "@/src/features/rememberVolume/index.metadata";
@@ -16,6 +14,7 @@ import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_test
 import { getCurrentVolume, setVolume } from "@/src/utils/_tests/player";
 import { readStoredState } from "@/src/utils/_tests/storage";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 // A live stream is a /watch document (isWatchPage() is true, isLivePage() is false), so restoreVolume and
 // setupVolumeChangeListener run the identical code path as on watch; the live fixture costs up to 120 s per test.

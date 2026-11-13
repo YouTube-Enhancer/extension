@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 import type {
 	ButtonPlacement,
@@ -23,6 +21,7 @@ import {
 	isExecutionContextDestroyed
 } from "@/src/utils/_tests/pageSetup";
 import { buildNumberConstraints, validateNumbers } from "@/src/validation/rules";
+import { expect } from "@/tests/harness";
 
 export type Switch = FilterKeysByValueType<configuration, boolean>;
 

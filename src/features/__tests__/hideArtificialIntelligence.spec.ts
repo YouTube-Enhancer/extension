@@ -1,7 +1,5 @@
 import type { FrameLocator, Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { Nullable } from "@/src/types";
 
 import { metadata } from "@/src/features/hideArtificialIntelligence/index.metadata";
@@ -23,6 +21,7 @@ import {
 	spaNavigateToHome
 } from "@/src/utils/_tests/navigation";
 import { loginRequiredPages, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 

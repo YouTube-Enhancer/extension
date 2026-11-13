@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/automaticallyShowMoreVideosOnEndScreen/index.metadata";
@@ -11,6 +9,7 @@ import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
 import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);

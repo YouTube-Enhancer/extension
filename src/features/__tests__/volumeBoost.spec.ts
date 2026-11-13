@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/volumeBoost/index.metadata";
 import {
 	expectFeatureButtonToBeFalsy,
@@ -28,6 +26,7 @@ import { WHEEL_DELTA_PER_NOTCH } from "@/src/utils/_tests/player";
 import { readStoredOptions } from "@/src/utils/_tests/storage";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 import { clampDb, dbToLinear } from "@/src/utils/misc";
+import { expect, test } from "@/tests/harness";
 const { right } = placementRecord;
 const { shorts, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);

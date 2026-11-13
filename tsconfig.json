@@ -23,6 +23,7 @@
 			"@/src/*": ["./src/*"],
 			"@/assets/*": ["./src/assets/*"],
 			"@/pages/*": ["./src/pages/*"],
+			"@/tests/*": ["./tests/*"],
 			"@/components/*": ["./src/components/*"],
 			"@/utils": ["./src/utils/index"],
 			"@/utils/*": ["./src/utils/*"],
@@ -43,7 +44,7 @@
 		"postcss.config.cjs",
 		"src/features/__tests__",
 		"src/utils/_tests",
-		"tests/globalSetup.ts"
+		"tests"
 	],
 	"exclude": ["node_modules", "dist", "releases"]
 }

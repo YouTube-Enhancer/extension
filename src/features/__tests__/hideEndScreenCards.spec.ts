@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/hideEndScreenCards/index.metadata";
 import {
 	expectBodyWithClass,
@@ -21,6 +19,7 @@ import {
 } from "@/src/utils/_tests/navigation";
 import { freezeAndGetTime, showEndScreen } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 

@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, optionsTest, test } from "playwright.config";
-
 import { metadata as disableCCMetadata } from "@/src/features/automaticallyDisableClosedCaptions/index.metadata";
 import { metadata } from "@/src/features/automaticallyEnableClosedCaptions/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
@@ -23,6 +21,7 @@ import {
 	waitForCaptionsAvailable
 } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, optionsTest, test } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { home, watch } = pageTypeRecord;

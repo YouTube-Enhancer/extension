@@ -1,5 +1,3 @@
-import { test } from "playwright.config";
-
 import { metadata } from "@/src/features/hideEndscreenRecommendedVideos/index.metadata";
 import {
 	expectBodyWithClass,
@@ -11,6 +9,7 @@ import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { showEndScreen } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { test } from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 

@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 
 import { metadata } from "@/src/features/defaultToOriginalAudioTrack/index.metadata";
@@ -15,6 +13,7 @@ import {
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 // The feature's pages, from its metadata: watch and shorts, each with its own player element.
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);

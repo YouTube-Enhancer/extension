@@ -1,4 +1,4 @@
-import { expect, type Locator, type Page, test } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 
 import type { PageType } from "@/src/features/_registry/types";
 import type { YouTubePlayerDiv } from "@/src/types";
@@ -16,6 +16,7 @@ import {
 	getCaptionsState,
 	waitForYoutubePlayerReady
 } from "@/src/utils/_tests/player";
+import { expect, test } from "@/tests/harness";
 
 export const fixtureCapabilities = [
 	"ambientMode",

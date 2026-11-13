@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { MiniPlayerPosition } from "@/src/features/miniPlayer/types";
 
 import {
@@ -32,6 +30,7 @@ import {
 } from "@/src/utils/_tests/navigation";
 import { readStoredState } from "@/src/utils/_tests/storage";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 const { home, live, watch } = pageTypeRecord;
 const { right } = placementRecord;

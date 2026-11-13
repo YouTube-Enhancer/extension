@@ -1,5 +1,3 @@
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/openYouTubeSettingsOnHover/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
@@ -10,6 +8,7 @@ import {
 } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 const { home, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const SETTINGS_MENU_SELECTOR = ".ytp-settings-menu:not(#yte-feature-menu)";

@@ -1,9 +1,8 @@
-import { expect, test } from "playwright.config";
-
 import type { pageTypeRecord } from "@/src/utils/_tests/constants";
 
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import { expect, test } from "@/tests/harness";
 
 const testPages: (keyof typeof pageTypeRecord)[] = ["watch", "home"];
 

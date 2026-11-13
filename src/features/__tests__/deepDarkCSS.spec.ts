@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import { deepDarkPreset, deepDarkPresets } from "@/src/deepDarkPresets";
 import { expectFeatureButtonToBeIn, expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
@@ -12,6 +10,7 @@ import {
 	DEEP_DARK_COLORS_ATTRIBUTE,
 	DEEP_DARK_PRESET_ATTRIBUTE
 } from "@/src/utils/deep-dark-theme/dom";
+import { expect, test } from "@/tests/harness";
 
 const { shorts, watch } = pageTypeRecord;
 const { below } = placementRecord;

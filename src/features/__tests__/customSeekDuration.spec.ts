@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 
 import { OSD_ACCUMULATION_TIMEOUT } from "@/src/features/customSeekDuration/constants";
@@ -27,6 +25,7 @@ import {
 } from "@/src/utils/_tests/osd";
 import { freezeAndGetTime, seekTo } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 const VIDEO_SELECTOR = "video.html5-main-video";
 const DEFAULT_SEEK_TIME = 20;

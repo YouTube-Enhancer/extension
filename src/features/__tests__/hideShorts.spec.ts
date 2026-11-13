@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 
 import { metadata } from "@/src/features/hideShorts/index.metadata";
@@ -21,6 +19,7 @@ import {
 	spaNavigateToHome
 } from "@/src/utils/_tests/navigation";
 import { loginRequiredPages, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { test } from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 

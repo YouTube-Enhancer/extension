@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/blockNumberKeySeeking/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import {
@@ -16,6 +14,7 @@ import {
 } from "@/src/utils/_tests/navigation";
 import { freezeAndGetTime } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 const { home, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);

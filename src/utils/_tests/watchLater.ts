@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
 
 import type { YouTubePlayerDiv } from "@/src/types";
 import type { YtButtonViewModelElement } from "@/src/utils/dom/nativeComponents";
@@ -11,6 +11,7 @@ import {
 } from "@/src/features/saveToWatchLaterButton/constants";
 import { enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPage, waitForExtensionReady } from "@/src/utils/_tests/navigation";
+import { expect } from "@/tests/harness";
 
 /** The class the saveToWatchLaterButton feature puts on every button it renders (buttons.ts). */
 export const WATCH_LATER_BUTTON_CLASS = BUTTON_CLASS;

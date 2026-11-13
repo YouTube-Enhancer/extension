@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/shareShortener/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import {
@@ -15,6 +13,7 @@ import {
 	spaNavigateToFirstVideo
 } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 // A live stream is a /watch document and neither index.ts nor utils.ts has a live/VOD branch, so the live case
 // duplicates watch while raising the test budget to 120 s and burning a channel crawl.

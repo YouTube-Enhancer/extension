@@ -3,6 +3,8 @@ import { existsSync, readdirSync, readFileSync, statSync } from "fs";
 import { join } from "path";
 import { cwd } from "process";
 
+import { generateMissingFeatureTests } from "@/src/utils/_tests/generateMissingFeatureTests";
+
 /**
  * Ensures the extension dist contains a test-capable build before tests run.
  *
@@ -34,6 +36,8 @@ const SOURCE_FILES = [
 ];
 
 export default function ensureTestCapableBuild(): void {
+	// Spec generation belongs to the pre-run hook: importing the test entrypoint must not write files.
+	generateMissingFeatureTests();
 	const optionsHtml = join(cwd(), "dist", "Chrome", "src", "pages", "options", "index.html");
 	if (!existsSync(optionsHtml)) {
 		buildTestDist("dist/Chrome not found");

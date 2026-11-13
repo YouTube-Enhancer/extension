@@ -1,4 +1,6 @@
-import { expect, type Locator, type Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
+
+import { expect } from "@/tests/harness";
 
 /** How long the settings round trip is given before the checkbox is expected to render the new state. */
 const CHECKBOX_SETTLE_TIMEOUT = 15000;

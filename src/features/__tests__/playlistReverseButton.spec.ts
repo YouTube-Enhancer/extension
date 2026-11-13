@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type {
 	ManagerElement,
 	PanelElement,
@@ -30,6 +28,7 @@ import { pageSetup } from "@/src/utils/_tests/pageSetup";
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { readStoredOptions, readStoredState } from "@/src/utils/_tests/storage";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const playlistRequirements: FixtureCapabilities[] = ["playlistLength", "playlistManagementButtons"];

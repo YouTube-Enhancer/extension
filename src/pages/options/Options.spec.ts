@@ -1,13 +1,13 @@
 import type { Page } from "@playwright/test";
 
 import { readFile } from "fs/promises";
-import { expect, optionsTest as test } from "playwright.config";
 
 import { youtubePlayerQualityLevels } from "@/src/features/playerQuality/types";
 import { loadDefaultConfig } from "@/src/utils/_tests/features";
 import { localeSelector, localeText } from "@/src/utils/_tests/locale";
 import { featureSettingLabel, loadAllFeatureMetadata } from "@/src/utils/_tests/metadata";
 import { setCheckbox } from "@/src/utils/_tests/options";
+import { expect, optionsTest as test } from "@/tests/harness";
 
 const SEEDED_HIDE_TIME = 1234;
 // The reset notice is two sentences on two lines; the first one is enough to tell the toast apart.

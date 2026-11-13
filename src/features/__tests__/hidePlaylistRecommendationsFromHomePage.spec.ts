@@ -1,5 +1,3 @@
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/hidePlaylistRecommendationsFromHomePage/index.metadata";
 import {
 	expectBodyClassToStayAbsent,
@@ -21,6 +19,7 @@ import {
 	resolveNonTargetPage,
 	resolvePageTypes
 } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 

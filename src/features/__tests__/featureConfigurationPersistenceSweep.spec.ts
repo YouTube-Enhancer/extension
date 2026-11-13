@@ -7,8 +7,6 @@
  * 4. Automated triage: isolates failing features into individual `test.step` blocks on retry.
  */
 
-import { expect, test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 
 import { watchExtensionErrors } from "@/src/utils/_tests/assertions";
@@ -31,6 +29,7 @@ import {
 import { readStoredOptions } from "@/src/utils/_tests/storage";
 import { loginRequiredPages, resolvePageTypes } from "@/src/utils/_tests/utils";
 import { getPathValue } from "@/src/utils/misc";
+import { expect, test } from "@/tests/harness";
 
 type PageBatch = {
 	batchIndex: number;

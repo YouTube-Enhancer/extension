@@ -1,5 +1,3 @@
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/miniPlayerButton/index.metadata";
 import {
 	expectFeatureButtonToBeFalsy,
@@ -20,6 +18,7 @@ import {
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 const { below, left, right } = placementRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);

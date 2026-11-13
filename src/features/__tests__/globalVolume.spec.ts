@@ -1,5 +1,3 @@
-import { expect, optionsTest, test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 
 import { metadata } from "@/src/features/globalVolume/index.metadata";
@@ -21,6 +19,7 @@ import {
 import { setCheckbox } from "@/src/utils/_tests/options";
 import { getCurrentVolume, isPlayerMuted, mutePlayer, setVolume } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, optionsTest, test } from "@/tests/harness";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { home, shorts, watch } = pageTypeRecord;
 // live takes exactly the same `isWatchPage() || isLivePage() -> #movie_player` branch as watch (index.ts:12), so it adds no coverage while each navigateToPageType(live) re-runs the channel scan with a 120 s budget.

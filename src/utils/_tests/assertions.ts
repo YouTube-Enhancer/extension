@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
 
 import type { PageType } from "@/src/features/_registry/types";
 import type { YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
@@ -7,6 +7,7 @@ import type { ButtonPlacement, FeatureButtonId, FeatureMenuItemId } from "@/src/
 import { placementSelectors } from "@/src/utils/_tests/constants";
 import { isLiveFixturePage } from "@/src/utils/_tests/liveFixture";
 import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
+import { expect } from "@/tests/harness";
 
 /** Fails when none of the selectors matches an element on the page. */
 export async function expectAnyMatch(

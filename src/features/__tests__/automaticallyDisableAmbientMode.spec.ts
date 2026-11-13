@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import type { PageType } from "@/src/features/_registry/types";
 
 import { metadata } from "@/src/features/automaticallyDisableAmbientMode/index.metadata";
@@ -22,6 +20,7 @@ import {
 } from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 // The feature's pages, from its metadata. The cases in the loop read ambient mode off the watch shell; shorts keeps it
 // behind the reel's "more" sheet and has its own cases at the end.

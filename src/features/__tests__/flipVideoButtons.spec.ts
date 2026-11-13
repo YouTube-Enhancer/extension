@@ -1,7 +1,5 @@
 import type { Page } from "@playwright/test";
 
-import { expect, test } from "playwright.config";
-
 import { metadata } from "@/src/features/flipVideoButtons/index.metadata";
 import {
 	expectFeatureButtonToBeFalsy,
@@ -20,6 +18,7 @@ import {
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { expect, test } from "@/tests/harness";
 
 const { left, menu, right } = placementRecord;
 const { home, watch } = pageTypeRecord;

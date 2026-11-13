@@ -1,5 +1,3 @@
-import { test } from "playwright.config";
-
 import { metadata } from "@/src/features/hideAutoplayButton/index.metadata";
 import {
 	expectBodyWithClass,
@@ -9,6 +7,7 @@ import {
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { test } from "@/tests/harness";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
