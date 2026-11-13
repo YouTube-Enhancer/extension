@@ -3,39 +3,19 @@ import type { Locator, Page } from "@playwright/test";
 import type { PageType } from "@/src/features/_registry/types";
 import type { YouTubePlayerDiv } from "@/src/types";
 
-import { hasAmbientModeMenuItem } from "@/src/utils/_tests/ambient";
+import {
+	type FixtureCapabilities,
+	meetsFixtureCapabilities,
+	verifyFixtureCapabilities
+} from "@/src/utils/_tests/capabilities";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { markLiveFixturePage, unmarkLiveFixturePage } from "@/src/utils/_tests/liveFixture";
-import {
-	ensurePlayerControlsVisible,
-	isExecutionContextDestroyed,
-	pageSetup
-} from "@/src/utils/_tests/pageSetup";
-import {
-	ensureCaptionsState,
-	getCaptionsState,
-	waitForYoutubePlayerReady
-} from "@/src/utils/_tests/player";
+import { isExecutionContextDestroyed, pageSetup } from "@/src/utils/_tests/pageSetup";
+import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { expect, test } from "@/tests/harness";
 
-export const fixtureCapabilities = [
-	"ambientMode",
-	"autoPlay",
-	"captions",
-	// Top comments that carry timestamp links (a mix with its tracklist in the comments).
-	"commentTimestamps",
-	"dubbedAudio",
-	"endScreenCards",
-	"playlistManagementButtons",
-	// A chip bar above legacy rows, the only host the remove-all-watched button has: Watch Later, today.
-	"playlistChipBar",
-	"playlistLength",
-	"timestamps",
-	"videoHistory",
-	"monoAudio"
-] as const;
-
-export type FixtureCapabilities = (typeof fixtureCapabilities)[number];
+export { fixtureCapabilities } from "@/src/utils/_tests/capabilities";
+export type { FixtureCapabilities } from "@/src/utils/_tests/capabilities";
 
 export type VideoFixture = {
 	capabilities: FixtureCapabilities[];
@@ -202,6 +182,7 @@ export async function navigateToPageType(
 	unmarkLiveFixturePage(page);
 	const fixture = getFixture(pageType, requirements);
 	await navigateToYoutubePage(page, fixture.url, pageType);
+	await verifyFixtureCapabilities(page, pageType, requirements);
 }
 /**
  * Reloads the current document and waits for the extension and (on player pages) the player to be ready again.
@@ -410,7 +391,10 @@ async function navigateToLiveVideo(
 				await navigateToPage(page, channelUrl);
 				continue;
 			}
-			if (requirements.length === 0 || (await videoMeetsCapabilities(page, requirements))) {
+			if (
+				requirements.length === 0 ||
+				(await meetsFixtureCapabilities(page, "live", requirements))
+			) {
 				return;
 			}
 			await navigateToPage(page, channelUrl);
@@ -481,34 +465,6 @@ async function tryOpenLiveVideo(page: Page, video: Locator, channelUrl: string):
 	} catch {
 		await navigateToPage(page, channelUrl);
 		return false;
-	}
-	return true;
-}
-
-async function videoMeetsCapabilities(
-	page: Page,
-	requirements: FixtureCapabilities[]
-): Promise<boolean> {
-	for (const req of requirements) {
-		switch (req) {
-			case "ambientMode": {
-				await ensurePlayerControlsVisible(page, "live");
-				if (!(await hasAmbientModeMenuItem(page))) return false;
-				break;
-			}
-			case "captions": {
-				await ensurePlayerControlsVisible(page, "live");
-				const state = await getCaptionsState(page);
-				if (state === null) return false;
-				// The button reports a state on every stream, and a live stream lists its auto-generated track only once
-				// captions are on, so the one proof that a stream has captions is turning them on. A stream found with
-				// captions off is left that way, so that a feature under test, and not this probe, is what turns them on.
-				if (state) break;
-				if (!(await ensureCaptionsState(page, true))) return false;
-				if (!(await ensureCaptionsState(page, false))) return false;
-				break;
-			}
-		}
 	}
 	return true;
 }

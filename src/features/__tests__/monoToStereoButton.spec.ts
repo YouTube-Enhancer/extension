@@ -38,9 +38,9 @@ async function isMonoEnabled(page: Page): Promise<boolean> {
 test.describe("monoToStereoButton", () => {
 	for (const pageType of testPages) {
 		test(`audio should switch to stereo on click on ${pageType}`, async ({ page }) => {
-			// videoMeetsCapabilities has no monoAudio case, so the requirement is silently ignored on live; the
-			// channel splitter reads channel 0 whatever the source is, so a mono source is not required there.
-			await navigateToPageType(page, pageType, pageType === "live" ? [] : ["monoAudio"]);
+			// The channel splitter reads channel 0 whatever the source is, so a mono source is not required on
+			// live; the shared capability check still verifies the fixture video plays there.
+			await navigateToPageType(page, pageType, ["monoAudio"]);
 			await enableFeature(page, "monoToStereoButton.button.enabled");
 			await setOption(page, "monoToStereoButton.button.placement", right);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-monoToStereoButton-button");
