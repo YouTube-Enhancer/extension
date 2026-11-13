@@ -6,6 +6,7 @@ import Loader from "@/src/components/Loader";
 import { parseChannelSpeeds, serializeChannelSpeeds } from "@/src/features/playerSpeed/utils";
 import useDebounceFn from "@/src/hooks/useDebounce";
 import { resolveChannelIdFromLink } from "@/src/utils/getChannelId";
+import { clamp } from "@/src/utils/math";
 import { cn } from "@/src/utils/style";
 
 export type KeyValueListProps = {
@@ -26,10 +27,6 @@ export type KeyValueListProps = {
 	title?: string;
 	value: string;
 };
-
-function clamp(value: number, min: number, max: number): number {
-	return Math.min(Math.max(value, min), max);
-}
 
 const KeyValueList: React.FC<KeyValueListProps> = ({
 	addLabel,

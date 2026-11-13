@@ -14,7 +14,7 @@ import {
 	selectFirstWithWidth
 } from "@/src/utils/dom/selectors";
 import { waitForAllElements } from "@/src/utils/dom/wait";
-import { formatDuration, timeStringToSeconds } from "@/src/utils/format/time";
+import { formatVideoTimestamp, timeStringToSeconds } from "@/src/utils/format/time";
 import { conditionalStyles } from "@/src/utils/style";
 import { isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
 import { getWatchedPercentage } from "@/src/utils/video";
@@ -132,7 +132,7 @@ export function createPlaylistLengthUIElement(
 			whiteSpace: "nowrap"
 		}
 	});
-	videoTimeDisplay.textContent = `${formatDuration(initialState.watchedTimeSeconds)} / ${formatDuration(initialState.totalTimeSeconds)} (- ${formatDuration(initialState.totalTimeSeconds - initialState.watchedTimeSeconds)})`;
+	videoTimeDisplay.textContent = `${formatVideoTimestamp(initialState.watchedTimeSeconds, "hhmmss")} / ${formatVideoTimestamp(initialState.totalTimeSeconds, "hhmmss")} (- ${formatVideoTimestamp(initialState.totalTimeSeconds - initialState.watchedTimeSeconds, "hhmmss")})`;
 	const percentageWatched = createStyledElement({
 		elementId: "yte-playlist-length-ui-percentageWatched",
 		elementType: "div",
@@ -159,7 +159,7 @@ export function createPlaylistLengthUIElement(
 		const safeWatched = Number.isFinite(watchedTimeSeconds) ? watchedTimeSeconds : 0;
 		const watchedPercentage = safeTotal > 0 ? Math.floor((safeWatched / safeTotal) * 100) : 0;
 		watchedProgressBar.style.width = `${watchedPercentage}%`;
-		const times = `${formatDuration(safeWatched)} / ${formatDuration(safeTotal)} (- ${formatDuration(safeTotal - safeWatched)})`;
+		const times = `${formatVideoTimestamp(safeWatched, "hhmmss")} / ${formatVideoTimestamp(safeTotal, "hhmmss")} (- ${formatVideoTimestamp(safeTotal - safeWatched, "hhmmss")})`;
 		videoTimeDisplay.textContent = times;
 		videoTimeDisplay.title = times;
 		percentageWatched.textContent = `${watchedPercentage}%`;

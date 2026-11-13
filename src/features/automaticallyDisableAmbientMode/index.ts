@@ -2,6 +2,7 @@ import type { Nullable } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
+import { delay } from "@/src/utils/async";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { getLayoutType, isShortsPage, isWatchPage } from "@/src/utils/url";
 
@@ -52,7 +53,7 @@ async function pollFor<T>(
 		const value = read();
 		if (value !== null && value !== undefined) return value;
 		if (Date.now() - start >= timeout) return null;
-		await new Promise((resolve) => setTimeout(resolve, 50));
+		await delay(50);
 	}
 }
 

@@ -1,8 +1,8 @@
 import type { JSX } from "react";
 
-import type { FeatureError } from "./types";
+import { formatError } from "@/src/utils/format/error";
 
-import { formatError } from "./utils";
+import type { FeatureError } from "./types";
 
 type ErrorsListProps = {
 	errors: FeatureError[];

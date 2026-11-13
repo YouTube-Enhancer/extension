@@ -2,12 +2,13 @@ import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
+import { createTrailingThrottle } from "@/src/utils/async";
 import {
 	subscribeToDomMutations,
 	type UnsubscribeFromDomMutations
 } from "@/src/utils/dom/observers/domMutationBus";
 
-/** Debounced so the top level observer does not run a document query for every YouTube DOM mutation. */
+/** Throttle window so the top level observer does not run a document query for every YouTube DOM mutation. */
 const ATTACH_DEBOUNCE_MS = 100;
 const CHAT_FRAME_SELECTOR = "ytd-live-chat-frame iframe";
 export const CHAT_STYLE_ID = "yte-hide-ai-chat";
@@ -33,7 +34,6 @@ const FEATURE_NAME = "hideArtificialIntelligence";
  */
 const FRAME_STYLE_TRIGGER_SELECTOR = "head, body";
 
-let attachTimeout: Nullable<ReturnType<typeof setTimeout>> = null;
 let unsubscribeBus: Nullable<UnsubscribeFromDomMutations> = null;
 let cleanupRegistered = false;
 /**
@@ -154,13 +154,7 @@ function removeInjectedStyles(): void {
 	}
 }
 
-function scheduleAttach(): void {
-	if (attachTimeout !== null) return;
-	attachTimeout = setTimeout(() => {
-		attachTimeout = null;
-		attachToChatFrames();
-	}, ATTACH_DEBOUNCE_MS);
-}
+const attachThrottle = createTrailingThrottle(attachToChatFrames, ATTACH_DEBOUNCE_MS);
 
 function startChatFrameObserver(): void {
 	if (unsubscribeBus) return;
@@ -169,17 +163,14 @@ function startChatFrameObserver(): void {
 	unsubscribeBus = subscribeToDomMutations(
 		CHAT_FRAME_SELECTOR,
 		() => {
-			scheduleAttach();
+			attachThrottle.schedule();
 		},
 		{ deep: true }
 	);
 }
 
 function stopChatFrameObserver(): void {
-	if (attachTimeout !== null) {
-		clearTimeout(attachTimeout);
-		attachTimeout = null;
-	}
+	attachThrottle.cancel();
 	unsubscribeBus?.();
 	unsubscribeBus = null;
 	disconnectFrameSubscriptions();

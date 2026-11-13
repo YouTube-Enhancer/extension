@@ -1,6 +1,7 @@
 import type { AllButtonNames, SingleButtonNames } from "@/src/types";
 
 import eventManager, { type FeatureName } from "@/src/events/EventManager";
+import { clamp } from "@/src/utils/math";
 import { isModernYouTubeVideoLayout } from "@/src/utils/url";
 /**
  * Creates a tooltip element and adds it to the element or a parent element.
@@ -110,8 +111,6 @@ function positionTooltip(params: {
 	const viewportPadding = 8;
 	const maxLeft = window.innerWidth - tooltipRect.width - viewportPadding;
 	const maxTop = window.innerHeight - tooltipRect.height - viewportPadding;
-
-	const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
 	let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
 	let top = rect.top - tooltipRect.height - gap;

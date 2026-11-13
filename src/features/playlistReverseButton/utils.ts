@@ -1,5 +1,6 @@
 import type { Nullable } from "@/src/types";
 
+import { delay } from "@/src/utils/async";
 import { createSVGElement } from "@/src/utils/dom/elements";
 import { PLAYLIST_PAGE_HEADER_SELECTORS, selectFirstWithWidth } from "@/src/utils/dom/selectors";
 import { isNewYouTubeVideoLayout, isPlaylistPage, isWatchPage } from "@/src/utils/url";
@@ -253,7 +254,7 @@ export async function poll<T>(
 	while (Date.now() - start < timeout) {
 		const result = fn();
 		if (predicate(result)) return result;
-		await new Promise((resolve) => setTimeout(resolve, interval));
+		await delay(interval);
 	}
 	return null;
 }

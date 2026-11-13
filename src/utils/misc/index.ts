@@ -1,9 +1,12 @@
 import type { Nullable, Path, PathValue } from "@/src/types";
+
+import { clamp } from "@/src/utils/math";
+
 export const MIN_DB = 0;
 export const MAX_DB = Infinity;
 export const STEP_DB = 1;
 export function clampDb(db: number) {
-	return Math.min(MAX_DB, Math.max(MIN_DB, db));
+	return clamp(db, MIN_DB, MAX_DB);
 }
 export function dbToLinear(db: number) {
 	return Math.pow(10, db / 20);

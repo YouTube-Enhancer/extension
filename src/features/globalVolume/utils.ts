@@ -1,6 +1,8 @@
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
+import { clamp } from "@/src/utils/math";
+import { peekPersistedVolume } from "@/src/utils/player/persistedVolume";
 import { isShortsPage } from "@/src/utils/url";
 
 let originalVolume: Nullable<number> = null;
@@ -19,9 +21,15 @@ export function resetVolumeChangeListener() {
 	reassertState = null;
 }
 
-export async function restorePlayerVolume(playerContainer: YouTubePlayerDiv) {
-	if (!playerContainer.setVolume || originalVolume === null) return;
-	await playerContainer.setVolume(originalVolume);
+export async function restorePlayerVolume(
+	playerContainer: YouTubePlayerDiv,
+	nativeVolume?: Nullable<number>
+) {
+	// Prefer the volume YouTube itself would boot at: with a seed in place the player booted at our
+	// level, so `originalVolume` - captured before our apply - is that level, not YouTube's.
+	const target = nativeVolume ?? originalVolume;
+	if (!playerContainer.setVolume || target === null || target === undefined) return;
+	await playerContainer.setVolume(target);
 	originalVolume = null;
 }
 
@@ -37,8 +45,10 @@ export async function setPlayerVolume(playerContainer: YouTubePlayerDiv, userVol
 		playerContainer.getVolume(),
 		playerContainer.isMuted()
 	]);
-	if (originalVolume === null) originalVolume = currentVolume;
-	const clampedVolume = Math.max(0, Math.min(userVolume, 100));
+	// With a seed in place the player booted at our level, so the volume read here is ours - prefer
+	// the level YouTube itself had stored, otherwise a later disable would "restore" our own value.
+	if (originalVolume === null) originalVolume = peekPersistedVolume() ?? currentVolume;
+	const clampedVolume = clamp(userVolume, 0, 100);
 	await playerContainer.setVolume(clampedVolume);
 	if (isMuted && typeof playerContainer.unMute === "function") await playerContainer.unMute();
 }

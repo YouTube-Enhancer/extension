@@ -7,6 +7,7 @@ import type { Nullable } from "@/src/types";
 import checkLocalesForMissingKeys from "@/src/i18n/checkLocalesForMissingKeys";
 import updateAvailableLocales from "@/src/i18n/updateAvailableLocales";
 import updateLocalePercentages from "@/src/i18n/updateLocalePercentages";
+import { delay } from "@/src/utils/async";
 import { emptyOutputFolder, rootDir } from "@/src/utils/plugins/utils";
 
 import {
@@ -67,7 +68,7 @@ export async function runPostBuildPipeline(retries = 3): Promise<void> {
 			console.error(`[Build Pipeline] Attempt ${attempt}/${retries} failed:`, lastError.message);
 			if (attempt < retries) {
 				console.log("[Build Pipeline] Retrying in 2 seconds...");
-				await new Promise((resolve) => setTimeout(resolve, 2000));
+				await delay(2000);
 			}
 		}
 	}

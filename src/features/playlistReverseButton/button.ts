@@ -2,6 +2,7 @@ import type { FeatureStateAPI } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
+import { delay } from "@/src/utils/async";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { isWatchPage } from "@/src/utils/url";
@@ -87,7 +88,7 @@ async function ensureReversalSticks(
 ): Promise<void> {
 	const start = Date.now();
 	while (Date.now() - start < maxTime) {
-		await new Promise((resolve) => setTimeout(resolve, 500));
+		await delay(500);
 		if (!isActive()) return;
 		const { isReversed } = stateAPI.getState();
 		if (!isReversed) return;

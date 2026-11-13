@@ -4,7 +4,7 @@ import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
-import { round } from "@/src/utils/math";
+import { clamp, round } from "@/src/utils/math";
 import { getOSDConfig, showOSD } from "@/src/utils/osd";
 import { getMinSpeed } from "@/src/utils/speed";
 import { isShortsPage } from "@/src/utils/url";
@@ -100,10 +100,7 @@ function handleMouseMove(event: MouseEvent) {
 	const speedAdjustment = segments * gestureSpeed;
 	const minSpeed =
 		segments < 0 ? Math.min(getMinSpeed(gestureSpeed), initialSpeed) : getMinSpeed(gestureSpeed);
-	const newSpeed = round(
-		Math.min(MAX_SPEED, Math.max(minSpeed, initialSpeed + speedAdjustment)),
-		2
-	);
+	const newSpeed = round(clamp(initialSpeed + speedAdjustment, minSpeed, MAX_SPEED), 2);
 	if (newSpeed === lastAppliedSpeed) return;
 
 	activeGesture.lastAppliedSpeed = newSpeed;
