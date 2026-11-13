@@ -12,14 +12,17 @@ import type {
 	PathValue
 } from "@/src/types";
 import type { FilterKeysByValueType } from "@/src/utils/_tests/types";
+import type { ConstraintTree } from "@/src/validation/types";
 
 import { expectFeatureButtonToBeIn, watchExtensionErrors } from "@/src/utils/_tests/assertions";
 import { sendYouTubeMessage } from "@/src/utils/_tests/messaging";
+import { loadAllFeatureMetadata } from "@/src/utils/_tests/metadata";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import {
 	ensurePlayerControlsVisible,
 	isExecutionContextDestroyed
 } from "@/src/utils/_tests/pageSetup";
+import { buildNumberConstraints, validateNumbers } from "@/src/validation/rules";
 
 export async function clickFeatureButton(
 	page: Page,
@@ -88,6 +91,10 @@ export async function setFeatureValue<K extends Path<configuration>>(
 	key: K,
 	value: PathValue<configuration, K>
 ) {
+	// Reject an out-of-bounds value before anything touches storage: the frontend enforces the
+	// metadata's min/max/step on every user edit, so a write that skips that check would park
+	// invalid config in storage and blame the product for whatever the spec asserts next.
+	validateNumbers(pathValueObject(key, value), await numberConstraints());
 	// Clear the signal so the wait observes this write's processing cycle. The embedded
 	// script sets it after reconciling a featureUpdate; the content script sets it when
 	// the write produced nothing to reconcile (an identical value fires no storage event).
@@ -196,4 +203,34 @@ export async function loadDefaultConfig(): Promise<configuration> {
 	} finally {
 		await server.close();
 	}
+}
+
+let _cachedNumberConstraints: ConstraintTree | null = null;
+/**
+ * The numeric constraint tree for every feature's settings, built from the same metadata files and
+ * the same rules the frontend validates with. Loaded lazily once per worker: the registry cannot be
+ * used here because its `import.meta.glob` only exists under Vite.
+ */
+async function numberConstraints(): Promise<ConstraintTree> {
+	if (_cachedNumberConstraints) return _cachedNumberConstraints;
+	const allMetadata = await loadAllFeatureMetadata();
+	const allSettings: unknown[] = [];
+	for (const metadata of allMetadata) {
+		if (metadata.settings) allSettings.push(...metadata.settings);
+	}
+	_cachedNumberConstraints = buildNumberConstraints(allSettings);
+	return _cachedNumberConstraints;
+}
+/** Wraps one dotted write as the single-key object the shared validator walks. */
+function pathValueObject(key: string, value: unknown): Record<string, unknown> {
+	const root: Record<string, unknown> = {};
+	let cursor = root;
+	const parts = key.split(".");
+	for (const part of parts.slice(0, -1)) {
+		cursor[part] = {};
+		cursor = cursor[part] as Record<string, unknown>;
+	}
+	const { [parts.length - 1]: lastPart } = parts;
+	cursor[lastPart] = value;
+	return root;
 }
