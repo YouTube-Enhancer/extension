@@ -208,6 +208,7 @@ for (const [pageType, features] of featuresByPageType.entries()) {
 
 /**
  * Configuration persistence sweep across all registered features.
+ * Assumes that there exists a retry mechanism in place.
  * Batches features by target page surface to co-verify reload and SPA navigations,
  * toggles cleanly (full 1 -> 1 and 0 -> 0 idempotency), and provides isolated per-feature triage fallback upon retry.
  */
@@ -261,6 +262,7 @@ test.describe("feature configuration persistence sweep", () => {
 				expect(errors, `No errors expected for batch ${batchTitle}`).toEqual([]);
 			} else {
 				// RETRY #1+: ISOLATED PER-FEATURE TRIAGE FALLBACK
+				test.setTimeout(300_000); // The retry triage can outlive the default timeout of 120secs under failed scenarios.
 				console.log(
 					`[Retry #${testInfo.retry}] Batch failed on previous attempt. Running isolated triage for ${batchTitle}...`
 				);
