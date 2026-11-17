@@ -75,6 +75,7 @@ type Subscriber = {
 	detachedParent?: Element;
 	once?: boolean;
 	parent?: ParentNode;
+	removed?: boolean;
 	selector: string;
 };
 
@@ -102,6 +103,7 @@ type SubscribeToDomMutationsOptions = {
 	 * document) is observed via its own refcounted root so mutations inside it deliver.
 	 */
 	parent?: ParentNode;
+	removed?: boolean;
 };
 
 /** Function that removes a subscription. */
@@ -268,43 +270,48 @@ function onMutations(records: MutationRecord[], fromSharedRoot: boolean): void {
 		if (record.type !== "childList") continue;
 
 		const addedNodes: Element[] = [];
+		const removedNodes: Element[] = [];
 		for (const node of record.addedNodes) {
 			if (isElementNode(node)) addedNodes.push(node);
 		}
-		if (addedNodes.length === 0) continue;
+		for (const node of record.removedNodes) {
+			if (isElementNode(node)) removedNodes.push(node);
+		}
+		if (addedNodes.length === 0 && removedNodes.length === 0) continue;
 
 		for (const [selector, subscribers] of subscriberMap) {
-			let hasChildListSubscribers = false;
-			let needsDescendantScan = false;
-			for (const s of subscribers) {
-				if (s.attributeFilter) continue;
-				hasChildListSubscribers = true;
-				if (s.deep) {
-					needsDescendantScan = true;
-					break;
-				}
-			}
-			if (!hasChildListSubscribers) continue;
-
-			const matches = new Set<Element>();
-			for (const node of addedNodes) {
-				if (node.matches(selector)) matches.add(node);
-				// The O(subtree) scan is the cost that made broad selectors jank; only
-				// pay it when a subscriber actually asked for descendant matching.
-				if (needsDescendantScan) {
-					const descendants = node.querySelectorAll(selector);
-					for (let i = 0; i < descendants.length; i++) matches.add(descendants[i]);
-				}
-			}
-			if (matches.size === 0) continue;
-			const matchList = Array.from(matches);
-
+			const addedSubscribers: Subscriber[] = [];
+			const removedSubscribers: Subscriber[] = [];
 			for (const subscriber of subscribers) {
-				// Attribute subscribers are driven by attribute records, not added nodes.
 				if (subscriber.attributeFilter) continue;
-				deliverToSubscriber(subscriber, matchList, selector, fromSharedRoot);
-				if (subscriber.once) toRemove.push(subscriber);
+				if (subscriber.removed) removedSubscribers.push(subscriber);
+				else addedSubscribers.push(subscriber);
 			}
+
+			const deliverMatches = (nodes: Element[], interested: Subscriber[]) => {
+				if (nodes.length === 0 || interested.length === 0) return;
+				const needsDescendantScan = interested.some((s) => s.deep);
+				const matches = new Set<Element>();
+				for (const node of nodes) {
+					if (node.matches(selector)) matches.add(node);
+					// The O(subtree) scan is the cost that made broad selectors jank. Only
+					// pay it when a subscriber actually asked for descendant matching.
+					if (needsDescendantScan) {
+						const descendants = node.querySelectorAll(selector);
+						for (let i = 0; i < descendants.length; i++) matches.add(descendants[i]);
+					}
+				}
+				if (matches.size === 0) return;
+				const matchList = Array.from(matches);
+
+				for (const subscriber of interested) {
+					deliverToSubscriber(subscriber, matchList, selector, fromSharedRoot);
+					if (subscriber.once) toRemove.push(subscriber);
+				}
+			};
+
+			deliverMatches(addedNodes, addedSubscribers);
+			deliverMatches(removedNodes, removedSubscribers);
 		}
 	}
 
@@ -390,6 +397,7 @@ function subscribeToDomMutations(
 		detachedParent,
 		once: options?.once,
 		parent,
+		removed: options?.removed,
 		selector
 	};
 
