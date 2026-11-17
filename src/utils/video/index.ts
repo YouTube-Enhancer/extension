@@ -1,4 +1,4 @@
-const THUMBNAIL_OVERLAY_SELECTORS = [
+export const THUMBNAIL_OVERLAY_SELECTORS = [
 	"ytd-thumbnail-overlay-resume-playback-renderer",
 	"ytw-thumbnail-overlay-resume-playback-renderer"
 ] as const;

@@ -7,6 +7,7 @@ import {
 } from "@/src/utils/dom/observers/domMutationBus";
 import { playlistItemsSelector, selectFirstWithWidth } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
+import { THUMBNAIL_OVERLAY_SELECTORS } from "@/src/utils/video";
 
 import type { PlaylistLengthGetMethod } from "./types";
 
@@ -30,6 +31,7 @@ export class PlaylistLengthController {
 	private destroyed = false;
 	private lastPlaylistLength: Nullable<number> = null;
 	private lastUpdate: Nullable<{ total: number; watched: number }> = null;
+	private overlayRemovalUnsubscribe: Nullable<UnsubscribeFromDomMutations> = null;
 	private rebuilding = false;
 	private rebuildQueued = false;
 	private rebuildTimer: Nullable<number> = null;
@@ -59,6 +61,9 @@ export class PlaylistLengthController {
 
 		this.unsubscribeBus?.();
 		this.unsubscribeBus = null;
+
+		this.overlayRemovalUnsubscribe?.();
+		this.overlayRemovalUnsubscribe = null;
 
 		this.resizeObserver?.disconnect();
 		this.resizeObserver = null;
@@ -128,6 +133,8 @@ export class PlaylistLengthController {
 	private disconnectObservers(): void {
 		this.unsubscribeBus?.();
 		this.unsubscribeBus = null;
+		this.overlayRemovalUnsubscribe?.();
+		this.overlayRemovalUnsubscribe = null;
 		this.resizeObserver?.disconnect();
 		this.resizeObserver = null;
 	}
@@ -335,6 +342,12 @@ export class PlaylistLengthController {
 		this.unsubscribeBus = subscribeToDomMutations("*", () => {
 			this.debouncedUpdate(methodConfig);
 		});
+
+		this.overlayRemovalUnsubscribe = subscribeToDomMutations(
+			THUMBNAIL_OVERLAY_SELECTORS.join(", "),
+			() => this.debouncedUpdate(methodConfig),
+			{ removed: true }
+		);
 
 		const resizeObserver = new ResizeObserver(() => {
 			void this.handleUpdate(methodConfig);
