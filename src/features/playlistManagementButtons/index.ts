@@ -131,7 +131,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 							const {
 								data: { setVideoId }
 							} = item as YTDPlaylistVideoRenderer;
-							await removeFromPlaylist(playlistId, setVideoId);
+							await removeFromPlaylist(playlistId, [setVideoId]);
 							await addRemoveAllButton();
 						},
 						translationError: (translations) =>
@@ -260,17 +260,13 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 
 				try {
 					const playlistId = getPlaylistId()!;
-					const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
+					const watchedSetVideoIds = Array.from(
+						document.querySelectorAll<YTDPlaylistVideoRenderer>(PLAYLIST_ITEM_SELECTOR)
+					)
+						.filter((item) => getWatchedPercentage(item) === 100)
+						.map((item) => item.data.setVideoId);
 
-					for (const item of playlistItems) {
-						const progressWidth = getWatchedPercentage(item);
-						if (progressWidth === 100) {
-							const {
-								data: { setVideoId }
-							} = item as YTDPlaylistVideoRenderer;
-							await removeFromPlaylist(playlistId, setVideoId);
-						}
-					}
+					await removeFromPlaylist(playlistId, watchedSetVideoIds);
 				} catch (error) {
 					console.error("Failed to remove watched videos:", error);
 				} finally {

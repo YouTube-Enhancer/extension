@@ -16,14 +16,12 @@ export async function removeFromHistory(videoId: string) {
 	await history.removeVideo(videoId, 5);
 }
 
-export async function removeFromPlaylist(playlistId: string, setVideoId: string) {
+export async function removeFromPlaylist(playlistId: string, setVideoIds: string[]) {
 	const response = await youtube.actions.execute("/browse/edit_playlist", {
-		actions: [
-			{
-				action: "ACTION_REMOVE_VIDEO",
-				setVideoId
-			}
-		],
+		actions: setVideoIds.map((setVideoId) => ({
+			action: "ACTION_REMOVE_VIDEO",
+			setVideoId
+		})),
 		params: "CAFAAQ%3D%3D",
 		playlistId
 	});
@@ -34,7 +32,7 @@ export async function removeFromPlaylist(playlistId: string, setVideoId: string)
 		new CustomEvent("yt-action", {
 			detail: {
 				actionName: "yt-playlist-remove-videos-action",
-				args: [{ playlistRemoveVideosAction: { setVideoIds: [setVideoId] } }],
+				args: [{ playlistRemoveVideosAction: { setVideoIds } }],
 				returnValue: []
 			}
 		})
