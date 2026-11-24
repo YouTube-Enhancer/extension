@@ -194,7 +194,11 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 						}
 					)
 					.then((results) => {
-						if (results[0]) this.handleNavigation(eventType);
+						if (results[0]) {
+							this.handleNavigation(eventType);
+							return undefined;
+						}
+						this.currentNavigationSignature = null;
 						return undefined;
 					});
 				return;
