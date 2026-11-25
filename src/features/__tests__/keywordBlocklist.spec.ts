@@ -157,12 +157,13 @@ async function injectMarkup(
 	page: Page,
 	options: { className?: string; html: string; id: string; tag: string }
 ): Promise<void> {
+	await installFixtureHTML(page);
 	await page.evaluate(({ className, html, id, tag }) => {
 		const element = document.createElement(tag);
 		element.id = id;
 		if (className) element.className = className;
 		document.body.appendChild(element);
-		element.innerHTML = html;
+		setFixtureHTML(element, html);
 	}, options);
 }
 /**
@@ -170,7 +171,7 @@ async function injectMarkup(
  * elements re-stamping it. It carries everything the feature masks or must leave alone: a title made of several
  * text nodes, a thumbnail with a srcset, a background image and a mini-game card image, which is excluded.
  */
-async function injectVideoWallCard(page: Page): Promise<void> {
+async function injectVideoWallCard(page: Page): Promise<string> {
 	await injectMarkup(page, {
 		className: "ytp-videowall-still",
 		html:
@@ -181,6 +182,10 @@ async function injectVideoWallCard(page: Page): Promise<void> {
 		id: INJECTED_CARD_ID,
 		tag: "div"
 	});
+	// The title this payload just wrote, taken from the payload itself: the injected title carries the
+	// blocked keyword, so the feature's MutationObserver is entitled to have masked it in the DOM
+	// before Playwright's next round-trip lands.
+	return INJECTED_TITLE_HTML.replace(/<[^>]*>/g, "");
 }
 async function readCard(page: Page, id: string): Promise<CardSnapshot | undefined> {
 	return (await readCards(page)).find((card) => card.id === id);
@@ -442,9 +447,10 @@ test.describe("keywordBlocklist", () => {
 		await navigateToPageType(page, channel_videos);
 		await setFeatureValue(page, "keywordBlocklist.keywords", "blocklist probe");
 		await enableFeature(page, "keywordBlocklist.enabled");
-		await injectVideoWallCard(page);
-		const original = (await readInjectedCard(page))!;
-		expect(original.title).toBe(INJECTED_TITLE);
+		// The title asserted here is the one the injection payload wrote, not a DOM read: the injected
+		// title carries the blocked keyword, so the feature's MutationObserver is entitled to have
+		// masked it before this line's round-trip lands, and that mask is the transition below.
+		expect(await injectVideoWallCard(page)).toBe(INJECTED_TITLE);
 		// The observer picks the new card up on its own; no navigation or config change nudges the feature.
 		await expect
 			.poll(async () => (await readInjectedCard(page))?.blocked, { timeout: 10_000 })
@@ -474,11 +480,17 @@ test.describe("keywordBlocklist", () => {
 		await expect
 			.poll(async () => (await readInjectedCard(page))?.blocked, { timeout: 10_000 })
 			.toBe(false);
-		// Node by node: the bold span inside the title is back where it was.
+		// Node by node: the bold span inside the title is back where it was, with every source the
+		// payload set. The expectation is built from the payload rather than a pre-mask DOM baseline,
+		// because a baseline read after enabling races the same observer this test drives.
 		expect(await readInjectedCard(page)).toEqual({
-			...original,
+			backgroundImage: `url("${INJECTED_THUMBNAIL}")`,
 			blocked: false,
-			imageSource: INJECTED_THUMBNAIL_LATE
+			excludedImageSource: INJECTED_AVATAR,
+			imageSource: INJECTED_THUMBNAIL_LATE,
+			imageSrcset: `${INJECTED_THUMBNAIL} 1x, ${INJECTED_THUMBNAIL_LATE} 2x`,
+			title: INJECTED_TITLE,
+			titleHtml: INJECTED_TITLE_HTML
 		});
 	});
 
