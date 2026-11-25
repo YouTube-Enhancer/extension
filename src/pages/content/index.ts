@@ -290,8 +290,24 @@ const mergeVideoHistoryUpdate = async (incomingState: unknown): Promise<void> =>
  * what it needs (bootstrap, and videoHistory per navigation) instead of receiving a startup
  * broadcast of the complete persisted state.
  */
-const onPageHide = () => {
+const onPageHide = (event?: PageTransitionEvent) => {
+	// A bfcache (persisted) hide keeps the document alive with features still enabled, so the
+	// forwarding listener must survive it — only a real unload detaches. The parameter is
+	// optional only because development mode holds this handler as a `() => void` dep (it merely
+	// unregisters it); as a pagehide listener the event is always supplied by the DOM.
+	if (event && event.persisted) return;
 	storage.onChanged.removeListener(storageListeners);
+};
+/**
+ * Belt and braces with the pagehide gate: after a bfcache restore, re-ensure the listener is
+ * attached. Remove-then-add is idempotent, so double registration is impossible whichever event
+ * ordering the browser uses. Runs only when forwarding was enabled, so a page that never reached
+ * readiness does not gain the listener here.
+ */
+const onPageShow = (event: PageTransitionEvent) => {
+	if (!event.persisted || !storageForwardingEnabled) return;
+	storage.onChanged.removeListener(storageListeners);
+	storage.onChanged.addListener(storageListeners);
 };
 let storageForwardingEnabled = false;
 const enableStorageForwarding = (): void => {
@@ -299,6 +315,7 @@ const enableStorageForwarding = (): void => {
 	storageForwardingEnabled = true;
 	storage.onChanged.addListener(storageListeners);
 	window.addEventListener("pagehide", onPageHide);
+	window.addEventListener("pageshow", onPageShow);
 };
 /**
  * Storage forwarding waits for the embedded instance to publish readiness
