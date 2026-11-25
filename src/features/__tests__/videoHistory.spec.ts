@@ -44,6 +44,21 @@ async function isOfficialArtistVideo(page: Page): Promise<boolean> {
 	);
 }
 
+/**
+ * The badge lands a beat after the channel name, so one count right after navigation can read the
+ * page before YouTube has drawn it and turn a fixture that carries the badge into a skip. Poll the
+ * same read for ~10 s; a channel that is genuinely not an official artist never flips, so the skip
+ * still fires for the real reason.
+ */
+async function isOfficialArtistVideoSettled(page: Page, timeout = 10_000): Promise<boolean> {
+	let found = false;
+	await expect
+		.poll(async () => (found = await isOfficialArtistVideo(page)), { timeout })
+		.toBe(true)
+		.catch(() => {});
+	return found;
+}
+
 async function isVideoPaused(page: Page): Promise<boolean> {
 	return await page.evaluate(() => {
 		const v = document.querySelector<HTMLVideoElement>("div#movie_player video");
@@ -314,7 +329,7 @@ test.describe("videoHistory", () => {
 		// those alone, since resuming a song part-way is not what anyone wants.
 		await navigateToPageType(page, watch);
 		test.skip(
-			!(await isOfficialArtistVideo(page)),
+			!(await isOfficialArtistVideoSettled(page)),
 			"the watch fixture's channel carries no official artist badge right now"
 		);
 		await enableFeature(page, "videoHistory.enabled");
