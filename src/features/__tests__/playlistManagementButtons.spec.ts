@@ -413,7 +413,7 @@ test.describe("playlistManagementButtons", () => {
 			// the full suite, because sibling specs write this same account's Watch Later while the poll
 			// runs - no budget can out-wait an active writer. The standard suite therefore skips it and
 			// the solo lane runs it afterwards:
-			//   YTE_SOLO_LANE=1 pnpm exec playwright test playlistManagementButtons.spec.ts:388 --project=chromium
+			//   YTE_SOLO_LANE=1 pnpm exec playwright test playlistManagementButtons.spec.ts:408 --project=chromium
 			test.skip(
 				!process.env.YTE_SOLO_LANE,
 				"solo lane: cross-file Watch Later interference (run with YTE_SOLO_LANE=1 after the suite)"
@@ -454,11 +454,19 @@ test.describe("playlistManagementButtons", () => {
 			await expect(removeAllButton).not.toBeAttached({ timeout: 15_000 });
 			// The history edit holds on the server: after a reload the row is back without progress. The feedback
 			// ack comes back processed within milliseconds, but YouTube's Watch Later browse keeps serving the
-			// watched bar until that edit propagates on their side, which has taken over 30s, so this polls as
-			// long as the remove-all count above does.
+			// watched bar until that edit propagates on their side - measured at more than 60s but under 16
+			// minutes - so this reloads inside the poll, re-requesting the page on every attempt, and runs far
+			// longer than the remove-all count above.
 			await reloadPage(page, playlist);
 			await expect
-				.poll(async () => readRowProgress(page, WATCH_LATER_SHORT_VIDEO), { timeout: 60_000 })
+				.poll(
+					async () => {
+						const progress = await readRowProgress(page, WATCH_LATER_SHORT_VIDEO);
+						if (progress !== 0) await reloadPage(page, playlist);
+						return progress;
+					},
+					{ intervals: [3000], timeout: 180_000 }
+				)
 				.toBe(0);
 			// Remove: the row leaves the page as the request goes through, and stays gone across a reload.
 			await expect(row.locator(REMOVE_BUTTON_SELECTOR)).toBeAttached({ timeout: 15000 });
