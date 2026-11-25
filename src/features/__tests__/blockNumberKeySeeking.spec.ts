@@ -17,11 +17,40 @@ import {
 	verifyReloadPersistence
 } from "@/tests/harness";
 
-const { home, watch } = pageTypeRecord;
+const { home, live, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
 const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"] as const;
 
+/**
+ * Arms a page-side probe that records whether digit keydowns reach the document at all.
+ *
+ * The feature's handler sits on `document` in the capture phase and stops propagation before
+ * anything else sees a digit, so the probe firing (or staying silent while the feature is on)
+ * reads the interception directly — it needs no seek to happen, which is what makes it usable on
+ * live, where a stream without a usable DVR window ignores the number keys entirely.
+ */
+async function armDigitKeyProbe(page: Page): Promise<void> {
+	await page.evaluate(() => {
+		const state: { reached: boolean } = { reached: false };
+		(window as unknown as { __yteDigitKeyProbe?: { reached: boolean } }).__yteDigitKeyProbe = state;
+		document.addEventListener(
+			"keydown",
+			(event) => {
+				if (/^[0-9]$/.test(event.key)) state.reached = true;
+			},
+			{ capture: true }
+		);
+	});
+}
+/** Whether a digit keydown reached the page since {@link armDigitKeyProbe}. */
+async function digitKeysReachPage(page: Page): Promise<boolean> {
+	return await page.evaluate(
+		() =>
+			(window as unknown as { __yteDigitKeyProbe?: { reached: boolean } }).__yteDigitKeyProbe
+				?.reached === true
+	);
+}
 async function pressNumberKeys(page: Page) {
 	for (const key of keys) {
 		await page.keyboard.press(key);
@@ -55,14 +84,26 @@ test.describe("blockNumberKeySeeking", () => {
 			if (end === null) return;
 			expect(Math.abs(end - start)).toBeLessThan(0.5);
 			await disableFeature(page, "blockNumberKeySeeking.enabled");
+			// On live the number keys drive DVR seeking, which a stream without a usable DVR window
+			// cannot perform: the position would not move whether or not the feature had released the
+			// keys, so the VOD-shaped >30s delta measures the stream rather than the feature (the red
+			// run read exactly 0 — no seek at all — while the product only removes a keydown listener
+			// that is byte-identical to playwright-testing's). What the feature owns is the keydown
+			// interception itself, so live reads the restoration off the probe instead: it fires only
+			// once the feature's capture-phase handler is gone from `document`.
+			if (pageType === live) await armDigitKeyProbe(page);
 			const start2 = await freezeAndGetTime(page, pageType);
 			expect(start2).not.toBeNull();
 			if (start2 === null) return;
 			await page.keyboard.press("9");
-			const end2 = await freezeAndGetTime(page, pageType);
-			expect(end2).not.toBeNull();
-			if (end2 === null) return;
-			expect(Math.abs(end2 - start2)).toBeGreaterThan(30);
+			if (pageType === live) {
+				expect(await digitKeysReachPage(page)).toBe(true);
+			} else {
+				const end2 = await freezeAndGetTime(page, pageType);
+				expect(end2).not.toBeNull();
+				if (end2 === null) return;
+				expect(Math.abs(end2 - start2)).toBeGreaterThan(30);
+			}
 			await enableFeature(page, "blockNumberKeySeeking.enabled");
 			const start3 = await freezeAndGetTime(page, pageType);
 			expect(start3).not.toBeNull();
