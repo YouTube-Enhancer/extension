@@ -303,7 +303,16 @@ async function setupRateChangeListener() {
 	// `#movie_player` on /shorts), then find the video inside it (readiness seam: player waits go
 	// through whenReady, not waitForElement).
 	const playerRoot = await whenReady("pagePlayer", { timeout: 15000 });
-	const video = playerRoot?.querySelector<HTMLVideoElement>("video.html5-main-video");
+	// The root and its media element are separate insertions on a fresh document: `whenReady` resolves on
+	// the root, which on a cold load lands before the `<video>` is created inside it, and one query that
+	// missed used to give up for the whole page. That left YouTube's own rate writes (a video or an ad
+	// writing the rate back on start) uncountered - `handleRateChange` is the only thing that puts the
+	// configured speed back, and after a successful run the state hook is already gone, so the cold-load
+	// apply was lost again with nothing to re-apply it. Wait for the video itself when the first probe
+	// comes up empty (generic DOM wait; readiness has no `<video>` target).
+	const video =
+		playerRoot?.querySelector<HTMLVideoElement>("video.html5-main-video") ??
+		(await waitForElement<HTMLVideoElement>("video.html5-main-video", 15000, "optional"));
 	if (!video) return;
 	eventManager.removeEventListener(video, "ratechange", metadata.id);
 	eventManager.addEventListener(video, "ratechange", () => handleRateChange(video), metadata.id);
