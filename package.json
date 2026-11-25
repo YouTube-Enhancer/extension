@@ -97,10 +97,5 @@
     "vite-plugin-css-injected-by-js": "^5.0.2",
     "vitest": "^5.1.0",
     "ws": "^8.21.3"
-  },
-  "overrides": {
-    "eslint-plugin-perfectionist": {
-      "typescript": "$typescript"
-    }
   }
 }
