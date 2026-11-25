@@ -24,6 +24,13 @@ import { metadata } from "./index.metadata";
 const OWN_SWITCH_SETTLE_MS = 2000;
 /** Player event that fires whenever the playback quality changes, no matter who asked for the change. */
 const QUALITY_CHANGE_EVENT = "onPlaybackQualityChange";
+/**
+ * How long a position captured for a quality switch stays worth putting back (bug #1228): the switch
+ * this feature asks for lands inside this window, and the restart it can cause comes with it.
+ */
+const POSITION_HOLD_MS = 5000;
+/** Playback that reached at least this far is worth restoring; a restart the switch caused lands below it. */
+const POSITION_MIN_RESTORE_SECONDS = 1;
 
 let currentQuality: Nullable<YoutubePlayerQualityLevel> = null;
 let qualityChangeTarget: Nullable<YouTubePlayerDiv> = null;
@@ -137,11 +144,39 @@ function getPlayer(): Nullable<YouTubePlayerDiv> {
 /**
  * Runs on every quality change the player announces. The event itself carries the quality that plays now,
  * which lags behind the request that caused it, so the decision is taken on the requested quality instead.
+ *
+ * This is the quality half of the asymmetry bug #1492: playerSpeed's ratechange listener not only watches,
+ * it *re-arms* the retry when the player resets the rate, so a speed comes back. The quality listener used
+ * to only ever suspend; a pin the player dropped after it landed had nothing left to bring it back, because
+ * the apply/verify run had already succeeded and taken its state hook with it.
  */
 function handleQualityChange(): void {
 	const player = getPlayer();
 	if (!player) return;
-	if (hasForeignQualityRequest(player)) markManualOverride();
+	if (hasForeignQualityRequest(player)) {
+		markManualOverride();
+		return;
+	}
+	if (hasDroppedPin(player)) reapplyDroppedPin();
+}
+
+/**
+ * Whether the player stopped honouring a pin this feature had already landed: the request reads back as
+ * auto (or as nothing) once the enforced level had time to settle. Auto is also what the request reads
+ * while our own switch is still in flight, so the pending-apply flag and the settle window keep that case
+ * out — without them every pin would look dropped the moment it was asked for.
+ */
+function hasDroppedPin(player: YouTubePlayerDiv): boolean {
+	if (enforcement.overrideDetected || enforcement.pendingOwnApply) return false;
+	// Both are only ever set once the pin has actually landed; before that the running apply is the answer.
+	if (!enforcement.appliedQuality || !enforcement.requestedQuality) return false;
+	if (isAdShowing()) return false;
+	if (Date.now() < enforcement.settleUntil) return false;
+	const { getPreferredQuality } = player as PlayerQualityRequestApi & YouTubePlayerDiv;
+	// Without the request API a dropped pin cannot be told apart from an unknown one; do not guess.
+	if (typeof getPreferredQuality !== "function") return false;
+	const requestedQuality = readRequestedQuality(player);
+	return !requestedQuality || requestedQuality === "auto";
 }
 
 async function hasForeignQuality(player: YouTubePlayerDiv): Promise<boolean> {
@@ -379,8 +414,22 @@ function readRequestedQuality(player: YouTubePlayerDiv): Nullable<string> {
 	}
 }
 
+/**
+ * Re-applies a pin the player dropped, through the same `registry.playerRetry` call enable and navigation
+ * make, with the same tasks — the shape playerSpeed's reapplyEnforcedSpeed uses for a rate the player
+ * reset. Nothing new: the retry seam is the restore flow this feature already had.
+ */
+function reapplyDroppedPin(): void {
+	if (!enforcementTasks || automaticReapplies >= MAX_AUTOMATIC_REAPPLIES) return;
+	automaticReapplies++;
+	browserColorLog("Quality pin dropped by the player - re-applying it", "FgYellow");
+	runEnforcement(enforcementTasks);
+}
+
 function resetEnforcementState(): void {
 	detachQualityChangeListener();
+	automaticReapplies = 0;
+	positionHold = null;
 	enforcement.appliedFormatId = null;
 	enforcement.appliedQuality = null;
 	enforcement.overrideDetected = false;
@@ -390,11 +439,28 @@ function resetEnforcementState(): void {
 	enforcement.verifiedOnce = false;
 }
 
+/**
+ * The single enforcement path. Enable, navigation and a dropped-pin re-apply all hand their apply/verify
+ * pair to the retry seam here, so the pin is put in place by the same code whichever of the three started
+ * it; the pair is kept so a later re-apply re-runs exactly what the page is enforcing.
+ */
+function runEnforcement(tasks: EnforceTasks): void {
+	enforcementTasks = tasks;
+	void registry.playerRetry(metadata.id, tasks, ["applyQuality", "verifyQuality"], {
+		maxAttempts: 30,
+		onPlayerStateChange: true,
+		pageTypes: ["watch", "live", "shorts"],
+		waitForLoaded: true
+	});
+}
+
 export default createFeature({
 	...metadata,
 	onDisable: () => {
 		// Lifecycle already aborted this feature's player retries and state hook before onDisable runs
 		detachQualityChangeListener();
+		enforcementTasks = null;
+		positionHold = null;
 		void registry.playerRetry(metadata.id, [makeRestoreQualityTask()], ["restoreQuality"], {
 			maxAttempts: 10,
 			pageTypes: ["watch", "live", "shorts"],
@@ -408,42 +474,24 @@ export default createFeature({
 		if (player && player.getPlaybackQuality) {
 			currentQuality = (await player.getPlaybackQuality()) as YoutubePlayerQualityLevel;
 		}
-		const [applyTask, verifyTask] = makeApplyQualityTasks(
-			fallbackStrategy,
-			quality,
-			preferPremium ?? false,
-			fpsPreference ?? "default"
-		);
-		void registry.playerRetry(
-			metadata.id,
-			[applyTask, verifyTask],
-			["applyQuality", "verifyQuality"],
-			{
-				maxAttempts: 30,
-				onPlayerStateChange: true,
-				pageTypes: ["watch", "live", "shorts"],
-				waitForLoaded: true
-			}
+		runEnforcement(
+			makeApplyQualityTasks(
+				fallbackStrategy,
+				quality,
+				preferPremium ?? false,
+				fpsPreference ?? "default"
+			)
 		);
 	},
 	onNavigate: ({ fallbackStrategy, fpsPreference, preferPremium, quality }) => {
 		resetEnforcementState();
-		const [applyTask, verifyTask] = makeApplyQualityTasks(
-			fallbackStrategy,
-			quality,
-			preferPremium ?? false,
-			fpsPreference ?? "default"
-		);
-		void registry.playerRetry(
-			metadata.id,
-			[applyTask, verifyTask],
-			["applyQuality", "verifyQuality"],
-			{
-				maxAttempts: 30,
-				onPlayerStateChange: true,
-				pageTypes: ["watch", "live", "shorts"],
-				waitForLoaded: true
-			}
+		runEnforcement(
+			makeApplyQualityTasks(
+				fallbackStrategy,
+				quality,
+				preferPremium ?? false,
+				fpsPreference ?? "default"
+			)
 		);
 	}
 });
