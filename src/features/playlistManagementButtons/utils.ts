@@ -1,7 +1,5 @@
 import { getInnertubeClient } from "@/src/utils/youtube";
 
-const youtube = await getInnertubeClient();
-
 type EditPlaylistResponse = {
 	frameworkUpdates: {
 		entityBatchUpdate: Record<string, unknown>;
@@ -12,11 +10,13 @@ type EditPlaylistResponse = {
 };
 
 export async function removeFromHistory(videoId: string) {
+	const youtube = await getInnertubeClient();
 	const history = await youtube.getHistory();
 	await history.removeVideo(videoId, 5);
 }
 
 export async function removeFromPlaylist(playlistId: string, setVideoIds: string[]) {
+	const youtube = await getInnertubeClient();
 	const response = await youtube.actions.execute("/browse/edit_playlist", {
 		actions: setVideoIds.map((setVideoId) => ({
 			action: "ACTION_REMOVE_VIDEO",

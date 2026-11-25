@@ -11,7 +11,11 @@ import { findInObjectTree } from "@/src/utils/misc";
 let clientPromise: Nullable<ReturnType<typeof createInnertubeClient>> = null;
 
 export function getInnertubeClient() {
-	return (clientPromise ??= createInnertubeClient());
+	clientPromise ??= createInnertubeClient().catch((error) => {
+		clientPromise = null;
+		throw error;
+	});
+	return clientPromise;
 }
 
 export async function isVideoInPlaylist(videoId: string, playlistId: string): Promise<boolean> {
