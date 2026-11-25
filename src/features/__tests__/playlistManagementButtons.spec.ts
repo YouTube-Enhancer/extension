@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import type { Page, Response } from "@playwright/test";
 
 import {
 	CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR,
@@ -388,12 +388,24 @@ test.describe("playlistManagementButtons", () => {
 				.toBe(true);
 			// The three sub-toggles are independent: this one must not bring the per-item buttons along.
 			await expectButtonsRemoved(page);
-			// The click removes the fully watched videos one request at a time; each row leaves the page as its removal
-			// goes through, and with nothing watched left the feature takes its button away too.
+			// The batch path collects every fully watched row up front and removes them in a single
+			// edit_playlist request, so exactly one response - not one per row - is what may come back.
+			// Rows leave as the removal goes through, and with nothing watched left the feature takes
+			// its button away too. Every request has completed by the time the last row is gone, so a
+			// count read after the poll cannot miss a late one.
+			const editPlaylistResponses: boolean[] = [];
+			const countEditPlaylistResponse = (response: Response) => {
+				if (response.url().includes("/youtubei/v1/browse/edit_playlist")) {
+					editPlaylistResponses.push(response.ok());
+				}
+			};
+			page.on("response", countEditPlaylistResponse);
 			await removeAllButton.click();
 			await expect
 				.poll(async () => (await readRemoveAllState(page)).fullyWatched, { timeout: 60_000 })
 				.toBe(0);
+			page.off("response", countEditPlaylistResponse);
+			expect(editPlaylistResponses).toEqual([true]);
 			expect(await readRowProgress(page, WATCH_LATER_SHORT_VIDEO)).toBeNull();
 			await expect(removeAllButton).not.toBeAttached({ timeout: 10_000 });
 			// A reload shows the removal held on the server: the row does not come back.

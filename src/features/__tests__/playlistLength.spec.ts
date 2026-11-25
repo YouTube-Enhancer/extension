@@ -8,6 +8,7 @@ import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType, waitForExtensionReady } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { THUMBNAIL_OVERLAY_SELECTORS, THUMBNAIL_PROGRESS_BAR_SELECTORS } from "@/src/utils/video";
 import {
 	expect,
 	test,
@@ -29,6 +30,13 @@ const PLAYLIST_ITEMS_SELECTOR =
 	"ytd-playlist-video-list-renderer div#contents, yt-item-section-renderer div#contents";
 const PLAYLIST_ITEM_SELECTOR =
 	"ytd-playlist-video-list-renderer div#contents > *, yt-item-section-renderer div#contents > *";
+/** The two places a playlist row renders its duration, in the order the controller reads them. */
+const DURATION_SELECTORS = [
+	"ytd-thumbnail-overlay-time-status-renderer > div#time-status",
+	"badge-shape .ytBadgeShapeText"
+] as const;
+/** Injected onto the synthetic overlay so the test removes the element it added, and nothing else. */
+const INJECTED_OVERLAY_SELECTOR = "[data-test-injected-overlay]";
 /** The UI only counts as rebuilt for a watch page when it lands in the watch layout's playlist header. */
 const WATCH_UI_SELECTOR = [
 	`#page-manager > ytd-watch-flexy #playlist #header-contents ${UI.root}`,
@@ -270,6 +278,70 @@ test.describe("playlistLength", () => {
 			timeout: 20000
 		});
 		await expectUIVisible(page);
+	});
+
+	test(`should re-update the UI when a watch-progress overlay is removed on ${playlist}`, async ({
+		page
+	}) => {
+		await navigateToPageType(page, playlist, ["playlistLength"]);
+		await enablePlaylistLength(page, playlist);
+		await expectUIVisible(page);
+		const watchedBefore = await getWatchedSeconds(page);
+		expect(watchedBefore).not.toBeNull();
+		// The overlay is where YouTube draws a row's watch progress, so one disappearing is what a
+		// watched or reset video looks like to the controller. The fixture rows carry no progress of
+		// their own to lose, so a 100% overlay is injected first: the watched total then rises by
+		// that row's full duration, and only a re-run of the update after it leaves brings it back.
+		const rowDuration = await page.evaluate(
+			({ durationSelectors, itemSelector, overlaySelector, progressSelectors }) => {
+				const toSeconds = (value: string): number =>
+					value.split(":").reduce((total, part) => total * 60 + Number(part), 0);
+				const readDuration = (row: HTMLElement): null | number => {
+					const text = durationSelectors
+						.map((selector) => row.querySelector<HTMLElement>(selector)?.textContent?.trim())
+						.find((value) => value);
+					return text ? toSeconds(text) : null;
+				};
+				// A row that already reports progress would keep reporting it once the injected overlay
+				// leaves, and a zero-duration row cannot move the watched total.
+				const row = Array.from(document.querySelectorAll<HTMLElement>(itemSelector)).find(
+					(candidate) =>
+						!progressSelectors.some((selector) => candidate.querySelector(selector)) &&
+						(readDuration(candidate) ?? 0) > 0
+				);
+				if (!row) return null;
+				const overlay = document.createElement(overlaySelector);
+				// YouTube's own overlay carries its tag name as a class, and that class is what scopes
+				// the progress-bar selector the controller reads the percentage from.
+				overlay.className = overlaySelector;
+				overlay.setAttribute("data-test-injected-overlay", "");
+				const progress = document.createElement("div");
+				progress.id = "progress";
+				progress.style.width = "100%";
+				overlay.append(progress);
+				row.append(overlay);
+				return readDuration(row);
+			},
+			{
+				durationSelectors: DURATION_SELECTORS,
+				itemSelector: PLAYLIST_ITEM_SELECTOR,
+				overlaySelector: THUMBNAIL_OVERLAY_SELECTORS[0],
+				progressSelectors: THUMBNAIL_PROGRESS_BAR_SELECTORS
+			}
+		);
+		expect(rowDuration).not.toBeNull();
+		// The injected overlay reaches the display through the bus's added-node subscription, so this
+		// rise is what proves the row above is the one being counted.
+		await expect
+			.poll(async () => getWatchedSeconds(page), { timeout: 15000 })
+			.toBeGreaterThanOrEqual(watchedBefore! + rowDuration!);
+		await page.evaluate(
+			(selector) => document.querySelector(selector)?.remove(),
+			INJECTED_OVERLAY_SELECTOR
+		);
+		// Nothing else changes on the page between the two reads, so the total coming back down to
+		// its starting value can only be the removed-mutation subscription re-running the update.
+		await expect.poll(async () => getWatchedSeconds(page), { timeout: 15000 }).toBe(watchedBefore);
 	});
 
 	test("should not render UI on non-target page", async ({ page }) => {
