@@ -1,3 +1,5 @@
+import type { ZodMiniType } from "zod/v4-mini";
+
 import browser from "webextension-polyfill";
 
 import type {
@@ -9,6 +11,7 @@ import type {
 } from "@/src/types";
 
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
+import { getConfigurationImportSchema } from "@/src/utils/config/importSchema";
 
 /** Known configuration keys; window-message storage writes are filtered to this set. */
 const allowedConfigKeys = new Set<string>(Object.keys(getDefaultConfiguration()));
@@ -282,6 +285,8 @@ function setupMessageListener() {
 					/**
 					 * Dev-build-only bridge, still narrowed to known configuration keys: the write
 					 * comes from a window message, so whatever arrives is treated as untrusted.
+					 * Values are checked against the shared configuration schema below, so a
+					 * malformed value for one key is dropped instead of written.
 					 */
 					const { data } = rawData;
 					if (typeof data !== "object" || data === null) return;
@@ -290,7 +295,23 @@ function setupMessageListener() {
 							allowedConfigKeys.has(String(key))
 						)
 					);
-					await browser.storage.local.set(filtered);
+					const schemaShape = getConfigurationImportSchema().shape as Record<string, ZodMiniType>;
+					const valid: Record<string, unknown> = {};
+					const rejectedKeys: string[] = [];
+					for (const [entryKey, value] of Object.entries(filtered)) {
+						// The augmented Object.entries types keys as `string | number`;
+						// object keys are strings at runtime.
+						const key = String(entryKey);
+						if (schemaShape[key]?.safeParse(value).success) valid[key] = value;
+						else rejectedKeys.push(key);
+					}
+					if (rejectedKeys.length > 0) {
+						console.warn(
+							"[DevTools ContentScript] Dropped invalid storage-bridge values for keys:",
+							rejectedKeys.join(", ")
+						);
+					}
+					if (Object.keys(valid).length > 0) await browser.storage.local.set(valid);
 				} catch (error) {
 					console.error(
 						"[DevTools ContentScript] Failed to persist storage update from injected script:",
