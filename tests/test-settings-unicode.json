@@ -1,0 +1,7 @@
+{
+	"screenshotButton": {
+		"filename": "YT\ud83c\udfac\u622a\u56fe_\u0442\u0435\u0441\u0442_",
+		"saveAs": "file"
+	},
+	"customCSS": "body::after{content:\"\u65e5\u672c\u8a9e\ud83c\udf89\";}"
+}
