@@ -383,6 +383,14 @@ test.describe("saveToWatchLaterButton", () => {
 			page
 		}) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
+			// Same proven cross-file interference as playlistManagementButtons.spec.ts:414-420: these
+			// tests write this account's Watch Later while sibling specs do the same, and no poll can
+			// out-wait an active writer. The suite skips them and the solo lane runs them afterwards:
+			//   YTE_SOLO_LANE=1 pnpm exec playwright test src/features/__tests__/saveToWatchLaterButton.spec.ts --project=chromium
+			test.skip(
+				!process.env.YTE_SOLO_LANE,
+				"solo lane: cross-file Watch Later writes (run with YTE_SOLO_LANE=1 after the suite)"
+			);
 			test.setTimeout(120_000);
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "saveToWatchLaterButton.enabled");
@@ -424,6 +432,14 @@ test.describe("saveToWatchLaterButton", () => {
 			page
 		}) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
+			// Same proven cross-file interference as playlistManagementButtons.spec.ts:414-420: these
+			// tests write this account's Watch Later while sibling specs do the same, and no poll can
+			// out-wait an active writer. The suite skips them and the solo lane runs them afterwards:
+			//   YTE_SOLO_LANE=1 pnpm exec playwright test src/features/__tests__/saveToWatchLaterButton.spec.ts --project=chromium
+			test.skip(
+				!process.env.YTE_SOLO_LANE,
+				"solo lane: cross-file Watch Later writes (run with YTE_SOLO_LANE=1 after the suite)"
+			);
 			test.setTimeout(120_000);
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "saveToWatchLaterButton.enabled");
@@ -494,6 +510,14 @@ test.describe("saveToWatchLaterButton", () => {
 			page
 		}) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
+			// Same proven cross-file interference as playlistManagementButtons.spec.ts:414-420: these
+			// tests write this account's Watch Later while sibling specs do the same, and no poll can
+			// out-wait an active writer. The suite skips them and the solo lane runs them afterwards:
+			//   YTE_SOLO_LANE=1 pnpm exec playwright test src/features/__tests__/saveToWatchLaterButton.spec.ts --project=chromium
+			test.skip(
+				!process.env.YTE_SOLO_LANE,
+				"solo lane: cross-file Watch Later writes (run with YTE_SOLO_LANE=1 after the suite)"
+			);
 			test.setTimeout(180_000);
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "saveToWatchLaterButton.enabled");
@@ -539,6 +563,14 @@ test.describe("saveToWatchLaterButton", () => {
 			page
 		}) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
+			// Same proven cross-file interference as playlistManagementButtons.spec.ts:414-420: these
+			// tests write this account's Watch Later while sibling specs do the same, and no poll can
+			// out-wait an active writer. The suite skips them and the solo lane runs them afterwards:
+			//   YTE_SOLO_LANE=1 pnpm exec playwright test src/features/__tests__/saveToWatchLaterButton.spec.ts --project=chromium
+			test.skip(
+				!process.env.YTE_SOLO_LANE,
+				"solo lane: cross-file Watch Later writes (run with YTE_SOLO_LANE=1 after the suite)"
+			);
 			test.setTimeout(240_000);
 			await navigateToPageType(page, home);
 			await enableFeature(page, "saveToWatchLaterButton.enabled");
@@ -546,14 +578,29 @@ test.describe("saveToWatchLaterButton", () => {
 			// This test ends by removing the video from Watch Later, so it may only ever act on a video that was
 			// not in the list to begin with. Only a candidate whose membership resolves to a definite false is
 			// used; an unresolved one is left alone rather than assumed unsaved.
-			const candidateIds = await readCardVideoIds(page, 3);
+			// The first three cards starve on a busy account (sibling specs have just written the same list),
+			// so the window widens with the feed itself instead of being a fixed count.
+			const candidateIds: string[] = [];
+			await scrollFeedUntil(
+				page,
+				async () => {
+					for (const id of await readCardVideoIds(page, 12))
+						if (!candidateIds.includes(id)) candidateIds.push(id);
+					return candidateIds.length >= 6;
+				},
+				30000
+			);
 			expect(
 				candidateIds.length,
 				"no feed card with a save button and a readable video id"
 			).toBeGreaterThan(0);
 			let videoId: null | string = null;
 			for (const candidateId of candidateIds) {
-				if ((await readWatchLaterMembership(page, candidateId)) !== false) continue;
+				// A membership read can fail to resolve (the probe page timed out loading its button); that is
+				// "unknown", not "already in the list", so it gets one retry before the candidate is dropped.
+				let membership = await readWatchLaterMembership(page, candidateId);
+				if (membership === null) membership = await readWatchLaterMembership(page, candidateId);
+				if (membership !== false) continue;
 				videoId = candidateId;
 				break;
 			}

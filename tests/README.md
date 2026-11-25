@@ -120,6 +120,12 @@ Some tests are quarantined or on a watch list, and the conventions for both are:
 YTE_SOLO_LANE=1 pnpm exec playwright test src/features/__tests__/playlistManagementButtons.spec.ts:388 --project=chromium
 ```
 
+The server-writing `saveToWatchLaterButton.spec.ts` tests (the actions-row toggle, the fallback-client round trip, the already-in-Watch-Later membership read and the home-feed card save) carry the same guard for the same reason — parallel same-account writes starve their icon and membership polls. After the suite:
+
+```
+YTE_SOLO_LANE=1 pnpm exec playwright test src/features/__tests__/saveToWatchLaterButton.spec.ts --project=chromium
+```
+
 Solo means alone in the invocation: batching it with other specs that write the same account's playlists reproduces the failure.
 
 **Flaky rotation watch list.** Failures in these get rerun alone with `--workers=1` before being treated as regressions (line numbers refer to this tree and drift; the test names are the anchor):
