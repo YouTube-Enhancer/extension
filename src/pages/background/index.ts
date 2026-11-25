@@ -1,6 +1,8 @@
+import type EnUS from "@/public/locales/en-US.json.d";
 import type { ContentToBackgroundSendOnlyMessages, DevToolsMessages, Nullable } from "@/src/types";
 
 import { setDefaultValues } from "@/src/defaults";
+import { availableLocales } from "@/src/i18n/constants";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { updateStoredSettings } from "@/src/utils/config/storage";
 import {

@@ -40,13 +40,12 @@ export async function i18nService(locale: AvailableLocales = "en-US") {
 	}
 }
 async function createLocaleInstance(locale: AvailableLocales): Promise<i18nInstanceType> {
-	const extensionURL = await getExtensionURL();
 	// i18next can only fall back to en-US when its resources are present in the instance, so every instance
 	// loads them alongside the target locale. The en-US fetch is shared across instances; when the target
 	// locale is en-US itself it doubles as the target's own fetch.
-	const fallbackTranslationsPromise = loadFallbackTranslations(extensionURL);
+	const fallbackTranslationsPromise = loadFallbackTranslations();
 	const translationsPromise =
-		locale === "en-US" ? fallbackTranslationsPromise : fetchTranslations(extensionURL, locale);
+		locale === "en-US" ? fallbackTranslationsPromise : fetchTranslations(locale);
 	const [translations, fallbackTranslations] = await Promise.all([
 		translationsPromise,
 		fallbackTranslationsPromise
@@ -81,43 +80,70 @@ async function createLocaleInstance(locale: AvailableLocales): Promise<i18nInsta
 		);
 	});
 }
-async function fetchTranslations(
-	extensionURL: string,
-	locale: AvailableLocales
-): Promise<Translations> {
-	const response = await fetch(`${extensionURL}locales/${locale}.json`).catch((err) => {
-		if (err instanceof Error) {
-			throw err;
-		} else {
-			throw new Error("unknown error");
+/**
+ * Loads one locale's messages.
+ *
+ * In an extension context (settings, devtools) the locale file is fetched directly, exactly as
+ * before. In the page world — where the embedded bundle runs on youtube.com — Chrome ≥157
+ * refuses any `chrome-extension://` load initiated by the frame, so the file is read by the
+ * content script (isolated world, allowed) and the messages arrive over the window bridge.
+ * Either way the caller receives the parsed translations, never a URL it might not be able to
+ * fetch.
+ */
+async function fetchTranslations(locale: AvailableLocales): Promise<Translations> {
+	if (isPageWorld()) return fetchTranslationsViaContent(locale);
+	const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`).catch(
+		(err) => {
+			if (err instanceof Error) {
+				throw err;
+			} else {
+				throw new Error("unknown error");
+			}
 		}
-	});
+	);
 	return (await response.json()) as Translations;
 }
-async function getExtensionURL(): Promise<string> {
-	const {
-		location: { hostname }
-	} = window;
-	const isYouTube = hostname === "youtube.com" || hostname.endsWith(".youtube.com");
-	if (!isYouTube) return chrome.runtime.getURL("");
-	const extensionURLResponse = await waitForSpecificMessage(
-		"extensionURL",
+/**
+ * Asks the content script to read the locale file and send the messages back.
+ *
+ * The data crosses the bridge instead of a URL: handing the page a `chrome-extension://` URL
+ * would leave it with a resource Chrome refuses it to load. `null` means the file could not be
+ * read (unknown locale, missing or unreadable file) and is turned into a throw, matching the
+ * rejection a failed fetch would have produced.
+ */
+async function fetchTranslationsViaContent(locale: AvailableLocales): Promise<Translations> {
+	const translationsResponse = await waitForSpecificMessage(
+		"translations",
 		"request_data",
-		"content"
+		"content",
+		{ locale }
 	);
-	if (!extensionURLResponse) throw new Error("Failed to get extension URL");
 	const {
-		data: { extensionURL }
-	} = extensionURLResponse;
-	return extensionURL;
+		data: { translations }
+	} = translationsResponse;
+	if (!translations) throw new Error(`Failed to load translations for '${locale}'`);
+	return translations;
 }
-function loadFallbackTranslations(extensionURL: string): Promise<Translations> {
-	fallbackTranslationsPromise ??= fetchTranslations(extensionURL, "en-US").catch(
-		(error: unknown) => {
-			// A failed load must not poison the cache, otherwise en-US could never be loaded again.
-			fallbackTranslationsPromise = undefined;
-			throw error;
-		}
-	);
+/**
+ * True when this module is running as a page script rather than in an extension context.
+ *
+ * Only extension pages and isolated-world scripts get `chrome.runtime.getURL`; a page-world
+ * copy of this module (the embedded bundle injected into youtube.com) does not, and any
+ * `chrome-extension://` fetch it attempted would be refused by the frame check anyway.
+ */
+function isPageWorld(): boolean {
+	try {
+		return typeof chrome === "undefined" || typeof chrome.runtime?.getURL !== "function";
+	} catch {
+		// A `chrome.runtime` that cannot even be read is not an extension context either.
+		return true;
+	}
+}
+function loadFallbackTranslations(): Promise<Translations> {
+	fallbackTranslationsPromise ??= fetchTranslations("en-US").catch((error: unknown) => {
+		// A failed load must not poison the cache, otherwise en-US could never be loaded again.
+		fallbackTranslationsPromise = undefined;
+		throw error;
+	});
 	return fallbackTranslationsPromise;
 }

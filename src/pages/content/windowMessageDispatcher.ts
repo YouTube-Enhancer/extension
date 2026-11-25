@@ -9,6 +9,7 @@
 
 import browser from "webextension-polyfill";
 
+import type EnUS from "@/public/locales/en-US.json.d";
 import type { FeatureKeysWithState, FeatureState } from "@/src/features/_registry/types";
 import type {
 	configuration,
@@ -23,7 +24,7 @@ import { videoHistoryEntrySchema } from "@/src/features/videoHistory/index.metad
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { deepMerge, parseStoredValue } from "@/src/utils/config/utils";
-import { waitForReady } from "@/src/utils/embedded/instanceLiveness";
+import { READY_ATTR, waitForReady } from "@/src/utils/embedded/instanceLiveness";
 import { MESSAGE_ORIGIN, sendExtensionMessage } from "@/src/utils/messaging";
 import { getCurrentVideoId } from "@/src/utils/url";
 
@@ -287,6 +288,41 @@ export const onWindowMessage = (event: MessageEvent) => {
 						);
 						break;
 					}
+					case "translations": {
+						/**
+						 * The embedded script runs in youtube.com's page world, where Chrome ≥157
+						 * refuses the frame's cross-origin `chrome-extension://` load — and the
+						 * same refusal covers this isolated world, so the file cannot be read here
+						 * either. The background worker (extension origin, no frame) fetches it
+						 * instead; this case is a pure relay: the parsed messages — not a URL the
+						 * page would be refused for fetching — cross the bridge.
+						 */
+						const {
+							data: { locale }
+						} = message;
+						let translations: EnUS | null = null;
+						try {
+							const response = (await browser.runtime.sendMessage({
+								action: "request_action",
+								data: { locale },
+								source: "content",
+								type: "getTranslations"
+							} satisfies ContentToBackgroundSendOnlyMessages)) as
+								| undefined
+								| { translations: EnUS | null };
+							translations = response?.translations ?? null;
+						} catch {
+							// Worker unreachable: answer `null` so the page throws instead of waiting out the bridge timeout.
+							translations = null;
+						}
+						void sendExtensionMessage(
+							"translations",
+							"data_response",
+							{ locale, translations },
+							requestId
+						);
+						break;
+					}
 				}
 				break;
 			}
@@ -361,6 +397,17 @@ export const onWindowMessage = (event: MessageEvent) => {
 						if (!isStorageForwardingEnabledHook()) {
 							const ready = await waitForReady(30_000);
 							if (!ready) {
+								/**
+								 * Loud on purpose: this is the second gate on the same readiness
+								 * signal, and a silent timeout here hides a dead page-world script
+								 * behind a generic failed acknowledgement.
+								 */
+								console.warn(
+									`[yte] waitForReady timed out after 30000 ms for the test config ` +
+										`write of "${key}" (nonce ${nonce}): document.documentElement never ` +
+										`published the ${READY_ATTR} attribute, so the page-world embedded ` +
+										`script is not running. Acknowledging the write as failed.`
+								);
 								acknowledge("failed");
 								break;
 							}

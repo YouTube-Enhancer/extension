@@ -706,6 +706,20 @@ export type MessageMappings = Prettify<{
 			{ [K in FeatureKeysWithState]: FeatureState[`state:${K}`] }
 		>;
 	};
+	/**
+	 * The page-world embedded script cannot fetch `chrome-extension://` resources itself —
+	 * Chrome ≥157 refuses the frame's cross-origin load — so it asks the content script (isolated
+	 * world, where the same fetch is allowed) to read the locale file and return the parsed
+	 * messages. A URL would be useless to the page; the data crosses instead.
+	 */
+	translations: {
+		request: RequestDataMessage<"translations", { locale: AvailableLocales }>;
+		response: DataResponseMessage<
+			"translations",
+			/** `null` = the file could not be read; the page turns that into a throw. */
+			{ locale: AvailableLocales; translations: EnUS | null }
+		>;
+	};
 }>;
 export type Messages = MessageMappings[keyof MessageMappings];
 export type MessageSource = "content" | "devtools" | "extension";
