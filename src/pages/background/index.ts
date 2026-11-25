@@ -161,7 +161,7 @@ chrome.runtime.onMessage.addListener(
 						return;
 					}
 					if (!enabled) return;
-					chrome.tabs.query({ url: "https://www.youtube.com/*" }, (tabs) => {
+					chrome.tabs.query({ url: "https://*.youtube.com/*" }, (tabs) => {
 						for (const tab of tabs) {
 							if (tab.id === senderTabId) continue;
 							if (tab.id !== undefined) {
