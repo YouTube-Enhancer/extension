@@ -1,0 +1,161 @@
+import type { Page } from "@playwright/test";
+
+import type { PageType } from "@/src/features/_registry/types";
+
+import { expectBodyWithClass, expectBodyWithoutClass } from "@/src/utils/_tests/assertions";
+import { pageTypeRecord } from "@/src/utils/_tests/constants";
+import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import {
+	expect,
+	test,
+	verifyDefaults,
+	verifyNavigationPersistence,
+	verifyReEnableCycle,
+	verifyReloadPersistence
+} from "@/tests/harness";
+
+const { channel_videos: channelVideos, watch } = pageTypeRecord;
+
+// The feature has no page-specific branch; an explicit page set avoids running every test on all 11 page types.
+const testPages: PageType[] = [channelVideos, watch];
+
+/** The count itself only reaches the page through this custom property, which the grid CSS reads. */
+async function expectVideosPerRowCount(page: Page, count: number): Promise<void> {
+	await expect
+		.poll(
+			() =>
+				page.evaluate(() =>
+					document.documentElement.style.getPropertyValue("--yte-videos-per-row-count")
+				),
+			{ timeout: 15000 }
+		)
+		.toBe(String(count));
+}
+
+/**
+ * The number of grid columns actually laid out, taken as the size of the widest rendered row. Every tile in a row
+ * shares its top offset, so tiles are grouped by that. Left offsets cannot be used: the channel grid is laid out with
+ * flex and shifts a few pixels horizontally while the feed loads, which counts a single column more than once.
+ */
+async function getRenderedColumnCount(page: Page): Promise<number> {
+	return page.evaluate(() => {
+		const tops = Array.from(
+			document.querySelectorAll<HTMLElement>("ytd-rich-grid-renderer ytd-rich-item-renderer")
+		)
+			.map((tile) => tile.getBoundingClientRect())
+			.filter((rect) => rect.width > 0 && rect.height > 0)
+			.map(({ top }) => top)
+			.sort((a, b) => a - b);
+		let widest = 0;
+		let rowTop = -Infinity;
+		let inRow = 0;
+		for (const top of tops) {
+			if (Math.abs(top - rowTop) > 4) {
+				rowTop = top;
+				inRow = 1;
+			} else {
+				inRow++;
+			}
+			widest = Math.max(widest, inRow);
+		}
+		return widest;
+	});
+}
+
+test.describe("videosPerRow", () => {
+	const assertOn = async (page: Page) => {
+		await expectBodyWithClass(page, "yte-videos-per-row", { timeout: 15000 });
+		await expectVideosPerRowCount(page, 6);
+	};
+	const assertOff = async (page: Page) => {
+		await expectBodyWithoutClass(page, "yte-videos-per-row", { timeout: 15000 });
+		await expect
+			.poll(
+				() =>
+					page.evaluate(() =>
+						document.documentElement.style.getPropertyValue("--yte-videos-per-row-count")
+					),
+				{ timeout: 10000 }
+			)
+			.toBe("");
+	};
+	const subject = { assertOff, assertOn };
+	const setup = async (page: Page) => {
+		await setOption(page, "videosPerRow.videosPerRow", 6);
+	};
+	for (const pageType of testPages) {
+		test(`should set videos per row on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await setOption(page, "videosPerRow.videosPerRow", 6);
+			await enableFeature(page, "videosPerRow.enabled");
+			await expectBodyWithClass(page, "yte-videos-per-row", { timeout: 15000 });
+			await expectVideosPerRowCount(page, 6);
+		});
+		test(`persists videos per row after full page reload on ${pageType}`, async ({ page }) => {
+			await verifyReloadPersistence(page, pageType, "videosPerRow", { ...subject, setup });
+		});
+		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
+			await verifyReEnableCycle(page, pageType, "videosPerRow", { ...subject, setup });
+		});
+		test(`should update on config change on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await setOption(page, "videosPerRow.videosPerRow", 6);
+			await enableFeature(page, "videosPerRow.enabled");
+			await expectBodyWithClass(page, "yte-videos-per-row", { timeout: 15000 });
+			await expectVideosPerRowCount(page, 6);
+			await setOption(page, "videosPerRow.videosPerRow", 8);
+			await expectVideosPerRowCount(page, 8);
+		});
+	}
+
+	// Fresh page with the shipped defaults, before any enable: neither the body class nor the
+	// count variable may reach the page.
+	test(`should not set videos per row by default on ${watch}`, async ({ page }) => {
+		await verifyDefaults(page, watch, subject);
+	});
+
+	test(`renders the configured number of grid columns on ${channelVideos}`, async ({ page }) => {
+		await navigateToPageType(page, channelVideos);
+		// The suite runs at 1280px wide, where the stylesheet clamps to min(4, count), so only counts up to 4 reach the grid.
+		await setOption(page, "videosPerRow.videosPerRow", 2);
+		await enableFeature(page, "videosPerRow.enabled");
+		await expectBodyWithClass(page, "yte-videos-per-row", { timeout: 15000 });
+		await expectVideosPerRowCount(page, 2);
+		await expect.poll(() => getRenderedColumnCount(page), { timeout: 15000 }).toBe(2);
+		await setOption(page, "videosPerRow.videosPerRow", 3);
+		await expectVideosPerRowCount(page, 3);
+		await expect.poll(() => getRenderedColumnCount(page), { timeout: 15000 }).toBe(3);
+	});
+	test(`removes the count variable when disabled on ${channelVideos}`, async ({ page }) => {
+		await navigateToPageType(page, channelVideos);
+		await setOption(page, "videosPerRow.videosPerRow", 6);
+		await enableFeature(page, "videosPerRow.enabled");
+		await expectVideosPerRowCount(page, 6);
+		await disableFeature(page, "videosPerRow.enabled");
+		await expectBodyWithoutClass(page, "yte-videos-per-row", { timeout: 15000 });
+		// onDisable removes the property as well; leaving it behind would resurface the stale count when the class returns.
+		await expect
+			.poll(
+				() =>
+					page.evaluate(() =>
+						document.documentElement.style.getPropertyValue("--yte-videos-per-row-count")
+					),
+				{ timeout: 10000 }
+			)
+			.toBe("");
+	});
+	// All pages: the feature declares no includePages, so the case is the effect surviving an SPA
+	// navigation rather than re-arm on a new page type.
+	test(`videos per row should persist after navigation on ${watch}`, async ({ page }) => {
+		// A genuine in-page navigation to another video, so the navigation manager's yt-navigate
+		// listeners run instead of a fresh document load re-running onEnable.
+		await verifyNavigationPersistence(
+			page,
+			watch,
+			"videosPerRow",
+			{ ...subject, setup },
+			(navPage) => spaNavigateToRelatedVideo(navPage)
+		);
+	});
+});
