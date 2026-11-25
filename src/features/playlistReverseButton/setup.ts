@@ -51,6 +51,7 @@ function setupNativeMiniPlayerDetection(stateAPI: StateAPI) {
 
 async function setupOnPlaylistPage(stateAPI: StateAPI) {
 	const generation = nextSetupGeneration();
+	// Page content (the playlist page's list), not player-owned: stays a generic wait.
 	const list = await waitForElement<HTMLElement>(PLAYLIST_PAGE_WAIT_SELECTOR, 5000, "optional");
 	if (!list) return;
 
@@ -100,6 +101,7 @@ async function setupOnWatchPage(stateAPI: StateAPI) {
 	if (!new URLSearchParams(window.location.search).has("list")) return;
 	setupReversalMaintenance(stateAPI, generation);
 
+	// Page chrome (the sidebar playlist panel), not player-owned: stays a generic wait.
 	const panel = await waitForElement("ytd-playlist-panel-renderer", 5000, "optional");
 	if (!panel) return;
 
@@ -143,6 +145,10 @@ function setupReversalMaintenance(stateAPI: StateAPI, generation: number) {
 		// other hand-over event's poll reads, so the two announcements cannot double-restore.
 		void poll(
 			() => {
+				// The hand-over answered here can still be in flight when the feature is torn
+				// down: only the poll's result is generation-checked below, so the loop itself
+				// has to stand down too, or it re-applies the reversal the disable just undid.
+				if (generation !== currentSetupGeneration()) return false;
 				if (!isWatchPage() || !stateAPI.getState().isReversed) return false;
 				if (!isPlaylistDataCurrent()) return false;
 				return matchReversalToState(true);

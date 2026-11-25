@@ -93,6 +93,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 	};
 	document.addEventListener("yt-action", preparePageDisposeListener);
 	void (async () => {
+		// Page content (the playlist page's sort menu), not player-owned: stays a generic wait.
 		if (
 			!(await waitForElement(
 				"ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)",
@@ -360,7 +361,15 @@ export default createFeature({
 		setupPlaylistManagementButtons(config);
 	},
 	onDisable: cleanupPlaylistManagementButtons,
-	onEnable: setupPlaylistManagementButtons,
+	onEnable: (config) => {
+		// A reconcile hands this feature onConfigChange before onEnable when one write both
+		// changes the config and switches the feature on, so a setup can already be live here.
+		// Tearing it down first keeps setupGeneration and the live subscription in step:
+		// observePlaylist refuses to attach while one is registered, and the generation bump
+		// inside setup would otherwise strand the subscription the earlier setup left behind.
+		cleanupPlaylistManagementButtons();
+		setupPlaylistManagementButtons(config);
+	},
 	onLanguageChange: () => {
 		if (removeAllButton) {
 			const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
