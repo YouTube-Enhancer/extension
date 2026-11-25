@@ -10,7 +10,11 @@ import { videoHistoryResumeTypes, videoHistoryStatuses } from "@/src/features/vi
  * page-facing write boundary instead of keeping a second copy of the shape.
  */
 const videoHistoryEntrySchema = z.object({
-	id: z.string(),
+	// Bounded here rather than at each writer: the entry id is a video id (11 chars), and the
+	// shared schema is what the content script enforces at the page-facing write boundary, so an
+	// unbounded id would let a page fatten entries until the merged map exhausts storage quota.
+	// (zod/v4-mini has no `.max()` string method; `check(z.maxLength(64))` is its equivalent.)
+	id: z.string().check(z.maxLength(64)),
 	status: z.enum(videoHistoryStatuses),
 	timestamp: z.number()
 });

@@ -50,6 +50,17 @@ const MAX_STATE_JSON_BYTES = 100_000;
 /** videoHistory entries kept in storage; the oldest beyond this are pruned on write. */
 const MAX_HISTORY_ENTRIES = 1000;
 /**
+ * videoHistory map keys are video ids (11 chars); 64 is the write-boundary ceiling. The entry id
+ * is bounded by the shared schema, but map keys are arbitrary strings a page chooses, so without
+ * this a page could fatten keys entry-by-entry until the merged map exhausts the storage quota.
+ */
+const MAX_HISTORY_KEY_LENGTH = 64;
+/**
+ * Serialized ceiling for the merged videoHistory map — ~10x a legitimate 1000-entry history
+ * (entry = 11-char id + enum status + number, so the whole map is tens of KB).
+ */
+const MAX_HISTORY_BYTES = 1_000_000;
+/**
  * The content script applies the feature's own stateSchema (exported by its
  * index.metadata.ts) at the page-facing write boundary, and hydration applies the same schema
  * again inside the page-world registry. Without the write-boundary check a page-planted invalid
@@ -197,10 +208,18 @@ const scopeStateForPage = (state: StoredFeatureState): StoredFeatureState => {
 		videoId && entry && isValidVideoHistoryEntry(entry) ? { [videoId]: entry } : {};
 	return { ...state, videoHistory: { ...history, storage: scopedStorage } };
 };
+/** Set once a refused over-budget write has been reported, so a flooding page can't spam the log. */
+let historyBudgetWarned = false;
 /**
  * Page-originated videoHistory updates are merged entry-by-entry instead of replacing the stored
- * map, so a page script cannot wipe or rewrite the history of videos other than its own. The
- * entry count is capped so repeated writes cannot grow storage without bound.
+ * map, and only the entry for the video the page currently owns may be applied: incoming keys
+ * other than `getCurrentVideoId()` are ignored entirely, so a page script can neither wipe the
+ * stored map nor add or rewrite entries for videos other than its own. The entry count and the
+ * serialized size are capped so repeated writes cannot grow storage without bound.
+ *
+ * Cost of the ownership rule: a legitimate push batches the whole page-side state map, so an
+ * entry for an earlier video of this session that is not yet in storage (its write failed, or it
+ * comes from a legacy `localStorage` migration) is dropped here instead of being re-added.
  */
 const mergeVideoHistoryUpdate = async (incomingState: unknown): Promise<void> => {
 	const incoming = (incomingState as null | { storage?: unknown })?.storage;
@@ -211,12 +230,27 @@ const mergeVideoHistoryUpdate = async (incomingState: unknown): Promise<void> =>
 		undefined | { storage?: Record<string, unknown> }
 	>;
 	/**
+	 * Ownership gate: only the current video's incoming key may add to or overwrite storage;
+	 * every other candidate key comes from `stored` alone, so unowned incoming keys can neither
+	 * replace an existing entry nor inject a new one.
+	 */
+	const incomingStorage = incoming as Record<string, unknown>;
+	const ownedVideoId = getCurrentVideoId();
+	const candidates = { ...stored?.storage } as Record<string, unknown>;
+	if (ownedVideoId && Object.hasOwn(incomingStorage, ownedVideoId)) {
+		const { [ownedVideoId]: ownedEntry } = incomingStorage;
+		candidates[ownedVideoId] = ownedEntry;
+	}
+	/**
 	 * Self-healing filter: every entry, incoming or already stored, must satisfy the feature's
 	 * schema, so invalid data can neither enter storage nor survive there to fail hydration.
+	 * Keys over the video-id ceiling are skipped for the same reason — the schema bounds the
+	 * entry id but not the page-chosen map key, and a stored key that oversized is already part
+	 * of the quota problem (real history keys are video ids, so none of them are dropped).
 	 */
-	const candidates = { ...stored?.storage, ...incoming } as Record<string, unknown>;
 	const mergedStorage: Record<string, unknown> = {};
 	for (const entryKey of Object.keys(candidates)) {
+		if (entryKey.length > MAX_HISTORY_KEY_LENGTH) continue;
 		const { [entryKey]: entryValue } = candidates;
 		if (isValidVideoHistoryEntry(entryValue)) mergedStorage[entryKey] = entryValue;
 	}
@@ -232,6 +266,20 @@ const mergeVideoHistoryUpdate = async (incomingState: unknown): Promise<void> =>
 			.forEach((entryKey) => delete mergedStorage[entryKey]);
 	}
 	const merged = { ...stored, storage: mergedStorage } as StoredFeatureState["videoHistory"];
+	/**
+	 * Byte budget: refuse the write rather than truncate stored entries. Dropping the incoming
+	 * additions keeps storage as it is, so a flooding page can never shrink real history to fit
+	 * its own payload; the stored map alone is never cut down to fit under the ceiling.
+	 */
+	if (JSON.stringify(mergedStorage).length > MAX_HISTORY_BYTES) {
+		if (!historyBudgetWarned) {
+			historyBudgetWarned = true;
+			console.warn(
+				`[yte] videoHistory write refused: merged map exceeds ${MAX_HISTORY_BYTES} bytes; keeping stored entries`
+			);
+		}
+		return;
+	}
 	await storage.local.set({ [key]: merged });
 	if (cachedState) {
 		cachedState = { ...cachedState, videoHistory: merged };
