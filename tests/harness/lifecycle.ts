@@ -204,7 +204,29 @@ export async function verifyShippedDefaults(featureId: string): Promise<void> {
 	expect(await loadDefaultConfig()).toMatchObject({ [featureId]: { enabled: false } });
 }
 
-function enabledKey(featureId: string): Parameters<typeof enableFeature>[1] {
+/**
+ * The config path that actually switches a feature on and off, read off its shipped defaults.
+ *
+ * `${featureId}.enabled` exists only for features whose config carries a top-level `enabled`.
+ * Button-only features keep their switch under `button.enabled`, and writing the top-level path
+ * there would invent a key no schema declares: `resolveEnabled` reads that phantom key before
+ * anything nested, so the feature's state flips while placement — which gates every button on the
+ * real `button.enabled` — never does. The observable failures are the cluster's two shapes: the
+ * first attach never happens (state on, button gate off), or, for a spec that enables through the
+ * real key, the disable's phantom write poisons `resolveEnabled` and the re-enable's identical
+ * real writes are acknowledged without a reconcile, so nothing re-attaches. Features whose
+ * defaults carry neither key keep the historical path.
+ */
+async function enabledKey(featureId: string): Promise<Parameters<typeof enableFeature>[1]> {
+	const defaults = (await loadDefaultConfig()) as unknown as Record<string, unknown>;
+	const { [featureId]: config } = defaults;
+	if (config && typeof config === "object") {
+		const { button, enabled } = config as { button?: { enabled?: unknown }; enabled?: unknown };
+		if (typeof enabled === "boolean")
+			return `${featureId}.enabled` as Parameters<typeof enableFeature>[1];
+		if (typeof button?.enabled === "boolean")
+			return `${featureId}.button.enabled` as Parameters<typeof enableFeature>[1];
+	}
 	return `${featureId}.enabled` as Parameters<typeof enableFeature>[1];
 }
 
@@ -218,7 +240,7 @@ function subjectFor(
 ): LifecycleSubject & Required<Pick<LifecycleSubject, "disable" | "enable">> {
 	return {
 		...subject,
-		disable: subject.disable ?? ((page) => disableFeature(page, enabledKey(featureId))),
-		enable: subject.enable ?? ((page) => enableFeature(page, enabledKey(featureId)))
+		disable: subject.disable ?? (async (page) => disableFeature(page, await enabledKey(featureId))),
+		enable: subject.enable ?? (async (page) => enableFeature(page, await enabledKey(featureId)))
 	};
 }
