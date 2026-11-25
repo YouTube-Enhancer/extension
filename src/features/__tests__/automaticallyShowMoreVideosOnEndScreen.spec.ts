@@ -4,9 +4,10 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/automaticallyShowMoreVideosOnEndScreen/index.metadata";
 import { expectBodyWithClass, expectBodyWithoutClass } from "@/src/utils/_tests/assertions";
+import { turnOffAutoPlay } from "@/src/utils/_tests/autoPlay";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 import {
@@ -63,39 +64,6 @@ async function playToEnd(page: Page): Promise<boolean> {
 	}
 	return true;
 }
-/**
- * Switches YouTube's own autoplay off, so the ended video stays on screen. A click aimed at a player YouTube has
- * not finished wiring up is dropped and leaves the toggle on, so the click is repeated a few times instead of
- * trusting the first one. When YouTube's newer control bar has folded the toggle away (inline `display: none`)
- * the button is inert; the player's own autonav API is tried then, and a fresh load, which usually unfolds it,
- * is the fallback after that.
- */
-async function turnOffAutoPlay(page: Page): Promise<void> {
-	const toggleState = page.locator(".ytp-autonav-toggle-button");
-	for (let load = 0; load < 3; load++) {
-		await expect(toggleState).toHaveAttribute("aria-checked", /^(true|false)$/);
-		for (let attempt = 0; attempt < 4; attempt++) {
-			if ((await toggleState.getAttribute("aria-checked")) === "false") return;
-			await page.locator(".ytp-autonav-toggle").evaluate((el) => {
-				const toggle = el as HTMLButtonElement;
-				const player = document.querySelector<
-					HTMLElement & { setAutonav?: (enabled: boolean) => void }
-				>("#movie_player");
-				if (toggle.style.display === "none" && typeof player?.setAutonav === "function")
-					player.setAutonav(false);
-				else toggle.click();
-			});
-			const off = await expect(toggleState)
-				.toHaveAttribute("aria-checked", "false", { timeout: 2500 })
-				.then(() => true)
-				.catch(() => false);
-			if (off) return;
-		}
-		await reloadPage(page, watch);
-	}
-	await expect(toggleState).toHaveAttribute("aria-checked", "false");
-}
-
 test.describe("automaticallyShowMoreVideosOnEndScreen", () => {
 	const assertOn = async (page: Page) => {
 		await expectBodyWithClass(page, "yte-show-html5-endscreen", { timeout: 15000 });

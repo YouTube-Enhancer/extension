@@ -1,6 +1,7 @@
 import type { Page } from "@playwright/test";
 
 import type { PageType } from "@/src/features/_registry/types";
+import type { YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/hideEndscreenRecommendedVideos/index.metadata";
 import {
