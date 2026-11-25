@@ -6,7 +6,8 @@ import {
 	CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR,
 	PLAYLIST_ITEM_SELECTOR
 } from "@/src/features/playlistManagementButtons/constants";
-import { hasAmbientModeMenuItem } from "@/src/utils/_tests/ambient";
+import { hasAmbientModeMenuItem, readSettledShortsAmbientState } from "@/src/utils/_tests/ambient";
+import { reloadPage } from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 import { ensureCaptionsState, getCaptionsState } from "@/src/utils/_tests/player";
 import { PLAYLIST_PAGE_HEADER_SELECTORS } from "@/src/utils/dom/selectors";
@@ -70,6 +71,21 @@ export async function verifyFixtureCapabilities(
 const capabilityChecks: Record<FixtureCapabilities, CapabilityCheck> = {
 	ambientMode: async (page, pageType) => {
 		await ensurePlayerControlsVisible(page, pageType);
+		if (pageType === "shorts") {
+			// Shorts has no ytp settings panel; the row lives in the reel's "more" sheet. false/true
+			// means the row exists (the test body establishes ON itself), so only "no row" denies the
+			// offer — and the settled read reports that by starving its not-to-null poll: expect.poll
+			// raises that starvation instead of resolving null, so it is read as the reason here. The
+			// sheet's own container wait fails under a different matcher and still surfaces as a
+			// failure, the way ambient.ts means it to.
+			let state: boolean | null = null;
+			try {
+				state = await readSettledShortsAmbientState(page);
+			} catch (error) {
+				if (!(error instanceof Error) || !error.message.includes("not.toBeNull()")) throw error;
+			}
+			return state === null ? "the reel's sheet has no ambient mode row" : null;
+		}
 		return (await hasAmbientModeMenuItem(page))
 			? null
 			: "the settings menu has no ambient mode row";
@@ -94,61 +110,92 @@ const capabilityChecks: Record<FixtureCapabilities, CapabilityCheck> = {
 		if (!(await ensureCaptionsState(page, false))) return "captions could not be restored to off";
 		return null;
 	},
-	commentTimestamps: async (page) => {
-		// YouTube loads comments when the section scrolls into view.
-		await page
-			.locator("#comments")
-			.evaluate((comments) => comments.scrollIntoView({ block: "start" }))
-			.catch(() => {});
+	commentTimestamps: async (page, pageType) => {
+		// YouTube loads comments when the section scrolls into view, and a section the page scrolled
+		// away from again never loads: the scroll rides every poll attempt instead of being a one-shot
+		// before it (a swallowed single scroll used to fail this check on a page that renders the
+		// comments fine). The section also has to exist before it can be scrolled — a locator that has
+		// not attached yet makes scrollIntoView a silent no-op, which is what let "never loaded" become
+		// self-fulfilling on a page whose section renders late — so an attempt waits for #comments to
+		// attach, scrolls, and only lets a zero thread count say "never loaded" once the scroll is
+		// verified to have taken. A zero count is also unreadable while the section still ranks
+		// by "Top comments": a video's Top payload can carry its count and no thread at all
+		// (yk4I80XVuk4), so an attempt switches the sort to Newest before the count is polled
+		// (probe: threads land within about four seconds of the switch) and reports the
+		// switch's own failure — no sort control, no Newest option — as itself rather than as
+		// a load failure. One document that fills nothing is a loading problem, not a fixture
+		// gap: the attempt is retried on a reloaded document before the load is called
+		// impossible.
+		const firstAttempt = await loadCommentThreads(page);
+		if (firstAttempt !== null) {
+			await reloadPage(page, pageType);
+			const secondAttempt = await loadCommentThreads(page);
+			// The retry's answer is the one that describes the document now on screen.
+			if (secondAttempt !== null) return secondAttempt;
+		}
+		// Splitting the two reasons is what makes the skip honest: "comments never loaded" is a
+		// loading problem this check retried, "no timestamp links" is the fixture saying it has
+		// none. A shared catch reported the second for the first.
 		try {
 			await expect
-				.poll(() => page.locator("ytd-comment-thread-renderer").count(), { timeout: 15_000 })
-				.toBeGreaterThan(0);
-			await expect
-				.poll(() => timestampLinkCount(page, true), { timeout: 10_000 })
+				.poll(() => timestampLinkCount(page, true), { timeout: 20_000 })
 				.toBeGreaterThan(0);
 			return null;
 		} catch {
 			return "the top comments carry no timestamp links";
 		}
 	},
-	dubbedAudio: async (page) =>
-		await page.evaluate(async () => {
-			const selector = document.location.pathname.startsWith("/shorts")
-				? "#shorts-player"
-				: "div#movie_player";
-			const player = document.querySelector<
-				HTMLDivElement & {
-					getAudioTrack?: () => Promise<Record<string, unknown>> | Record<string, unknown>;
-				}
-			>(selector);
-			if (!player?.getAudioTrack) return "the player exposes no audio track API";
-			const parseTrack = (value: unknown): null | { isAutoDubbed: boolean } => {
-				if (typeof value !== "object" || value === null || Array.isArray(value)) return null;
-				const track = value as Record<string, unknown>;
-				if (
-					typeof track.name === "string" &&
-					typeof track.isDefault === "boolean" &&
-					typeof track.isAutoDubbed === "boolean" &&
-					typeof track.id === "string"
-				) {
-					return { isAutoDubbed: track.isAutoDubbed };
-				}
-				return null;
-			};
-			const raw: unknown = await player.getAudioTrack();
-			if (!raw || typeof raw !== "object") return "the player reports no audio track";
-			const track =
-				parseTrack(raw) ??
-				Object.values(raw)
-					.map(parseTrack)
-					.find((parsed) => parsed !== null) ??
-				null;
-			if (!track) return "the audio track descriptor is not one the feature parses";
-			// The fixture is a dubbed video: its current track being auto-dubbed is what makes a
-			// switch-to-original test meaningful rather than a no-op.
-			return track.isAutoDubbed ? null : "the current audio track is not auto-dubbed";
-		}),
+	// What the test gates on is the offer, not the selection: the spec repairs a non-dubbed start
+	// itself (requireAutoDubbedStart), so demanding the *current* track be auto-dubbed at this
+	// instant skipped eleven tests the fixture could run (probe 2026-11-19: 19 of 20 offered tracks
+	// auto-dubbed on watch and shorts while the current track read original in 4/4 reads). The offer
+	// also lands a moment after the player reports ready, so it is polled like every sibling check.
+	dubbedAudio: async (page) => {
+		const readOffer = () =>
+			page.evaluate(async () => {
+				const selector = document.location.pathname.startsWith("/shorts")
+					? "#shorts-player"
+					: "div#movie_player";
+				const player = document.querySelector<
+					HTMLDivElement & {
+						getAvailableAudioTracks?: () =>
+							| Promise<Record<string, unknown>[]>
+							| Record<string, unknown>[];
+					}
+				>(selector);
+				if (!player?.getAvailableAudioTracks) return "no-api" as const;
+				const describesAutoDubbed = (value: unknown): boolean => {
+					if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+					const track = value as Record<string, unknown>;
+					return typeof track.id === "string" && track.isAutoDubbed === true;
+				};
+				const tracks: unknown = await player.getAvailableAudioTracks();
+				if (!Array.isArray(tracks)) return "no-api" as const;
+				// The flag nests one level down in some player builds, so the descriptor is matched at
+				// the top level or one Object.values hop down - the same shape selectAutoDubbedTrack
+				// in defaultToOriginalAudioTrack.spec.ts unwraps.
+				const offersAutoDubbed = tracks.some(
+					(raw) =>
+						describesAutoDubbed(raw) ||
+						Object.values((raw ?? {}) as Record<string, unknown>).some(describesAutoDubbed)
+				);
+				return offersAutoDubbed ? ("offers" as const) : ("none" as const);
+			});
+		if ((await readOffer()) === "no-api") return "the player exposes no audio track API";
+		try {
+			await expect
+				// Siblings poll 10-30 s; this offer is present at the first sample on a healthy load,
+				// so 15 s is insurance against the post-ready timing only.
+				.poll(() => readOffer(), { intervals: [1000], timeout: 15_000 })
+				.toBe("offers");
+			return null;
+		} catch {
+			// Re-read rather than remember: the last poll sample is what the skip has to speak for.
+			return (await readOffer()) === "no-api"
+				? "the player exposes no audio track API"
+				: "the video offers no auto-dubbed track";
+		}
+	},
 	endScreenCards: async (page) => {
 		const failure = await playerPlaysVideo(page);
 		if (failure !== null) return failure;
@@ -264,6 +311,53 @@ async function expandDescription(page: Page): Promise<void> {
 		} catch {
 			// The context may be mid-navigation; the next attempt follows the settle the caller made.
 		}
+	}
+}
+
+/**
+ * One comment-load attempt. The section has to attach before a scroll can find it, the sort has
+ * to be Newest before a zero thread count means anything (the default "Top comments" ranking can
+ * carry a video's count and no thread at all), the scroll has to land before a zero thread count
+ * means anything, and the scroll rides every poll attempt rather than happening once. Returns
+ * null once a thread renders, or the honest reason this attempt produced none: a section that
+ * never rendered, a section that never offered a sort control, a menu that never offered Newest,
+ * a section the scroll never reached, or a section that was reached, switched, and stayed empty.
+ */
+async function loadCommentThreads(page: Page): Promise<null | string> {
+	const comments = page.locator("#comments");
+	// Bounded rather than skipped: a section that has not rendered yet makes scrollIntoView a
+	// silent no-op, so waiting for the attach is what stops the old self-fulfilling "never loaded".
+	try {
+		await comments.waitFor({ state: "attached", timeout: 10_000 });
+	} catch {
+		return "the comments section never rendered";
+	}
+	// The default "Top comments" ranking can carry a video's count and no thread at all
+	// (yk4I80XVuk4: the Top payload held the count, zero commentThreadRenderers), so the sort is
+	// switched to Newest before the count means anything — the probe's threads landed within
+	// about four seconds of the switch. A section that refuses the switch says that instead of
+	// letting the zero masquerade as a load failure.
+	const sortFailure = await switchCommentSortToNewest(comments);
+	let scrolledIntoView = false;
+	try {
+		await expect
+			.poll(
+				async () => {
+					scrolledIntoView = (await scrollCommentsIntoView(comments)) || scrolledIntoView;
+					return page.locator("ytd-comment-thread-renderer").count();
+				},
+				{ timeout: 30_000 }
+			)
+			.toBeGreaterThan(0);
+		return null;
+	} catch {
+		// The scroll is reported, not assumed: a swallowed scroll is what used to turn a page that
+		// renders comments fine into "never loaded".
+		if (!scrolledIntoView) return "the comments section never scrolled into view";
+		// Only a zero that survived the switch may be called a load failure, and it says so; a
+		// switch the section never offered reports that instead.
+		if (sortFailure !== null) return sortFailure;
+		return "the video's comments never loaded even after switching the sort to Newest";
 	}
 }
 

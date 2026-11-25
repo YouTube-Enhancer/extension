@@ -109,14 +109,8 @@ export const pageFixtures: Record<PageType, VideoFixture[]> = {
 			url: "https://www.youtube.com/watch?v=ReYYEs-tHx4"
 		},
 		{
-			capabilities: ["timestamps"],
+			capabilities: ["timestamps", "commentTimestamps"],
 			url: "https://www.youtube.com/watch?v=yk4I80XVuk4"
-		},
-		{
-			// yk4I80XVuk4 kept its description timestamps but its comments were cut to one on 2026-09-04, so the
-			// comment cases use a mix whose top comments list the tracks with timestamps.
-			capabilities: ["commentTimestamps"],
-			url: "https://www.youtube.com/watch?v=NvbbEBL9My4"
 		},
 		{
 			capabilities: ["dubbedAudio"],
