@@ -1,11 +1,8 @@
 import browser from "webextension-polyfill";
 
-import type { FeatureState } from "@/src/features/_registry/types";
-import type { configuration } from "@/src/types";
-
-import { initialState as rememberVolumeInitialState } from "@/src/features/rememberVolume/index.metadata";
 import { startDevelopmentMode } from "@/src/pages/content/development";
 import { storageListeners } from "@/src/pages/content/storageForwarding";
+import { seedPersistedVolumeAtStart } from "@/src/pages/content/volumeSeeding";
 import {
 	defaultConfiguration,
 	onWindowMessage,
@@ -13,13 +10,7 @@ import {
 	storage
 } from "@/src/pages/content/windowMessageDispatcher";
 import { DEV_MODE } from "@/src/utils/config/env";
-import { parseStoredValue } from "@/src/utils/config/utils";
 import { waitForReady } from "@/src/utils/embedded/instanceLiveness";
-import {
-	documentVolumeBucket,
-	restorePersistedVolume,
-	seedPersistedVolume
-} from "@/src/utils/player/persistedVolume";
 
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
@@ -63,43 +54,6 @@ const scheduleEmbeddedScript = () => {
  * cache the page bootstrap answers `request_data options` from - a change arriving before the
  * storage listener is attached would then be served stale.
  */
-const seedPersistedVolumeAtStart = async (): Promise<void> => {
-	try {
-		const stored = await storage.local.get([
-			"globalVolume",
-			"rememberVolume",
-			"state:rememberVolume"
-		]);
-		const globalVolume = parseStoredValue(
-			stored.globalVolume as string
-		) as configuration["globalVolume"];
-		const rememberVolume = parseStoredValue(
-			stored.rememberVolume as string
-		) as configuration["rememberVolume"];
-
-		if (globalVolume?.enabled) {
-			if (typeof globalVolume.volume === "number") seedPersistedVolume(globalVolume.volume);
-			return;
-		}
-		if (rememberVolume?.enabled) {
-			const remembered = (parseStoredValue(stored["state:rememberVolume"] as string) ??
-				rememberVolumeInitialState) as FeatureState["state:rememberVolume"];
-			// A remembered 0 means "nothing to force" here, exactly as rememberedVolumeForCurrentPage
-			// reads it: hand back any seed an earlier value left behind rather than booting at it.
-			const bucket = documentVolumeBucket(remembered);
-			if (bucket) seedPersistedVolume(bucket);
-			else restorePersistedVolume();
-			return;
-		}
-
-		// Neither volume feature owns the store: hand YouTube's own value back, so a feature that was
-		// disabled with no page open to run its onDisable does not keep forcing its level forever.
-		restorePersistedVolume();
-	} catch {
-		// Losing this race only costs the loud first second the features' apply already fixes;
-		// it must never delay or break page startup.
-	}
-};
 
 void seedPersistedVolumeAtStart();
 
