@@ -5,7 +5,6 @@ import {
 	type UnsubscribeFromDomMutations
 } from "@/src/utils/dom/observers/domMutationBus";
 import { whenReady } from "@/src/utils/dom/readiness";
-import { waitForElement } from "@/src/utils/dom/wait";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
 
 import { buttonContainerId } from "./buttonPlacementState";
@@ -173,7 +172,10 @@ class PlacementTransition {
 			});
 		};
 		// Player chrome + watch element theater signals via the shared bus
-		await waitForElement<HTMLButtonElement>("button.ytp-size-button");
+		// Player-owned: the size button lives inside the player root, so presence is gated
+		// through the readiness seam; the mutation subscription below is selector-based and
+		// arms either way (the discarded wait proceeded on timeout exactly as before).
+		await whenReady("pagePlayer", { timeout: 2500 });
 		this.theaterModeUnsubscribes.push(
 			subscribeToDomMutations("button.ytp-size-button", scheduleReposition, {
 				attributeFilter: ["class"]

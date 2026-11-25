@@ -36,7 +36,6 @@ import {
 } from "./containerTracking";
 import {
 	addFeatureItemToMenu,
-	enableFeatureMenuButton,
 	getFeatureButtonId,
 	getFeatureIds,
 	getFeatureMenuItem,
@@ -88,7 +87,12 @@ export async function addButton<
 ) {
 	const effectivePlacement = getEffectivePlacement(placement, fullscreenPlacement);
 	const selector = getPlacementSelector(effectivePlacement);
-	await enableFeatureMenuButton();
+	// No menu gate here: menu readiness is owned by buttonPlacement.ensureReadiness(),
+	// which every placement pass awaits once before any btn.add runs (placeFeatureButtons /
+	// placeFeaturesByPriority), plus coreFeatures.register() at lifecycle init. Re-checking
+	// it per add re-scheduled a duplicate featurePlayerManager retry loop on every button.
+	// A deferred re-entry below only fires once its own placement target exists, so it never
+	// needs to create the menu either.
 	if (selector) {
 		const cachedContainer = getCachedContainer(effectivePlacement);
 		if (cachedContainer && !cachedContainer.isConnected) {

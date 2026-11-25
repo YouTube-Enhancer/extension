@@ -39,6 +39,8 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 ) {
 	const featureName = metadataRegistry.getButtonFeature(buttonName);
 	if (!featureName) return;
+	// Not player-owned: the menu is created by this module and inserted into the player
+	// root only after the root resolves, so the generic wait covers that creation window.
 	await waitForElement(menuId);
 	const featureMenu = getMenu();
 	if (!featureMenu) return;
