@@ -126,11 +126,18 @@ export async function refinePageTypeFromPlayer(): Promise<Nullable<PageType>> {
 	if (current !== "watch") return current;
 	const urlVideoId = new URLSearchParams(window.location.search).get("v");
 	const isLive = await refineLiveFlagFromPlayer({ urlVideoId });
-	if (isLive) {
+	/**
+	 * The await spans up to ~5 s (player wait + id poll). An SPA navigation during that
+	 * window invalidates the cache and re-classifies the new URL; committing the old
+	 * video's live flag afterwards would overwrite the new page's classification.
+	 * Re-read both the URL id and the classification before writing.
+	 */
+	const stillCurrent = getCurrentVideoId() === urlVideoId && getCurrentPageType() === "watch";
+	if (isLive && stillCurrent) {
 		cachedPageType = "live";
 		return "live";
 	}
-	return "watch";
+	return getCurrentPageType();
 }
 
 /**
