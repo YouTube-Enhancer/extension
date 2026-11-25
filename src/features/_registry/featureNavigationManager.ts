@@ -5,10 +5,11 @@ import type {
 } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
-import { invalidatePageTypeCache, refinePageTypeFromPlayer } from "@/src/utils/url";
+import { invalidatePageTypeCache } from "@/src/utils/url";
 import { getNavigationSignature, type NavigationSignature } from "@/src/utils/url/signature";
 
 import { FeatureManagerBase } from "./featureManagerBase";
+import { runLiveRefinePipeline } from "./featureNavigationPipeline";
 import { featurePlayerManager } from "./featurePlayerManager";
 
 export type NavigationEventType = "finish" | "popstate" | "start" | "updated";
@@ -140,7 +141,21 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	/** Player refine after init/navigation: update page type when a watch URL is actually live. */
 	refineLivePageType(): Promise<void> {
 		if (this.liveRefinePromise) return this.liveRefinePromise;
-		this.liveRefinePromise = this.runLiveRefine().finally(() => {
+		this.liveRefinePromise = runLiveRefinePipeline({
+			commitSignature: (signature) => {
+				this.currentNavigationSignature = signature;
+				this.currentPage = getPageFromSignature(signature);
+			},
+			invokePipeline: async (signature) => {
+				if (this.navigationCallback) await this.navigationCallback(signature, "updated");
+			},
+			isInitialized: () => this._initialized,
+			isNavigating: () => this.navigating,
+			readBaseline: () => ({
+				page: this.currentPage,
+				signature: this.currentNavigationSignature
+			})
+		}).finally(() => {
 			this.liveRefinePromise = null;
 		});
 		return this.liveRefinePromise;
@@ -198,8 +213,9 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 				 * so those events produce no signature change; without this re-arm the player is
 				 * never asked and an SPA navigation (or reload) onto a live stream stays
 				 * classified as watch with every live-gated feature disabled. The top gate in
-				 * runLiveRefine no-ops an attempt that lands mid-pipeline, and liveRefinePromise
-				 * dedups concurrent calls, so event bursts cost one shared attempt instead of N.
+				 * runLiveRefinePipeline no-ops an attempt that lands mid-pipeline, and
+				 * liveRefinePromise dedups concurrent calls, so event bursts cost one shared
+				 * attempt instead of N.
 				 */
 				void this.refineLivePageType();
 			}
@@ -207,24 +223,6 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 			const { pendingNavigationEvent: pending } = this;
 			this.pendingNavigationEvent = null;
 			if (pending) this.handleNavigation(pending);
-		}
-	}
-
-	private async runLiveRefine(): Promise<void> {
-		// A refine that lands mid-pipeline would start a second full navigation pass.
-		if (this.navigating) return;
-		const { currentNavigationSignature: previousSignature, currentPage: previousPage } = this;
-		const refined = await refinePageTypeFromPlayer();
-		if (!refined || refined === previousPage) return;
-		if (!this._initialized) return;
-		// Re-check after the player await; a navigation may have started while we waited.
-		if (this.navigating) return;
-		const signature = getNavigationSignature();
-		if (!signature) return;
-		this.currentNavigationSignature = signature;
-		this.currentPage = getPageFromSignature(signature);
-		if (this.navigationCallback && signature !== previousSignature) {
-			await this.navigationCallback(signature, "updated");
 		}
 	}
 
