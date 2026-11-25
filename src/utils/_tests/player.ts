@@ -377,18 +377,49 @@ export async function setValueOnYouTubePlayer<
 export async function setVolume(page: Page, volume: number, pageType: PageType = "watch") {
 	await setValueOnYouTubePlayer(page, pageType, "setVolume", volume);
 }
-/** Seeks to just before the end and plays, so the end screen shows. */
+/**
+ * Seeks to just before the end and plays, so the end screen shows.
+ *
+ * Both the duration read and the seek are verified. Metadata can lag behind navigation under load,
+ * and an unverified read that returns 0 would seek to the START of the video, so the end screen
+ * never renders and the caller's grid wait expires on this race rather than on a video that truly
+ * has no end screen.
+ */
 export async function showEndScreen(page: Page, pageType: PageType): Promise<void> {
-	const duration = (await getValueFromYouTubePlayer(page, "getDuration", pageType)) ?? 0;
+	// Poll until the player reports a real duration. A player that never does is a genuine failure
+	// and must throw loudly: silently falling back to 0 hides it behind the caller's end-screen skip.
+	let duration = 0;
+	const durationDeadline = Date.now() + 10_000;
+	while (duration <= 0 && Date.now() < durationDeadline) {
+		duration = (await getValueFromYouTubePlayer(page, "getDuration", pageType)) ?? 0;
+		if (duration <= 0) await page.waitForTimeout(500);
+	}
+	if (duration <= 0)
+		throw new Error(
+			`showEndScreen: player never reported a duration > 0 within 10 s (last read: ${duration})`
+		);
 	await page.evaluate(
 		async (seconds) => {
 			const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
 			if (!player) return;
 			await player.seekTo(seconds, true);
-			await player.playVideo();
 		},
 		Math.max(0, duration - 2)
 	);
+	// A seek can silently no-op (player not ready, ad in the way) and leave the playhead at the
+	// start; confirm it landed inside the end-screen window before playing, so the caller starts
+	// timing its grid wait from a playhead that is actually near the end.
+	await expect
+		.poll(async () => (await getValueFromYouTubePlayer(page, "getCurrentTime", pageType)) ?? -1, {
+			intervals: [500],
+			timeout: 10_000
+		})
+		.toBeGreaterThanOrEqual(duration - 10);
+	await page.evaluate(async () => {
+		const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
+		if (!player) return;
+		await player.playVideo();
+	});
 }
 /**
  * Waits for the video to offer captions. YouTube hides the subtitles button, or labels it unavailable, until the
