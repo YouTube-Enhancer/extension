@@ -151,7 +151,14 @@ function unwrapRedirect(el: Element): void {
 	try {
 		const url = new URL(href);
 		const target = url.searchParams.get("q");
-		if (target) el.setAttribute("href", target);
+		if (!target) return;
+		try {
+			const targetUrl = new URL(target);
+			if (targetUrl.protocol !== "http:" && targetUrl.protocol !== "https:") return;
+		} catch {
+			return; // not an absolute URL — leave the original redirect link alone
+		}
+		el.setAttribute("href", target);
 	} catch {
 		/* ignore malformed urls */
 	}
