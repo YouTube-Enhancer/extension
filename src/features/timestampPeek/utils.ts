@@ -365,7 +365,7 @@ async function previewTimestamp(element: HTMLElement, timestamp: number, show: b
 			parentElement.insertBefore(state.placeholder, video);
 			state.overlayParent = parentElement;
 		}
-		overlay.innerHTML = "";
+		overlay.replaceChildren();
 		overlay.appendChild(video);
 		overlay.style.display = "block";
 		positionOverlay(element, overlay);

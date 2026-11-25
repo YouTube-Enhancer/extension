@@ -361,7 +361,7 @@ export class MiniPlayerController {
 			});
 			this.overlayElement.insertBefore(content, this.overlayElement.firstChild);
 		}
-		content.innerHTML = "";
+		content.replaceChildren();
 		content.appendChild(player);
 		player.style.width = "100%";
 		player.style.height = "100%";

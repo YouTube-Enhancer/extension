@@ -1,4 +1,3 @@
-import React from "react";
 import { FaTrashAlt, FaUndoAlt } from "react-icons/fa";
 
 import type { configuration, Nullable, YtActionEvent } from "@/src/types";
@@ -6,7 +5,7 @@ import type { configuration, Nullable, YtActionEvent } from "@/src/types";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { getPlaylistId } from "@/src/features/playlistLength/utils";
-import { createActionButton } from "@/src/features/playlistManagementButtons/button";
+import { createActionButton, createIconSvg } from "@/src/features/playlistManagementButtons/button";
 import {
 	CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR,
 	PLAYLIST_ITEM_SELECTOR,
@@ -105,7 +104,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 		}
 		if (isStale()) return;
 
-		async function addButtonToPlaylistItems() {
+		function addButtonToPlaylistItems() {
 			if (isStale()) return;
 			// Creation is gated on the URL too: the playlist rows can outlive the `list` param
 			// during a transition, and a button rendered then could never remove anything.
@@ -124,7 +123,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				const hasWatchProgress = getWatchedPercentage(item) > 0;
 
 				if (enable_playlist_remove_button && !removeButton) {
-					const removeButton = await createActionButton({
+					const removeButton = createActionButton({
 						className: `${REMOVE_BUTTON_CLASS} yte-action-button-large`,
 						featureName: "playlistManagementButtons",
 						icon: FaTrashAlt,
@@ -137,7 +136,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 								data: { setVideoId }
 							} = item as YTDPlaylistVideoRenderer;
 							await removeFromPlaylist(playlistId, [setVideoId]);
-							await addRemoveAllButton();
+							addRemoveAllButton();
 						},
 						translationError: (translations) =>
 							translations.pages.content.features.playlistManagementButtons.extras
@@ -154,7 +153,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				}
 
 				if (enable_playlist_reset_button && !resetButton && hasWatchProgress) {
-					const resetButton = await createActionButton({
+					const resetButton = createActionButton({
 						className: `${RESET_BUTTON_CLASS} yte-action-button-large`,
 						featureName: "playlistManagementButtons",
 						icon: FaUndoAlt,
@@ -170,7 +169,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 							// catches with another recount.
 							getThumbnailOverlay(item)?.remove();
 							resetButton.remove();
-							await addRemoveAllButton();
+							addRemoveAllButton();
 						},
 						translationError: (translations) =>
 							translations.pages.content.features.playlistManagementButtons.extras
@@ -197,7 +196,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 			}
 		}
 
-		async function addRemoveAllButton() {
+		function addRemoveAllButton() {
 			if (!enable_remove_all_watched_button) return;
 			// Same URL gate as the per-item buttons: its click needs a playlist id to work.
 			if (!getPlaylistId()) return;
@@ -234,23 +233,20 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 					],
 				{ count: watchedCount }
 			);
-			const { renderToString } = await import("react-dom/server");
 			if (isStale()) return;
-			const trashIcon = renderToString(
-				React.createElement(FaTrashAlt, {
-					size: 12,
-					style: { marginRight: "12px", verticalAlign: "middle" }
-				})
-			);
+			const trashIcon = createIconSvg(FaTrashAlt, {
+				size: 12,
+				style: { marginRight: "12px", verticalAlign: "middle" }
+			});
 			if (existingButton) {
-				existingButton.innerHTML = trashIcon + text;
+				existingButton.replaceChildren(trashIcon, text);
 				return;
 			}
 
 			const button = document.createElement("button");
 			button.id = REMOVE_ALL_BUTTON_ID;
 			button.className = REMOVE_ALL_BUTTON_ID;
-			button.innerHTML = trashIcon + text;
+			button.replaceChildren(trashIcon, text);
 			removeAllButton = button;
 
 			removeAllButton.onclick = async () => {
@@ -282,20 +278,20 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				} finally {
 					button.disabled = false;
 					button.title = originalTitle;
-					await addRemoveAllButton();
+					addRemoveAllButton();
 				}
 			};
 
 			header.appendChild(removeAllButton);
 		}
 
-		async function observePlaylist() {
+		function observePlaylist() {
 			if (playlistUnsubscribeBus) {
 				return;
 			}
 
-			await addButtonToPlaylistItems();
-			await addRemoveAllButton();
+			addButtonToPlaylistItems();
+			addRemoveAllButton();
 			if (isStale()) return;
 			const container = document.querySelector("ytd-playlist-video-list-renderer");
 			if (container) {
@@ -314,8 +310,8 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 						passesDebounce = setTimeout(() => {
 							passesDebounce = null;
 							if (isStale()) return;
-							void addButtonToPlaylistItems();
-							void addRemoveAllButton();
+							addButtonToPlaylistItems();
+							addRemoveAllButton();
 						}, 100);
 					},
 					{ parent: container }
@@ -340,7 +336,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 					debounced = setTimeout(() => {
 						debounced = null;
 						if (isStale()) return;
-						void addRemoveAllButton();
+						addRemoveAllButton();
 					}, 100);
 				},
 				{ attributeFilter: ["style"], parent: document.body }
@@ -353,7 +349,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 			resetButton: { enabled: enable_playlist_reset_button }
 		} = config;
 
-		await observePlaylist();
+		observePlaylist();
 	})();
 }
 
@@ -382,16 +378,15 @@ export default createFeature({
 						],
 					{ count: watchedCount }
 				);
-				void import("react-dom/server").then(({ renderToString }) => {
-					const trashIcon = renderToString(
-						React.createElement(FaTrashAlt, {
+				if (removeAllButton) {
+					removeAllButton.replaceChildren(
+						createIconSvg(FaTrashAlt, {
 							size: 12,
 							style: { marginRight: "12px", verticalAlign: "middle" }
-						})
+						}),
+						text
 					);
-					if (removeAllButton) removeAllButton.innerHTML = trashIcon + text;
-					return;
-				});
+				}
 			}
 		}
 		for (const item of document.querySelectorAll<HTMLElement>(PLAYLIST_ITEM_SELECTOR)) {

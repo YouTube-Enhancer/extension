@@ -68,11 +68,19 @@ export function showSnackbar(text: string, thumbnailUrl?: string): boolean {
 	// loader never runs on an img we create), so the thumbnail actually paints. The image is
 	// built with DOM APIs rather than interpolated into markup, so a crafted URL cannot break
 	// out of an attribute context.
-	snack.innerHTML =
-		`<div class="snackbarViewModelEngagementBarWrapper">` +
-		`<div class="snackbarViewModelTitleSubtextWrapper"><div class="snackbarViewModelTitle">` +
-		`<span class="ytAttributedStringHost ytAttributedStringWhiteSpacePreWrap" role="text"></span>` +
-		`</div></div></div>`;
+	const label = document.createElement("span");
+	label.className = "ytAttributedStringHost ytAttributedStringWhiteSpacePreWrap";
+	label.setAttribute("role", "text");
+	const title = document.createElement("div");
+	title.className = "snackbarViewModelTitle";
+	title.append(label);
+	const subtitle = document.createElement("div");
+	subtitle.className = "snackbarViewModelTitleSubtextWrapper";
+	subtitle.append(title);
+	const bar = document.createElement("div");
+	bar.className = "snackbarViewModelEngagementBarWrapper";
+	bar.append(subtitle);
+	snack.append(bar);
 	if (thumbnailUrl) {
 		const engagementBar = snack.querySelector(".snackbarViewModelEngagementBarWrapper");
 		const image = document.createElement("img");

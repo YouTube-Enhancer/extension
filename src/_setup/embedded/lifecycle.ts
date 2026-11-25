@@ -9,7 +9,6 @@ import { DEV_MODE } from "@/src/utils/config/env";
 import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
 import { disconnectFromDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
-import { ensureTrustedTypesPolicy } from "@/src/utils/security/trustedTypes";
 import { isSupportedYouTubeHostname } from "@/src/utils/url/constants";
 
 import { coreFeatures } from "./coreFeatures";
@@ -23,7 +22,6 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	if (!isSupportedYouTubeHostname(window.location.hostname)) {
 		return { dispose: async () => {} };
 	}
-	ensureTrustedTypesPolicy();
 
 	const [options, { data: state }] = await Promise.all([
 		fetchOptions(),
