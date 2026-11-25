@@ -166,11 +166,20 @@ export async function expectStableCaptionsState(
 		.toBe(2);
 }
 export async function freezeAndGetTime(page: Page, pageType: PageType) {
-	await page.evaluate(() => {
-		const video = document.querySelector<HTMLVideoElement>("video");
-		if (!video) return;
-		video.pause();
-	});
+	// The pause can land while YouTube is still starting its own muted autoplay, so a single read is
+	// not a frozen value: pause (again, in case playback resumed) until two consecutive reads agree
+	// a quarter second apart, and return that settled position.
+	for (let attempt = 0; attempt < 12; attempt++) {
+		await page.evaluate(() => {
+			const video = document.querySelector<HTMLVideoElement>("video");
+			if (!video) return;
+			video.pause();
+		});
+		const first = await getValueFromYouTubePlayer(page, "getCurrentTime", pageType);
+		await page.waitForTimeout(250);
+		const second = await getValueFromYouTubePlayer(page, "getCurrentTime", pageType);
+		if (first === second) return second;
+	}
 	return await getValueFromYouTubePlayer(page, "getCurrentTime", pageType);
 }
 export async function getCaptionsState(page: Page): Promise<boolean | null> {
@@ -333,7 +342,10 @@ export async function seekTo(page: Page, seconds: number): Promise<void> {
 			const video = document.querySelector<HTMLVideoElement>(videoSelector);
 			return video !== null && !video.seeking && Math.abs(video.currentTime - seekTime) < 0.25;
 		},
-		{ seekTime: seconds, videoSelector: "video.html5-main-video" }
+		{ seekTime: seconds, videoSelector: "video.html5-main-video" },
+		// A paused seek on a cold video has to fetch media first; the default budget was chosen for an
+		// idle machine and under 5 workers the fetch legitimately outlasts it.
+		{ timeout: 30_000 }
 	);
 }
 export async function setValueOnYouTubePlayer<
