@@ -10,7 +10,7 @@ import {
 } from "@/src/utils/_tests/capabilities";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { markLiveFixturePage, unmarkLiveFixturePage } from "@/src/utils/_tests/liveFixture";
-import { isExecutionContextDestroyed, pageSetup } from "@/src/utils/_tests/pageSetup";
+import { pageSetup } from "@/src/utils/_tests/pageSetup";
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { expect, test } from "@/tests/harness";
 
@@ -335,25 +335,20 @@ export async function waitForExtensionReady(page: Page): Promise<void> {
 	await expect(page.locator("html[yte-ready]")).toBeAttached({ timeout: 30_000 });
 }
 /**
- * Resolves false when a navigation landed while the play call was in flight (YouTube's reload
- * storm, or the harness's error-watcher reload): the stream this attempt opened is gone, so the
- * hunt re-navigates and tries the next one instead of dying with a destroyed-context evaluate.
+ * Plays the stream the hunt just opened. A navigation landing while the play call is in flight
+ * destroys the evaluate's context; that now propagates instead of restarting the hunt — the
+ * harness owns its reloader (errorWatcher, stopped at teardown), so there is no unknown ambient
+ * reload left to defend against here. Every other failure already propagated before this change.
  */
-async function finishLiveVideoSetup(page: Page): Promise<boolean> {
+async function finishLiveVideoSetup(page: Page): Promise<void> {
 	await waitForExtensionReady(page);
 	await waitForYoutubePlayerReady(page, "live");
 	await pageSetup(page);
-	try {
-		await page.evaluate(async () => {
-			const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
-			await player?.playVideo?.();
-		});
-	} catch (error) {
-		if (isExecutionContextDestroyed(error)) return false;
-		throw error;
-	}
+	await page.evaluate(async () => {
+		const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
+		await player?.playVideo?.();
+	});
 	await page.waitForTimeout(100);
-	return true;
 }
 /**
  * Opens a live stream from the fixture channel, walking its streams until one meets the requirements. `deadline`

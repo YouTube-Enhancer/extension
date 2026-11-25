@@ -18,10 +18,7 @@ import { expectFeatureButtonToBeIn } from "@/src/utils/_tests/assertions";
 import { sendYouTubeMessage } from "@/src/utils/_tests/messaging";
 import { loadAllFeatureMetadata } from "@/src/utils/_tests/metadata";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-import {
-	ensurePlayerControlsVisible,
-	isExecutionContextDestroyed
-} from "@/src/utils/_tests/pageSetup";
+import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 import { buildNumberConstraints, validateNumbers } from "@/src/validation/rules";
 import { expect, watchExtensionErrors } from "@/tests/harness";
 
@@ -121,21 +118,10 @@ export async function setFeatureValue<K extends Path<configuration>>(
 	// Clear the signal so the wait observes this write's acknowledgement cycle. The embedded
 	// script sets it to this write's nonce after reconciling a featureUpdate; the content
 	// script sets it when the write produced nothing to reconcile (an identical value).
-	// A live page can navigate mid-sweep (YouTube's reload storms), which destroys this
-	// evaluate's execution context. Re-establish the re-injected document and re-send the
-	// write rather than failing a long sequential sweep on a page that may navigate under
-	// load (the every-feature live sweep is the main exposure, at ~50 writes wide).
-	for (let attempt = 0; ; attempt++) {
-		try {
-			await page.evaluate(() => document.documentElement.removeAttribute("yte-config-processing"));
-			break;
-		} catch (error) {
-			if (!isExecutionContextDestroyed(error) || attempt >= 2) throw error;
-			// The fresh document carries no stale signal to clear; wait for the extension to
-			// re-inject so the message below reaches a listening content script.
-			await page.waitForSelector("html[yte-ready]", { timeout: 30_000 }).catch(() => {});
-		}
-	}
+	// A live page can navigate mid-sweep and destroy this evaluate's context. That now fails
+	// loudly instead of being retried: the harness owns its reloader (errorWatcher, stopped at
+	// teardown), so there is no unknown ambient reload left to defend against here.
+	await page.evaluate(() => document.documentElement.removeAttribute("yte-config-processing"));
 	// Interval polling instead of Playwright's rAF default, which can stall on throttled
 	// background pages under full-suite load. 60 s (not the bare 30 s) so the every-feature
 	// sweep - ~50 sequential writes, each waiting on its feature's onEnable reconcile, whose

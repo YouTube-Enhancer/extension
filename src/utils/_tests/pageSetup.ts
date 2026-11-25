@@ -39,9 +39,33 @@ async function fastForwardAd(page: Page): Promise<void> {
 		}, YOUTUBE_AD_SELECTORS.adShowing)
 		.catch(() => {});
 }
+/**
+ * Budget for one `pageSetup` ad pass — the last watcher `pageSetup` arms and the only one whose
+ * budget was not named anywhere. It is owned here, at module scope next to the selectors it spends
+ * itself against, the way the other test budgets are (`CHECKBOX_SETTLE_TIMEOUT` in options.ts,
+ * `attachBudget` in assertions.ts), rather than as anonymous numbers inside the loop.
+ *
+ * It is not a background watcher: `pageSetup` awaits `handleYoutubeAds` inline on every navigation,
+ * so the budget is spent inside the caller's own test time and always ends by itself — either the
+ * last ad is gone, or the pass throws with the pod and the time left so the spec fails instead of
+ * hanging. Nothing has to stop it.
+ *
+ * 90 s global — the handler seeks each ad to its end and clicks skip as soon as the countdown lets
+ * it, so a whole pod (pre-roll plus the mid-rolls that follow it) drains in a few passes rather than
+ * playing out; 90 s is the ceiling on that drain: long enough for a long pod under full-suite load,
+ * short enough that a stuck ad costs one test instead of the run.
+ *
+ * 15 s player wait — `pageSetup` runs right after a navigation, so `#movie_player` mounts a beat
+ * later; this only has to tell "player not mounted yet" from "nothing to handle here", and it bounds
+ * the same pass.
+ */
+const AD_HANDLER_BUDGET = {
+	/** Ceiling for the whole ad pass, measured from the first probe. */
+	globalMs: 90_000,
+	/** How long to wait for the player (or an ad) to exist before deciding there is nothing to handle. */
+	playerWaitMs: 15_000
+} as const;
 async function handleYoutubeAds(page: Page): Promise<void> {
-	const GLOBAL_TIMEOUT = 90_000;
-	const PLAYER_WAIT_TIMEOUT = 15_000;
 	const startTime = Date.now();
 
 	const getAdInfo = async () => {
@@ -109,7 +133,7 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 	while (
 		!adInfo.isShowing &&
 		!adInfo.playerExists &&
-		Date.now() - startTime < PLAYER_WAIT_TIMEOUT
+		Date.now() - startTime < AD_HANDLER_BUDGET.playerWaitMs
 	) {
 		await page.waitForTimeout(500);
 		adInfo = await getAdInfo();
@@ -117,7 +141,7 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 	// Every tick handles whatever ad is showing right now: seek it to its end, then click skip once the countdown
 	// allows it (the button is visible, but inert, while it counts down). Ads in a pod follow each other, so the
 	// loop keeps going until no ad is showing instead of assuming the first one seen was the only one.
-	while (adInfo.isShowing && Date.now() - startTime < GLOBAL_TIMEOUT) {
+	while (adInfo.isShowing && Date.now() - startTime < AD_HANDLER_BUDGET.globalMs) {
 		await fastForwardAd(page);
 		await clickSkipButton();
 		await page.waitForTimeout(500);
@@ -125,7 +149,7 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 	}
 	if (adInfo.isShowing) {
 		throw new Error(
-			`An ad was still showing after ${GLOBAL_TIMEOUT / 1000}s (${adInfo.podText ?? "no pod info"}, ${adInfo.remainingSeconds ?? "?"}s remaining)`
+			`An ad was still showing after ${AD_HANDLER_BUDGET.globalMs / 1000}s (${adInfo.podText ?? "no pod info"}, ${adInfo.remainingSeconds ?? "?"}s remaining)`
 		);
 	}
 }
