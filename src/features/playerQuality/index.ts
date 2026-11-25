@@ -55,6 +55,60 @@ const enforcement: EnforcementState = {
 	verifiedOnce: false
 };
 
+/** The apply/verify pair of the enforcement run in force; {@link runEnforcement} hands it to the retry seam. */
+type EnforceTasks = [() => Promise<boolean>, () => Promise<boolean>];
+
+/**
+ * The tasks of the run currently in force, kept so a pin the player drops *after* it landed can be
+ * re-applied by re-running them instead of rebuilding anything. playerSpeed reaches the same seam the
+ * same way for a rate the player resets (handleRateChange → reapplyEnforcedSpeed → registry.playerRetry),
+ * which is why a speed survived an event that used to take the quality pin with it.
+ */
+let enforcementTasks: Nullable<EnforceTasks> = null;
+/**
+ * How often one page may re-apply a pin the player dropped. The player resets the request a few times at
+ * most; past this the fight is not worth having (playerSpeed bounds its re-applies the same way).
+ */
+const MAX_AUTOMATIC_REAPPLIES = 5;
+let automaticReapplies = 0;
+/**
+ * The position a quality switch is being watched for (bug #1228). Armed when this feature asks for a
+ * change, raised by {@link holdPlaybackPosition} for as long as the window lasts, and dropped once the
+ * switch has settled or the restart it caused has been put back. Nothing else in the feature reads it.
+ */
+let positionHold: Nullable<{ target: number; until: number }> = null;
+
+/**
+ * Opens the position window for a switch this feature is about to ask for (bug #1228). The target starts
+ * at where playback is now and is only ever raised while the window lasts, so a restart the switch causes
+ * shows up as a drop back below {@link POSITION_MIN_RESTORE_SECONDS}. A live stream's playhead is not a
+ * position that can restart from 0:00, so it never gets a window.
+ */
+async function armPositionHold(player: YouTubePlayerDiv): Promise<void> {
+	if (isLivePage()) {
+		positionHold = null;
+		return;
+	}
+	const { getVideoData } = player as unknown as {
+		getVideoData?: () => undefined | { isLive?: boolean };
+	};
+	if (typeof getVideoData === "function" && getVideoData.call(player)?.isLive) {
+		positionHold = null;
+		return;
+	}
+	let time = 0;
+	try {
+		const current = await player.getCurrentTime();
+		if (Number.isFinite(current)) time = current;
+	} catch {
+		time = 0;
+	}
+	positionHold = {
+		target: Math.max(positionHold?.target ?? 0, time),
+		until: Math.max(positionHold?.until ?? 0, Date.now() + POSITION_HOLD_MS)
+	};
+}
+
 function attachQualityChangeListener(player: YouTubePlayerDiv): void {
 	if (qualityChangeTarget === player) return;
 	detachQualityChangeListener();
@@ -215,6 +269,59 @@ function hasForeignQualityRequest(player: YouTubePlayerDiv): boolean {
 	return requestedQuality !== enforcement.requestedQuality;
 }
 
+/**
+ * Keeps the playback position across a quality switch this feature asked for (bug #1228: the switch
+ * restarts the media at 0:00). Nothing in this feature's change path reloads the page or replaces the
+ * player element — `setPlaybackQualityRange()`/`setPlaybackQuality()` only re-request the stream — so the
+ * restart happens inside the player and is repaired here through the same player API the feature already
+ * calls: `getCurrentTime()` to notice it, `seekTo()` to put it back.
+ *
+ * Returns false while the window is still open, so the verify task that is already ticking keeps this run
+ * alive long enough to see the restart; true once there is nothing left to watch (no window, expired, or
+ * the position was put back), which lets the run finish as before.
+ */
+async function holdPlaybackPosition(player: YouTubePlayerDiv): Promise<boolean> {
+	if (!positionHold) return true;
+	if (Date.now() > positionHold.until) {
+		positionHold = null;
+		return true;
+	}
+	const { getCurrentTime, seekTo } = player as unknown as {
+		getCurrentTime?: () => Promise<number>;
+		seekTo?: (seconds: number, allowSeekAhead: boolean) => Promise<void>;
+	};
+	if (typeof getCurrentTime !== "function" || typeof seekTo !== "function") {
+		positionHold = null;
+		return true;
+	}
+	let time = 0;
+	try {
+		const current = await getCurrentTime.call(player);
+		if (Number.isFinite(current)) time = current;
+	} catch {
+		return true;
+	}
+	// Playback only ever moves forward between restarts, so the target tracks where it has got to.
+	if (time > positionHold.target) positionHold.target = time;
+	// The bug is a reset to 0:00: only a collapse back to the start is repaired, so a user seeking
+	// backwards inside the window is never dragged forward again.
+	if (time >= POSITION_MIN_RESTORE_SECONDS || positionHold.target < POSITION_MIN_RESTORE_SECONDS)
+		return false;
+	const { target: restoreTo } = positionHold;
+	positionHold = null;
+	browserColorLog(
+		`Playback restarted at ${time.toFixed(1)}s by the quality switch - restoring ${restoreTo.toFixed(1)}s`,
+		"FgYellow"
+	);
+	try {
+		await seekTo.call(player, restoreTo, true);
+	} catch {
+		// The player refused the seek (still switching); the next tick inside the window tries again.
+		return false;
+	}
+	return true;
+}
+
 function isAdShowing(): boolean {
 	return !!document.querySelector(".ad-showing, .ytp-ad-player-overlay");
 }
@@ -279,6 +386,9 @@ function makeApplyQualityTasks(
 			return true;
 		}
 
+		// The switch below can restart the media at 0:00 (#1228); watch the position across it.
+		await armPositionHold(player);
+
 		try {
 			enforcement.pendingOwnApply = true;
 			if (qualityFormatId) {
@@ -335,25 +445,30 @@ function makeApplyQualityTasks(
 		 * Our chosen format streaming is the strongest signal the pin landed. ABR can still move
 		 * to another format for the same level later without that being a manual override.
 		 */
+		let verified = false;
 		if (enforcement.appliedFormatId != null) {
 			const stats = player.getVideoStats();
-			if (typeof stats?.fmt === "number" && stats.fmt === enforcement.appliedFormatId) {
-				recordRequestedBaseline();
-				return true;
-			}
+			verified = typeof stats?.fmt === "number" && stats.fmt === enforcement.appliedFormatId;
 		}
-
-		/**
-		 * Same level (playback or pin) is enough: ABR may stream a different format for that level,
-		 * and a format-only check re-ran the retry loop then treated the next ABR shift as manual.
-		 */
-		const playbackQuality = await player.getPlaybackQuality();
-		const preferredQuality = readRequestedQuality(player);
-		const verified =
-			playbackQuality === enforcement.appliedQuality ||
-			preferredQuality === enforcement.appliedQuality;
+		if (!verified) {
+			/**
+			 * Same level (playback or pin) is enough: ABR may stream a different format for that level,
+			 * and a format-only check re-ran the retry loop then treated the next ABR shift as manual.
+			 */
+			const playbackQuality = await player.getPlaybackQuality();
+			const preferredQuality = readRequestedQuality(player);
+			verified =
+				playbackQuality === enforcement.appliedQuality ||
+				preferredQuality === enforcement.appliedQuality;
+		}
 		if (verified) recordRequestedBaseline();
-		return verified;
+		/**
+		 * The pin can be right while the switch that put it there restarts the media (#1228). The hold
+		 * answers false until its window has passed, so this task — the one still ticking — stays on the
+		 * job long enough to notice that restart and put the position back.
+		 */
+		const positionHeld = await holdPlaybackPosition(player);
+		return verified && positionHeld;
 	};
 
 	return [applyTask, verifyTask];
