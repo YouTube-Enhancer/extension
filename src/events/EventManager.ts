@@ -39,12 +39,12 @@ type ButtonNameEvents =
 	| "flipVideoVerticalButton"
 	| "volumeBoostButton";
 
-/** O(1) callback deduplication lookup, parallel to the EventListenerInfo arrays. */
-type CallbackIndex = WeakMap<EventListenerOrEventListenerObject, EventListenerInfo>;
+/** O(1) callback deduplication lookup, parallel to the EventListenerInfo arrays: every (target, eventName) tuple registered for that callback. */
+type CallbackIndex = WeakMap<EventListenerOrEventListenerObject, EventListenerInfo[]>;
 
 type CoreFeatureEvents = "featureMenu" | "scrollWheelController";
 
-/** Per-feature WeakMap from callback reference to its EventListenerInfo, for O(1) deduplication. */
+/** Per-feature WeakMap from callback reference to its EventListenerInfo tuples, for O(1) deduplication. */
 const callbackIndexes = new Map<FeatureName, CallbackIndex>();
 
 const eventManager: EventManager = {
@@ -58,11 +58,15 @@ const eventManager: EventManager = {
 		const eventListeners = targetListeners.get(target) || new Map<string, EventListenerInfo[]>();
 		// Get any existing listeners for the event, or create an empty array if it doesn't exist
 		const existingListeners = eventListeners.get(eventName) || [];
-		// O(1) deduplication via WeakMap instead of linear scan
+		// O(1) deduplication via WeakMap instead of linear scan: one entry per callback, holding every (target, eventName) tuple it serves
 		const callbackIndex = callbackIndexes.get(featureName) ?? new WeakMap();
-		const existingListener = callbackIndex.get(callback as EventListenerOrEventListenerObject);
+		const callbackTuples = callbackIndex.get(callback as EventListenerOrEventListenerObject) ?? [];
+		// Skip only when this exact (callback, target, eventName) tuple is already registered — the same callback may serve other events/targets
+		const alreadyRegistered = callbackTuples.some(
+			(listener) => listener.target === target && listener.eventName === eventName
+		);
 		// If the listener hasn't been added, add it
-		if (!existingListener) {
+		if (!alreadyRegistered) {
 			const listenerInfo: EventListenerInfo = {
 				callback: callback as EventListenerOrEventListenerObject,
 				eventName,
@@ -70,7 +74,8 @@ const eventManager: EventManager = {
 				target
 			};
 			existingListeners.push(listenerInfo);
-			callbackIndex.set(callback as EventListenerOrEventListenerObject, listenerInfo);
+			callbackTuples.push(listenerInfo);
+			callbackIndex.set(callback as EventListenerOrEventListenerObject, callbackTuples);
 			callbackIndexes.set(featureName, callbackIndex);
 			eventListeners.set(eventName, existingListeners);
 			targetListeners.set(target, eventListeners);
@@ -117,11 +122,20 @@ const eventManager: EventManager = {
 				// If it is, we get the listeners
 				const listeners = eventListeners.get(eventName);
 				if (listeners) {
-					// Remove each callback from the WeakMap
+					// Prune this (target, eventName) tuple from each callback's index; drop the key when the list empties
 					const callbackIndex = callbackIndexes.get(featureName);
 					if (callbackIndex) {
 						listeners.forEach(({ callback }) => {
-							callbackIndex.delete(callback);
+							const tuples = callbackIndex.get(callback);
+							if (!tuples) return;
+							const remaining = tuples.filter(
+								(listener) => !(listener.target === target && listener.eventName === eventName)
+							);
+							if (remaining.length === 0) {
+								callbackIndex.delete(callback);
+							} else {
+								callbackIndex.set(callback, remaining);
+							}
 						});
 					}
 					// If we have listeners, we remove them
@@ -174,12 +188,19 @@ const eventManager: EventManager = {
 		// Get the listeners for this target only
 		const eventListeners = targetListeners.get(target);
 		if (!eventListeners) return;
-		// Remove each callback from the WeakMap before removing from DOM
+		// Prune this target's tuples from each callback's index before removing from DOM; drop the key when the list empties
 		const callbackIndex = callbackIndexes.get(featureName);
 		if (callbackIndex) {
 			eventListeners.forEach((listeners) => {
 				listeners.forEach(({ callback }) => {
-					callbackIndex.delete(callback);
+					const tuples = callbackIndex.get(callback);
+					if (!tuples) return;
+					const remaining = tuples.filter((listener) => listener.target !== target);
+					if (remaining.length === 0) {
+						callbackIndex.delete(callback);
+					} else {
+						callbackIndex.set(callback, remaining);
+					}
 				});
 			});
 		}
