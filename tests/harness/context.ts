@@ -86,17 +86,21 @@ export async function getExtensionOrigin(context: BrowserContext): Promise<strin
 	const page = context.pages()[0] ?? (await context.newPage());
 
 	await page.goto("https://www.youtube.com", { waitUntil: "domcontentloaded" });
-	await page.waitForSelector('script[src*="/src/pages/embedded/index.js"]', {
+	// The WAR script tag that used to carry the origin is gone (plan 061 injects the embedded
+	// bundle with chrome.scripting.executeScript instead); the content script publishes the same
+	// origin on <html> at document_start.
+	await page.waitForSelector("html[data-yte-extension-origin]", {
 		state: "attached",
 		timeout: 15_000
 	});
+	const raw = await page.evaluate(() =>
+		document.documentElement.getAttribute("data-yte-extension-origin")
+	);
 
-	const origin = await page.evaluate(() => {
-		const script = document.querySelector('script[src*="/src/pages/embedded/index.js"]');
-		return new URL(script!.getAttribute("src")!).origin;
-	});
-
-	return origin;
+	// Same shape as the old `new URL(script.src).origin`: scheme and host only, no trailing slash.
+	// Node's URL reports an opaque ("null") origin for extension schemes, so assemble it by hand.
+	const { host, protocol } = new URL(raw!);
+	return `${protocol}//${host}`;
 }
 
 export async function getPrimaryPage(context: BrowserContext): Promise<Page> {
