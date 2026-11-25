@@ -107,6 +107,9 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 
 		async function addButtonToPlaylistItems() {
 			if (isStale()) return;
+			// Creation is gated on the URL too: the playlist rows can outlive the `list` param
+			// during a transition, and a button rendered then could never remove anything.
+			if (!getPlaylistId()) return;
 			const playlistItems = document.querySelectorAll(
 				`${PLAYLIST_ITEM_SELECTOR}:has(ytd-thumbnail-overlay-time-status-renderer)`
 			);
@@ -127,7 +130,9 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 						icon: FaTrashAlt,
 						iconColor: IsDarkMode() ? "white" : "black",
 						onClick: async () => {
-							const playlistId = getPlaylistId()!;
+							// No playlist context in the URL — nothing to remove.
+							const playlistId = getPlaylistId();
+							if (!playlistId) return;
 							const {
 								data: { setVideoId }
 							} = item as YTDPlaylistVideoRenderer;
@@ -194,6 +199,8 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 
 		async function addRemoveAllButton() {
 			if (!enable_remove_all_watched_button) return;
+			// Same URL gate as the per-item buttons: its click needs a playlist id to work.
+			if (!getPlaylistId()) return;
 
 			const header = document.querySelector<HTMLElement>(CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR);
 			if (!header) return;
@@ -249,6 +256,9 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 			removeAllButton.onclick = async () => {
 				const button = removeAllButton;
 				if (!button) return;
+				// No playlist context in the URL — bail before the button enters its "removing" state.
+				const playlistId = getPlaylistId();
+				if (!playlistId) return;
 
 				const { title: originalTitle } = button;
 				button.disabled = true;
