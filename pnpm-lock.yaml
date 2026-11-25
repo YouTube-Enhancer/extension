@@ -28,9 +28,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.103.1
         version: 5.103.1(react@19.3.0)
-      dotenv:
-        specifier: ^18.0.4
-        version: 18.0.9
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       fuse.js:
         specifier: ^7.5.0
         version: 7.5.0
@@ -52,15 +52,15 @@ importers:
       react-icons:
         specifier: ^5.7.0
         version: 5.7.0(react@19.3.0)
+      recharts:
+        specifier: ^3.10.1
+        version: 3.10.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react-is@19.3.0)(react@19.3.0)(redux@5.0.1)
       safe-units:
         specifier: ^2.0.1
         version: 2.0.1
-      tailwindcss-multi:
-        specifier: ^0.4.6
-        version: 0.4.6
-      vite-plugin-css-injected-by-js:
-        specifier: ^5.0.2
-        version: 5.0.3(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.15)(yaml@2.9.1))
+      tailwind-merge:
+        specifier: ^3.7.0
+        version: 3.7.0
       webextension-polyfill:
         specifier: ^0.12.0
         version: 0.12.0
@@ -70,6 +70,9 @@ importers:
       zod:
         specifier: '>=4.6.6'
         version: 4.6.7
+      zod-error:
+        specifier: ^2.0.0
+        version: 2.0.0(zod@4.6.7)
     devDependencies:
       '@semantic-release/changelog':
         specifier: ^7.0.0
@@ -119,12 +122,12 @@ importers:
       autoprefixer:
         specifier: ^10.6.1
         version: 10.6.2(postcss@8.5.32)
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
       concurrently:
         specifier: ^10.0.5
         version: 10.0.6
+      dotenv:
+        specifier: ^18.0.4
+        version: 18.0.9
       eslint:
         specifier: ^10.11.0
         version: 10.11.0(jiti@1.21.7)(supports-color@10.2.2)
@@ -161,18 +164,15 @@ importers:
       postcss-safe-parser:
         specifier: ^7.1.0
         version: 7.1.0(postcss@8.5.32)
-      recharts:
-        specifier: ^3.10.1
-        version: 3.10.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react-is@19.3.0)(react@19.3.0)(redux@5.0.1)
       semantic-release:
         specifier: ^25.0.9
         version: 25.0.9(supports-color@10.2.2)(typescript@7.0.2)
-      tailwind-merge:
-        specifier: ^3.7.0
-        version: 3.7.0
       tailwindcss:
         specifier: ^3.4.19
         version: 3.4.19(tsx@4.23.15)(yaml@2.9.1)
+      tailwindcss-multi:
+        specifier: ^0.4.6
+        version: 0.4.6
       ts-json-as-const:
         specifier: ^1.0.7
         version: 1.0.7(typescript@7.0.2)
@@ -185,15 +185,15 @@ importers:
       vite:
         specifier: '>=8.3.3'
         version: 8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.15)(yaml@2.9.1)
+      vite-plugin-css-injected-by-js:
+        specifier: ^5.0.2
+        version: 5.0.3(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.15)(yaml@2.9.1))
       vitest:
         specifier: ^5.1.0
         version: 5.1.0(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.15)(yaml@2.9.1))
       ws:
         specifier: ^8.21.3
         version: 8.21.3
-      zod-error:
-        specifier: ^2.0.0
-        version: 2.0.0(zod@4.6.7)
 
 packages:
 
