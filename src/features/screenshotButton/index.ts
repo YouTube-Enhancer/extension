@@ -15,97 +15,93 @@ import { metadata } from "./index.metadata";
 import { buildScreenshotFilenameContext } from "./utils";
 
 async function takeScreenshot(videoElement: HTMLVideoElement) {
-	try {
-		// Create a canvas element and get its context
-		const canvas = document.createElement("canvas");
-		const context = canvas.getContext("2d");
-		// Set the dimensions of the canvas to the video's dimensions (fallback for unavailable streams)
-		const videoWidth = videoElement.videoWidth || videoElement.offsetWidth || 640;
-		const videoHeight = videoElement.videoHeight || videoElement.offsetHeight || 360;
-		canvas.width = videoWidth;
-		canvas.height = videoHeight;
-		// Draw the video element onto the canvas
-		if (!context) return;
-		context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-		// Wait for the options message and get the format from it
-		const {
-			dateFormat = "iso",
-			filename = defaultScreenshotFilenameTemplate,
-			format,
-			saveAs,
-			timestampFormat = "auto",
-			timestampSeparator = "auto"
-		} = featureConfigManager.getLastOr("screenshotButton", metadata.defaults);
+	// Create a canvas element and get its context
+	const canvas = document.createElement("canvas");
+	const context = canvas.getContext("2d");
+	// Set the dimensions of the canvas to the video's dimensions (fallback for unavailable streams)
+	const videoWidth = videoElement.videoWidth || videoElement.offsetWidth || 640;
+	const videoHeight = videoElement.videoHeight || videoElement.offsetHeight || 360;
+	canvas.width = videoWidth;
+	canvas.height = videoHeight;
+	// Draw the video element onto the canvas
+	if (!context) return;
+	context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+	// Wait for the options message and get the format from it
+	const {
+		dateFormat = "iso",
+		filename = defaultScreenshotFilenameTemplate,
+		format,
+		saveAs,
+		timestampFormat = "auto",
+		timestampSeparator = "auto"
+	} = featureConfigManager.getLastOr("screenshotButton", metadata.defaults);
 
-		const copyToClipboard = async () => {
-			const screenshotButton = getFeatureButton("screenshotButton");
-			if (!screenshotButton) return;
-			const { listener, remove } = createTooltip({
-				direction: "up",
-				element: screenshotButton,
-				featureName: "screenshotButton",
-				id: "yte-feature-screenshotButton-tooltip"
-			});
+	const copyToClipboard = async () => {
+		const screenshotButton = getFeatureButton("screenshotButton");
+		if (!screenshotButton) return;
+		const { listener, remove } = createTooltip({
+			direction: "up",
+			element: screenshotButton,
+			featureName: "screenshotButton",
+			id: "yte-feature-screenshotButton-tooltip"
+		});
+		try {
+			const mimeType = "image/png";
+			const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, mimeType));
+			if (!blob) throw new Error("canvas.toBlob produced no image data");
+			const clipboardImage = new ClipboardItem({ [mimeType]: blob });
+			await navigator.clipboard.write([clipboardImage]);
+			// Announce success only once the write has resolved — a failed copy must not claim otherwise.
 			screenshotButton.dataset.title = window.i18nextInstance.t(
 				(translations) =>
 					translations.pages.content.features.screenshotButton.extras.copiedToClipboard
 			);
 			listener();
-			try {
-				const mimeType = "image/png";
-				const blob = await new Promise<Nullable<Blob>>((resolve) =>
-					canvas.toBlob(resolve, mimeType)
-				);
-				if (blob) {
-					const clipboardImage = new ClipboardItem({ [mimeType]: blob });
-					await navigator.clipboard.write([clipboardImage]);
-				}
-				setTimeout(() => {
-					remove();
-				}, 1200);
-			} catch (err) {
+			setTimeout(() => {
 				remove();
-				console.error("[screenshotButton] Failed to copy screenshot to clipboard:", err);
-			}
-		};
-
-		const saveToFile = async () => {
-			const mimeType = `image/${format}`;
-			const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, mimeType));
-			if (!blob) return;
-			const urlParams = new URLSearchParams(window.location.search);
-			const videoId = urlParams.get("v") ?? "";
-			const context = await buildScreenshotFilenameContext(
-				videoElement,
-				{
-					date: formatScreenshotDate(new Date(), dateFormat),
-					extension: format,
-					resolution: `${videoWidth}x${videoHeight}`,
-					videoId
-				},
-				timestampFormat,
-				timestampSeparator
-			);
-			const name =
-				resolveFilenameTemplate(filename, context) ??
-				resolveFilenameTemplate(defaultScreenshotFilenameTemplate, context) ??
-				`Screenshot-${videoId}-${context.date}`;
-			const downloadName = name.toLowerCase().endsWith(`.${format.toLowerCase()}`)
-				? name
-				: `${name}.${format}`;
-			const a = document.createElement("a");
-			a.href = URL.createObjectURL(blob);
-			a.download = downloadName;
-			a.click();
-		};
-
-		if (saveAs === "clipboard" || saveAs === "both") {
-			await copyToClipboard();
+			}, 1200);
+		} catch (err) {
+			remove();
+			console.error("[screenshotButton] Failed to copy screenshot to clipboard:", err);
 		}
-		if (saveAs === "file" || saveAs === "both") {
-			await saveToFile();
-		}
-	} catch (_error) {}
+	};
+
+	const saveToFile = async () => {
+		const mimeType = `image/${format}`;
+		const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, mimeType));
+		if (!blob) throw new Error("canvas.toBlob produced no image data");
+		const urlParams = new URLSearchParams(window.location.search);
+		const videoId = urlParams.get("v") ?? "";
+		const context = await buildScreenshotFilenameContext(
+			videoElement,
+			{
+				date: formatScreenshotDate(new Date(), dateFormat),
+				extension: format,
+				resolution: `${videoWidth}x${videoHeight}`,
+				videoId
+			},
+			timestampFormat,
+			timestampSeparator
+		);
+		const name =
+			resolveFilenameTemplate(filename, context) ??
+			resolveFilenameTemplate(defaultScreenshotFilenameTemplate, context) ??
+			`Screenshot-${videoId}-${context.date}`;
+		const downloadName = name.toLowerCase().endsWith(`.${format.toLowerCase()}`)
+			? name
+			: `${name}.${format}`;
+		const a = document.createElement("a");
+		a.href = URL.createObjectURL(blob);
+		a.download = downloadName;
+		a.click();
+	};
+
+	if (saveAs === "clipboard" || saveAs === "both") {
+		await copyToClipboard();
+	}
+	if (saveAs === "file" || saveAs === "both") {
+		await saveToFile();
+	}
 }
 
 export default createFeature({
