@@ -121,9 +121,10 @@ export async function sendDevToolsMessage<T extends DevToolsMessageType>(
 				return;
 			})
 			.catch((error) => {
-				// Clear timeout on error
+				// Settle the caller's promise: rethrowing here would float into an
+				// unhandled rejection and leave the outer promise pending forever.
 				clearTimeout(timeoutId);
-				throw error;
+				reject(error instanceof Error ? error : new Error(String(error)));
 			});
 	});
 }
