@@ -40,7 +40,8 @@ const endMarker = "<!-- YOUTUBE-ENHANCER-FEATURES-LIST:END -->";
 /** True when the committed README already matches what the metadata generates. Used by `pnpm run lint:readme`. */
 export async function isReadmeUpToDate(): Promise<boolean> {
 	const rendered = await renderReadme();
-	return !rendered || rendered.next === rendered.current;
+	if (!rendered) return false;
+	return rendered.next === rendered.current;
 }
 
 /**
