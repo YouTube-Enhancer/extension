@@ -21,6 +21,8 @@
 		"paths": {
 			"@/public/locales/*": ["./public/locales/*"],
 			"@/src/*": ["./src/*"],
+			"@/tests/*": ["./tests/*"],
+			"playwright.config": ["./playwright.config.ts"],
 			"monaco-editor/esm/*": ["./node_modules/monaco-editor/esm/*"],
 			"youtubei.js/dist/*": ["./node_modules/youtubei.js/dist/*"],
 			"vite/*": ["./node_modules/vite/*"]
@@ -30,8 +32,12 @@
 		"src",
 		"vite.config.ts",
 		"public/locales",
+		"playwright.config.ts",
 		"tailwind.config.ts",
-		"postcss.config.cjs"
+		"postcss.config.cjs",
+		"src/features/__tests__",
+		"src/utils/_tests",
+		"tests"
 	],
 	"exclude": ["node_modules", "dist", "releases"]
 }
