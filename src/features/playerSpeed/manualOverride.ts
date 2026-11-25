@@ -32,32 +32,9 @@ export function getSessionSpeed(): Nullable<number> {
 export function installUserInputTracking(): void {
 	if (userInputTracked) return;
 	userInputTracked = true;
-	const note = (event: Event) => {
-		if (event.isTrusted) lastUserInputAt = Date.now();
-	};
-	document.addEventListener(
-		"pointerdown",
-		(event) => {
-			note(event);
-			if (event.isTrusted) pointerHeld = true;
-		},
-		true
-	);
-	document.addEventListener(
-		"pointerup",
-		(event) => {
-			note(event);
-			pointerHeld = false;
-		},
-		true
-	);
-	document.addEventListener(
-		"pointercancel",
-		() => {
-			pointerHeld = false;
-		},
-		true
-	);
+	document.addEventListener("pointerdown", onPointerDown, true);
+	document.addEventListener("pointerup", onPointerUp, true);
+	document.addEventListener("pointercancel", onPointerCancel, true);
 	document.addEventListener("keydown", note, true);
 	document.addEventListener("wheel", note, { capture: true, passive: true });
 }
@@ -92,9 +69,34 @@ export function setSessionSpeed(speed: number): void {
 	sessionSpeed = speed;
 }
 
+/** Removes the five document listeners `installUserInputTracking` added and re-arms tracking for a later enable. */
+export function uninstallUserInputTracking(): void {
+	document.removeEventListener("pointerdown", onPointerDown, true);
+	document.removeEventListener("pointerup", onPointerUp, true);
+	document.removeEventListener("pointercancel", onPointerCancel, true);
+	document.removeEventListener("keydown", note, true);
+	document.removeEventListener("wheel", note, { capture: true });
+	userInputTracked = false;
+}
+
 /** Whether the user pressed, clicked or scrolled recently enough for a rate change to be theirs (a held pointer counts). */
 export function wasUserInputRecent(): boolean {
 	return pointerHeld || Date.now() - lastUserInputAt <= USER_INPUT_WINDOW_MS;
+}
+
+function note(event: Event): void {
+	if (event.isTrusted) lastUserInputAt = Date.now();
+}
+function onPointerCancel(): void {
+	pointerHeld = false;
+}
+function onPointerDown(event: Event): void {
+	note(event);
+	if (event.isTrusted) pointerHeld = true;
+}
+function onPointerUp(event: Event): void {
+	note(event);
+	pointerHeld = false;
 }
 
 function pruneExpiredRecords(now: number): void {

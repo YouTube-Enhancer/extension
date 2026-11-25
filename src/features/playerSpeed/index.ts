@@ -28,6 +28,7 @@ import {
 	markManualOverride,
 	noteUserInput,
 	setSessionSpeed,
+	uninstallUserInputTracking,
 	wasUserInputRecent
 } from "./manualOverride";
 import { parseChannelSpeeds } from "./utils";
@@ -344,6 +345,7 @@ export default createFeature({
 		enforcedConfig = null;
 		teardownMenuObservers();
 		observedSettingsMenu = null;
+		uninstallUserInputTracking();
 		// Lifecycle already aborted this feature's player retries before onDisable runs
 		detachRateChangeListener();
 		clearManualOverride();
