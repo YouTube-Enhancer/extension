@@ -124,7 +124,6 @@ export async function startWatch(argv: string[]): Promise<void> {
 		define,
 		logLevel: "warn",
 		outDir: targetDir,
-		singleFileEmbedded: true,
 		watch: watchOptions
 	});
 	attach("pages", pagesWatcher, () => hmrServer?.writeHtml(targetDir));

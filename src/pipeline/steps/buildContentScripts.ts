@@ -21,11 +21,6 @@ export type ContentScriptBuildOptions = {
 	logLevel?: LogLevel;
 	/** Output folder. The release pipeline builds into `dist/temp`; the watch pipeline builds straight into its target. */
 	outDir?: string;
-	/**
-	 * Emit the embedded script as one file. The watch pipeline re-injects it into open YouTube tabs with a fresh query
-	 * string, and a document's ES module map would otherwise keep serving the old chunks by their unchanged URLs.
-	 */
-	singleFileEmbedded?: boolean;
 	/** Keep building on change; one watcher per bundle is returned in `contentScripts` order. */
 	watch?: Rolldown.WatcherOptions;
 };
@@ -34,24 +29,21 @@ const contentScripts = [
 	{
 		/** The manifest loads the content script as a classic script, so it must stay one file without ES imports. */
 		codeSplitting: false,
-		entry: "content"
+		entry: "content",
+		format: "es" as const
 	},
 	{
-		codeSplitting: {
-			/**
-			 * Every feature chunk imports its own `index.metadata.ts`, which the eagerly loaded metadata registry imports
-			 * as well. Left to itself, Rolldown emits one tiny chunk per such shared module; this keeps all feature
-			 * metadata in one chunk, as the entry already loads it.
-			 */
-			groups: [{ name: "featureMetadata", test: /[\\/]index\.metadata\.ts$/ }],
-			/**
-			 * Keep the metadata modules' own imports (schemas, constants such as the deep-dark presets) in the same chunk.
-			 * With this off, Rolldown split those constants into a chunk that also imported this one, and the metadata ran
-			 * before the constants existed ("Cannot convert undefined or null to object" from zod's enum).
-			 */
-			includeDependenciesRecursively: true
-		},
-		entry: "embedded"
+		/**
+		 * The embedded bundle reaches the page world as a classic script injected by
+		 * `chrome.scripting.executeScript({ world: "MAIN", files: [...] })` (Chrome ≥157 refuses
+		 * the page-initiated `chrome-extension://` module tag), so it must be one self-contained
+		 * IIFE: no top-level `import`, no sibling chunks, and every lazy feature chunk inlined —
+		 * there is no module map to resolve them against on youtube.com. Code splitting is off
+		 * because IIFE output cannot be split; the single file also removes the chunk-boundary
+		 * ordering hazard (feature metadata evaluating before the constants it enumerates).
+		 */
+		entry: "embedded",
+		format: "iife" as const
 	}
 ];
 
@@ -59,11 +51,10 @@ export async function buildContentScripts({
 	define,
 	logLevel,
 	outDir: targetDir = resolve(outDir, "temp"),
-	singleFileEmbedded = false,
 	watch
 }: ContentScriptBuildOptions = {}): Promise<Rolldown.RolldownWatcher[]> {
 	const watchers: Rolldown.RolldownWatcher[] = [];
-	for (const { codeSplitting, entry } of contentScripts) {
+	for (const { codeSplitting, entry, format } of contentScripts) {
 		const result = await build({
 			build: {
 				emptyOutDir: false,
@@ -86,10 +77,12 @@ export async function buildContentScripts({
 					output: {
 						assetFileNames: "src/[name][extname]",
 						chunkFileNames: (chunk) => `src/${chunk.name}.js`,
-						codeSplitting: singleFileEmbedded && entry === "embedded" ? false : codeSplitting,
+						codeSplitting,
 						entryFileNames: (chunk) => {
 							return `src/pages/${chunk.name}/index.js`;
 						},
+						/** The embedded entry's IIFE is the classic-script delivery path (see the entry comment). */
+						format,
 						keepNames: true
 					},
 					treeshake: {
