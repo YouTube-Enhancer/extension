@@ -4,7 +4,7 @@ import { isGroupNode, isSettingNode } from "@/src/features/_registry/types";
 
 /**
  * The numeric validation rules, kept free of the metadata registry so non-bundled consumers
- * (the Playwright worker, scripts) can load them: importing the registry runs `import.meta.glob`,
+ * (scripts running outside the Vite bundle) can load them: importing the registry runs `import.meta.glob`,
  * which only exists under Vite. Callers pass settings nodes from wherever they load metadata and
  * get back the tree `validateNumbers` walks.
  */
