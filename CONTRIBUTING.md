@@ -72,7 +72,7 @@ PRs opened against `main` will be asked to retarget `dev`.
 2. **Install dependencies:** `pnpm install`
 3. **Run dev server:** `pnpm run dev` (hot reload enabled)
 4. **Testing:**
-   Automated testing is planned. For now, all testing is **manual verification**.
+   This branch (`dev`) has no automated test suite — the E2E suite lives on the `playwright-testing` branch (see `tests/README.md` there), and no test script runs here. Changes on this branch are verified with `pnpm run lint` and `pnpm run typecheck`, then **manual verification** using the [Manual Testing Checklist](#-manual-testing-checklist) below.
    Your feature must be validated across multiple YouTube states (watch, live, navigation, etc.).
 
 ---
@@ -85,6 +85,7 @@ It is recommended to test your code before committing by running:
 
 1. Lint check: `pnpm run lint`
 2. Fix lint errors: `pnpm run lint:fix`
+3. Type check: `pnpm run typecheck`
 
 Commits also run a husky pre-commit hook: it formats the staged files, and whenever code files are staged it executes `pnpm run lint` and `pnpm run typecheck`. Run `pnpm run typecheck` yourself before pushing as well. `pnpm run verify` chains that gate in one command — `lint`, then `typecheck`, then `build`, cheapest first so failures surface fast; `build` earns its place because it alone runs metadata validation and locale-key completeness. It is **static + build only** — it never exercises the extension, so behavioral verification stays with the [Manual Testing Checklist](#-manual-testing-checklist) below. Note that oxlint's `correctness` category is intentionally off for ESLint parity (`.oxlintrc.json`), so `verify` runs the same rule set the project had under ESLint, not a stricter one.
 
@@ -431,7 +432,7 @@ Follow a strict workflow cycle:
 
 1.  **Branching:** Always branch from `dev` — never from `main`. `dev` holds the latest features and fixes; `main` is only updated when `dev` is merged in for a release. Run: `git checkout dev && git checkout -b feature/your-feature-name`.
 2.  **Development Cycle:** Implement small, focused changes. When designing logic, adopt the **Red-Green-Refactor** methodology.
-3.  **Modification:** After implementing logic, first explore existing subdirectories in `src/utils/` (e.g., dom, format, logging, math, messaging, plugins, style, color, deep-dark-theme) to see if your utility fits into an existing category. If so, place it there. Otherwise, update `src/utils/utilities.ts` for general-purpose utilities.
+3.  **Modification:** After implementing logic, first explore existing subdirectories in `src/utils/` (e.g., dom, format, logging, math, messaging, plugins, style, color, deep-dark-theme) to see if your utility fits into an existing category. If so, place it there. Otherwise, update the best-fitting `src/utils/` category subdirectory for general-purpose utilities (create a new category directory named for the domain if none fits).
 4.  **Committing:** Commit only when the feature is functionally complete and manually verified.
 5.  **Conventional Commits:** All commits **must** follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification (`type(scope): message`), with messages that meaningfully describe the change itself. Because our release CI/CD workflow is automated, we rely on this convention for semantic versioning ([why](https://www.conventionalcommits.org/en/v1.0.0/#why-use-conventional-commits)).
     - **feat:** For new features.

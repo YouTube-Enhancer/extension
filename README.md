@@ -314,7 +314,7 @@ Before you begin, ensure you have the following software installed on your syste
 Next, open your terminal (command prompt or shell) and navigate to the directory where you want to store the YouTube Enhancer extension project. Run the following command to clone the repository:
 
 ```bash
-git clone https://github.com/YouTube-Enhancer/extension.git
+git clone https://github.com/YouTube-Enhancer/extension.git youtube-enhancer
 ```
 
 ### 3. Navigate to the Project Directory
@@ -325,7 +325,15 @@ Change your working directory to the project folder:
 cd youtube-enhancer
 ```
 
-### 4. Install Project Dependencies
+### 4. Check Out the `dev` Branch
+
+Check out `dev`: active development happens on `dev`, while `main` only receives releases.
+
+```bash
+git checkout dev
+```
+
+### 5. Install Project Dependencies
 
 Inside the project folder, run the following command to install the required dependencies:
 
@@ -333,7 +341,7 @@ Inside the project folder, run the following command to install the required dep
 pnpm install
 ```
 
-### 5. Build the Extension
+### 6. Build the Extension
 
 After the installation is complete, build the extension using the following command:
 
@@ -343,7 +351,7 @@ pnpm run build
 
 This command will bundle the extension's code and assets into a 'dist' directory.
 
-### 6. Loading the Extension from the 'dist' Folder
+### 7. Loading the Extension from the 'dist' Folder
 
 After building the extension, you can load it into your browser for testing. Follow these steps:
 
@@ -357,9 +365,9 @@ Depending on your browser, follow these steps:
 
 - **Mozilla Firefox:**
   - Open Firefox and go to `about:debugging#/runtime/this-firefox`.
-  - Click on 'Load Temporary Add-on' and select any file in the 'dist/Firefox" directory.
+  - Click on 'Load Temporary Add-on' and select any file in the 'dist/Firefox' directory.
 
-### 7. Test the Extension
+### 8. Test the Extension
 
 Your extension should now be loaded. Test it on YouTube to ensure it functions as expected.
 
@@ -385,7 +393,7 @@ Using the YouTube Enhancer Extension is straightforward:
 
 ## 📝 Contributing
 
-Contributions to the YouTube Enhancer Extension are welcome! If you'd like to contribute to the development of this extension or report issues, please refer to the project's GitHub repository.
+Contributions to the YouTube Enhancer Extension are welcome! If you'd like to contribute to the development of this extension or report issues, please see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## 🤝 Contributors
 
