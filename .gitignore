@@ -394,6 +394,8 @@ public/locales/en-US.json.d.ts
 releases/
 yarn.lock
 package-lock.json
+bun.lockb
+bun.lock
 /test-results/
 /playwright-report/
 /blob-report/
