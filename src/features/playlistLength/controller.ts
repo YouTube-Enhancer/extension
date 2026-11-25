@@ -7,6 +7,7 @@ import {
 } from "@/src/utils/dom/observers/domMutationBus";
 import { playlistItemsSelector, selectFirstWithWidth } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
+import { getPlaylistId } from "@/src/utils/playlist/getPlaylistId";
 import { THUMBNAIL_OVERLAY_SELECTORS } from "@/src/utils/video";
 
 import type { PlaylistLengthGetMethod } from "./types";
@@ -17,7 +18,6 @@ import {
 	createPlaylistLengthUIElement,
 	getDurationFromAPI,
 	getHeaderSelectors,
-	getPlaylistId,
 	getPlaylistItemsFromPlaylistPage,
 	getPlaylistItemsFromWatchPage,
 	getPlaylistItemsVideoDetails,

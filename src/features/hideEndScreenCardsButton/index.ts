@@ -5,9 +5,10 @@ import { registry } from "@/src/features/_registry/featureRegistry";
 import { addFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { whenReady } from "@/src/utils/dom/readiness";
+import { getEndScreenCardsButtonTitle } from "@/src/utils/player/endScreenCardsButton";
 
 import { metadata } from "./index.metadata";
-import { getEndScreenCardsButtonTitle, toCheckedStateIcons } from "./utils";
+import { toCheckedStateIcons } from "./utils";
 
 export default createFeature({
 	...metadata,

@@ -15,10 +15,12 @@ import {
 } from "@/src/utils/dom/selectors";
 import { waitForAllElements } from "@/src/utils/dom/wait";
 import { formatVideoTimestamp, timeStringToSeconds } from "@/src/utils/format/time";
+import { getPlaylistId } from "@/src/utils/playlist/getPlaylistId";
 import { conditionalStyles } from "@/src/utils/style";
 import { isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
 import { getWatchedPercentage } from "@/src/utils/video";
 import { getInnertubeClient } from "@/src/utils/youtube";
+
 export const getHeaderSelectors = () => {
 	const playlistSelectors = PLAYLIST_PAGE_HEADER_SELECTORS;
 	const playlist =
@@ -205,10 +207,6 @@ export async function getDurationFromAPI(playlistId: string): Promise<number> {
 			cause: error
 		});
 	}
-}
-
-export function getPlaylistId(): Nullable<string> {
-	return new URLSearchParams(window.location.search).get("list");
 }
 
 export function getPlaylistItemsFromPlaylistPage(): HTMLElement[] {

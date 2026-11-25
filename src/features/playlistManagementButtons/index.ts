@@ -4,7 +4,6 @@ import type { configuration, Nullable, YtActionEvent } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { getPlaylistId } from "@/src/features/playlistLength/utils";
 import { createActionButton, createIconSvg } from "@/src/features/playlistManagementButtons/button";
 import {
 	CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR,
@@ -23,6 +22,7 @@ import {
 } from "@/src/utils/dom/observers/domMutationBus";
 import { IsDarkMode } from "@/src/utils/dom/state";
 import { waitForElement } from "@/src/utils/dom/wait";
+import { getPlaylistId } from "@/src/utils/playlist/getPlaylistId";
 import {
 	getThumbnailOverlay,
 	getWatchedPercentage,

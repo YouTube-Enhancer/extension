@@ -9,12 +9,12 @@ import {
 	updateFeatureButtonIconByName,
 	updateFeatureButtonTitle
 } from "@/src/features/buttonController";
+import { getFeatureIcon } from "@/src/icons";
+import { modifyElementClassList } from "@/src/utils/dom/classList";
 import {
 	getEndScreenCardsButtonIcon,
 	getEndScreenCardsButtonTitle
-} from "@/src/features/hideEndScreenCardsButton/utils";
-import { getFeatureIcon } from "@/src/icons";
-import { modifyElementClassList } from "@/src/utils/dom/classList";
+} from "@/src/utils/player/endScreenCardsButton";
 
 import "./index.css";
 import { metadata } from "./index.metadata";
