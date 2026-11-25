@@ -28,6 +28,7 @@
     "lint:manifest": "tsx src/pipeline/checkFeatureLightManifest.ts",
     "lint:readme": "tsx src/pipeline/checkReadme.ts",
     "lint:fix": "oxlint . --fix && oxfmt --write \"**/*.{ts,tsx,js,mjs,cjs}\"",
+    "test:unit": "vitest run",
     "update:deepdark": "concurrently \"node scripts/updateDeepDarkMaterialCSS.js\" \"tsx scripts/updateDeepDarkPresets.js\"",
     "update:deepdark-css": "node scripts/updateDeepDarkMaterialCSS.js",
     "update:deepdark-presets": "tsx scripts/updateDeepDarkPresets.js",
@@ -95,6 +96,7 @@
     "tsx": "^4.23.13",
     "typescript": "~7.0.2",
     "vite": "^8.3.0",
+    "vitest": "^5.1.0",
     "ws": "^8.21.3",
     "zod-error": "^2.0.0"
   },
