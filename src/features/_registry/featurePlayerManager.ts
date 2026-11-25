@@ -4,7 +4,7 @@ import type {
 	FeatureKeysWithState,
 	PageType
 } from "@/src/features/_registry/types";
-import type { Nullable } from "@/src/types";
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { FeatureManagerBase } from "@/src/features/_registry/featureManagerBase";
 import {
@@ -198,15 +198,20 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		 * handler only flags; the flag is consumed when the run ends unsuccessful.
 		 */
 		if (resolved.onPlayerStateChange) {
-			this.setupStateHook(featureId, token, () => {
-				if (token.aborted || (externalSignal?.aborted ?? false)) return;
-				const entry = this.stateHooks.get(featureId);
-				if (this.activeRetries.has(featureId)) {
-					if (entry) entry.pendingChange = true;
-					return;
-				}
-				void this.executeWithRetries(featureId, tasks, taskNames, config);
-			});
+			this.setupStateHook(
+				featureId,
+				token,
+				() => {
+					if (token.aborted || (externalSignal?.aborted ?? false)) return;
+					const entry = this.stateHooks.get(featureId);
+					if (this.activeRetries.has(featureId)) {
+						if (entry) entry.pendingChange = true;
+						return;
+					}
+					void this.executeWithRetries(featureId, tasks, taskNames, config);
+				},
+				resolved.overallTimeout
+			);
 		}
 
 		return new Promise<boolean[]>((resolve) => {
@@ -351,7 +356,13 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		this.stateHooks.delete(featureId);
 	}
 
-	private setupStateHook(featureId: PlayerRetryKey, token: AbortSignal, trigger: () => void): void {
+	private setupStateHook(
+		featureId: PlayerRetryKey,
+		token: AbortSignal,
+		trigger: () => void,
+		/** Budget for the late-player continuation when the element is absent at attach time. */
+		attachBudgetMs: number
+	): void {
 		this.removeStateHook(featureId);
 
 		const handler = (): void => {
@@ -375,33 +386,55 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 
 		this.stateHooks.set(featureId, entry);
 
-		const player = getPagePlayerElement();
-		if (!player) return;
+		const attach = (player: YouTubePlayerDiv): void => {
+			player.addEventListener("onStateChange", handler);
+			/**
+			 * An ad ending is not always a state change, since the ad and the content both report "playing". The class
+			 * YouTube keeps on the player while an ad shows is watched as well, and the tasks run once it clears.
+			 */
+			let adWasShowing = player.classList.contains("ad-showing");
+			entry.adObserverUnsubscribe = subscribeToDomMutations(
+				"div#movie_player, div#shorts-player",
+				(elements) => {
+					if (token.aborted) {
+						entry.adObserverUnsubscribe?.();
+						entry.adObserverUnsubscribe = null;
+						return;
+					}
+					if (!elements.includes(player)) return;
+					const adShowing = player.classList.contains("ad-showing");
+					if (adWasShowing && !adShowing) {
+						entry.lastRun = Date.now();
+						trigger();
+					}
+					adWasShowing = adShowing;
+				},
+				{ attributeFilter: ["class"] }
+			);
+		};
 
-		player.addEventListener("onStateChange", handler);
+		const player = getPagePlayerElement();
+		if (player) {
+			attach(player);
+			return;
+		}
 		/**
-		 * An ad ending is not always a state change, since the ad and the content both report "playing". The class
-		 * YouTube keeps on the player while an ad shows is watched as well, and the tasks run once it clears.
+		 * The pre-run player wait is fail-open (see the comment above it) and can resolve
+		 * null while the player element is still missing from the DOM, and this is the only
+		 * setupStateHook call site — nothing re-attaches later. Arm a one-shot readiness
+		 * continuation so a player that appears within the run's budget still gets the
+		 * listener. Entry identity plus the token drop it once a newer run, removeStateHook
+		 * (allDone) or cancelRetries superseded this hook; the guard mirrors the
+		 * `token.aborted` check inside the ad observer.
 		 */
-		let adWasShowing = player.classList.contains("ad-showing");
-		entry.adObserverUnsubscribe = subscribeToDomMutations(
-			"div#movie_player, div#shorts-player",
-			(elements) => {
-				if (token.aborted) {
-					entry.adObserverUnsubscribe?.();
-					entry.adObserverUnsubscribe = null;
-					return;
-				}
-				if (!elements.includes(player)) return;
-				const adShowing = player.classList.contains("ad-showing");
-				if (adWasShowing && !adShowing) {
-					entry.lastRun = Date.now();
-					trigger();
-				}
-				adWasShowing = adShowing;
-			},
-			{ attributeFilter: ["class"] }
-		);
+		void (async (): Promise<void> => {
+			const latePlayer = await whenReady("pagePlayer", {
+				isCancelled: () => token.aborted || this.stateHooks.get(featureId) !== entry,
+				timeout: attachBudgetMs
+			});
+			if (!latePlayer || token.aborted || this.stateHooks.get(featureId) !== entry) return;
+			attach(getPagePlayerElement() ?? latePlayer);
+		})();
 	}
 }
 
