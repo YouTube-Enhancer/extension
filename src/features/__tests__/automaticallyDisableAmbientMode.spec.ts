@@ -6,6 +6,8 @@ import { metadata } from "@/src/features/automaticallyDisableAmbientMode/index.m
 import {
 	ambientModeMenuItemSelector,
 	describeShortsSheet,
+	ensureShortsAmbientOn,
+	readSettledShortsAmbientState,
 	readShortsAmbientState,
 	settingsPanelMenuSelector,
 	shortsOpenSheetSelector
@@ -381,23 +383,23 @@ test.describe("automaticallyDisableAmbientMode", () => {
 
 	// The shorts page keeps ambient mode behind the reel's "more" sheet, which the feature opens out of sight, reads and
 	// closes again; these cases read it the same way, with a real click. As on watch, the row only exists in YouTube's
-	// dark theme. YouTube offers it on the reel a page loads on only, and its switch does not turn back on within a
-	// page session, so ambient mode cannot be switched on as a precondition and the restore on disable cannot be
-	// verified on shorts.
+	// dark theme and only on the reel a page loads on. Where the settled read finds the switch off, the precondition is
+	// established by clicking it on (ensureShortsAmbientOn), the way the feature itself clicks it; the case skips only
+	// when that read finds no row at all or YouTube refuses the click.
 	test.describe(`on ${shorts}`, () => {
 		test.skip(!featurePages.includes(shorts), "the feature does not declare shorts");
 		test(`should turn ambient mode off on ${shorts}`, async ({ page }) => {
 			await useDarkTheme(page);
 			await navigateToPageType(page, shorts, ["ambientMode"]);
-			const initialState = await readShortsAmbientState(page);
+			const initialState = await readSettledShortsAmbientState(page);
 			test.skip(
 				initialState === null,
 				`this reel's sheet offers no ambient mode row: ${await describeShortsSheet(page)}`
 			);
-			test.skip(
-				initialState === false,
-				"ambient mode is already off on this reel and YouTube's switch does not turn it back on"
-			);
+			// Ambient mode has to be on before the feature is enabled, or the assertion below would pass on a
+			// switch that was never on; the click is also the live test of the old "cannot be switched on" claim.
+			const established = initialState === true || (await ensureShortsAmbientOn(page));
+			test.skip(!established, "this reel's ambient mode switch would not turn on");
 			await enableFeature(page, "automaticallyDisableAmbientMode.enabled");
 			await expect
 				.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 20000 })
@@ -408,10 +410,16 @@ test.describe("automaticallyDisableAmbientMode", () => {
 		}) => {
 			await useDarkTheme(page);
 			await navigateToPageType(page, shorts, ["ambientMode"]);
+			const state = await readSettledShortsAmbientState(page);
 			test.skip(
-				(await readShortsAmbientState(page)) !== true,
-				`this reel's sheet offers no ambient mode row that is on: ${await describeShortsSheet(page)}`
+				state === null,
+				`this reel's sheet offers no ambient mode row: ${await describeShortsSheet(page)}`
 			);
+			// Ambient mode is established on before the feature is enabled, so the assertion below can only pass
+			// because the feature turned it off; the click is the live test of the old "will not switch back on"
+			// claim, and only YouTube refusing it makes this case skip.
+			const established = state === true || (await ensureShortsAmbientOn(page));
+			test.skip(!established, "this reel's ambient mode switch would not turn on");
 			await enableFeature(page, "automaticallyDisableAmbientMode.enabled");
 			await expect
 				.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 20000 })
@@ -428,10 +436,16 @@ test.describe("automaticallyDisableAmbientMode", () => {
 		}) => {
 			await useDarkTheme(page);
 			await navigateToPageType(page, shorts, ["ambientMode"]);
+			const state = await readSettledShortsAmbientState(page);
 			test.skip(
-				(await readShortsAmbientState(page)) !== true,
-				`this reel's sheet offers no ambient mode row that is on: ${await describeShortsSheet(page)}`
+				state === null,
+				`this reel's sheet offers no ambient mode row: ${await describeShortsSheet(page)}`
 			);
+			// Ambient mode is established on before the feature is enabled, so the assertion below can only pass
+			// because the feature turned it off; the click is the live test of the old "will not switch back on"
+			// claim, and only YouTube refusing it makes this case skip.
+			const established = state === true || (await ensureShortsAmbientOn(page));
+			test.skip(!established, "this reel's ambient mode switch would not turn on");
 			await enableFeature(page, "automaticallyDisableAmbientMode.enabled");
 			await expect
 				.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 20000 })
