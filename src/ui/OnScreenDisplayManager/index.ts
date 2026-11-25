@@ -108,9 +108,8 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 		if (!this.value) return;
 
 		const {
-			fontSize,
 			options: { displayColor, displayOpacity, displayType },
-			value: { max, type, value }
+			value: { max, value }
 		} = this;
 
 		switch (displayType) {
@@ -161,45 +160,61 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 			case "no_display":
 				// Do nothing for no_display type.
 				break;
-			case "text": {
-				// Draw text on the canvas.
-				let text: string = "";
-				switch (type) {
-					case "seek": {
-						text = `${value > 0 ? "+" : ""}${value}s`;
-						break;
-					}
-					case "speed": {
-						text = `${value.toFixed(2)}x`;
-						break;
-					}
-					case "volume": {
-						text = `${value}%`;
-						break;
-					}
-					case "volume_boost_db": {
-						text = `${value}dB`;
-					}
-				}
-				this.setFont();
-				const { width } = this.context.measureText(text);
-				this.canvas.width = width + 15;
-				this.canvas.height = fontSize + 15;
-				this.clearCanvas();
-				// Add a shadow effect around the text.
-				this.context.shadowColor = "black";
-				this.context.shadowBlur = 10;
-				this.context.shadowOffsetX = 0;
-				this.context.shadowOffsetY = 0;
-				this.context.globalAlpha = displayOpacity / 100;
-				this.context.fillStyle = displayColor;
-				this.setFont();
-				this.context.fillText(text, this.canvas.width / 2, this.canvas.height / 2);
+			case "text":
+				this.drawText();
+				break;
+			default:
+				// Unvalidated stored config can carry a non-enum displayType: render as text (the safe
+				// fallback) so something still shows, then log and degrade instead of tearing down.
+				this.drawText();
+				this.handleError("Invalid display type");
+				break;
+		}
+	}
+
+	// Draw the text display on the canvas; shared by the "text" case and the unknown-type fallback.
+	private drawText(): void {
+		if (!this.context) return;
+		if (!this.value) return;
+
+		const {
+			fontSize,
+			options: { displayColor, displayOpacity },
+			value: { type, value }
+		} = this;
+		// Draw text on the canvas.
+		let text: string = "";
+		switch (type) {
+			case "seek": {
+				text = `${value > 0 ? "+" : ""}${value}s`;
 				break;
 			}
-			default:
-				this.handleError("Invalid display type");
+			case "speed": {
+				text = `${value.toFixed(2)}x`;
+				break;
+			}
+			case "volume": {
+				text = `${value}%`;
+				break;
+			}
+			case "volume_boost_db": {
+				text = `${value}dB`;
+			}
 		}
+		this.setFont();
+		const { width } = this.context.measureText(text);
+		this.canvas.width = width + 15;
+		this.canvas.height = fontSize + 15;
+		this.clearCanvas();
+		// Add a shadow effect around the text.
+		this.context.shadowColor = "black";
+		this.context.shadowBlur = 10;
+		this.context.shadowOffsetX = 0;
+		this.context.shadowOffsetY = 0;
+		this.context.globalAlpha = displayOpacity / 100;
+		this.context.fillStyle = displayColor;
+		this.setFont();
+		this.context.fillText(text, this.canvas.width / 2, this.canvas.height / 2);
 	}
 
 	private getContext(): Nullable<CanvasRenderingContext2D> {
@@ -220,7 +235,11 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 	}
 
 	private handleError(message: string) {
-		this.handleError(message);
+		// Log and degrade — never throw out of the constructor into the calling feature's handler.
+		browserColorLog(message, "FgRed");
+		// Best-effort teardown: both call sites run before appendCanvas has attached the canvas, so an
+		// immediate remove() would be a no-op; scheduling removal applies whenever it ends up attached.
+		this.scheduleRemoval();
 	}
 
 	private scheduleRemoval() {
