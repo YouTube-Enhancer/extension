@@ -186,6 +186,22 @@ const onKeyDown = (e: KeyboardEvent) => {
 	void minimizePlayer();
 };
 /**
+ * Whether the last maximize attempt actually landed. `body[yte-maximized]` is set unconditionally
+ * by maximizePlayer, so it only proves the extension committed to being maximized; the layout that
+ * defines it is YouTube's theater attribute flipping on the watch container. When automaticTheaterMode
+ * owns theater, maximizePlayer skips its own click and records `yte-size-button-state="theater"`
+ * instead - that flip then belongs to the theater feature's own retry, so it counts as landed here.
+ */
+export function isMaximizeLanded(): boolean {
+	if (document.body.getAttribute("yte-maximized") !== "") return false;
+	if (document.body.getAttribute("yte-size-button-state") === "theater") return true;
+	return (
+		document
+			.querySelector<HTMLDivElement>("ytd-watch-flexy, ytd-watch-grid")
+			?.hasAttribute("theater") ?? false
+	);
+}
+/**
  * One maximize attempt for the player retry seam. maximizePlayer's element/readiness waits are
  * one-shot budgets, and a player transition (theater mode re-renders the controls, live starts
  * late) can outlast them, which used to drop the user's click for the rest of the page. The task
@@ -194,7 +210,7 @@ const onKeyDown = (e: KeyboardEvent) => {
 export function makeMaximizeTask(attemptTimeout = 2500): () => Promise<boolean> {
 	return async (): Promise<boolean> => {
 		await maximizePlayer(attemptTimeout);
-		return document.body.getAttribute("yte-maximized") === "";
+		return isMaximizeLanded();
 	};
 }
 export async function maximizePlayer(timeout = 2500) {
@@ -223,10 +239,18 @@ export async function maximizePlayer(timeout = 2500) {
 	adjustPlayer("add");
 	void changeMaximizeButtonState(true);
 	const { height } = header.getBoundingClientRect();
-	document.body.setAttribute(
-		"yte-size-button-state",
-		inTheaterMode || theaterEnabled ? "theater" : "default"
-	);
+	// Set-once: the attribute records the layout this maximize STARTED from, and the retry seam
+	// re-enters maximizePlayer after the theater flip has already landed. A later attempt would read
+	// inTheaterMode=true, skip its own click and rewrite the record to "theater" - which misreports
+	// the starting layout and makes minimizePlayer skip its restoring size-button click, leaving
+	// theater engaged after a restore that claims success. The first entry owns the value; a retry
+	// only refreshes the styles below.
+	if (!document.body.hasAttribute("yte-size-button-state")) {
+		document.body.setAttribute(
+			"yte-size-button-state",
+			inTheaterMode || theaterEnabled ? "theater" : "default"
+		);
+	}
 	document.body.style.setProperty("--yte-header-height", `${height}px`);
 	document.body.style.setProperty("--yte-video-height", `${window.innerHeight}px`);
 	window.addEventListener("resize", handleResize);
