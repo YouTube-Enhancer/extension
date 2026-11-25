@@ -211,7 +211,7 @@ Features access configuration through three mechanisms, in order of preference:
 - `pnpm run lint:i18n` - Lint i18n constants
 - `pnpm run typecheck` - Regenerate the locale type definitions, then TypeScript type check (`tsc --noEmit -p tsconfig.json`)
 - `pnpm run format` - Format code with oxfmt
-- `pnpm run test` - NOT AVAILABLE on this branch: no test script exists; the E2E suite lives on `playwright-testing`
+- `pnpm run test` - Run the Playwright E2E suite (chromium project; development build required, stop `pnpm run dev` first, one Playwright command at a time — full run rules in `tests/README.md`)
 - `pnpm run test:unit` - Run unit tests (pure logic; no browser)
 - `pnpm run verify` - Run lint, typecheck and build (the full local gate; not behavioral verification)
 

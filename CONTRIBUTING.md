@@ -72,7 +72,7 @@ PRs opened against `main` will be asked to retarget `dev`.
 2. **Install dependencies:** `pnpm install`
 3. **Run dev server:** `pnpm run dev` (hot reload enabled)
 4. **Testing:**
-   This branch (`dev`) has no automated test suite — the E2E suite lives on the `playwright-testing` branch (see `tests/README.md` there), and no test script runs here. Changes on this branch are verified with `pnpm run lint` and `pnpm run typecheck`, then **manual verification** using the [Manual Testing Checklist](#-manual-testing-checklist) below.
+   Changes on this branch are verified with `pnpm run lint` and `pnpm run typecheck`, unit tests via `pnpm run test:unit`, and end-to-end tests via `pnpm run test` (Playwright, chromium project — build a development version first, stop `pnpm run dev`, and issue one Playwright command at a time; run rules live in `tests/README.md`). The **manual verification** using the [Manual Testing Checklist](#-manual-testing-checklist) below still owns every behavior the automated suites do not cover.
    Your feature must be validated across multiple YouTube states (watch, live, navigation, etc.).
 
 **Build-script approvals:** pnpm asks before a dependency runs its install script; approve with `pnpm approve-builds`, which records the decision in `pnpm-workspace.yaml` under `allowBuilds`. `package.json` has no `allowScripts` field — build approvals live only in `pnpm-workspace.yaml`.
