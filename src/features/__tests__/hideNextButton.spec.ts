@@ -64,6 +64,10 @@ test.describe("hideNextButton", () => {
 	}
 
 	test(`should not hide next button on non-target page`, async ({ page }) => {
-		await verifyNonTargetSilence(page, nonTargetPage!, "hideNextButton", subject);
+		// YT natively hides .ytp-next-button off-playlist, so only the extension's body class is owned;
+		// the visibility check belongs to the watch-page tests where YT shows the button.
+		await verifyNonTargetSilence(page, nonTargetPage!, "hideNextButton", {
+			assertOff: (page) => expectBodyWithoutClass(page, bodyClass)
+		});
 	});
 });
