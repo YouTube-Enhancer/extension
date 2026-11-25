@@ -4,6 +4,8 @@ import eventManager from "@/src/events/EventManager";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { getFeatureButtonId } from "@/src/features/buttonController";
+// Documented exception (AGENTS config-delivery rules): the shared controller refreshes the
+// sibling feature's tooltips through its own `featureConfigManager.getLastOr(…)` config read.
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import {

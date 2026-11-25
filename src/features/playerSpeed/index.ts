@@ -4,6 +4,8 @@ import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
+// Documented exception (AGENTS config-delivery rules): refreshing the sibling feature's
+// speed-button tooltips runs its own `featureConfigManager.getLastOr("playbackSpeedButtons", …)` read.
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
 // Intentional exception (AGENTS.md "shared logic → src/utils/"): metadata is the feature
 // contract's own vocabulary, and this is only the documented cross-feature config read
@@ -15,6 +17,7 @@ import {
 } from "@/src/utils/dom/observers/domMutationBus";
 import { whenReady } from "@/src/utils/dom/readiness";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
+import { waitForElement } from "@/src/utils/dom/wait";
 import { getCurrentChannelId } from "@/src/utils/getChannelId";
 import { browserColorLog } from "@/src/utils/logging";
 import { isShortsPage, isWatchPage } from "@/src/utils/url";
