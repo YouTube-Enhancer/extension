@@ -193,7 +193,7 @@ Features access configuration through three mechanisms, in order of preference:
 
 **Navigation gate:** Events that arrive while a navigation pipeline run is in flight are queued and drained after the run. Signature + `VOLATILE_URL_PARAMS` live in `@/src/utils/url/signature`. Classify pages with the `is*Page` helpers in `@/src/utils/url`.
 
-**Do NOT use `waitForSpecificMessage("options"...)` for feature-internal config access.** This function is only for infrastructure: bootstrap, navigation re-reads, locale changes, and devtools. It has a 30s timeout but creates a message bus round-trip that is always slower than a synchronous store read.
+**Do NOT use `waitForSpecificMessage("options"...)` for feature-internal config access.** This function is only for infrastructure: bootstrap, navigation re-reads, locale changes, and devtools. It has a 30s timeout but creates a message bus round-trip that is always slower than a synchronous store read. Documented exception: `videoHistory`'s scoped-entry read (`requestStoredVideoEntry`) is a feature-path bus read on purpose — the page-side store only holds the load-time video's entry (`scopeStateForPage`), so per-navigation scoping has no synchronous equivalent; it overrides the default budget with a 500 ms timeout and warns loudly when it expires rather than failing silently (verified by investigation; see the in-code comment in `src/features/videoHistory/utils.ts`).
 
 # Build and Dev Commands
 
