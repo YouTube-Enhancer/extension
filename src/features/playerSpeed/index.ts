@@ -365,8 +365,10 @@ export default createFeature({
 		browserColorLog(`Setting player speed to ${speed}`, "FgMagenta");
 		installUserInputTracking();
 		enforcedConfig = { channelSpeeds, speed };
-		// onInit only runs for features enabled at page load; a feature enabled later through the settings
-		// still has to record manual speed changes from the player's settings menu, so arm it here too.
+		// onInit only runs in the registry's single post-registration enable pass, and only for a feature
+		// that was not already enabled when that pass reached it (its page gate flipped during startup).
+		// A feature enabled at page load - or later through the settings - never gets onInit, so manual
+		// speed changes from the player's settings menu still have to be recorded here.
 		setupPlaybackSpeedChangeListener();
 		void setupRateChangeListener();
 		clearManualOverride();

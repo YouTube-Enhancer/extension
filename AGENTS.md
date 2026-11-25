@@ -12,7 +12,7 @@ The extension uses a central `FeatureRegistry` to manage all features:
 
 - **Registration**: All features are registered via `registerAllFeatures()` which imports and registers each feature module using a glob pattern
 - **Execution Lifecycle**:
-  1. `onInit` - runs once during initialization, regardless of enabled state
+  1. `onInit` - runs once in the registry's single post-registration enable pass, before `onEnable`, and only for a feature that pass was still enabling (its page gate or config flipped during startup). Features already enabled when the pass runs are skipped, and a disabled feature is never reached, so init work for a normally-loaded feature belongs in `onEnable`
   2. `onEnable` - runs when feature is enabled (if implemented)
   3. `onDisable` - runs when feature is disabled (if implemented)
   4. `onConfigChange` - runs when configuration changes (if implemented)
@@ -35,7 +35,7 @@ Only modules that follow this contract qualify as features:
 - `onEnable(config)` - Runs when feature is enabled
 - `onDisable(config)` - Runs when feature is disabled
 - `onConfigChange(config)` - Runs when configuration changes
-- `onInit(config)` - Runs once during initialization (optional)
+- `onInit(config)` - Runs once in the post-registration enable pass, before `onEnable`, and only for features that pass enables; features enabled during registration never get it (optional)
 
 **`onEnable` and `onDisable` are a required pair.** A feature that implements one without the other is invalid: it fails the `FeatureWithoutStateBranch`/`FeatureWithStateBranch` both-or-neither union in `src/features/_registry/types.ts` at compile time, and the runtime `isFeature` validation rejects it so the registry never registers it (a warning naming the feature is logged). Features that manage no state or DOM may implement neither.
 
