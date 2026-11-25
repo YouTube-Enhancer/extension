@@ -198,15 +198,19 @@ export function makeMaximizeTask(attemptTimeout = 2500): () => Promise<boolean> 
 	};
 }
 export async function maximizePlayer(timeout = 2500) {
-	const videoPlayer = await waitForElement<HTMLVideoElement>("video.html5-main-video", timeout);
-	if (!videoPlayer) return;
-	const sizeElement = await waitForElement<HTMLButtonElement>("button.ytp-size-button", timeout);
-	if (!sizeElement) return;
-	const header = await waitForElement<HTMLElement>("#masthead-container", timeout);
-	if (!header) return;
 	// Wait for player to be fully loaded
 	const moviePlayer = await whenReady("pagePlayerReady", { timeout });
 	if (!moviePlayer) return;
+	// The video and size button live inside the player, so they are queried from the resolved
+	// root instead of waiting for them through the generic DOM wait (readiness seam: player
+	// presence waits belong to whenReady).
+	const videoPlayer = moviePlayer.querySelector<HTMLVideoElement>("video.html5-main-video");
+	if (!videoPlayer) return;
+	const sizeElement = moviePlayer.querySelector<HTMLButtonElement>("button.ytp-size-button");
+	if (!sizeElement) return;
+	// Page chrome, not player-owned: it stays a generic wait by design.
+	const header = await waitForElement<HTMLElement>("#masthead-container", timeout);
+	if (!header) return;
 	const inTheaterMode =
 		document
 			.querySelector<HTMLButtonElement>(
@@ -236,7 +240,10 @@ export async function minimizePlayer() {
 	// re-maximize after the user has already asked for the normal layout back.
 	registry.cleanupPlayerRetry("maximizePlayerButton");
 	const lastState = document.body.getAttribute("yte-size-button-state");
-	const sizeElement = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
+	// Same readiness-first pattern as maximizePlayer: the size button lives inside the player, so
+	// the player presence wait replaces the button wait (presence-only budget, as before).
+	const player = await whenReady("pagePlayer", { timeout: 2500 });
+	const sizeElement = player?.querySelector<HTMLButtonElement>("button.ytp-size-button");
 	if (lastState === "default" && sizeElement) {
 		const autoTheaterConfig = registry.getConfig("automaticTheaterMode");
 		if (!("enabled" in autoTheaterConfig) || !autoTheaterConfig.enabled)

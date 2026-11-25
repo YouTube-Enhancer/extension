@@ -3,6 +3,7 @@ import type { Nullable } from "@/src/types";
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
+import { whenReady } from "@/src/utils/dom/readiness";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { isLivePage, isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
@@ -37,8 +38,17 @@ let setupGeneration = 0;
 async function setupHoverListeners() {
 	const generation = ++setupGeneration;
 	eventManager.removeEventListeners("openYouTubeSettingsOnHover");
-	const settingsButton = await waitForElement<HTMLButtonElement>(".ytp-button.ytp-settings-button");
+	// The settings button is a child of the player's right controls, so the readiness seam waits
+	// for that root and the button is queried from it (player waits belong to whenReady).
+	const playerControls = await whenReady("playerControls");
+	const settingsButton = playerControls?.querySelector<HTMLButtonElement>(
+		".ytp-button.ytp-settings-button"
+	);
 	if (!settingsButton) return;
+	// `.ytp-settings-menu` is a sibling popup under the player
+	// root, not a descendant of the right controls, so it cannot be queried from that root, and
+	// readiness.ts has no supported sub-element wait. Left on the generic wait rather than
+	// inventing polling.
 	const settingsMenu = await waitForElement<HTMLDivElement>(settingsPanelMenuSelector);
 	if (!settingsMenu) return;
 	// Get the player element

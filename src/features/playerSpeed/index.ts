@@ -5,13 +5,16 @@ import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
+// Intentional exception (AGENTS.md "shared logic → src/utils/"): metadata is the feature
+// contract's own vocabulary, and this is only the documented cross-feature config read
+// (`featureConfigManager.getLastOr("playbackSpeedButtons", defaults)` needs the sibling's defaults).
 import { metadata as playbackSpeedButtonsMetadata } from "@/src/features/playbackSpeedButtons/index.metadata";
 import {
 	subscribeToDomMutations,
 	type UnsubscribeFromDomMutations
 } from "@/src/utils/dom/observers/domMutationBus";
+import { whenReady } from "@/src/utils/dom/readiness";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
-import { waitForElement } from "@/src/utils/dom/wait";
 import { getCurrentChannelId } from "@/src/utils/getChannelId";
 import { browserColorLog } from "@/src/utils/logging";
 import { isShortsPage, isWatchPage } from "@/src/utils/url";
@@ -292,7 +295,12 @@ function setupPlaybackSpeedChangeListener() {
 }
 
 async function setupRateChangeListener() {
-	const video = await waitForElement<HTMLVideoElement>("video.html5-main-video", 15000);
+	// No readiness target yields the <video> directly: wait for the page player root (the watch
+	// player or the shorts player — this feature serves both page types, and there is no
+	// `#movie_player` on /shorts), then find the video inside it (readiness seam: player waits go
+	// through whenReady, not waitForElement).
+	const playerRoot = await whenReady("pagePlayer", { timeout: 15000 });
+	const video = playerRoot?.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!video) return;
 	eventManager.removeEventListener(video, "ratechange", metadata.id);
 	eventManager.addEventListener(video, "ratechange", () => handleRateChange(video), metadata.id);
