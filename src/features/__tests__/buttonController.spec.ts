@@ -423,15 +423,56 @@ async function getTooltipParent(page: Page, tooltipId: string): Promise<null | s
 
 async function toggleFullscreen(page: Page, fullscreen: boolean): Promise<void> {
 	await page.locator("div#movie_player").hover();
-	await page.locator("button.ytp-fullscreen-button").click();
+	await toggleFullscreenWithForeground(page, fullscreen, () =>
+		page.locator("button.ytp-fullscreen-button").click()
+	);
 	await waitForFullscreenState(page, fullscreen);
 }
 
-async function waitForFullscreenState(page: Page, fullscreen: boolean): Promise<void> {
+/**
+ * A toggle click carrying the foreground guarantee plan 060 proved Chromium needs: YouTube's
+ * `requestFullscreen` is denied unless the browser window is OS-active, and every suite worker
+ * opens at identical window coordinates, so a parallel navigation can steal the foreground between
+ * our click and YouTube's handler — the toggle then never engages and `ytd-app[fullscreen]` never
+ * appears (evidence in plan 060's execution record,
+ * `plans/060-fullscreen-engage-investigation.md`). So bring the page to front and let the window
+ * settle immediately before each click; if the attribute still has not flipped within ~3 s, restore
+ * the foreground and click once more, then let the caller's original assertion decide. Same shape as
+ * `toggleFullscreenWithForeground` in `src/utils/_tests/fullscreen.ts`.
+ */
+async function toggleFullscreenWithForeground(
+	page: Page,
+	fullscreen: boolean,
+	click: () => Promise<void>
+): Promise<void> {
+	/** Whether `ytd-app` already reports the wanted state, polled for at most ~3 s. */
+	const stateMatches = async (): Promise<boolean> => {
+		try {
+			await waitForFullscreenState(page, fullscreen, 3000);
+			return true;
+		} catch {
+			return false;
+		}
+	};
+	await page.bringToFront();
+	await page.waitForTimeout(150);
+	await click();
+	if (await stateMatches()) return;
+	await page.bringToFront();
+	await page.waitForTimeout(150);
+	await click();
+}
+
+async function waitForFullscreenState(
+	page: Page,
+	fullscreen: boolean,
+	timeout?: number
+): Promise<void> {
 	const ytdApp = page.locator("ytd-app");
+	const options = timeout === undefined ? undefined : { timeout };
 	if (fullscreen) {
-		await expect(ytdApp).toHaveAttribute("fullscreen", "");
+		await expect(ytdApp).toHaveAttribute("fullscreen", "", options);
 		return;
 	}
-	await expect(ytdApp).not.toHaveAttribute("fullscreen", "");
+	await expect(ytdApp).not.toHaveAttribute("fullscreen", "", options);
 }
