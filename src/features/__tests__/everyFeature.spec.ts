@@ -1,0 +1,312 @@
+import type { Page } from "@playwright/test";
+
+import type { PageType } from "@/src/features/_registry/types";
+
+import { pageTypeRecord, placementSelectors } from "@/src/utils/_tests/constants";
+import {
+	collectPaths,
+	collectSwitches,
+	loadDefaultConfig,
+	setOption,
+	type Switch
+} from "@/src/utils/_tests/features";
+import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
+import {
+	navigateToPageType,
+	reloadPage,
+	spaNavigateToFirstVideo,
+	spaNavigateToHome,
+	spaNavigateToRelatedVideo,
+	waitForExtensionReady
+} from "@/src/utils/_tests/navigation";
+import { expect, test } from "@/tests/harness";
+
+/**
+ * Every feature at once. The per-feature specs prove each feature does its job; these cases prove that the whole
+ * set can be switched on together on a page, survive the page changing under it, and be switched off again, without
+ * the extension throwing. They reach the guards a healthy page never trips one feature at a time: a player that is
+ * not there, a page a feature is not meant for, a teardown while another feature still holds the element.
+ */
+const {
+	channel_home,
+	channel_posts,
+	channel_streams,
+	channel_videos,
+	home,
+	live,
+	playlist,
+	search,
+	shorts,
+	subscriptions,
+	watch
+} = pageTypeRecord;
+/** How long the features get to finish their retry loops before the page is changed or the switches read back. */
+const SETTLE_MS = 15_000;
+
+async function enableEverythingOn(page: Page, pageType: PageType): Promise<{ switches: Switch[] }> {
+	const switches = collectSwitches(await loadDefaultConfig());
+	expect(switches.length).toBeGreaterThan(50);
+	await navigateToPageType(page, pageType);
+	await setEverySwitch(page, switches, true);
+	await page.waitForTimeout(SETTLE_MS);
+	return { switches };
+}
+
+async function setEverySwitch(page: Page, switches: Switch[], enabled: boolean): Promise<void> {
+	for (const key of switches) await setOption(page, key, enabled);
+}
+
+test.describe("every feature", () => {
+	// The extension's onInstalled options page is the window's active tab, so these tests run on a
+	// hidden page; hidden tabs throttle main-thread work and the heaviest readiness gates (the
+	// live-page navigation gate especially) starve under five-worker load, which is what the
+	// recurring everyFeature live-strip failure was. Fronting the page here keeps this spec's
+	// environment visible without changing any other spec's: visibility-sensitive families
+	// (pauseBackgroundPlayers) depend on the historical hidden-tab behaviour.
+	test.beforeEach(async ({ page }) => {
+		await page.bringToFront();
+	});
+	test(`every feature enabled on ${watch} survives an in-page round trip through home and a full disable`, async ({
+		page
+	}) => {
+		test.setTimeout(300_000);
+		const { switches } = await enableEverythingOn(page, watch);
+		await waitForExtensionReady(page);
+		// Home has no player: every player-bound feature has to stand down, and the page-gated ones have to disable.
+		await spaNavigateToHome(page);
+		await page.waitForTimeout(SETTLE_MS);
+		await spaNavigateToFirstVideo(page);
+		await page.waitForTimeout(SETTLE_MS);
+		await setEverySwitch(page, switches, false);
+		await page.waitForTimeout(SETTLE_MS);
+		await expect(page.locator("div#movie_player")).toBeAttached();
+	});
+	test(`every feature enabled on ${shorts} and disabled again`, async ({ page }) => {
+		test.setTimeout(240_000);
+		const { switches } = await enableEverythingOn(page, shorts);
+		await setEverySwitch(page, switches, false);
+		await page.waitForTimeout(SETTLE_MS);
+	});
+	test(`every feature enabled on ${playlist} and disabled again`, async ({ page }) => {
+		test.setTimeout(240_000);
+		const { switches } = await enableEverythingOn(page, playlist);
+		await setEverySwitch(page, switches, false);
+		await page.waitForTimeout(SETTLE_MS);
+	});
+	test(`every feature enabled on a ${watch} page whose player is gone`, async ({ page }) => {
+		test.setTimeout(240_000);
+		await navigateToPageType(page, watch);
+		// The features find the player by waiting for it; with the element removed every one of them has to give up
+		// cleanly instead of throwing on a null it did not expect.
+		await page.evaluate(() => document.querySelector("div#movie_player")?.remove());
+		const switches = collectSwitches(await loadDefaultConfig());
+		await setEverySwitch(page, switches, true);
+		await page.waitForTimeout(SETTLE_MS * 2);
+		await setEverySwitch(page, switches, false);
+		await page.waitForTimeout(SETTLE_MS);
+	});
+	test(`every feature enabled on a ${watch} page without player controls, below-player host and owner row`, async ({
+		page
+	}) => {
+		test.setTimeout(240_000);
+		await navigateToPageType(page, watch);
+		// The hosts the buttons, the below-player container and the channel lookups attach to are gone, but the player
+		// itself stays, so every feature gets past its player check and into its own placement guards.
+		await page.evaluate(() => {
+			for (const selector of [
+				".ytp-left-controls",
+				".ytp-right-controls",
+				"div#primary > div#primary-inner > div#player",
+				"#owner",
+				"ytd-watch-metadata"
+			]) {
+				document.querySelector(selector)?.remove();
+			}
+		});
+		const switches = collectSwitches(await loadDefaultConfig());
+		await setEverySwitch(page, switches, true);
+		await page.waitForTimeout(SETTLE_MS * 2);
+		await setEverySwitch(page, switches, false);
+		await page.waitForTimeout(SETTLE_MS);
+	});
+	test(`every button placed below the player, then in the feature menu, then in fullscreen with every feature enabled on ${watch}`, async ({
+		page
+	}) => {
+		test.setTimeout(300_000);
+		const defaults = await loadDefaultConfig();
+		const placements = collectPaths(defaults, (key) => key === "placement");
+		const fullscreenPlacements = collectPaths(defaults, (key) => key === "fullscreenPlacement");
+		expect(placements.length).toBeGreaterThan(10);
+		const { switches } = await enableEverythingOn(page, watch);
+		for (const key of placements) await setOption(page, key, "below_player");
+		await page.waitForTimeout(SETTLE_MS);
+		await expect(page.locator(placementSelectors.below_player)).toBeAttached();
+		// Theater mode moves the below-player container into the watch element and back.
+		await page
+			.locator("button.ytp-size-button")
+			.evaluate((el) => (el as HTMLButtonElement).click());
+		await page.waitForTimeout(5000);
+		await expect(page.locator(placementSelectors.below_player)).toBeAttached();
+		await page
+			.locator("button.ytp-size-button")
+			.evaluate((el) => (el as HTMLButtonElement).click());
+		await page.waitForTimeout(5000);
+		for (const key of placements) await setOption(page, key, "feature_menu");
+		await page.waitForTimeout(SETTLE_MS);
+		await expect(page.locator("#yte-feature-menu-button")).toBeAttached();
+		for (const key of placements) await setOption(page, key, "player_controls_left");
+		for (const key of fullscreenPlacements) await setOption(page, key, "player_controls_right");
+		await page.waitForTimeout(SETTLE_MS);
+		await toggleFullscreen(page, true);
+		await page.waitForTimeout(5000);
+		await toggleFullscreen(page, false);
+		await page.waitForTimeout(5000);
+		await setEverySwitch(page, switches, false);
+		await page.waitForTimeout(SETTLE_MS);
+	});
+	test(`every feature enabled survives a reload, theater mode and a related-video navigation on ${watch}`, async ({
+		page
+	}) => {
+		test.setTimeout(300_000);
+		const { switches } = await enableEverythingOn(page, watch);
+		// A load with everything already on takes the registry's enable-all path instead of one enable at a time.
+		await reloadPage(page, watch);
+		await page.waitForTimeout(SETTLE_MS);
+		await page
+			.locator("button.ytp-size-button")
+			.evaluate((el) => (el as HTMLButtonElement).click());
+		await page.waitForTimeout(5000);
+		await page
+			.locator("button.ytp-size-button")
+			.evaluate((el) => (el as HTMLButtonElement).click());
+		await page.waitForTimeout(5000);
+		await spaNavigateToRelatedVideo(page);
+		await page.waitForTimeout(SETTLE_MS);
+		await setEverySwitch(page, switches, false);
+		await page.waitForTimeout(SETTLE_MS);
+	});
+	test("every feature enabled across the feed and channel pages by full loads", async ({
+		page
+	}) => {
+		test.setTimeout(420_000);
+		const { switches } = await enableEverythingOn(page, home);
+		// Each load starts the whole set on a page of that type; the channel tabs include the two the page-type
+		// detector only learned on 2026-09-07.
+		for (const pageType of [
+			search,
+			subscriptions,
+			channel_home,
+			channel_videos,
+			channel_posts,
+			channel_streams
+		]) {
+			await navigateToPageType(page, pageType);
+			await page.waitForTimeout(SETTLE_MS / 2);
+		}
+		await setEverySwitch(page, switches, false);
+		await page.waitForTimeout(SETTLE_MS / 2);
+	});
+	test(`every feature enabled on ${live} and disabled again`, async ({ page }) => {
+		test.setTimeout(360_000);
+		// A live watch page is its own page type: the live-only features start here and the watch-only ones stand down.
+		const { switches } = await enableEverythingOn(page, live);
+		await setEverySwitch(page, switches, false);
+		await page.waitForTimeout(SETTLE_MS);
+	});
+	for (const { pageType, removed } of [
+		{
+			pageType: watch,
+			removed: [
+				"video.html5-main-video",
+				".ytp-chrome-bottom",
+				"#secondary",
+				"ytd-comments",
+				"ytd-playlist-panel-renderer"
+			]
+		},
+		{ pageType: shorts, removed: ["#shorts-player", "ytd-reel-video-renderer", "#menu-button"] },
+		{
+			pageType: playlist,
+			removed: [
+				"ytd-playlist-video-list-renderer",
+				"ytd-playlist-header-renderer",
+				"yt-page-header-view-model"
+			]
+		},
+		{
+			// The combination strip: navigation chrome and the video at once, the shape a feature
+			// meets when the page is still assembling.
+			pageType: watch,
+			removed: ["#masthead-container", "#guide", "video"]
+		},
+		{
+			// A live page without its chat: the live-only features must find nothing and stand down.
+			pageType: live,
+			removed: ["ytd-live-chat-frame", "ytd-comments", "ytd-playlist-panel-renderer"]
+		},
+		{
+			// Shorts with the player intact but its reel list empty.
+			pageType: shorts,
+			removed: ["ytd-reel-video-renderer"]
+		}
+	] as const) {
+		test(`every feature enabled on a ${pageType} page stripped of ${removed.join(", ")}`, async ({
+			page
+		}) => {
+			test.setTimeout(240_000);
+			await navigateToPageType(page, pageType);
+			// Each feature has to notice the part of the page it works on is missing and give up without throwing.
+			await page.evaluate((selectors) => {
+				for (const selector of selectors)
+					document.querySelectorAll(selector).forEach((element) => element.remove());
+			}, removed);
+			const switches = collectSwitches(await loadDefaultConfig());
+			await setEverySwitch(page, switches, true);
+			await page.waitForTimeout(SETTLE_MS * 2);
+			await setEverySwitch(page, switches, false);
+			await page.waitForTimeout(SETTLE_MS);
+		});
+	}
+	test(`every feature enabled on ${watch} treats a player without its ready class as absent`, async ({
+		page
+	}) => {
+		test.setTimeout(240_000);
+		await navigateToPageType(page, watch);
+		// The player stays mounted but loses the class the readiness gate looks for: features must
+		// treat it as not-ready rather than reaching into a half-initialised player.
+		await page.evaluate(() => {
+			document.querySelector("#movie_player")?.classList.remove("html5-video-player");
+		});
+		const switches = collectSwitches(await loadDefaultConfig());
+		await setEverySwitch(page, switches, true);
+		await page.waitForTimeout(SETTLE_MS * 2);
+		await setEverySwitch(page, switches, false);
+		await page.waitForTimeout(SETTLE_MS);
+	});
+	test(`every feature enabled on ${watch} survives secondary content that appears only after enable`, async ({
+		page
+	}) => {
+		test.setTimeout(240_000);
+		await navigateToPageType(page, watch);
+		// Hidden, not removed: the enable pass sees no secondary info or end screen, and the
+		// restore makes them appear afterwards - the timing shape where only an observer can
+		// catch up. Anything that assumed presence at enable time must recover or stand down.
+		await page.evaluate(() => {
+			for (const selector of ["#secondary", "ytd-endscreen-content"])
+				document
+					.querySelectorAll(selector)
+					.forEach((element) => (element as HTMLElement).style.setProperty("display", "none"));
+		});
+		const switches = collectSwitches(await loadDefaultConfig());
+		await setEverySwitch(page, switches, true);
+		await page.evaluate(() => {
+			for (const selector of ["#secondary", "ytd-endscreen-content"])
+				document
+					.querySelectorAll(selector)
+					.forEach((element) => (element as HTMLElement).style.removeProperty("display"));
+		});
+		await page.waitForTimeout(SETTLE_MS * 2);
+		await setEverySwitch(page, switches, false);
+		await page.waitForTimeout(SETTLE_MS);
+	});
+});
