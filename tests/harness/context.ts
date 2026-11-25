@@ -42,7 +42,11 @@ export async function createExtensionContext(
 	}
 	const context = await browserType.launchPersistentContext(userDataDir, {
 		acceptDownloads: true,
-		args: headless && browserName === "chromium" ? ["--headless=chrome"] : [],
+		// Test browsers run muted: the suite plays real YouTube audio and the maintainer hears every run.
+		args: [
+			"--mute-audio",
+			...(headless && browserName === "chromium" ? ["--headless=chrome"] : [])
+		],
 		downloadsPath: join(cwd(), "playwright-downloads"),
 		headless: false,
 		// YouTube registers a service worker on the first load; see PROFILE_COPY_SKIP for what it did to navigations.
