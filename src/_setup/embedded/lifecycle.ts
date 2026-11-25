@@ -8,6 +8,7 @@ import { fetchOptions, reconcileAfterPageLoaded, seed } from "@/src/ui/configPro
 import { DEV_MODE } from "@/src/utils/config/env";
 import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
 import { disconnectFromDomMutations } from "@/src/utils/dom/observers/domMutationBus";
+import { getActiveSlotId } from "@/src/utils/embedded/instanceLiveness";
 import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
 import { isSupportedYouTubeHostname } from "@/src/utils/url/constants";
 
@@ -22,6 +23,13 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	if (!isSupportedYouTubeHostname(window.location.hostname)) {
 		return { dispose: async () => {} };
 	}
+
+	/**
+	 * The slot was claimed by `pages/embedded/index.ts` before setup ran, so this is our own id.
+	 * Captured before the first await below, while we still own the page: dispose re-reads the
+	 * slot and refuses to tear down state a newer instance now owns.
+	 */
+	const ownerId = getActiveSlotId();
 
 	const [options, { data: state }] = await Promise.all([
 		fetchOptions(),
@@ -90,6 +98,18 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 
 	return {
 		async dispose(options?: { disableFeatures?: boolean }) {
+			/**
+			 * Dead instance: a newer embedded instance holds the page slot now, so this one's
+			 * teardown would tear down state the live instance set up — the shared feature menu,
+			 * the navigation listener, the page's DOM hooks. Nothing here belongs to us anymore,
+			 * so the whole teardown is a no-op rather than a partial one.
+			 *
+			 * A free slot is not a takeover (our own release runs after dispose in every caller),
+			 * so teardown still runs for the last instance standing.
+			 */
+			const activeOwnerId = getActiveSlotId();
+			if (activeOwnerId && activeOwnerId !== ownerId) return;
+
 			/**
 			 * Each teardown step runs even if an earlier one throws. A failed disableAll used to
 			 * skip listener/history cleanup and left the next hot-reload instance stacked on top.
