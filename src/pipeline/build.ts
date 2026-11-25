@@ -13,6 +13,7 @@ import { emptyOutputFolder, rootDir } from "@/src/utils/plugins/utils";
 import {
 	copyOutputs,
 	generateFeatureLightManifest,
+	generateHideFeatureSelectors,
 	generateManifests,
 	makeReleaseZips,
 	updateReadmeFeatures,
@@ -52,6 +53,7 @@ export async function runPostBuildPipeline(retries = 3): Promise<void> {
 		try {
 			await timedStep("Generating manifests", () => generateManifests());
 			await timedStep("Copying outputs", () => copyOutputs());
+			await timedStep("Generating hide feature selectors", () => generateHideFeatureSelectors());
 			await timedStep("Updating README features", () => updateReadmeFeatures());
 			await timedStep("Generating locale types", () => generateLocaleTypes());
 			if (isDevelopment) {

@@ -2,6 +2,7 @@ import type { ExtensionSendOnlyMessages, Messages, Nullable } from "@/src/types"
 
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { setFeatureMenuConfig, setOnScreenDisplayConfig } from "@/src/ui/configProvider";
+import { DEV_MODE } from "@/src/utils/config/env";
 import { MESSAGE_ORIGIN } from "@/src/utils/messaging";
 
 import { coreFeatures } from "./coreFeatures";
@@ -27,7 +28,16 @@ async function routeMessage(message: ExtensionSendOnlyMessages | Messages["respo
 			});
 			break;
 		case "featureUpdate":
-			await registry.reconcileFeature(message.data.id, message.data.config, message.data.enabled);
+			try {
+				await registry.reconcileFeature(message.data.id, message.data.config, message.data.enabled);
+			} finally {
+				// Acknowledge this write's reconcile by its nonce, so only the write that
+				// caused this update is the one reported as settled. Compiled out of
+				// release builds, where DEV_MODE is statically false.
+				if (DEV_MODE) {
+					document.documentElement.setAttribute("yte-config-processing", message.data.nonce ?? "");
+				}
+			}
 			break;
 		case "languageChange":
 			await coreFeatures.handleLanguageChange(message.data.language);

@@ -297,6 +297,7 @@ const onPageHide = (event?: PageTransitionEvent) => {
 	// unregisters it); as a pagehide listener the event is always supplied by the DOM.
 	if (event && event.persisted) return;
 	storage.onChanged.removeListener(storageListeners);
+	document.documentElement.removeAttribute("yte-ready");
 };
 /**
  * Belt and braces with the pagehide gate: after a bfcache restore, re-ensure the listener is
@@ -410,6 +411,7 @@ const onWindowMessage = (event: MessageEvent) => {
 					}
 					case "pageLoaded": {
 						enableStorageForwarding();
+						document.documentElement.setAttribute("yte-ready", "");
 						break;
 					}
 					case "setVolumeBoostAmount": {
@@ -423,6 +425,73 @@ const onWindowMessage = (event: MessageEvent) => {
 						void storage.local.set({
 							volumeBoost: { ...existingVolumeBoost, amount }
 						});
+						break;
+					}
+					/**
+					 * ⚠ Test-only entrypoint.
+					 * Directly writes to browser.storage.local via content script pipeline.
+					 * Exists solely to support E2E tests (Playwright). Not a runtime feature.
+					 */
+					case "test_setConfigValue": {
+						// Test-only entrypoint: compiled out of release builds, where DEV_MODE is
+						// statically false, so pages cannot trigger storage rewrites.
+						if (!DEV_MODE) break;
+						/**
+						 * The write only reaches the embedded script through the storage listener
+						 * that forwards it. On a freshly (re)loaded document (YouTube's error
+						 * watcher, reload storms) that listener may not be attached yet: the
+						 * write would fire no change event and dispatch no featureUpdate, so the
+						 * wait for this write's acknowledgement would never resolve. Wait for
+						 * the embedded instance and attach forwarding first; when it never comes,
+						 * answer with a failed acknowledgement so the waiting write fails fast by
+						 * name instead of timing out.
+						 */
+						const {
+							data: { key, nonce, value }
+						} = message;
+						const acknowledge = (state: "failed" | "ok") => {
+							document.documentElement.setAttribute(
+								"yte-config-processing",
+								state === "ok" ? nonce : `failed:${nonce}`
+							);
+						};
+						if (!storageForwardingEnabled) {
+							const ready = await waitForReady(30_000);
+							if (!ready) {
+								acknowledge("failed");
+								break;
+							}
+							enableStorageForwarding();
+						}
+						const config = await storage.local.get();
+						const keys = key.split(".");
+						let current = config;
+						for (const segment of keys.slice(0, -1)) {
+							current = current[segment] as Record<string, unknown>;
+						}
+						const leafKey = keys.at(-1)!;
+						const { [leafKey]: previous } = current;
+						current[leafKey] = value;
+						// An identical value fires no storage event and needs no reconcile, so it is
+						// acknowledged explicitly instead of waiting out a grace timer.
+						if (JSON.stringify(previous) === JSON.stringify(value)) {
+							acknowledge("ok");
+							break;
+						}
+						pendingTestWriteNonce = nonce;
+						const dispatchedBefore = dispatchedFeatureUpdates;
+						const settled = new Promise<void>((resolve) => {
+							testConfigWriteSettled = resolve;
+						});
+						await storage.local.set(config);
+						await settled;
+						// featureUpdates are reconciled by the embedded script, which acknowledges with
+						// this write's nonce itself. When the write dispatched none there is nothing to
+						// reconcile, so the acknowledgement is set here.
+						if (dispatchedFeatureUpdates === dispatchedBefore) {
+							acknowledge("ok");
+						}
+						pendingTestWriteNonce = null;
 						break;
 					}
 				}
@@ -569,6 +638,12 @@ function emitPathEvent<P extends keyof typeof changeHandlers>({
 
 	sendExtensionOnlyMessage(def.event, def.build({ newValue, oldValue, options, path }));
 }
+/** Feature updates dispatched to the embedded script; lets the test config-write handler detect writes that produced nothing to reconcile. */
+let dispatchedFeatureUpdates = 0;
+/** The in-flight test write's acknowledgement nonce; rides the featureUpdate so the embedded script answers for that write. */
+let pendingTestWriteNonce: null | string = null;
+/** Resolves the in-flight test_setConfigValue write once storage has settled. */
+let testConfigWriteSettled: (() => void) | null = null;
 const storageChangeHandler = async (changes: StorageChanges<unknown>, areaName: string) => {
 	if (areaName !== "local") return;
 	const castedChanges = castStorageChanges(changes);
@@ -604,9 +679,15 @@ const storageChangeHandler = async (changes: StorageChanges<unknown>, areaName: 
 			sendExtensionOnlyMessage("featureUpdate", {
 				config,
 				enabled: resolveEnabled(config),
-				id: feature
+				id: feature,
+				...(pendingTestWriteNonce ? { nonce: pendingTestWriteNonce } : {})
 			});
+			if (DEV_MODE) dispatchedFeatureUpdates += 1;
 		}
+	}
+	if (DEV_MODE) {
+		testConfigWriteSettled?.();
+		testConfigWriteSettled = null;
 	}
 };
 type ConfigPathChange<P extends keyof typeof changeHandlers> = {

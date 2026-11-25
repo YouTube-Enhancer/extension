@@ -189,6 +189,7 @@ export type DeepDarkCustomThemeColors = {
 	mainText: string;
 	secondBackground: string;
 };
+export type FeatureButtonId = `yte-feature-${AllButtonNames}-button`;
 export type FeatureMenuItemIconId = `yte-${AllButtonNames}-icon`;
 export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
@@ -470,6 +471,22 @@ export type ContentSendOnlyMessageMappings = {
 	>;
 	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded">;
 	setVolumeBoostAmount: SendDataMessage<"send_data", "content", "setVolumeBoostAmount", number>;
+	/**
+	 * ⚠ Test-only entrypoint.
+	 * Directly writes to browser.storage.local via content script pipeline.
+	 * Exists solely to support E2E tests (Playwright). Not a runtime feature.
+	 */
+	test_setConfigValue: SendDataMessage<
+		"send_data",
+		"content",
+		"test_setConfigValue",
+		{
+			key: Path<configuration>;
+			/** Per-write acknowledgement token: the reply is this nonce on yte-config-processing. */
+			nonce: string;
+			value: PathValue<configuration, Path<configuration>>;
+		}
+	>;
 };
 export type ContentSendOnlyMessages =
 	ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings];
@@ -562,7 +579,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	>;
 	featureUpdate: DataResponseMessage<
 		"featureUpdate",
-		{ config: configuration[FeatureKeys]; enabled: boolean; id: FeatureKeys }
+		{ config: configuration[FeatureKeys]; enabled: boolean; id: FeatureKeys; nonce?: string }
 	>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	onScreenDisplayConfigChange: DataResponseMessage<
