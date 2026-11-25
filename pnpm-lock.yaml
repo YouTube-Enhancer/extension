@@ -193,8 +193,8 @@ importers:
         specifier: ^7.5.0
         version: 7.5.0
       i18next:
-        specifier: ^26.4.2
-        version: 26.6.0(typescript@7.0.2)
+        specifier: ^27.2.4
+        version: 27.2.4(typescript@7.0.2)
       monaco-editor:
         specifier: 0.57.0
         version: 0.57.0
@@ -2375,8 +2375,9 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  i18next@26.6.0:
-    resolution: {integrity: sha512-jpb1n5386s9mbBLNF6tSNIVhbBUUNiNeDyjWte+uxHP/Wr+CEy7WBM8q29TkfQ46VbwKeJFYdQJK3pSUhLp4CQ==}
+  i18next@27.2.4:
+    resolution: {integrity: sha512-Twhl6dx3IznvyQEv7rrYH2xBMAmOIjNuj/lPicevTa0d/fxg4Km315MlAI07SOWQcw2pypA4qf39RoMJgJ8WEQ==}
+    engines: {node: '>=22'}
     peerDependencies:
       typescript: ^5 || ^6 || ^7
     peerDependenciesMeta:
@@ -5579,7 +5580,7 @@ snapshots:
 
   husky@9.1.7: {}
 
-  i18next@26.6.0(typescript@7.0.2):
+  i18next@27.2.4(typescript@7.0.2):
     optionalDependencies:
       typescript: 7.0.2
 

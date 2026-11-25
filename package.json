@@ -44,7 +44,7 @@
     "@tanstack/react-query": "^5.103.1",
     "clsx": "^2.1.1",
     "fuse.js": "^7.5.0",
-    "i18next": "^26.4.2",
+    "i18next": "^27.2.4",
     "monaco-editor": "0.57.0",
     "playwright-webextext": "^0.0.5",
     "react": "^19.3.0",
