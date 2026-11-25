@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 
 import type { PageType } from "@/src/features/_registry/types";
 
@@ -16,7 +16,7 @@ export const fixtureCapabilities = [
 	"ambientMode",
 	"autoPlay",
 	"captions",
-	// Top comments that carry timestamp links (a mix with its tracklist in the comments).
+	// Top comments that carry timestamp links.
 	"commentTimestamps",
 	"dubbedAudio",
 	"endScreenCards",
@@ -317,6 +317,81 @@ async function runCheck(
 	const reason = await capabilityChecks[capability](page, pageType);
 	forPage.set(key, reason);
 	return reason;
+}
+
+/**
+ * Scrolls the comments section into view and reports whether the scroll took: the section ended up
+ * inside the viewport, or the page actually moved. A scroll that silently did nothing — element
+ * gone, zero-sized, or an evaluate on a destroyed context — reports false instead of pretending.
+ *
+ * scrollIntoView rather than a wheel step: it targets the section itself, so it cannot land in the
+ * wrong scroll container (the pointer could be over the side panel or a miniplayer) or stop short
+ * of a section thousands of pixels down, and it is the same move the passing timestampPeek spec
+ * already proves YouTube's lazy comment load answers.
+ */
+async function scrollCommentsIntoView(comments: Locator): Promise<boolean> {
+	return await comments
+		.evaluate((element) => {
+			const { scrollY: before } = window;
+			element.scrollIntoView({ block: "start" });
+			const rect = element.getBoundingClientRect();
+			const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
+			return inViewport || window.scrollY !== before;
+		})
+		.catch(() => false);
+}
+
+/**
+ * Switches the comment section off the default "Top comments" sort and onto Newest — the only
+ * sort the probe saw carry threads for a video whose Top payload had the count alone. Returns
+ * null once Newest is chosen, or the distinct reason it was not: a sort control the section
+ * never showed (the header renders with the section, so a short bound is enough), or a menu that
+ * never offered Newest. Both bounds stay short because the switch itself is fast — the probe's
+ * threads landed within about four seconds of the click — and this runs twice inside a 120 s test.
+ */
+async function switchCommentSortToNewest(comments: Locator): Promise<null | string> {
+	const page = comments.page();
+	const sortControl = comments.getByText(/^Sort by$/).first();
+	// The header rides the section into view, so the scroll rides this wait the way it rides the
+	// thread poll: the control cannot appear before the page has been shown the section.
+	try {
+		await expect
+			.poll(
+				async () => {
+					await scrollCommentsIntoView(comments);
+					return sortControl.isVisible();
+				},
+				{ timeout: 5_000 }
+			)
+			.toBe(true);
+		// scrollCommentsIntoView parks #comments at block:"start", i.e. the very top of the
+		// viewport, where YouTube's sticky masthead sits on top of the sort control: a force click
+		// there is delivered to the masthead and no menu ever opens (measured: elementFromPoint at
+		// the label's centre was DIV#container.ytd-masthead and the sort listbox stayed 0 px wide
+		// for a full 2 s after the click). The probe's click landed because its nudge left the
+		// header mid-screen, so centre the control the same way before clicking it.
+		await sortControl.evaluate((element) => element.scrollIntoView({ block: "center" }));
+		await sortControl.click({ force: true, timeout: 3_000 });
+	} catch {
+		return "the comments section never offered a sort control";
+	}
+	// The probe's exact pick (tri-comments-probe8): the open menu's items matched page-wide —
+	// not scoped to #comments, and with no `role="option"` requirement or visibility filter of
+	// its own — filtered on an unanchored /newest/i, taking the FIRST of the two shadow matches,
+	// force-clicked with the probe's own 8 s bound. The visible wait is the probe's settle before
+	// it read the menu, bounded so a menu that never opened fails fast instead of hanging.
+	const items = page.locator(
+		"tp-yt-paper-listbox tp-yt-paper-item, ytd-menu-popup-renderer tp-yt-paper-item, #contents tp-yt-paper-item"
+	);
+	const newestOption = items.filter({ hasText: /newest/i }).first();
+	try {
+		await page.waitForTimeout(1_500);
+		await newestOption.waitFor({ state: "visible", timeout: 4_000 });
+		await newestOption.click({ force: true, timeout: 8_000 });
+	} catch {
+		return "the comments sort menu never offered a Newest option";
+	}
+	return null;
 }
 
 function timestampLinkCount(page: Page, inComment: boolean): Promise<number> {
