@@ -13,6 +13,7 @@ import {
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { installFixtureHTML } from "@/src/utils/_tests/fixtureHtml";
 import {
 	navigateToLiveOrSkip,
 	navigateToPageType,
@@ -80,6 +81,7 @@ async function getSelectorDisplays(page: Page): Promise<string[]> {
  *
  */
 async function injectAiMarkup(page: Page): Promise<void> {
+	await installFixtureHTML(page);
 	await page.evaluate(
 		({ glyph, hostId }) => {
 			const addChild = (
@@ -100,8 +102,8 @@ async function injectAiMarkup(page: Page): Promise<void> {
 			host.id = hostId;
 			document.body.appendChild(host);
 			// Plain elements are never upgraded, so they can be parsed in one go.
-			host.insertAdjacentHTML(
-				"beforeend",
+			appendFixtureHTML(
+				host,
 				`
 					<div id="expandable-metadata"><span has-video-summary></span></div>
 					<div id="video-summary"><span has-video-summary></span></div>
@@ -110,24 +112,24 @@ async function injectAiMarkup(page: Page): Promise<void> {
 					<span class="yte-test-ai-control"></span>
 				`
 			);
-			addChild(host, "yt-button-view-model").insertAdjacentHTML(
-				"beforeend",
+			appendFixtureHTML(
+				addChild(host, "yt-button-view-model"),
 				`<span class="you-chat-entrypoint-button"></span>`
 			);
-			addChild(host, "yt-player-quick-action-buttons").insertAdjacentHTML(
-				"beforeend",
+			appendFixtureHTML(
+				addChild(host, "yt-player-quick-action-buttons"),
 				`<span class="you-chat-entrypoint-button"></span>`
 			);
 			addChild(host, "ytd-engagement-panel-section-list-renderer", [["target-id", "PAyouchat"]]);
-			addChild(host, "button-view-model").insertAdjacentHTML(
-				"beforeend",
+			appendFixtureHTML(
+				addChild(host, "button-view-model"),
 				`<svg><path d="${glyph}"></path></svg>`
 			);
 			addChild(host, "yt-video-description-youchat-section-view-model");
 			const chatFrame = addChild(host, "ytd-live-chat-frame");
 			addChild(chatFrame, "yt-live-chat-banner-renderer");
-			chatFrame.insertAdjacentHTML(
-				"beforeend",
+			appendFixtureHTML(
+				chatFrame,
 				`<span class="yte-test-ai-summary"></span><span class="yte-test-generative"></span>`
 			);
 			addChild(chatFrame, "ytd-engagement-panel-section-list-renderer", [

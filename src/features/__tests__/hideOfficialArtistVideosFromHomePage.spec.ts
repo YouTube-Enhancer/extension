@@ -11,6 +11,7 @@ import {
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { installFixtureHTML } from "@/src/utils/_tests/fixtureHtml";
 import {
 	navigateToPageType,
 	spaNavigateToFirstVideo,
@@ -50,6 +51,7 @@ const [, artistBadgeGlyph = ""] = /path\[d="([^"]+)"\]/.exec(firstSelector) ?? [
  * first and only given its badge once it is upgraded.
  */
 async function injectOfficialArtistMarkup(page: Page): Promise<void> {
+	await installFixtureHTML(page);
 	await page.evaluate(
 		({ glyph, hostId }) => {
 			const host = document.createElement("div");
@@ -60,8 +62,8 @@ async function injectOfficialArtistMarkup(page: Page): Promise<void> {
 			// Outside a rich grid YouTube gives the card no box of its own, so the stand-in is forced visible. The
 			// feature's `display: none !important` has to beat this inline display for the hide to register.
 			card.style.display = "block";
-			card.insertAdjacentHTML("beforeend", `<svg><path d="${glyph}"></path></svg>`);
-			host.insertAdjacentHTML("beforeend", `<span class="yte-test-artist-control"></span>`);
+			appendFixtureHTML(card, `<svg><path d="${glyph}"></path></svg>`);
+			appendFixtureHTML(host, `<span class="yte-test-artist-control"></span>`);
 		},
 		{ glyph: artistBadgeGlyph, hostId: artistHostId }
 	);

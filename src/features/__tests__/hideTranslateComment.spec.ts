@@ -10,6 +10,7 @@ import {
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { installFixtureHTML } from "@/src/utils/_tests/fixtureHtml";
 import {
 	navigateToPageType,
 	spaNavigateBack,
@@ -48,10 +49,14 @@ const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
  * would otherwise iterate over zero elements and assert nothing. Injecting one makes the check deterministic.
  */
 async function injectTranslateButton(page: Page): Promise<void> {
+	await installFixtureHTML(page);
 	await page.evaluate(() => {
 		const host = document.createElement("div");
 		host.id = "yte-test-translate-button-host";
-		host.innerHTML = `<ytd-tri-state-button-view-model class="translate-button">Translate to English</ytd-tri-state-button-view-model>`;
+		setFixtureHTML(
+			host,
+			`<ytd-tri-state-button-view-model class="translate-button">Translate to English</ytd-tri-state-button-view-model>`
+		);
 		document.body.appendChild(host);
 	});
 }

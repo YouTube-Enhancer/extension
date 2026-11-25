@@ -12,6 +12,7 @@ import {
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { installFixtureHTML } from "@/src/utils/_tests/fixtureHtml";
 import {
 	navigateToPageType,
 	spaNavigateBack,
@@ -59,6 +60,7 @@ const [, memberBadgeGlyph = ""] = /path\[d="([^"]+)"\]/.exec(firstSelector) ?? [
  * given its badge once it is upgraded.
  */
 async function injectMembersOnlyMarkup(page: Page): Promise<void> {
+	await installFixtureHTML(page);
 	await page.evaluate(
 		({ glyph, hostId }) => {
 			const addChild = (parent: Element, tag: string): HTMLElement => {
@@ -70,7 +72,7 @@ async function injectMembersOnlyMarkup(page: Page): Promise<void> {
 				return element;
 			};
 			const addBadge = (parent: Element): void =>
-				parent.insertAdjacentHTML("beforeend", `<svg><path d="${glyph}"></path></svg>`);
+				appendFixtureHTML(parent, `<svg><path d="${glyph}"></path></svg>`);
 			const host = document.createElement("div");
 			host.id = hostId;
 			document.body.appendChild(host);
@@ -79,7 +81,7 @@ async function injectMembersOnlyMarkup(page: Page): Promise<void> {
 				addChild(addChild(host, "ytd-item-section-renderer"), "yt-horizontal-list-renderer")
 			);
 			addBadge(addChild(host, "yt-lockup-view-model"));
-			host.insertAdjacentHTML("beforeend", `<span class="yte-test-members-control"></span>`);
+			appendFixtureHTML(host, `<span class="yte-test-members-control"></span>`);
 		},
 		{ glyph: memberBadgeGlyph, hostId: membersHostId }
 	);

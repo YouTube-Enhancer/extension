@@ -13,6 +13,7 @@ import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { hasAnyMatch } from "@/src/utils/_tests/dom";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { installFixtureHTML } from "@/src/utils/_tests/fixtureHtml";
 import {
 	navigateToPageType,
 	spaNavigateToFirstVideo,
@@ -51,6 +52,7 @@ const injectedSelectors = selectors.map((selector) => `#${playablesHostId} ${sel
  * connected first and only given its link once it is upgraded.
  */
 async function injectPlayablesShelf(page: Page): Promise<void> {
+	await installFixtureHTML(page);
 	await page.evaluate((hostId) => {
 		const addSection = (parent: Element, className: string, href: string, label: string): void => {
 			const section = document.createElement("ytd-rich-section-renderer");
@@ -59,7 +61,7 @@ async function injectPlayablesShelf(page: Page): Promise<void> {
 			// Outside the home feed YouTube gives the section no box of its own, so the stand-in is forced visible.
 			// The feature's `display: none !important` has to beat this inline display for the hide to register.
 			section.style.display = "block";
-			section.insertAdjacentHTML("beforeend", `<a href="${href}">${label}</a>`);
+			appendFixtureHTML(section, `<a href="${href}">${label}</a>`);
 		};
 		const host = document.createElement("div");
 		host.id = hostId;
