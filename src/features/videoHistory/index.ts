@@ -13,7 +13,6 @@ import { delay } from "@/src/utils/async";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { whenReady } from "@/src/utils/dom/readiness";
 import { createTooltip } from "@/src/utils/dom/tooltip";
-import { waitForElement } from "@/src/utils/dom/wait";
 import { formatVideoTimestamp } from "@/src/utils/format/time";
 import { browserColorLog } from "@/src/utils/logging";
 import { round } from "@/src/utils/math";
@@ -243,10 +242,15 @@ async function handleVideoChange(resumeType: VideoHistoryResumeType) {
 	const playerContainer = await whenReady("pagePlayer", { timeout: 15000 });
 	if (!playerContainer) return;
 	// The video element and video data wait are independent once the player container exists, so run
-	// them in parallel to avoid adding the video element wait to the critical path.
+	// them in parallel to avoid adding the video element wait to the critical path. The readiness
+	// seam waits for the loaded player on the original 15 s budget (a loaded player implies the
+	// media element), then the element is queried from the resolved root — presence-gated like the
+	// old wait, so an element that arrived but never reported loaded still counts.
 	const [playerVideoData, videoElement] = await Promise.all([
 		waitForPlayerVideoData(playerContainer),
-		waitForElement<HTMLVideoElement>("div#movie_player video.video-stream.html5-main-video", 15000)
+		whenReady("pagePlayerReady", { timeout: 15000 }).then(() =>
+			playerContainer.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video")
+		)
 	]);
 	// If the video is live return
 	if (playerVideoData.isLive) return;

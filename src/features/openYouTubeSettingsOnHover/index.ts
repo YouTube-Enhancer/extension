@@ -55,6 +55,8 @@ async function setupHoverListeners() {
 	const playerContainer =
 		isWatchPage() || isLivePage()
 			? await waitForElement<HTMLDivElement>(
+					// Page chrome (the player's layout container), not player-owned under
+					// `.ytp-*`: stays a generic wait.
 					isNewYouTubeVideoLayout()
 						? "div#player-container.ytd-watch-grid"
 						: "div#player-container.ytd-watch-flexy"

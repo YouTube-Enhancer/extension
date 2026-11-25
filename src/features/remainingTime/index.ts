@@ -4,7 +4,6 @@ import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { whenReady } from "@/src/utils/dom/readiness";
-import { waitForElement } from "@/src/utils/dom/wait";
 
 import { metadata } from "./index.metadata";
 import { calculateRemainingTime } from "./utils";
@@ -49,11 +48,13 @@ async function setupRemainingTime() {
 	const playerContainer = await whenReady("pagePlayer");
 	// If player element is not available, return
 	if (!playerContainer) return;
-	// Get the video element
-	const [videoElement, remainingTimeElement] = await Promise.all([
-		waitForElement<HTMLVideoElement>("video", playerContainer, 75),
-		waitForElement<HTMLSpanElement>("span#ytp-time-remaining", 75, "optional")
-	]);
+	// Both the video and this feature's time span live under the player root, so readiness
+	// waits for the loaded player on the original 75 ms budget (independent — not the shared
+	// memo), then both are queried from the resolved root instead of polling the document.
+	await whenReady("pagePlayerReady", { memo: false, timeout: 75 });
+	const videoElement = playerContainer.querySelector<HTMLVideoElement>("video");
+	const remainingTimeElement =
+		playerContainer.querySelector<HTMLSpanElement>("span#ytp-time-remaining");
 	// If video element is not available, return
 	if (!videoElement) return;
 	const timeDisplay = playerContainer.querySelector<HTMLDivElement>(

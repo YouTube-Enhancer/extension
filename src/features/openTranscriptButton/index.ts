@@ -54,6 +54,8 @@ export default createFeature({
 			},
 			name: "openTranscriptButton",
 			shouldRender: async () => {
+				// Page content (the description's transcript section), not player-owned:
+				// stays a generic wait.
 				const transcriptButton = await waitForElement(
 					"ytd-video-description-transcript-section-renderer button",
 					150,

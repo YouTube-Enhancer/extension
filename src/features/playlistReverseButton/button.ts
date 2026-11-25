@@ -109,6 +109,7 @@ function handleReverseButtonHover(event: Event) {
 }
 
 async function injectButton(stateAPI: StateAPI, container?: HTMLElement | string) {
+	// Page chrome (the playlist header's action row), not player-owned: stays a generic wait.
 	const resolvedContainer =
 		typeof container === "string" || container === undefined
 			? await waitForElement<HTMLElement>(container ?? getHeaderSelector(), 5000, "optional")

@@ -3,7 +3,6 @@ import type { Nullable } from "@/src/types";
 import eventManager from "@/src/events/EventManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { whenReady } from "@/src/utils/dom/readiness";
-import { waitForElement } from "@/src/utils/dom/wait";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
 const stateAPI = registry.getStateAPI("rememberVolume");
@@ -29,15 +28,13 @@ export async function setupVolumeChangeListener(options?: { nativeVolume?: Nulla
 	if (!IsWatchPage && !IsLivePage && !IsShortsPage) return;
 	const playerContainer = await whenReady("pagePlayer");
 	if (!playerContainer) return;
-	// The video element renders after the player shell on live pages; wait for it (scoped to the
-	// player) instead of missing the attach window entirely when the shell is up but the media
-	// element is not yet in the document.
-	const videoElement = await waitForElement<HTMLVideoElement>(
-		"div > video",
-		playerContainer,
-		10_000,
-		"optional"
-	);
+	// The video element renders after the player shell on live pages; the readiness seam waits
+	// for the loaded player on the original 10 s budget (a loaded player implies the media
+	// element), then the element is queried from the resolved root — presence-gated like the
+	// old wait, so an element that arrived but never reported loaded is still attached (the
+	// reapply retry backstops a query that runs before the element lands).
+	await whenReady("pagePlayerReady", { timeout: 10_000 });
+	const videoElement = playerContainer.querySelector<HTMLVideoElement>("div > video");
 	if (!videoElement) return;
 	// The reapply retry calls this every tick until its task succeeds; a fresh closure per call
 	// would defeat the event manager's dedup and stack recording listeners for the page session.

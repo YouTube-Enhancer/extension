@@ -224,6 +224,7 @@ export class PlaylistLengthController {
 		let headerContents: Nullable<Element> = this.queryHeader(headerSelector);
 
 		if (!headerContents) {
+			// Page chrome (the playlist header), not player-owned: stays a generic wait.
 			headerContents = await waitForElement(headerSelector);
 		}
 		if (this.destroyed) return;
@@ -238,6 +239,7 @@ export class PlaylistLengthController {
 		const itemsSelector = playlistItemsSelector();
 		let playlistItemsElement = document.querySelector(itemsSelector);
 		if (!playlistItemsElement) {
+			// Page content (the playlist's items list), not player-owned: stays a generic wait.
 			playlistItemsElement = await waitForElement(itemsSelector);
 		}
 		if (this.destroyed) return;

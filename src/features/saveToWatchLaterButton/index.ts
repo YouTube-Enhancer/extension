@@ -134,6 +134,7 @@ async function setupSaveToWatchLaterButtons() {
 	}
 
 	// The container can hydrate after navigation. Wait for it instead of a one-shot query.
+	// Page content (results/lockup container), not player-owned: stays a generic wait.
 	const container = await waitForElement<Element>(containerSelector, 5000, "optional");
 	if (!isCurrent() || !container) return;
 
