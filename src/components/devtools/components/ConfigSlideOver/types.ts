@@ -1,4 +1,4 @@
-import type { AllConfigsData } from "@/components/devtools/hooks/useDevToolsQuery";
+import type { AllConfigsData } from "@/src/components/devtools/hooks/useDevToolsQuery";
 import type {
 	FeatureKeys,
 	SettingConfig,

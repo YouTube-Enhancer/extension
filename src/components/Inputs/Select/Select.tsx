@@ -5,10 +5,10 @@ import React, { useRef } from "react";
 
 import type { configuration, configurationId, PathValue } from "@/src/types";
 
-import { useComponentVisible } from "@/hooks";
 import Arrow from "@/src/components/Inputs/Number/Arrow";
 import Loader from "@/src/components/Loader";
 import { useSettings } from "@/src/components/Settings/Settings";
+import { useComponentVisible } from "@/src/hooks";
 import { cn } from "@/src/utils/style";
 
 export type SelectOption<Key extends configurationId> = {

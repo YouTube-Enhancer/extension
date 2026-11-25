@@ -9,8 +9,8 @@ import {
 	markReady,
 	releaseSlot
 } from "@/src/utils/embedded/instanceLiveness";
+import { formatError } from "@/src/utils/format/error";
 import { browserColorLog } from "@/src/utils/logging";
-import { formatError } from "@/utils/format/error";
 
 const INSTANCE_ID = crypto.randomUUID();
 

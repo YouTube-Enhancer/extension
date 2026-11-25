@@ -2,14 +2,14 @@ import type { JSX } from "react";
 
 import { useState } from "react";
 
-import type { AllConfigsData } from "@/components/devtools/hooks/useDevToolsQuery";
+import type { AllConfigsData } from "@/src/components/devtools/hooks/useDevToolsQuery";
 import type { FeatureKeys, FeatureKeysWithState } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
-import ConfigSlideOver from "@/components/devtools/components/ConfigSlideOver";
-import DevToolsLoader from "@/components/devtools/components/DevToolsLoader";
-import { DevToolsError } from "@/components/devtools/components/DevToolsMessage";
-import StateSlideOver from "@/components/devtools/components/StateSlideOver";
+import ConfigSlideOver from "@/src/components/devtools/components/ConfigSlideOver";
+import DevToolsLoader from "@/src/components/devtools/components/DevToolsLoader";
+import { DevToolsError } from "@/src/components/devtools/components/DevToolsMessage";
+import StateSlideOver from "@/src/components/devtools/components/StateSlideOver";
 
 import type { FeatureInfo } from "./types";
 

@@ -13,7 +13,7 @@ import {
 	pagesDir,
 	srcDir,
 	utilsDir
-} from "@/utils/plugins/utils";
+} from "@/src/utils/plugins/utils";
 
 export type ContentScriptBuildOptions = {
 	/** Extra compile-time constants, e.g. the hot-reload port in watch mode. */

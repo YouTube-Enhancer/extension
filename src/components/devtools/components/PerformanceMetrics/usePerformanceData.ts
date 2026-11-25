@@ -10,7 +10,7 @@ import type {
 import {
 	type PerformanceMetricsData,
 	performanceMetricsQuery
-} from "@/components/devtools/hooks/useDevToolsQuery";
+} from "@/src/components/devtools/hooks/useDevToolsQuery";
 import { sendDevToolsMessage } from "@/src/utils/messaging/devtools";
 
 import type { ChartType, FeatureGroup, FeatureSlowest, PhaseGroup, Stats, ViewMode } from "./types";

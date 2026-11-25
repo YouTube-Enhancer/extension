@@ -1,9 +1,9 @@
-import "@/assets/styles/tailwind.css";
-import "@/pages/devtools/index.css";
+import "@/src/assets/styles/tailwind.css";
+import "@/src/pages/devtools/index.css";
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import DevTools from "@/pages/devtools/DevTools";
+import DevTools from "@/src/pages/devtools/DevTools";
 
 function init() {
 	const rootContainer = document.querySelector("#__root");

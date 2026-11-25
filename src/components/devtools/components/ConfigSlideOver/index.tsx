@@ -4,8 +4,8 @@ import { useMutation } from "@tanstack/react-query";
 
 import type { FeatureKeys, FeatureSettingNode } from "@/src/features/_registry/types";
 
-import { DevToolsEmpty } from "@/components/devtools/components/DevToolsMessage";
-import { featureConfigUpdateQuery } from "@/components/devtools/hooks/useDevToolsQuery";
+import { DevToolsEmpty } from "@/src/components/devtools/components/DevToolsMessage";
+import { featureConfigUpdateQuery } from "@/src/components/devtools/hooks/useDevToolsQuery";
 import { useDevToolsTranslations } from "@/src/components/devtools/hooks/useDevToolsTranslations";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { useNotifications } from "@/src/hooks";

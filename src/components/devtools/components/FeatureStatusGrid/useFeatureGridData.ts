@@ -12,7 +12,7 @@ import {
 	type AllConfigsData,
 	allConfigsQuery,
 	featureListQuery
-} from "@/components/devtools/hooks/useDevToolsQuery";
+} from "@/src/components/devtools/hooks/useDevToolsQuery";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
 import { updateConfigAtPath } from "@/src/utils/config/utils";

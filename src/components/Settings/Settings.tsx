@@ -11,9 +11,8 @@ import browser from "webextension-polyfill";
 
 import type { configuration, Nullable, Path, PathValue } from "@/src/types";
 
-import "@/assets/styles/tailwind.css";
-import "@/components/Settings/Settings.css";
-import { useNotifications } from "@/hooks";
+import "@/src/assets/styles/tailwind.css";
+import "@/src/components/Settings/Settings.css";
 import Loader from "@/src/components/Loader";
 import SettingsFooter from "@/src/components/Settings/components/SettingsFooter";
 import SettingsHeader from "@/src/components/Settings/components/SettingsHeader";
@@ -24,6 +23,7 @@ import {
 	OnScreenDisplaySection
 } from "@/src/components/Settings/sections";
 import SettingsGenerator from "@/src/components/Settings/SettingsGenerator";
+import { useNotifications } from "@/src/hooks";
 import { type i18nInstanceType, i18nService } from "@/src/i18n";
 import { localeDirection } from "@/src/i18n/constants";
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";

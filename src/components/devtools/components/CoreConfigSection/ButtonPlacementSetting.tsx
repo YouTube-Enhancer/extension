@@ -5,8 +5,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { FeatureKeys } from "@/src/features/_registry/types";
 import type { i18nInstanceType } from "@/src/i18n";
 
-import DevToolsLoader from "@/components/devtools/components/DevToolsLoader";
-import { coreConfigQuery } from "@/components/devtools/hooks/useDevToolsQuery";
+import DevToolsLoader from "@/src/components/devtools/components/DevToolsLoader";
+import { coreConfigQuery } from "@/src/components/devtools/hooks/useDevToolsQuery";
 import { useDevToolsTranslations } from "@/src/components/devtools/hooks/useDevToolsTranslations";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { useNotifications } from "@/src/hooks";
