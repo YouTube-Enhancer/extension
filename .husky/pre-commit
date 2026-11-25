@@ -1,8 +1,10 @@
 #!/bin/sh
 set -e
 npx lint-staged
-# only run full lint/typecheck when code files changed
-if git diff --cached --name-only | grep -qE '\.(ts|tsx|js|mjs|cjs)$'; then
+# run full lint/typecheck when code, JSON/locale, markdown or CSS files changed —
+# those are what lint:readme, lint:manifest and build:locales guard.
+# YAML is deliberately excluded: no guard covers it, so it would only pay the cost.
+if git diff --cached --name-only | grep -qE '\.(ts|tsx|js|mjs|cjs|json|md|css)$'; then
   pnpm run lint
   pnpm run typecheck
 fi
