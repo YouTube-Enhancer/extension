@@ -212,6 +212,8 @@ Features access configuration through three mechanisms, in order of preference:
 - `pnpm run typecheck` - Regenerate the locale type definitions, then TypeScript type check (`tsc --noEmit -p tsconfig.json`)
 - `pnpm run format` - Format code with oxfmt
 - `pnpm run test` - Run tests
+- `pnpm run test:unit` - Run unit tests (pure logic; no browser)
+- `pnpm run verify` - Run lint, typecheck and build (the full local gate; not behavioral verification)
 
 **Note:** Always use `pnpm run typecheck` instead of calling `tsc` directly. Use `pnpm run lint` and `pnpm run lint:fix` for linting.
 

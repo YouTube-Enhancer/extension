@@ -29,6 +29,7 @@
     "lint:readme": "tsx src/pipeline/checkReadme.ts",
     "lint:fix": "oxlint . --fix && oxfmt --write \"**/*.{ts,tsx,js,mjs,cjs}\"",
     "test:unit": "vitest run",
+    "verify": "pnpm run lint && pnpm run typecheck && pnpm run build",
     "update:deepdark": "concurrently \"node scripts/updateDeepDarkMaterialCSS.js\" \"tsx scripts/updateDeepDarkPresets.js\"",
     "update:deepdark-css": "node scripts/updateDeepDarkMaterialCSS.js",
     "update:deepdark-presets": "tsx scripts/updateDeepDarkPresets.js",

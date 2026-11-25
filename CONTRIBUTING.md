@@ -86,6 +86,8 @@ It is recommended to test your code before committing by running:
 1. Lint check: `pnpm run lint`
 2. Fix lint errors: `pnpm run lint:fix`
 
+Commits also run a husky pre-commit hook: it formats the staged files, and whenever code files are staged it executes `pnpm run lint` and `pnpm run typecheck`. Run `pnpm run typecheck` yourself before pushing as well. `pnpm run verify` chains that gate in one command — `lint`, then `typecheck`, then `build`, cheapest first so failures surface fast; `build` earns its place because it alone runs metadata validation and locale-key completeness. It is **static + build only** — it never exercises the extension, so behavioral verification stays with the [Manual Testing Checklist](#-manual-testing-checklist) below. Note that oxlint's `correctness` category is intentionally off for ESLint parity (`.oxlintrc.json`), so `verify` runs the same rule set the project had under ESLint, not a stricter one.
+
 > You won't need to do this if you use a [supported editor](https://marketplace.visualstudio.com/items?itemName=oxc.oxc-vscode), as the process is automated.
 
 ---
