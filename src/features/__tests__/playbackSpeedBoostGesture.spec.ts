@@ -6,6 +6,7 @@ import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setFeatureValue } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { OSD_SELECTOR as osdSelector, readOnScreenDisplayState } from "@/src/utils/_tests/osd";
+import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 import { expect, test, verifyDefaults } from "@/tests/harness";
 
@@ -57,8 +58,10 @@ async function expectRate(page: Page, expected: number): Promise<void> {
 async function pressPointOnVideo(page: Page): Promise<{ x: number; y: number }> {
 	// The player can still be laying out when the test first looks: a zero-size or off-screen video
 	// yields no point, which used to throw on the first sample under load. Keep sampling for a few
-	// seconds before giving up; the point conditions themselves are unchanged.
-	for (let attempt = 0; attempt < 20; attempt++) {
+	// seconds before giving up; the point conditions themselves are unchanged. 40 attempts instead of
+	// 20: gate-coverage-final.log shows this budget expiring pre-drag under 5-worker load (no rate
+	// read involved), so the window is load insurance rather than a longer patience for a dead player.
+	for (let attempt = 0; attempt < 40; attempt++) {
 		const point = await page.evaluate((selector) => {
 			const videos = Array.from(document.querySelectorAll<HTMLVideoElement>(selector));
 			for (const video of videos) {
@@ -128,6 +131,11 @@ test.describe("playbackSpeedBoostGesture", () => {
 			const boosted = Number((baseline + 10 * DEFAULT_STEP).toFixed(2));
 			expect(boosted - baseline).toBe(DEFAULT_STEP_BOOST);
 
+			// The readiness wait inside navigateToPageType runs before enableFeature, so the
+			// config-write/error-watcher reload can re-layout the reel afterwards; wait again
+			// right before the press the way the OSD path does (:438). gate-coverage-final.log:
+			// budget expired pre-drag, no rate read involved.
+			await waitForYoutubePlayerReady(page, pageType);
 			const { x, y } = await pressPointOnVideo(page);
 			await page.mouse.move(x, y);
 			await page.mouse.down();
@@ -147,6 +155,9 @@ test.describe("playbackSpeedBoostGesture", () => {
 			// clamps at the feature's floor instead of going below it. The displacement stays small on
 			// purpose: on shorts the player is a narrow centered column, and a -600px drag would leave
 			// the viewport, fire the feature's mouseleave end and revert the rate mid-assertion.
+			// Same re-layout race as the rightward drag: the readiness wait in navigateToPageType
+			// runs before enableFeature, so wait again right before the press (:438 precedent).
+			await waitForYoutubePlayerReady(page, pageType);
 			const { x, y } = await pressPointOnVideo(page);
 			await page.mouse.move(x, y);
 			await page.mouse.down();
@@ -432,6 +443,9 @@ test.describe("playbackSpeedBoostGesture", () => {
 
 				await expect(page.locator(osdSelector)).not.toBeAttached();
 
+				// The reel is still laying out its video when the first probe runs under load, so wait for
+				// the player instead of hoping the 10 s press-point window outlasts it.
+				await waitForYoutubePlayerReady(page, pageType);
 				const { x, y } = await pressPointOnVideo(page);
 				await page.mouse.move(x, y);
 				await page.mouse.down();

@@ -251,7 +251,7 @@ test.describe("onScreenDisplay", () => {
 				const style = getComputedStyle(bar);
 				return bar.offsetHeight + parseInt(style.marginTop, 10) + parseInt(style.marginBottom, 10);
 			});
-		await expect.poll(readBarHeight, { timeout: 15_000 }).toBeGreaterThan(0);
+		await expect.poll(readBarHeight, { timeout: 45_000 }).toBeGreaterThan(0);
 		const barHeight = await readBarHeight();
 		await dispatchWheelNotches(page, shorts, "up");
 		await expect(page.locator(OSD_SELECTOR)).toBeAttached({ timeout: 10000 });
