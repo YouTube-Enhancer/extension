@@ -1,5 +1,7 @@
 import browser from "webextension-polyfill";
 
+import type { ContentToBackgroundSendOnlyMessages } from "@/src/types";
+
 import { startDevelopmentMode } from "@/src/pages/content/development";
 import { storageListeners } from "@/src/pages/content/storageForwarding";
 import { seedPersistedVolumeAtStart } from "@/src/pages/content/volumeSeeding";
@@ -10,22 +12,51 @@ import {
 	storage
 } from "@/src/pages/content/windowMessageDispatcher";
 import { DEV_MODE } from "@/src/utils/config/env";
-import { waitForReady } from "@/src/utils/embedded/instanceLiveness";
+import { READY_ATTR, waitForReady } from "@/src/utils/embedded/instanceLiveness";
 
 /**
- * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
+ * Page-visible extension origin, set unconditionally (dev and prod) from this isolated-world
+ * document_start script. Plan 061 removed the page-world `<script src="…/src/pages/embedded/index.js">`
+ * tag, which used to expose the same origin through its `src`; the test harness reads this attribute
+ * instead of waiting for a tag that no longer exists. Not a new leak: pre-061 the origin was already
+ * page-visible via the web-accessible script tag (same value, same audience).
  */
-const injectEmbeddedScript = (buildId?: string) => {
-	const script = document.createElement("script");
-	script.src =
-		browser.runtime.getURL("src/pages/embedded/index.js") + (buildId ? `?b=${buildId}` : "");
-	script.type = "module";
-	document.documentElement.appendChild(script);
+document.documentElement.setAttribute("data-yte-extension-origin", browser.runtime.getURL(""));
+
+/** SPA navigations reuse the document, so the bundle is injected once per document (see below). */
+let embeddedScriptInjected = false;
+/**
+ * Chrome ≥157 refuses the page-initiated `chrome-extension://` **module** script tag that used
+ * to deliver the embedded bundle ("Unsafe attempt to load URL ... from frame with URL ..."),
+ * so the content script asks the background worker to inject it into the page world instead:
+ * `chrome.scripting.executeScript({ world: "MAIN", files: [...], injectImmediately: true })`.
+ * The message is the only trigger; the bundle is a self-contained IIFE, so no WAR entry is
+ * needed for the load itself.
+ *
+ * `force` bypasses the per-document latch for the development hot-reload swap, where a fresh
+ * copy must replace the disposed instance inside the same document.
+ */
+const injectEmbeddedScript = (force = false): void => {
+	/** SPA navigations reuse the document: one injection per document, as the tag latch did. */
+	if (embeddedScriptInjected && !force) return;
+	embeddedScriptInjected = true;
+	void browser.runtime
+		.sendMessage({
+			action: "request_action",
+			data: undefined,
+			source: "content",
+			type: "injectEmbedded"
+		} satisfies ContentToBackgroundSendOnlyMessages)
+		.catch((error: unknown) => {
+			/**
+			 * A rejected send means the background never answered, so nothing was injected.
+			 * Drop the latch so a later request (dev swap, a retry) can still try.
+			 */
+			embeddedScriptInjected = false;
+			console.error("[yte] Embedded-script injection request failed:", error);
+		});
 };
-let embeddedScriptAppended = false;
 const appendEmbeddedScript = () => {
-	if (embeddedScriptAppended) return;
-	embeddedScriptAppended = true;
 	injectEmbeddedScript();
 };
 const scheduleEmbeddedScript = () => {
@@ -37,23 +68,6 @@ const scheduleEmbeddedScript = () => {
 		appendEmbeddedScript();
 	}
 };
-
-/**
- * Put the configured level into YouTube's own volume store before this document's player is built.
- *
- * The player reads `yt-player-volume` exactly once - when it constructs itself, long after `base.js`
- * has downloaded and parsed - and starts the video at whatever it finds there, defaulting to 100%
- * when the key is empty. The extension's own `setVolume()` never reaches that store, so without this
- * seed every load plays loud and the features' apply only lands after the first audible frames.
- *
- * Seeding deliberately ignores the features' page gates: an in-page navigation (home feed -> video)
- * never runs `document_start` again, so the document the user is already on is the only one that
- * can put the value in place before the next player boots.
- *
- * Reads its three keys directly instead of going through `getCachedSettings()`, which would warm the
- * cache the page bootstrap answers `request_data options` from - a change arriving before the
- * storage listener is attached would then be served stale.
- */
 
 void seedPersistedVolumeAtStart();
 
@@ -95,7 +109,19 @@ const enableStorageForwarding = (): void => {
  * (DOM marker from the liveness module). pageLoaded remains a faster path.
  */
 void waitForReady(30000).then((ready) => {
-	if (ready) enableStorageForwarding();
+	if (ready) {
+		enableStorageForwarding();
+		return undefined;
+	}
+	/**
+	 * Loud on purpose. Before this warn, a refused page-world injection only surfaced as a
+	 * dead page-side bridge 30 s later; production consoles must see the failure at once.
+	 */
+	console.warn(
+		`[yte] waitForReady timed out after 30000 ms: document.documentElement never published ` +
+			`the ${READY_ATTR} attribute, so the page-world embedded script is not running ` +
+			`(injection was refused or the bundle threw). Storage forwarding stays disabled.`
+	);
 	return undefined;
 });
 

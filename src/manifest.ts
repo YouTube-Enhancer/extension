@@ -11,8 +11,11 @@ const baseResources = [
 	"/icons/icon_128.png",
 	"/icons/icon_48.png",
 	"/icons/icon_16.png",
-	// Only the embedded script is loaded by URL (injected as a page-world script tag). The
-	// content script is injected via the manifest and must not be page-loadable.
+	// The embedded bundle stays web-accessible even though the page no longer loads it as a
+	// module tag (Chrome ≥157 refuses that load; the background worker injects it with
+	// chrome.scripting.executeScript instead) — dropping a manifest resource is a scope change
+	// this fix does not need. The content script is injected via the manifest and must not be
+	// page-loadable.
 	"src/pages/embedded/index.js",
 	...availableLocales.map((locale) => `/locales/${locale}.json`)
 ];

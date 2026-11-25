@@ -11,7 +11,11 @@ import type { Nullable } from "@/src/types";
  * this module.
  */
 
-const READY_ATTR = "data-yte-embedded-ready";
+/**
+ * The cross-world readiness marker on `document.documentElement`. Exported so every timeout
+ * tripwire names the exact attribute that never appeared.
+ */
+export const READY_ATTR = "data-yte-embedded-ready";
 
 export type SlotClaimOptions = {
 	/** Called once when another instance holds the slot (dev dispose request). May be async. */

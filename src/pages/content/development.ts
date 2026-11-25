@@ -15,7 +15,7 @@ import {
 
 type DevelopmentModeDeps = {
 	defaultConfiguration: configuration;
-	injectEmbeddedScript: (buildId?: string) => void;
+	injectEmbeddedScript: (force?: boolean) => void;
 	onPageHide: () => void;
 	onWindowMessage: (event: MessageEvent) => void;
 	scheduleEmbeddedScript: () => void;
@@ -85,11 +85,17 @@ export function startDevelopmentMode({
 				"*"
 			);
 		});
-	const swapEmbeddedScript = async (buildId: string) => {
+	/**
+	 * The embedded bundle is no longer a script tag this file appends: the background worker
+	 * injects it with `chrome.scripting.executeScript` on request (see `content/index.ts`).
+	 * A swap is therefore a forced re-inject — `executeScript` re-reads the file from disk and
+	 * re-executes it in the page, so there is no query-string cache bust and no stale tag to
+	 * remove. The disposed instance has already released its slot, so the new copy's
+	 * `claimSlot` takes over cleanly.
+	 */
+	const swapEmbeddedScript = async () => {
 		await requestEmbeddedDispose();
-		for (const oldScript of document.querySelectorAll('script[src*="src/pages/embedded/index.js"]'))
-			oldScript.remove();
-		injectEmbeddedScript(buildId);
+		injectEmbeddedScript(true);
 	};
 	const devInvalidateListener = (changes: Record<string, unknown>, areaName: string) => {
 		if (areaName !== "local") return;
@@ -99,7 +105,7 @@ export function startDevelopmentMode({
 	};
 	const onDevRuntimeMessage = (message: unknown) => {
 		if (!isDevRuntimeMessage(message)) return false;
-		void swapEmbeddedScript(message.buildId);
+		void swapEmbeddedScript();
 		return false;
 	};
 	const dispose = () => {
@@ -136,7 +142,7 @@ export function startDevelopmentMode({
 			{ instanceId, source: DEV_RELOAD_SOURCE, type: "takeover" } satisfies DevWindowMessage,
 			"*"
 		);
-		void swapEmbeddedScript(Date.now().toString(36));
+		void swapEmbeddedScript();
 	} else {
 		scheduleEmbeddedScript();
 	}

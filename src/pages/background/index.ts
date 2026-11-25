@@ -10,6 +10,12 @@ import {
 
 import { version } from "../../../package.json";
 
+/**
+ * The page-world embedded bundle, injected with `chrome.scripting.executeScript`. The path is
+ * fixed (hash-free) by the build, and the manifest still lists it as a web-accessible resource
+ * for the devtools bridge; the page itself no longer loads it by URL.
+ */
+const EMBEDDED_SCRIPT_FILE = "src/pages/embedded/index.js";
 const sentRequestIds = new Set<string>();
 /** Bounds the devtools requestId dedup set so page-relayed requests cannot grow it forever. */
 const MAX_TRACKED_REQUEST_IDS = 5000;
@@ -143,6 +149,79 @@ chrome.runtime.onMessage.addListener(
 		// Handle regular background messages
 		const typedMessage = message as ContentToBackgroundSendOnlyMessages;
 		switch (typedMessage.type) {
+			/**
+			 * Locale files are read here, never in the content script: Chrome ≥157 refuses a
+			 * `chrome-extension://` load initiated from any context inside the youtube.com
+			 * document — the content script's isolated world included, which is why the
+			 * fetch used to fail there — while this worker runs at extension origin with no
+			 * frame around it. The content script relays the page's request and gets the
+			 * parsed messages back; no URL crosses the window bridge either way.
+			 */
+			case "getTranslations": {
+				const {
+					data: { locale }
+				} = typedMessage;
+				void (async () => {
+					let translations: EnUS | null = null;
+					/** The requester picks the path segment, so only a known locale may reach getURL. */
+					if (availableLocales.includes(locale)) {
+						try {
+							const response = await fetch(chrome.runtime.getURL(`locales/${locale}.json`));
+							if (response.ok) translations = (await response.json()) as EnUS;
+						} catch {
+							// Unreadable file: answer `null` so the caller throws instead of waiting out its timeout.
+							translations = null;
+						}
+					}
+					sendResponse({ locale, translations });
+				})();
+				/** Keeps the message channel open until the locale fetch answers. */
+				return true;
+			}
+			/**
+			 * Page-world delivery of the embedded bundle. Chrome ≥157 refuses the page-initiated
+			 * `chrome-extension://` module tag, so the content script asks for this injection
+			 * instead: `world: "MAIN"` runs the file in the page, `injectImmediately` skips the
+			 * idle deadline, and the bundle is a self-contained IIFE (no module graph, no WAR
+			 * load from the page). Only the content script can ask: the window-message relay
+			 * forwards `request_action` solely for `pauseBackgroundPlayers`.
+			 */
+			case "injectEmbedded": {
+				const tabId = sender.tab?.id;
+				if (tabId === undefined) {
+					console.error("[yte] injectEmbedded request arrived without a sender tab");
+					sendResponse({ ok: false });
+					return false;
+				}
+				chrome.scripting.executeScript(
+					{
+						files: [EMBEDDED_SCRIPT_FILE],
+						injectImmediately: true,
+						target: { tabId },
+						world: "MAIN"
+					},
+					() => {
+						/**
+						 * `lastError` must be read inside the callback: an unread error makes
+						 * Chrome log "Unchecked runtime.lastError" on its own.
+						 */
+						/**
+						 * Deliberately the same shape as the pauseBackgroundPlayers callback
+						 * below: read `chrome.runtime.lastError` in place, never store it.
+						 */
+						if (chrome.runtime.lastError) {
+							console.error(
+								`[yte] Could not inject ${EMBEDDED_SCRIPT_FILE} into tab ${tabId}: ${chrome.runtime.lastError.message}`
+							);
+							sendResponse({ ok: false });
+							return;
+						}
+						sendResponse({ ok: true });
+					}
+				);
+				/** Keeps the message channel open until the executeScript callback answers. */
+				return true;
+			}
 			case "pauseBackgroundPlayers": {
 				const senderTabId = sender.tab?.id;
 				/**

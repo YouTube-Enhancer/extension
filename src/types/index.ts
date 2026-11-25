@@ -491,6 +491,20 @@ export type ContentSendOnlyMessageMappings = {
 export type ContentSendOnlyMessages =
 	ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings];
 export type ContentToBackgroundSendOnlyMessageMappings = {
+	/**
+	 * Asks the background worker to fetch a locale file at extension origin and return the
+	 * parsed messages. Chrome ≥157 refuses `chrome-extension://` loads initiated from any
+	 * context inside the youtube.com document — the content script's isolated world included —
+	 * so only the worker, which has no frame, can read the file. The content script relays this
+	 * for the page-side i18n request; it never fetches extension resources itself.
+	 */
+	getTranslations: ActionMessage<"getTranslations", { locale: AvailableLocales }>;
+	/**
+	 * Asks the background worker to inject the page-world embedded bundle with
+	 * `chrome.scripting.executeScript({ world: "MAIN" })`. Only the content script sends it:
+	 * the window-message relay forwards `request_action` messages only for `pauseBackgroundPlayers`.
+	 */
+	injectEmbedded: ActionMessage<"injectEmbedded">;
 	pauseBackgroundPlayers: ActionMessage<"pauseBackgroundPlayers">;
 };
 export type ContentToBackgroundSendOnlyMessages =
