@@ -75,6 +75,8 @@ PRs opened against `main` will be asked to retarget `dev`.
    This branch (`dev`) has no automated test suite — the E2E suite lives on the `playwright-testing` branch (see `tests/README.md` there), and no test script runs here. Changes on this branch are verified with `pnpm run lint` and `pnpm run typecheck`, then **manual verification** using the [Manual Testing Checklist](#-manual-testing-checklist) below.
    Your feature must be validated across multiple YouTube states (watch, live, navigation, etc.).
 
+**Build-script approvals:** pnpm asks before a dependency runs its install script; approve with `pnpm approve-builds`, which records the decision in `pnpm-workspace.yaml` under `allowBuilds`. `package.json` has no `allowScripts` field — build approvals live only in `pnpm-workspace.yaml`.
+
 ---
 
 ## 🔧 Code Quality

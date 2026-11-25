@@ -102,9 +102,5 @@
     "eslint-plugin-perfectionist": {
       "typescript": "$typescript"
     }
-  },
-  "allowScripts": {
-    "esbuild@0.28.2": true,
-    "@swc/core@1.16.2": true
   }
 }
