@@ -1,5 +1,6 @@
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
+import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { clamp } from "@/src/utils/math";
@@ -8,7 +9,7 @@ import { isShortsPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
 import {
-	resetVolumeChangeListener,
+	resetReassertState,
 	restorePlayerVolume,
 	setPlayerVolume,
 	setupVolumeReassertListener
@@ -81,7 +82,9 @@ export default createFeature({
 	onDisable: async (config) => {
 		// Lifecycle already aborted this feature's player retries before onDisable runs. The store
 		// itself is restored by onConfigChange, which always precedes a real disable.
-		resetVolumeChangeListener();
+		// Listener removal is a disposer (registered in onEnable); the reassert tracking reset
+		// stays here so the next enable re-attaches a fresh listener.
+		resetReassertState();
 		/**
 		 * A page-gate exit (watch -> home, watch -> /playlist) also runs this hook with the feature
 		 * still configured on, and on a non-gated page `getPlayerContainer()` now finds a live player
@@ -95,6 +98,7 @@ export default createFeature({
 		await restorePlayerVolume(playerContainer);
 	},
 	onEnable: ({ volume }) => {
+		registry.on(metadata.id, "events", () => eventManager.removeEventListeners(metadata.id));
 		seedPersistedVolume(volume);
 		applyVolume(volume);
 	},

@@ -3,6 +3,7 @@ import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import { clamp } from "@/src/utils/math";
 import { getOSDConfig, showOSD } from "@/src/utils/osd";
 
@@ -142,10 +143,6 @@ function manageOSD(actualJump: number, video: HTMLVideoElement) {
 	});
 }
 
-function removeKeyListener() {
-	eventManager.removeEventListener(document, "keydown", customSeekId);
-}
-
 function seekHandler(direction: "backward" | "forward", videoElement: HTMLVideoElement) {
 	const { currentTime, duration, ended } = videoElement;
 
@@ -173,7 +170,6 @@ export default createFeature({
 		jumpByTime = jumpBy;
 	},
 	onDisable: () => {
-		removeKeyListener();
 		if (osdAccumulationTimeout !== null) {
 			window.clearTimeout(osdAccumulationTimeout);
 			osdAccumulationTimeout = null;
@@ -189,5 +185,6 @@ export default createFeature({
 	onEnable: ({ jumpBy }) => {
 		jumpByTime = jumpBy;
 		addKeyListener();
+		registry.on(customSeekId, "events", () => eventManager.removeEventListeners(customSeekId));
 	}
 });

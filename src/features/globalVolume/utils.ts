@@ -14,9 +14,11 @@ let reassertVideo: Nullable<HTMLVideoElement> = null;
  */
 let reassertState: Nullable<{ deadline: number; nativeVolume: number; target: number }> = null;
 
-/** Called from onDisable: the next enable has to attach a fresh listener, even on the same element. */
-export function resetVolumeChangeListener() {
-	eventManager.removeEventListeners("globalVolume");
+/**
+ * Called from onDisable: clears the reassert tracking so the next enable attaches a fresh
+ * listener, even on the same element.
+ */
+export function resetReassertState() {
 	reassertVideo = null;
 	reassertState = null;
 }

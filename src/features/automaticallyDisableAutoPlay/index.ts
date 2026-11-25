@@ -203,7 +203,6 @@ export default createFeature({
 		}
 	},
 	onDisable: () => {
-		unwatchToggle();
 		void registry.playerRetry(metadata.id, [makeDisableTask()], ["disableAutoPlay"], {
 			interval: 300,
 			maxAttempts: 24,
@@ -212,6 +211,7 @@ export default createFeature({
 		});
 	},
 	onEnable: () => {
+		registry.on(metadata.id, "events", () => unwatchToggle());
 		void registry.playerRetry(metadata.id, [makeEnableTask()], ["enableAutoPlay"], {
 			interval: 300,
 			maxAttempts: 30,
