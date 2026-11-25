@@ -169,6 +169,9 @@ export async function navigateToPageType(
 		await expect
 			.poll(
 				async () => {
+					// An unavailable stream shows an error panel instead of ever rendering the badge;
+					// skipping here beats waiting out the poll on a video that cannot come back.
+					await skipIfLiveVideoUnavailable(page);
 					return await page.locator(".ytp-live-badge").isVisible();
 				},
 				{
@@ -196,6 +199,35 @@ export async function reloadPage(page: Page, pageType: PageType): Promise<void> 
 		await waitForYoutubePlayerReady(page, pageType);
 	}
 	await pageSetup(page);
+}
+/**
+ * Strong signals that the hunted live video itself is unavailable (its stream ended or was removed): the
+ * player's own error overlay, the watch-page error renderer, or YouTube's unavailable block, either visible
+ * or carrying the "Video unavailable" reason line. Only these known error surfaces count — never the absence
+ * of the live badge or of any text — so a slow player cannot skip a test that would otherwise pass. Outside
+ * a test body `test.skip` itself throws "can only be called inside test", so a misuse fails loudly.
+ */
+const LIVE_UNAVAILABLE_SELECTOR = [
+	".ytp-error",
+	"ytd-player-error-message-renderer",
+	"#player-unavailable"
+].join(", ");
+const LIVE_UNAVAILABLE_REASON = "Video unavailable";
+/**
+ * Skips the current test when the live fixture's video is unavailable, so the live readiness poll ends in a
+ * skip instead of hanging to its 120 s timeout. Call it from inside the poll: Playwright propagates a throw
+ * out of the poll callback immediately rather than retrying it.
+ */
+export async function skipIfLiveVideoUnavailable(page: Page): Promise<void> {
+	const surfaces = page.locator(LIVE_UNAVAILABLE_SELECTOR);
+	const shown = await surfaces
+		.first()
+		.isVisible()
+		.catch(() => false);
+	const text = (await surfaces.allTextContents().catch(() => [])).join(" ");
+	if (shown || text.includes(LIVE_UNAVAILABLE_REASON)) {
+		test.skip(true, "pinned live video unavailable (environmental) — skipped, not failed");
+	}
 }
 /**
  * Returns to the previous page through the browser history, which YouTube handles as a single-page navigation
@@ -381,11 +413,7 @@ async function navigateToLiveVideo(
 				everyStreamOpened = false;
 				continue;
 			}
-			if (!(await finishLiveVideoSetup(page))) {
-				everyStreamOpened = false;
-				await navigateToPage(page, channelUrl);
-				continue;
-			}
+			await finishLiveVideoSetup(page);
 			if (
 				requirements.length === 0 ||
 				(await meetsFixtureCapabilities(page, "live", requirements))
