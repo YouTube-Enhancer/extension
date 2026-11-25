@@ -14,13 +14,8 @@ const fromRepoRoot = (relativePath: string): string =>
 export default defineConfig({
 	resolve: {
 		alias: {
-			"@/assets": fromRepoRoot("./src/assets"),
-			"@/components": fromRepoRoot("./src/components"),
-			"@/hooks": fromRepoRoot("./src/hooks"),
-			"@/pages": fromRepoRoot("./src/pages"),
 			"@/public/locales": fromRepoRoot("./public/locales"),
-			"@/src": fromRepoRoot("./src"),
-			"@/utils": fromRepoRoot("./src/utils")
+			"@/src": fromRepoRoot("./src")
 		}
 	},
 	test: {
