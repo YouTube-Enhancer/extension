@@ -4,6 +4,7 @@ import type { ContentToBackgroundSendOnlyMessages, DevToolsMessages, Nullable } 
 import { setDefaultValues } from "@/src/defaults";
 import { availableLocales } from "@/src/i18n/constants";
 import { DEV_MODE } from "@/src/utils/config/env";
+import { applyManagedSettings } from "@/src/utils/config/managed";
 import { updateStoredSettings } from "@/src/utils/config/storage";
 import {
 	reinjectContentScriptsAfterReload,
@@ -40,6 +41,10 @@ chrome.runtime.onInstalled.addListener((details) => {
 				console.error("[Background] Failed to set default values:", err);
 				return undefined;
 			})) ?? {};
+		// After the defaults, so a policy value is merged into a complete configuration.
+		await applyManagedSettings().catch((err) => {
+			console.error("[Background] Failed to apply managed settings:", err);
+		});
 		const { previousVersion, reason } = details;
 		if (!openSettingsOnMajorOrMinorVersionChange) return;
 		switch (reason) {
@@ -62,6 +67,15 @@ chrome.runtime.onInstalled.addListener((details) => {
 			}
 		}
 	})();
+});
+/**
+ * Registering this listener is also what makes the browser start the background with itself, so
+ * policy values are applied at every startup and not only when a page first messages it.
+ */
+chrome.runtime.onStartup.addListener(() => {
+	void applyManagedSettings().catch((err) => {
+		console.error("[Background] Failed to apply managed settings:", err);
+	});
 });
 type VersionString = `${string}.${string}.${string}`;
 
