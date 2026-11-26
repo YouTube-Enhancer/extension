@@ -1,7 +1,7 @@
 import type EnUS from "@/public/locales/en-US.json.d";
 import type { ContentToBackgroundSendOnlyMessages, DevToolsMessages, Nullable } from "@/src/types";
 
-import { setDefaultValues } from "@/src/defaults";
+import { initialDefaultsWritten, setDefaultValues } from "@/src/defaults";
 import { availableLocales } from "@/src/i18n/constants";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { applyManagedSettings } from "@/src/utils/config/managed";
@@ -42,9 +42,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 				return undefined;
 			})) ?? {};
 		// After the defaults, so a policy value is merged into a complete configuration.
-		await applyManagedSettings().catch((err) => {
-			console.error("[Background] Failed to apply managed settings:", err);
-		});
+		await applyManagedSettingsAfterDefaults();
 		const { previousVersion, reason } = details;
 		if (!openSettingsOnMajorOrMinorVersionChange) return;
 		switch (reason) {
@@ -73,12 +71,20 @@ chrome.runtime.onInstalled.addListener((details) => {
  * policy values are applied at every startup and not only when a page first messages it.
  */
 chrome.runtime.onStartup.addListener(() => {
-	void applyManagedSettings().catch((err) => {
-		console.error("[Background] Failed to apply managed settings:", err);
-	});
+	void applyManagedSettingsAfterDefaults();
 });
 type VersionString = `${string}.${string}.${string}`;
 
+/**
+ * Importing `@/src/defaults` starts a read-then-write of every setting; one that lands after the
+ * managed settings would put the old values back, so those wait for it.
+ */
+async function applyManagedSettingsAfterDefaults() {
+	await initialDefaultsWritten;
+	await applyManagedSettings().catch((err) => {
+		console.error("[Background] Failed to apply managed settings:", err);
+	});
+}
 function isNewMajorVersion(oldVersion: VersionString, newVersion: VersionString) {
 	const [oldMajorVersion] = oldVersion.split(".");
 	const [newMajorVersion] = newVersion.split(".");

@@ -66,6 +66,12 @@ function setSetting<K extends keyof configuration>(
 	obj[key] = value;
 }
 
-void (async () => {
-	await setDefaultValues();
-})().catch((err) => console.error("[defaults] Failed to set default values:", err));
+/**
+ * The write this module starts when it loads, in every extension page and in the background. It
+ * reads storage and writes every setting back, so a writer that must not be overwritten by it (such
+ * as the managed settings) awaits this first.
+ */
+export const initialDefaultsWritten: Promise<void> = setDefaultValues().then(
+	() => undefined,
+	(err: unknown) => console.error("[defaults] Failed to set default values:", err)
+);
