@@ -77,7 +77,8 @@ const manifestV3: Manifest.WebExtensionManifest = {
 const manifestV3Firefox: Manifest.WebExtensionManifest = {
 	...manifestV3,
 	background: {
-		scripts: ["src/pages/background/index.js"]
+		scripts: ["src/pages/background/index.js"],
+		type: "module"
 	},
 	browser_specific_settings: {
 		gecko: {
